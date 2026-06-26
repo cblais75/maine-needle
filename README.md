@@ -1,4 +1,4 @@
-# Maine Election Needle
+# The Needle Project
 
 A live election dashboard for Maine's November 2026 races: U.S. Senate, Governor
 (three-way), both U.S. House seats, and three ballot questions.

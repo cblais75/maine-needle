@@ -6,11 +6,12 @@ import town2county from "./town-county.mjs";
 // Which office maps to which race, and how to tell the sides apart.
 // Sides resolve by party first; if the file has no party column, by candidate name.
 const RACES = [
-  { id: "sen", office: /senat/i, kind: "two", names: { dem: /platner/i, rep: /collins/i } },
-  { id: "gov", office: /governor/i, kind: "three", names: { dem: /pingree/i, rep: /charles/i, ind: /bennett/i } },
-  { id: "cd1", office: /(congress|representative).*(district\s*1|first|\b1\b)/i, kind: "two", names: { dem: /pingree/i, rep: /russell/i } },
-  { id: "cd2", office: /(congress|representative).*(district\s*2|second|\b2\b)/i, kind: "two", names: { dem: /dunlap/i, rep: /lepage/i } },
-  { id: "q1", office: /question\s*1/i, kind: "ballot" },
+  { id: "sen", state: "ME", office: /senat/i, kind: "two", names: { dem: /platner/i, rep: /collins/i } },
+  { id: "gov", state: "ME", office: /governor/i, kind: "three", names: { dem: /pingree/i, rep: /charles/i, ind: /bennett/i } },
+  { id: "cd1", state: "ME", office: /(congress|representative).*(district\s*1|first|\b1\b)/i, kind: "two", names: { dem: /pingree/i, rep: /russell/i } },
+  { id: "cd2", state: "ME", office: /(congress|representative).*(district\s*2|second|\b2\b)/i, kind: "two", names: { dem: /dunlap/i, rep: /lepage/i } },
+  { id: "q1", state: "ME", office: /question\s*1/i, kind: "ballot" },
+  { id: "nc_sen", state: "NC", office: /senat/i, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
 ];
 
 function lookupCounty(townRaw) {
@@ -30,14 +31,16 @@ function sideOf(race, party, candidate) {
   return null;
 }
 
-export function aggregate(rows) {
+export function aggregate(rows, state = "ME") {
+  const pool = RACES.filter((R) => R.state === state);
   const acc = {}, unmatchedTowns = new Set(), unmatchedOffice = new Set();
   for (const r of rows) {
-    const race = RACES.find((R) => R.office.test(r.office || ""));
+    const race = pool.find((R) => R.office.test(r.office || ""));
     if (!race) { if (r.office) unmatchedOffice.add(r.office); continue; }
     const side = sideOf(race, r.party, r.candidate);
     if (!side) continue;
-    const county = lookupCounty(r.town);
+    // Maine reports by town and rolls up to county; NC already reports by county.
+    const county = state === "NC" ? String(r.town || r.county || "").trim() : lookupCounty(r.town);
     if (!county) { unmatchedTowns.add(r.town); continue; }
     const votes = Number(String(r.votes).replace(/[^0-9.-]/g, "")) || 0;
     acc[race.id] = acc[race.id] || {};
@@ -56,7 +59,7 @@ export function aggregate(rows) {
   }
   return {
     updated: new Date().toISOString(),
-    source: "Maine SoS (parsed)",
+    source: state === "NC" ? "NC SBE (parsed)" : "Maine SoS (parsed)",
     races,
     _diag: { unmatchedOffices: [...unmatchedOffice], unmatchedTownsSample: [...unmatchedTowns].slice(0, 15) },
   };

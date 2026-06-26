@@ -38,6 +38,7 @@ const sen = summarize(polls.senate || []);
 const gov = summarize(polls.governor || []);
 const cd1 = summarize(polls.cd1 || []);
 const cd2 = summarize(polls.cd2 || []);
+const nc = summarize(polls.nc_sen || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
   method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower." },
@@ -51,8 +52,11 @@ const current = {
     note: cd1.nPolls === 0 ? "No public District 1 polls yet; using the 2020 House baseline." : "", polls: cd1.polls },
   cd2: { margin: cd2.margin, nPolls: cd2.nPolls, fallback: cd2.margin === null,
     note: cd2.nPolls === 0 ? "No public District 2 polls yet; using the personal-vote-adjusted baseline." : "", polls: cd2.polls },
+  nc_sen: { margin: nc.margin, nPolls: nc.nPolls, fallback: nc.margin === null,
+    note: nc.nPolls === 0 ? "No public North Carolina Senate polls yet." : "", polls: nc.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
 console.log(`Senate: ${current.senate.margin >= 0 ? "Platner +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
 console.log(`Governor: ${current.governor.nPolls} polls (${current.governor.fallback ? "placeholder" : "live"})`);
 console.log(`CD1: ${current.cd1.nPolls} polls · CD2: ${current.cd2.nPolls} polls`);
+console.log(`NC Senate: ${current.nc_sen.margin >= 0 ? "Cooper +" : "Whatley +"}${Math.abs(current.nc_sen.margin)} from ${current.nc_sen.nPolls} polls`);

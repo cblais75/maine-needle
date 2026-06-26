@@ -1,0 +1,25 @@
+ 
+=== git-push3.bat starting === 
+PATH set 
+GH_EXE: [C:\Program Files\GitHub CLI\gh.exe] 
+gh version 2.95.0 (2026-06-17)
+https://github.com/cli/cli/releases/tag/v2.95.0
+GH version check exit code: 0 
+Token exit code: 0 
+Token prefix: [gho_e] 
+=== Git log === 
+1291d00 add intro line
+4aaf3d3 Initial commit: maine-needle 2026 election dashboard
+=== Git status === 
+?? git-check.bat
+?? git-log.txt
+?? git-push.bat
+?? git-push2.bat
+?? git-push3.bat
+?? push-log.txt
+?? push-log3.txt
+=== Pushing === 
+To https://github.com/cblais75/maine-needle.git
+   4aaf3d3..1291d00  main -> main
+Push exit code: 0 
+=== Done === 

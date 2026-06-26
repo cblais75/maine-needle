@@ -1,0 +1,6 @@
+ 
+=== git-push2.bat starting === 
+GH_EXE: C:\Users\colin\AppData\Local\gh.exe 
+'"C:\Users\colin\AppData\Local\gh.exe"' is not recognized as an internal or external command,
+operable program or batch file.
+ERROR: Could not get gh auth token 

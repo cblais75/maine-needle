@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-24",
+  "updated": "2026-06-26",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -59,5 +59,31 @@
     "fallback": true,
     "note": "No public District 2 polls yet; using the personal-vote-adjusted baseline.",
     "polls": []
+  },
+  "nc_sen": {
+    "margin": 12,
+    "nPolls": 2,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "Carolina Journal/Civitas (R)",
+        "date": "2026-05-15",
+        "rating": 0.6,
+        "dem": 49.8,
+        "rep": 38.7,
+        "ind": null,
+        "weightPct": 88
+      },
+      {
+        "pollster": "Carolina Journal/Civitas (R)",
+        "date": "2026-03-15",
+        "rating": 0.6,
+        "dem": 48.9,
+        "rep": 41.1,
+        "ind": null,
+        "weightPct": 12
+      }
+    ]
   }
 }

@@ -1,0 +1,8 @@
+1291d00 add intro line
+4aaf3d3 Initial commit: maine-needle 2026 election dashboard
+?? git-check.bat
+?? git-log.txt
+?? git-push.bat
+Remote: 
+origin	https://github.com/cblais75/maine-needle.git (fetch)
+origin	https://github.com/cblais75/maine-needle.git (push)

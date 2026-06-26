@@ -43,16 +43,37 @@ const SEN_W = {
   Lincoln: 22177, Washington: 16447, Franklin: 16093, Piscataquis: 9258,
 };
 // pollMargin = Platner two-party lead in points (D+). center share = 0.5 + margin/200.
+// SEN_HOUSE shifts the center toward Collins: she has consistently outrun her polling
+// (she trailed in nearly every 2020 public poll and won by about 9 points), so a raw
+// poll average structurally overstates the Democrat in Maine. This keeps a tossup a tossup.
+const SEN_HOUSE = 4;
 const senateUnits = (pollMargin) =>
   Object.keys(SEN_LEAN).map((n) =>
-    unit(n, clamp(0.5 + pollMargin / 200 + SEN_LEAN[n], 0.02, 0.98), SEN_W[n]));
+    unit(n, clamp(0.5 + (pollMargin - SEN_HOUSE) / 200 + SEN_LEAN[n], 0.02, 0.98), SEN_W[n]));
 const makeSenate = (pollMargin) => ({
-  id: "sen", title: "U.S. Senate",
+  id: "sen", state: "ME", title: "U.S. Senate",
   sub: "Platner (D) vs Collins (R)",
   system: "Ranked-Choice Voting", real: true,
+  note: `Centered on polls, then shifted ${SEN_HOUSE} pts toward Collins, who has consistently outrun her polls (she trailed in nearly every 2020 survey and won by ~9).`,
   left: { full: "Collins", short: "Collins", color: RED },
   right: { full: "Platner", short: "Platner", color: BLUE },
   units: senateUnits(pollMargin),
+});
+
+// ---- NORTH CAROLINA ----
+// Cooper (D) vs Whatley (R) — open seat (Tillis retired), plurality, rated tossup/lean-D.
+// County-level baseline is pending the real-data step (scripts/build-baseline-nc.mjs pulls
+// NC's past results via dispatch). Until then NC runs on a single statewide unit centered on
+// polling: a valid poll-driven needle now, and a statewide live needle on election night.
+const NC_HOUSE = 4; // toward Whatley: NC leans Republican federally and undecideds have tended to break R
+const makeNCSenate = (pollMargin) => ({
+  id: "nc_sen", state: "NC", title: "U.S. Senate",
+  sub: "Cooper (D) vs Whatley (R)",
+  system: "Plurality", real: true,
+  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley for North Carolina's Republican lean. County-level baseline is being added; the needle is currently statewide.`,
+  left: { full: "Whatley", short: "Whatley", color: RED },
+  right: { full: "Cooper", short: "Cooper", color: BLUE },
+  units: [unit("North Carolina", clamp(0.5 + (pollMargin - NC_HOUSE) / 200, 0.02, 0.98), 1)],
 });
 
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
@@ -74,7 +95,7 @@ const recenter = (units, targetMarginPts) => {
 };
 
 const makeCD1 = (margin = null) => ({
-  id: "cd1", title: "U.S. House · District 1", sub: "Pingree (D) vs Russell (R)", system: "Ranked-Choice Voting", real: true,
+  id: "cd1", state: "ME", title: "U.S. House · District 1", sub: "Pingree (D) vs Russell (R)", system: "Ranked-Choice Voting", real: true,
   left: { full: "Russell", short: "Russell", color: RED },
   right: { full: "Pingree", short: "Pingree", color: BLUE },
   units: recenter(fromMap(CD1), margin),
@@ -90,7 +111,7 @@ const cd2Units = (decay) =>
     return unit(n, clamp(fund + decay * (golden - fund), 0.02, 0.98), CD2[n][1]);
   });
 const makeCD2 = (decay, margin = null) => ({
-  id: "cd2", title: "U.S. House · District 2",
+  id: "cd2", state: "ME", title: "U.S. House · District 2",
   sub: "Dunlap (D) vs LePage (R)",
   system: "Ranked-Choice Voting", real: true,
   left: { full: "LePage", short: "LePage", color: RED },
@@ -112,7 +133,7 @@ const govUnits3 = (bennettPts, marginPts) => {
   });
 };
 const makeGov = (bennettPts, marginPts) => ({
-  id: "gov", title: "Governor", type: "three",
+  id: "gov", state: "ME", title: "Governor", type: "three",
   sub: "Pingree (D) · Charles (R) · Bennett (I)",
   system: "Plurality", real: true,
   cands: [
@@ -168,7 +189,7 @@ const ballotUnits = (yesCenter, corr) =>
 // the ballot question(s). Illustrative — a new question has no prior election to map.
 const OTHER_RACES = [
   {
-    id: "q1", title: "Question 1",
+    id: "q1", state: "ME", title: "Question 1",
     sub: "Do you want to change civil rights and education laws to require public schools to restrict access to bathrooms and sports based on the gender on the child's original birth certificate and allow students to sue the schools?",
     system: "Majority",
     left: { full: "No", short: "No", color: AMBER }, right: { full: "Yes", short: "Yes", color: TEAL },
@@ -208,7 +229,7 @@ function compute(units) {
     return s + u.weight * (known ? u.finalShare : clamp(u.prior + swing, 0.02, 0.98));
   }, 0) / totalW;
   const margin = 2 * proj - 1;
-  const se = 0.062 * Math.sqrt(1 - fracIn) + 0.004;
+  const se = 0.095 * Math.sqrt(1 - fracIn) + 0.004;
   return { fracIn, swing, margin, se, winRight: ncdf(margin / se) };
 }
 function rateOf(race, m) {
@@ -242,6 +263,7 @@ function applyLive(race, rdata) {
   const hasData = Object.values(rdata.counties).some((c) => ((c.dem || 0) + (c.rep || 0) + (c.ind || 0)) > 0);
   if (!hasData) return { ...race, liveOn: false };
   const units = race.type === "three" ? liveThree(race.units, rdata.counties) : liveTwoWay(race.units, rdata.counties);
+  if (!units.some((u) => u.reported > 0)) return { ...race, liveOn: false };
   return { ...race, units, liveOn: true };
 }
 function applyAllLive(races, results) {
@@ -252,18 +274,22 @@ function applyAllLive(races, results) {
 const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
+const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }];
 
 export default function MaineDashboard() {
   const DEFAULT_MARGIN = 3; // Platner D+3 two-party, a mid estimate of current polls
+  const DEFAULT_NC_MARGIN = 9; // Cooper D+9, mid of recent NC polls
   const [pollMargin, setPollMargin] = useState(DEFAULT_MARGIN);
+  const [ncMargin, setNcMargin] = useState(DEFAULT_NC_MARGIN);
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null) => [
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN) => [
     rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
     rollRace(makeCD2(dc, cd2m)),
+    rollRace(makeNCSenate(ncm)),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
@@ -271,7 +297,7 @@ export default function MaineDashboard() {
   const [running, setRunning] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [current, setCurrent] = useState(null);   // current polling outlook from public/current.json
-  const [view, setView] = useState("board");       // board | polls | method
+  const [view, setView] = useState("dashboard");   // dashboard | <state code> | polls | method
   const [currentLoaded, setCurrentLoaded] = useState(false);
   const [results, setResults] = useState(null);   // live returns from public/results.json
   const resultsRef = useRef(null);
@@ -308,8 +334,9 @@ export default function MaineDashboard() {
       .then((c) => {
         setCurrent(c);
         if (c?.senate) setPollMargin(c.senate.margin ?? DEFAULT_MARGIN);
+        if (c?.nc_sen) setNcMargin(c.nc_sen.margin ?? DEFAULT_NC_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -330,7 +357,7 @@ export default function MaineDashboard() {
     return () => clearInterval(id);
   }, []);
 
-  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null), resultsRef.current)); };
+  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -344,9 +371,9 @@ export default function MaineDashboard() {
     <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: 16 }}>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>Maine 2026 Election Needle</div>
+          <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>The Needle Project</div>
           <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginTop: 4 }}>
-            An independent, live-updating tracker for Maine's 2026 races — U.S. Senate, Governor, both U.S. House seats, and the statewide ballot question. Live on election night.
+            An independent, live-updating tracker for the 2026 elections. Each state's key races, centered on polling now and running on real returns on election night.
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 1.4, color: anyLive ? RED : C.muted, fontFamily: mono, textTransform: "uppercase", marginBottom: 12 }}>
@@ -355,27 +382,51 @@ export default function MaineDashboard() {
         </div>
 
         {sel !== null ? (
-          <Detail race={races[sel]} onBack={() => setSel(null)}
+          <Detail race={races.find((r) => r.id === sel)} onBack={() => setSel(null)}
             pollMargin={pollMargin} onPoll={setPoll}
             cd2Decay={cd2Decay} onDecay={setDecay}
             govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
         ) : (
           <>
-            <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-              {[["board", "Board"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
+            <div style={{ display: "flex", gap: 6, marginBottom: 14, overflowX: "auto", paddingBottom: 2 }}>
+              {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
                 <button key={k} onClick={() => setView(k)}
-                  style={{ flex: 1, padding: "8px 0", fontSize: 13, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer",
+                  style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
                     background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
                   {label}
                 </button>
               ))}
             </div>
 
-            {view === "board" && <Overview races={races} onPick={setSel} />}
+            {view === "dashboard" && (
+              <div>
+                <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALL RACES · NOVEMBER 2026</div>
+                <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 14 }}>Election Night Board</div>
+                {STATES.map((st) => {
+                  const sr = races.filter((r) => r.state === st.code);
+                  if (!sr.length) return null;
+                  return (
+                    <div key={st.code} style={{ marginBottom: 18 }}>
+                      <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", marginBottom: 8 }}>{st.label}</div>
+                      <Overview races={sr} onPick={setSel} />
+                    </div>
+                  );
+                })}
+                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, fontFamily: mono }}>Tap any race to open its needle.</div>
+              </div>
+            )}
+            {STATES.some((s) => s.code === view) && (
+              <div>
+                <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>{STATES.find((s) => s.code === view).label.toUpperCase()} · NOVEMBER 2026</div>
+                <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 14 }}>{STATES.find((s) => s.code === view).label}</div>
+                <Overview races={races.filter((r) => r.state === view)} onPick={setSel} />
+                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 12, fontFamily: mono }}>Tap any race to open its needle and county board.</div>
+              </div>
+            )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} />}
             {view === "method" && <MethodView />}
 
-            {view === "board" && (
+            {(view === "dashboard" || STATES.some((s) => s.code === view)) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -446,30 +497,23 @@ function ThreeBar({ race }) {
 
 function Overview({ races, onPick }) {
   return (
-    <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MAINE · NOVEMBER 2026</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 12 }}>Election Night Board</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {races.map((r, i) => (
-          <button key={r.id} onClick={() => onPick(i)}
-            style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", cursor: "pointer", color: C.text }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <div style={{ fontSize: 15, fontWeight: 700 }}>{r.title}</div>
-              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                {r.liveOn && (
-                  <span style={{ fontSize: 9, fontFamily: mono, letterSpacing: 0.5, padding: "2px 5px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>
-                )}
-                <span style={{ fontSize: 10, fontFamily: mono, color: C.muted, letterSpacing: 1 }}>{r.system}</span>
-              </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {races.map((r) => (
+        <button key={r.id} onClick={() => onPick(r.id)}
+          style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", cursor: "pointer", color: C.text }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>{r.title}</div>
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              {r.liveOn && (
+                <span style={{ fontSize: 9, fontFamily: mono, letterSpacing: 0.5, padding: "2px 5px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>
+              )}
+              <span style={{ fontSize: 10, fontFamily: mono, color: C.muted, letterSpacing: 1 }}>{r.system}</span>
             </div>
-            <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 9 }}>{r.sub}</div>
-            {r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
-          </button>
-        ))}
-      </div>
-      <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 12, fontFamily: mono }}>
-        Tap any race to open its needle and county board.
-      </div>
+          </div>
+          <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 9 }}>{r.sub}</div>
+          {r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
+        </button>
+      ))}
     </div>
   );
 }
@@ -613,12 +657,13 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", padding: 0, marginBottom: 10, fontFamily: mono }}>
         <ChevronLeft size={16} /> All races
       </button>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MAINE · {race.system}</div>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>{(STATES.find((s) => s.code === race.state)?.label || "").toUpperCase()} · {race.system}</div>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
         {race.liveOn && <span style={{ fontSize: 10, fontFamily: mono, letterSpacing: 0.5, padding: "2px 6px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>}
       </div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: 12 }}>{race.sub}</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: race.note ? 6 : 12 }}>{race.sub}</div>
+      {race.note && <div style={{ fontSize: 11, color: "#9FB3CE", lineHeight: 1.5, marginBottom: 12, padding: "8px 10px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8 }}>{race.note}</div>}
 
       {race.id === "sen" && (
         <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 14px", marginBottom: 12 }}>
@@ -742,10 +787,13 @@ function PollsView({ current, loaded }) {
         </div>
       ) : (
         <>
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "2px 0 8px" }}>Maine</div>
           <PollRace title="U.S. Senate" lead={current.senate} demName="Platner" repName="Collins" />
           <PollRace title="Governor" lead={current.governor} demName="Pingree" repName="Charles" indName="Bennett" />
           <PollRace title="U.S. House · District 1" lead={current.cd1} demName="Pingree" repName="Russell" />
           <PollRace title="U.S. House · District 2" lead={current.cd2} demName="Dunlap" repName="LePage" />
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>North Carolina</div>
+          <PollRace title="U.S. Senate" lead={current.nc_sen} demName="Cooper" repName="Whatley" />
         </>
       )}
       <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.5, marginTop: 4 }}>
@@ -804,19 +852,26 @@ function MethodView() {
       <div style={card}>
         <div style={h2}>Where the baselines come from</div>
         <div style={body}>
-          Built from real past results (OpenElections public data):
+          Built from real past results (OpenElections public data).
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.text }}>Senate</b> — a blend of the 2020 Collins–Gideon Senate map (60%) and the 2020 + 2016 presidential maps (40%), re-centered on current polling.<br />
-            <b style={{ color: C.text }}>House District 1 &amp; 2</b> — the actual 2020 U.S. House results by county. District 2 also has a dial that fades the former incumbent's personal vote toward the district's partisan fundamentals, since the seat is open.<br />
-            <b style={{ color: C.text }}>Governor</b> — the blended presidential map for shape, with a polling-set statewide split. It's a three-way race (Pingree, Charles, and independent Bennett) decided by plurality, so it shows three win-probability meters, not a left–right needle.<br />
-            <b style={{ color: C.text }}>Ballot question</b> — illustrative only. A brand-new question has no prior election to map, so its starting point is a placeholder until real votes or polling exist.
+            <b style={{ color: C.brass }}>Maine — Senate</b> — a blend of the 2020 Collins–Gideon Senate map (60%) and the 2020 + 2016 presidential maps (40%), re-centered on current polling.<br />
+            <b style={{ color: C.brass }}>Maine — House 1 &amp; 2</b> — the actual 2020 U.S. House results by county. District 2 also has a dial that fades the former incumbent's personal vote toward the district's fundamentals, since the seat is open.<br />
+            <b style={{ color: C.brass }}>Maine — Governor</b> — the blended presidential map for shape, with a polling-set split. A three-way plurality race (Pingree, Charles, independent Bennett), so it shows three win-probability meters.<br />
+            <b style={{ color: C.brass }}>Maine — Ballot question</b> — illustrative only; a brand-new question has no prior election to map.<br />
+            <b style={{ color: C.brass }}>North Carolina — Senate</b> — Cooper vs Whatley, an open seat. Currently centered on polling at the statewide level; the county-by-county baseline (from NC's past results) is being added.
           </div>
         </div>
       </div>
 
       <div style={card}>
-        <div style={h2}>Polling</div>
-        <div style={body}>The statewide center of each race is set by a recency- and quality-weighted polling average. See the Polls tab for the exact polls and how much each one counts.</div>
+        <div style={h2}>Polling &amp; adjustments</div>
+        <div style={body}>
+          Each race's center is a recency- and quality-weighted polling average (see the Polls tab). Two races then get a documented house-effect adjustment, because a raw poll average has a known directional bias in that state:
+          <div style={{ marginTop: 8 }}>
+            <b style={{ color: C.text }}>Maine Senate</b> — shifted toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
+            <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.
+          </div>
+        </div>
       </div>
 
       <div style={card}>

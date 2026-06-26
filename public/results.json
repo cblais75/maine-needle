@@ -1,1 +1,1 @@
-{ "_comment": "Empty = simulation. Fill via scripts/update-results.mjs. Test: npm run results:demo", "updated": null, "source": null, "races": {} }
+{ "updated": null, "source": "simulation", "races": {} }
