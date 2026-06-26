@@ -138,5 +138,31 @@
         "weightPct": 1
       }
     ]
+  },
+  "tx_sen": {
+    "margin": 0,
+    "nPolls": 2,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "UT / Texas Politics Project",
+        "date": "2026-06-12",
+        "rating": 0.85,
+        "dem": 42,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 70
+      },
+      {
+        "pollster": "Texas Public Opinion Research",
+        "date": "2026-05-28",
+        "rating": 0.6,
+        "dem": 47,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 30
+      }
+    ]
   }
 }

@@ -1,2 +1,21 @@
  
 === commit-update6.bat === 
+Add exit: 0 
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   commit-update6-log.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Commit exit: 1 
+ba5bd89 Update 6: add Ohio (Brown vs Husted) with county baseline
+4367a12 Update 5: add favicon, masthead mark, and social preview image
+db10656 Update 4: fix poll-average inflation; deploy NC county baseline + calibration
+80a824d Update 3: NC calibration (house effect 4 to 6)
+9ce0891 Update 2: North Carolina county-level baseline (100 counties)
+Everything up-to-date
+Push exit: 0 
+=== Done === 
