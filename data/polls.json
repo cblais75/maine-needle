@@ -1,0 +1,11 @@
+{
+  "_comment": "Reputable-pollster feed. rating 0-1 = quality weight (partisan firms down-weighted). For ballot Q, use dem=Yes, rep=No. Append new polls to the right race, then run: npm run polls",
+  "senate": [
+    { "pollster": "UMass Lowell/YouGov", "rating": 0.90, "date": "2026-05-20", "dem": 48, "rep": 43 },
+    { "pollster": "UNH Survey Center",   "rating": 0.85, "date": "2026-05-27", "dem": 51, "rep": 42 },
+    { "pollster": "Fabrizio Lee (R)",    "rating": 0.55, "date": "2026-06-02", "dem": 46, "rep": 46 }
+  ],
+  "governor": [],
+  "cd1": [],
+  "cd2": []
+}

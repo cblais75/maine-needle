@@ -1,0 +1,63 @@
+// Deterministic core: turn per-town vote rows into county results.json.
+// A row is { town, office, party, candidate, votes }. Source-agnostic: the Excel
+// reader and the CSV reader both produce rows, this turns them into the app's schema.
+import town2county from "./town-county.mjs";
+
+// Which office maps to which race, and how to tell the sides apart.
+// Sides resolve by party first; if the file has no party column, by candidate name.
+const RACES = [
+  { id: "sen", office: /senat/i, kind: "two", names: { dem: /platner/i, rep: /collins/i } },
+  { id: "gov", office: /governor/i, kind: "three", names: { dem: /pingree/i, rep: /charles/i, ind: /bennett/i } },
+  { id: "cd1", office: /(congress|representative).*(district\s*1|first|\b1\b)/i, kind: "two", names: { dem: /pingree/i, rep: /russell/i } },
+  { id: "cd2", office: /(congress|representative).*(district\s*2|second|\b2\b)/i, kind: "two", names: { dem: /dunlap/i, rep: /lepage/i } },
+  { id: "q1", office: /question\s*1/i, kind: "ballot" },
+];
+
+function lookupCounty(townRaw) {
+  let n = String(townRaw || "").trim();
+  if (town2county[n]) return town2county[n];
+  for (const suf of [" Ward", " CP", " City", " Precinct"]) if (n.includes(suf)) n = n.split(suf)[0].trim();
+  return town2county[n] || null;
+}
+function sideOf(race, party, candidate) {
+  const p = String(party || "").toUpperCase(), c = String(candidate || "");
+  if (race.kind === "ballot") { if (/^\s*y/i.test(c)) return "dem"; if (/^\s*n/i.test(c)) return "rep"; return null; }
+  if (p.startsWith("DEM")) return "dem";
+  if (p.startsWith("REP")) return "rep";
+  const nm = race.names || {};
+  for (const s of ["dem", "rep", "ind"]) if (nm[s] && nm[s].test(c)) return s;
+  if (race.kind === "three" && p) return "ind"; // gov: any other party is the independent lane
+  return null;
+}
+
+export function aggregate(rows) {
+  const acc = {}, unmatchedTowns = new Set(), unmatchedOffice = new Set();
+  for (const r of rows) {
+    const race = RACES.find((R) => R.office.test(r.office || ""));
+    if (!race) { if (r.office) unmatchedOffice.add(r.office); continue; }
+    const side = sideOf(race, r.party, r.candidate);
+    if (!side) continue;
+    const county = lookupCounty(r.town);
+    if (!county) { unmatchedTowns.add(r.town); continue; }
+    const votes = Number(String(r.votes).replace(/[^0-9.-]/g, "")) || 0;
+    acc[race.id] = acc[race.id] || {};
+    acc[race.id][county] = acc[race.id][county] || { dem: 0, rep: 0, ind: 0 };
+    acc[race.id][county][side] += votes;
+  }
+  const races = {};
+  for (const id of Object.keys(acc)) {
+    const counties = {};
+    for (const [co, v] of Object.entries(acc[id])) {
+      const o = { dem: Math.round(v.dem), rep: Math.round(v.rep) };
+      if (v.ind) o.ind = Math.round(v.ind);
+      counties[co] = o;
+    }
+    races[id] = { counties };
+  }
+  return {
+    updated: new Date().toISOString(),
+    source: "Maine SoS (parsed)",
+    races,
+    _diag: { unmatchedOffices: [...unmatchedOffice], unmatchedTownsSample: [...unmatchedTowns].slice(0, 15) },
+  };
+}

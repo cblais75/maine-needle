@@ -1,0 +1,63 @@
+{
+  "updated": "2026-06-24",
+  "method": {
+    "halfLifeDays": 21,
+    "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
+  },
+  "senate": {
+    "margin": 5,
+    "nPolls": 3,
+    "fallback": false,
+    "polls": [
+      {
+        "pollster": "Fabrizio Lee (R)",
+        "date": "2026-06-02",
+        "rating": 0.55,
+        "dem": 46,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 30
+      },
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-05-27",
+        "rating": 0.85,
+        "dem": 51,
+        "rep": 42,
+        "ind": null,
+        "weightPct": 38
+      },
+      {
+        "pollster": "UMass Lowell/YouGov",
+        "date": "2026-05-20",
+        "rating": 0.9,
+        "dem": 48,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 32
+      }
+    ]
+  },
+  "governor": {
+    "bennett": 18,
+    "margin": 6,
+    "nPolls": 0,
+    "fallback": true,
+    "note": "No public three-way polls yet; using a placeholder until real surveys appear.",
+    "polls": []
+  },
+  "cd1": {
+    "margin": null,
+    "nPolls": 0,
+    "fallback": true,
+    "note": "No public District 1 polls yet; using the 2020 House baseline.",
+    "polls": []
+  },
+  "cd2": {
+    "margin": null,
+    "nPolls": 0,
+    "fallback": true,
+    "note": "No public District 2 polls yet; using the personal-vote-adjusted baseline.",
+    "polls": []
+  }
+}
