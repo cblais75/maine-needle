@@ -1,2 +1,38 @@
  
 === commit-update2.bat === 
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/aggregate.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'update1-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'build-nc-baseline.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-nc-baseline.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-nc-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update2.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push-final.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nc-baseline-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'push-final-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/convert-tsv-to-csv.mjs', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 9ce0891] Update 2: North Carolina county-level baseline (100 counties)
+ 12 files changed, 349 insertions(+), 3 deletions(-)
+ create mode 100644 build-nc-baseline.bat
+ create mode 100644 commit-nc-baseline.bat
+ create mode 100644 commit-nc-log.txt
+ create mode 100644 commit-update2-log.txt
+ create mode 100644 commit-update2.bat
+ create mode 100644 git-push-final.bat
+ create mode 100644 nc-baseline-log.txt
+ create mode 100644 push-final-log.txt
+ create mode 100644 scripts/convert-tsv-to-csv.mjs
+Commit exit: 0 
+9ce0891 Update 2: North Carolina county-level baseline (100 counties)
+1c0a557 Add NC county baseline data
+f0d9e20 Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+1291d00 add intro line
+Token prefix: [gho_e] 
+To https://github.com/cblais75/maine-needle.git
+   1c0a557..9ce0891  main -> main
+Push exit: 0 
+=== Done === 

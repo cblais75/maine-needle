@@ -66,7 +66,7 @@ const makeSenate = (pollMargin) => ({
 // County-level baseline is pending the real-data step (scripts/build-baseline-nc.mjs pulls
 // NC's past results via dispatch). Until then NC runs on a single statewide unit centered on
 // polling: a valid poll-driven needle now, and a statewide live needle on election night.
-const NC_HOUSE = 4; // toward Whatley: NC leans Republican federally and undecideds have tended to break R
+const NC_HOUSE = 6; // toward Whatley: NC has overstated Democrats in 2016/2020/2022, and undecideds there tend to break R
 // Real county baseline from NC's 2024 presidential results (scripts/build-baseline-nc.mjs):
 // lean = each county's Dem two-party share minus the statewide share (mean-zero); weight = two-party turnout.
 const NC_LEAN = ncBaseline.lean, NC_W = ncBaseline.weight;
