@@ -1,2 +1,21 @@
  
 === commit-update4.bat === 
+Add exit: 0 
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   commit-update4-log.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Commit exit: 1 
+db10656 Update 4: fix poll-average inflation; deploy NC county baseline + calibration
+80a824d Update 3: NC calibration (house effect 4 to 6)
+9ce0891 Update 2: North Carolina county-level baseline (100 counties)
+1c0a557 Add NC county baseline data
+f0d9e20 Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+Everything up-to-date
+Push exit: 0 
+=== Done === 

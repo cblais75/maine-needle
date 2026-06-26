@@ -378,7 +378,15 @@ export default function MaineDashboard() {
     <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: 16 }}>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>The Needle Project</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+            <svg viewBox="0 0 64 64" width="26" height="26" style={{ flexShrink: 0 }} aria-hidden="true">
+              <path d="M10 42 A22 22 0 0 1 32 20" fill="none" stroke={RED} strokeWidth="5.5" strokeLinecap="round" />
+              <path d="M32 20 A22 22 0 0 1 54 42" fill="none" stroke={BLUE} strokeWidth="5.5" strokeLinecap="round" />
+              <line x1="30.4" y1="46.8" x2="37.9" y2="23.9" stroke={C.brass} strokeWidth="3.2" strokeLinecap="round" />
+              <circle cx="32" cy="42" r="3.4" fill={C.brass} />
+            </svg>
+            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>The Needle Project</div>
+          </div>
           <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginTop: 4 }}>
             An independent, live-updating tracker for the 2026 elections. Each state's key races, centered on polling now and running on real returns on election night.
           </div>

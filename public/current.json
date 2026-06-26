@@ -5,28 +5,10 @@
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 4,
-    "nPolls": 5,
+    "margin": 5,
+    "nPolls": 3,
     "fallback": false,
     "polls": [
-      {
-        "pollster": "Tavern Research",
-        "date": "2026-06-08",
-        "rating": 0.55,
-        "dem": 51,
-        "rep": 49,
-        "ind": null,
-        "weightPct": 22
-      },
-      {
-        "pollster": "Public Policy Polling (D)",
-        "date": "2026-06-03",
-        "rating": 0.5,
-        "dem": 49,
-        "rep": 45,
-        "ind": null,
-        "weightPct": 17
-      },
       {
         "pollster": "Fabrizio Lee (R)",
         "date": "2026-06-02",
@@ -34,7 +16,7 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 30
       },
       {
         "pollster": "UNH Survey Center",
@@ -43,7 +25,7 @@
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "weightPct": 23
+        "weightPct": 38
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -52,7 +34,7 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 32
       }
     ]
   },
@@ -79,20 +61,11 @@
     "polls": []
   },
   "nc_sen": {
-    "margin": 13,
-    "nPolls": 3,
+    "margin": 11,
+    "nPolls": 2,
     "fallback": false,
     "note": "",
     "polls": [
-      {
-        "pollster": "Catawba College/YouGov",
-        "date": "2026-06-10",
-        "rating": 0.9,
-        "dem": 48,
-        "rep": 34,
-        "ind": null,
-        "weightPct": 76
-      },
       {
         "pollster": "Carolina Journal/Civitas (R)",
         "date": "2026-05-15",
@@ -100,7 +73,7 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 88
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -109,7 +82,7 @@
         "dem": 48.9,
         "rep": 41.1,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 12
       }
     ]
   }
