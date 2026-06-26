@@ -12,6 +12,7 @@ const RACES = [
   { id: "cd2", state: "ME", office: /(congress|representative).*(district\s*2|second|\b2\b)/i, kind: "two", names: { dem: /dunlap/i, rep: /lepage/i } },
   { id: "q1", state: "ME", office: /question\s*1/i, kind: "ballot" },
   { id: "nc_sen", state: "NC", office: /senat/i, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
+  { id: "oh_sen", state: "OH", office: /senat/i, kind: "two", names: { dem: /brown/i, rep: /husted/i } },
 ];
 
 function lookupCounty(townRaw) {
@@ -39,8 +40,8 @@ export function aggregate(rows, state = "ME") {
     if (!race) { if (r.office) unmatchedOffice.add(r.office); continue; }
     const side = sideOf(race, r.party, r.candidate);
     if (!side) continue;
-    // Maine reports by town and rolls up to county; NC already reports by county.
-    const county = state === "NC"
+    // Maine reports by town and rolls up to county; other states report by county directly.
+    const county = state !== "ME"
       ? String(r.town || r.county || "").trim().toUpperCase().replace(/\s+COUNTY$/, "")
       : lookupCounty(r.town);
     if (!county) { unmatchedTowns.add(r.town); continue; }
@@ -61,7 +62,7 @@ export function aggregate(rows, state = "ME") {
   }
   return {
     updated: new Date().toISOString(),
-    source: state === "NC" ? "NC SBE (parsed)" : "Maine SoS (parsed)",
+    source: ({ NC: "NC SBE (parsed)", OH: "OH SOS (parsed)" }[state]) || "Maine SoS (parsed)",
     races,
     _diag: { unmatchedOffices: [...unmatchedOffice], unmatchedTownsSample: [...unmatchedTowns].slice(0, 15) },
   };

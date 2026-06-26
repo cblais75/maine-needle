@@ -85,5 +85,58 @@
         "weightPct": 12
       }
     ]
+  },
+  "oh_sen": {
+    "margin": 4,
+    "nPolls": 5,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "AARP (Impact/Fabrizio)",
+        "date": "2026-06-16",
+        "rating": 0.85,
+        "dem": 48,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 55
+      },
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-06-01",
+        "rating": 0.9,
+        "dem": 53,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 35
+      },
+      {
+        "pollster": "BGSU/YouGov",
+        "date": "2026-04-14",
+        "rating": 0.85,
+        "dem": 47,
+        "rep": 50,
+        "ind": null,
+        "weightPct": 7
+      },
+      {
+        "pollster": "Quantus Insights",
+        "date": "2026-03-14",
+        "rating": 0.6,
+        "dem": 44,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 2
+      },
+      {
+        "pollster": "On Message Inc. (R)",
+        "date": "2026-03-08",
+        "rating": 0.6,
+        "dem": 47,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 1
+      }
+    ]
   }
 }

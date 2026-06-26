@@ -1,2 +1,26 @@
  
 === commit-update5.bat === 
+warning: in the working copy of 'commit-update4-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update5.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/favicon.svg', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 4367a12] Update 5: add favicon, masthead mark, and social preview image
+ 8 files changed, 92 insertions(+), 37 deletions(-)
+ create mode 100644 commit-update5-log.txt
+ create mode 100644 commit-update5.bat
+ create mode 100644 public/favicon.svg
+ create mode 100644 public/og-image.png
+Commit exit: 0 
+4367a12 Update 5: add favicon, masthead mark, and social preview image
+db10656 Update 4: fix poll-average inflation; deploy NC county baseline + calibration
+80a824d Update 3: NC calibration (house effect 4 to 6)
+9ce0891 Update 2: North Carolina county-level baseline (100 counties)
+1c0a557 Add NC county baseline data
+To https://github.com/cblais75/maine-needle.git
+   db10656..4367a12  main -> main
+Push exit: 0 
+=== Done === 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause, SkipForward, RotateCcw, ChevronLeft } from "lucide-react";
 import ncBaseline from "../data/nc-baseline.json";
+import ohBaseline from "../data/oh-baseline.json";
 
 const C = {
   ink: "#0E1422", panel: "#161E2E", panel2: "#1B2435", line: "#28344A",
@@ -81,6 +82,28 @@ const makeNCSenate = (pollMargin) => ({
   left: { full: "Whatley", short: "Whatley", color: RED },
   right: { full: "Cooper", short: "Cooper", color: BLUE },
   units: ncUnits(pollMargin),
+});
+
+// ---- OHIO ---- (special election for JD Vance's old seat)
+// Brown (D) vs Husted (R), plurality. Ohio leans Republican (Trump +11 in 2024) and its polls
+// overstated Brown in 2024 (he led several surveys, then lost by ~3.5), so the poll center is
+// shifted toward Husted. Uses the real county map when data/oh-baseline.json is filled in,
+// otherwise a single statewide unit until the dispatch baseline step runs.
+const OH_HOUSE = 4;
+const OH_LEAN = ohBaseline.lean || {}, OH_W = ohBaseline.weight || {};
+const OH_HAS_COUNTIES = Object.keys(OH_LEAN).length > 0;
+const ohUnits = (pollMargin) =>
+  OH_HAS_COUNTIES
+    ? Object.keys(OH_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - OH_HOUSE) / 200 + OH_LEAN[n], 0.02, 0.98), OH_W[n]))
+    : [unit("Ohio", clamp(0.5 + (pollMargin - OH_HOUSE) / 200, 0.02, 0.98), 1)];
+const makeOhioSenate = (pollMargin) => ({
+  id: "oh_sen", state: "OH", title: "U.S. Senate (special)",
+  sub: "Brown (D) vs Husted (R)",
+  system: "Plurality", real: true,
+  note: `Special election for JD Vance's old seat. Centered on polls, then shifted ${OH_HOUSE} pts toward Husted for Ohio's Republican lean.${OH_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  left: { full: "Husted", short: "Husted", color: RED },
+  right: { full: "Brown", short: "Brown", color: BLUE },
+  units: ohUnits(pollMargin),
 });
 
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
@@ -281,22 +304,25 @@ function applyAllLive(races, results) {
 const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
-const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }];
+const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }];
 
 export default function MaineDashboard() {
   const DEFAULT_MARGIN = 3; // Platner D+3 two-party, a mid estimate of current polls
   const DEFAULT_NC_MARGIN = 9; // Cooper D+9, mid of recent NC polls
+  const DEFAULT_OH_MARGIN = 4; // Brown D+4, mid of recent Ohio polls
   const [pollMargin, setPollMargin] = useState(DEFAULT_MARGIN);
   const [ncMargin, setNcMargin] = useState(DEFAULT_NC_MARGIN);
+  const [ohMargin, setOhMargin] = useState(DEFAULT_OH_MARGIN);
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN) => [
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN) => [
     rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
     rollRace(makeCD2(dc, cd2m)),
     rollRace(makeNCSenate(ncm)),
+    rollRace(makeOhioSenate(ohm)),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
@@ -342,8 +368,9 @@ export default function MaineDashboard() {
         setCurrent(c);
         if (c?.senate) setPollMargin(c.senate.margin ?? DEFAULT_MARGIN);
         if (c?.nc_sen) setNcMargin(c.nc_sen.margin ?? DEFAULT_NC_MARGIN);
+        if (c?.oh_sen) setOhMargin(c.oh_sen.margin ?? DEFAULT_OH_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -364,7 +391,7 @@ export default function MaineDashboard() {
     return () => clearInterval(id);
   }, []);
 
-  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -809,6 +836,8 @@ function PollsView({ current, loaded }) {
           <PollRace title="U.S. House · District 2" lead={current.cd2} demName="Dunlap" repName="LePage" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>North Carolina</div>
           <PollRace title="U.S. Senate" lead={current.nc_sen} demName="Cooper" repName="Whatley" />
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Ohio</div>
+          <PollRace title="U.S. Senate (special)" lead={current.oh_sen} demName="Brown" repName="Husted" />
         </>
       )}
       <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.5, marginTop: 4 }}>
@@ -873,7 +902,8 @@ function MethodView() {
             <b style={{ color: C.brass }}>Maine — House 1 &amp; 2</b> — the actual 2020 U.S. House results by county. District 2 also has a dial that fades the former incumbent's personal vote toward the district's fundamentals, since the seat is open.<br />
             <b style={{ color: C.brass }}>Maine — Governor</b> — the blended presidential map for shape, with a polling-set split. A three-way plurality race (Pingree, Charles, independent Bennett), so it shows three win-probability meters.<br />
             <b style={{ color: C.brass }}>Maine — Ballot question</b> — illustrative only; a brand-new question has no prior election to map.<br />
-            <b style={{ color: C.brass }}>North Carolina — Senate</b> — Cooper vs Whatley, an open seat. Currently centered on polling at the statewide level; the county-by-county baseline (from NC's past results) is being added.
+            <b style={{ color: C.brass }}>North Carolina — Senate</b> — Cooper vs Whatley, an open seat, on a county map from NC's past results.<br />
+            <b style={{ color: C.brass }}>Ohio — Senate (special)</b> — Brown vs Husted, the special election for JD Vance's old seat. County baseline from Ohio's past results is being added; until then it runs statewide on polling.
           </div>
         </div>
       </div>
@@ -884,7 +914,8 @@ function MethodView() {
           Each race's center is a recency- and quality-weighted polling average (see the Polls tab). Two races then get a documented house-effect adjustment, because a raw poll average has a known directional bias in that state:
           <div style={{ marginTop: 8 }}>
             <b style={{ color: C.text }}>Maine Senate</b> — shifted toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
-            <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.
+            <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.<br />
+            <b style={{ color: C.text }}>Ohio Senate</b> — shifted toward Husted: Ohio is a clearly Republican-leaning state and its polls overstated Brown in 2024, when he led several surveys but lost.
           </div>
         </div>
       </div>

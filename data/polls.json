@@ -62,5 +62,12 @@
       "dem": 48,
       "rep": 34
     }
+  ],
+  "oh_sen": [
+    {"pollster":"Fox News (Beacon/Shaw)","rating":0.9,"date":"2026-06-01","dem":53,"rep":45},
+    {"pollster":"AARP (Impact/Fabrizio)","rating":0.85,"date":"2026-06-16","dem":48,"rep":45},
+    {"pollster":"BGSU/YouGov","rating":0.85,"date":"2026-04-14","dem":47,"rep":50},
+    {"pollster":"Quantus Insights","rating":0.6,"date":"2026-03-14","dem":44,"rep":46},
+    {"pollster":"On Message Inc. (R)","rating":0.6,"date":"2026-03-08","dem":47,"rep":45}
   ]
 }
