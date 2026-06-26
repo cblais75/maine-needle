@@ -3,6 +3,7 @@ import { Play, Pause, SkipForward, RotateCcw, ChevronLeft } from "lucide-react";
 import ncBaseline from "../data/nc-baseline.json";
 import ohBaseline from "../data/oh-baseline.json";
 import txBaseline from "../data/tx-baseline.json";
+import iaBaseline from "../data/ia-baseline.json";
 
 const C = {
   ink: "#0E1422", panel: "#161E2E", panel2: "#1B2435", line: "#28344A",
@@ -126,6 +127,27 @@ const makeTexasSenate = (pollMargin) => ({
   left: { full: "Paxton", short: "Paxton", color: RED },
   right: { full: "Talarico", short: "Talarico", color: BLUE },
   units: txUnits(pollMargin),
+});
+
+// ---- IOWA ---- (open seat; Ernst is retiring)
+// Hinson (R) vs Turek (D), plurality. Iowa leans strongly Republican (Trump +13 in 2024) and a
+// Democrat has not won a Senate race here since 2008, so the center is shifted toward Hinson.
+// No public general-election polls yet, so it runs on fundamentals until the weekly refresh adds them.
+const IA_HOUSE = 5;
+const IA_LEAN = iaBaseline.lean || {}, IA_W = iaBaseline.weight || {};
+const IA_HAS_COUNTIES = Object.keys(IA_LEAN).length > 0;
+const iaUnits = (pollMargin) =>
+  IA_HAS_COUNTIES
+    ? Object.keys(IA_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - IA_HOUSE) / 200 + IA_LEAN[n], 0.02, 0.98), IA_W[n]))
+    : [unit("Iowa", clamp(0.5 + (pollMargin - IA_HOUSE) / 200, 0.02, 0.98), 1)];
+const makeIowaSenate = (pollMargin) => ({
+  id: "ia_sen", state: "IA", title: "U.S. Senate",
+  sub: "Hinson (R) vs Turek (D)",
+  system: "Plurality", real: true,
+  note: `Open seat (Ernst is retiring). Iowa leans strongly Republican, so the poll center is shifted ${IA_HOUSE} pts toward Hinson.${IA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  left: { full: "Hinson", short: "Hinson", color: RED },
+  right: { full: "Turek", short: "Turek", color: BLUE },
+  units: iaUnits(pollMargin),
 });
 
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
@@ -326,21 +348,23 @@ function applyAllLive(races, results) {
 const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
-const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }];
+const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }];
 
 export default function MaineDashboard() {
   const DEFAULT_MARGIN = 3; // Platner D+3 two-party, a mid estimate of current polls
   const DEFAULT_NC_MARGIN = 9; // Cooper D+9, mid of recent NC polls
   const DEFAULT_OH_MARGIN = 4; // Brown D+4, mid of recent Ohio polls
   const DEFAULT_TX_MARGIN = 0; // ~even, mid of recent Texas polls
+  const DEFAULT_IA_MARGIN = 0; // no public polls yet; fundamentals via house effect
   const [pollMargin, setPollMargin] = useState(DEFAULT_MARGIN);
   const [ncMargin, setNcMargin] = useState(DEFAULT_NC_MARGIN);
   const [ohMargin, setOhMargin] = useState(DEFAULT_OH_MARGIN);
   const [txMargin, setTxMargin] = useState(DEFAULT_TX_MARGIN);
+  const [iaMargin, setIaMargin] = useState(DEFAULT_IA_MARGIN);
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN) => [
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN) => [
     rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
@@ -348,6 +372,7 @@ export default function MaineDashboard() {
     rollRace(makeNCSenate(ncm)),
     rollRace(makeOhioSenate(ohm)),
     rollRace(makeTexasSenate(txm)),
+    rollRace(makeIowaSenate(iam)),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
@@ -395,8 +420,9 @@ export default function MaineDashboard() {
         if (c?.nc_sen) setNcMargin(c.nc_sen.margin ?? DEFAULT_NC_MARGIN);
         if (c?.oh_sen) setOhMargin(c.oh_sen.margin ?? DEFAULT_OH_MARGIN);
         if (c?.tx_sen) setTxMargin(c.tx_sen.margin ?? DEFAULT_TX_MARGIN);
+        if (c?.ia_sen) setIaMargin(c.ia_sen.margin ?? DEFAULT_IA_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -417,7 +443,7 @@ export default function MaineDashboard() {
     return () => clearInterval(id);
   }, []);
 
-  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -866,6 +892,8 @@ function PollsView({ current, loaded }) {
           <PollRace title="U.S. Senate (special)" lead={current.oh_sen} demName="Brown" repName="Husted" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Texas</div>
           <PollRace title="U.S. Senate" lead={current.tx_sen} demName="Talarico" repName="Paxton" />
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Iowa</div>
+          <PollRace title="U.S. Senate" lead={current.ia_sen} demName="Turek" repName="Hinson" />
         </>
       )}
       <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.5, marginTop: 4 }}>
@@ -932,7 +960,8 @@ function MethodView() {
             <b style={{ color: C.brass }}>Maine — Ballot question</b> — illustrative only; a brand-new question has no prior election to map.<br />
             <b style={{ color: C.brass }}>North Carolina — Senate</b> — Cooper vs Whatley, an open seat, on a county map from NC's past results.<br />
             <b style={{ color: C.brass }}>Ohio — Senate (special)</b> — Brown vs Husted, the special election for JD Vance's old seat, on a county map from Ohio's past results.<br />
-            <b style={{ color: C.brass }}>Texas — Senate</b> — Paxton vs Talarico, on a county map from Texas's past results.
+            <b style={{ color: C.brass }}>Texas — Senate</b> — Paxton vs Talarico, on a county map from Texas's past results.<br />
+            <b style={{ color: C.brass }}>Iowa — Senate</b> — Hinson vs Turek, an open seat. County baseline from Iowa's past results is being added; centered on fundamentals until public polls appear.
           </div>
         </div>
       </div>
@@ -945,7 +974,8 @@ function MethodView() {
             <b style={{ color: C.text }}>Maine Senate</b> — shifted toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
             <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.<br />
             <b style={{ color: C.text }}>Ohio Senate</b> — shifted toward Husted for Ohio's Republican lean at the federal level.<br />
-            <b style={{ color: C.text }}>Texas Senate</b> — shifted toward Paxton for Texas's strong Republican lean.
+            <b style={{ color: C.text }}>Texas Senate</b> — shifted toward Paxton for Texas's strong Republican lean.<br />
+            <b style={{ color: C.text }}>Iowa Senate</b> — shifted toward Hinson for Iowa's strong Republican lean at the federal level.
           </div>
         </div>
       </div>

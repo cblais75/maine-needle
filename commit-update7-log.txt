@@ -1,2 +1,28 @@
  
 === commit-update7.bat === 
+warning: in the working copy of 'commit-update6-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/town-county.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/aggregate.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/update-polls.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update7.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/tx-baseline.json', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 3483278] Update 7
+ 9 files changed, 654 insertions(+), 64 deletions(-)
+ create mode 100644 commit-update7-log.txt
+ create mode 100644 commit-update7.bat
+ create mode 100644 data/tx-baseline.json
+Commit exit: 0 
+3483278 Update 7
+ba5bd89 Update 6: add Ohio (Brown vs Husted) with county baseline
+4367a12 Update 5: add favicon, masthead mark, and social preview image
+db10656 Update 4: fix poll-average inflation; deploy NC county baseline + calibration
+80a824d Update 3: NC calibration (house effect 4 to 6)
+To https://github.com/cblais75/maine-needle.git
+   ba5bd89..3483278  main -> main
+Push exit: 0 
+=== Done === 

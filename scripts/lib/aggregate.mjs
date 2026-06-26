@@ -14,6 +14,7 @@ const RACES = [
   { id: "nc_sen", state: "NC", office: /senat/i, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
   { id: "oh_sen", state: "OH", office: /senat/i, kind: "two", names: { dem: /brown/i, rep: /husted/i } },
   { id: "tx_sen", state: "TX", office: /senat/i, kind: "two", names: { dem: /talarico/i, rep: /paxton/i } },
+  { id: "ia_sen", state: "IA", office: /senat/i, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
 ];
 
 function lookupCounty(townRaw) {
@@ -63,7 +64,7 @@ export function aggregate(rows, state = "ME") {
   }
   return {
     updated: new Date().toISOString(),
-    source: ({ NC: "NC SBE (parsed)", OH: "OH SOS (parsed)", TX: "TX SOS (parsed)" }[state]) || "Maine SoS (parsed)",
+    source: ({ NC: "NC SBE (parsed)", OH: "OH SOS (parsed)", TX: "TX SOS (parsed)", IA: "IA SOS (parsed)" }[state]) || "Maine SoS (parsed)",
     races,
     _diag: { unmatchedOffices: [...unmatchedOffice], unmatchedTownsSample: [...unmatchedTowns].slice(0, 15) },
   };
