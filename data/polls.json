@@ -21,6 +21,20 @@
       "date": "2026-06-02",
       "dem": 46,
       "rep": 46
+    },
+    {
+      "pollster": "Public Policy Polling (D)",
+      "rating": 0.5,
+      "date": "2026-06-03",
+      "dem": 49,
+      "rep": 45
+    },
+    {
+      "pollster": "Tavern Research",
+      "rating": 0.55,
+      "date": "2026-06-08",
+      "dem": 51,
+      "rep": 49
     }
   ],
   "governor": [],
@@ -40,6 +54,13 @@
       "date": "2026-05-15",
       "dem": 49.8,
       "rep": 38.7
+    },
+    {
+      "pollster": "Catawba College/YouGov",
+      "rating": 0.9,
+      "date": "2026-06-10",
+      "dem": 48,
+      "rep": 34
     }
   ]
 }

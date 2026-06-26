@@ -27,7 +27,7 @@ function summarize(list) {
       weightPct: Math.round((p._w / W) * 100),
     }));
   return {
-    margin: Math.round(((dem - rep) / (dem + rep)) * 100),
+    margin: Math.round(dem - rep),
     bennett: Math.round(ind),
     nPolls: list.length,
     polls: detail,

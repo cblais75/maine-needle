@@ -1,2 +1,21 @@
  
 === commit-update3.bat === 
+warning: in the working copy of 'commit-update2-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update3.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 80a824d] Update 3: NC calibration (house effect 4 to 6)
+ 5 files changed, 74 insertions(+), 3 deletions(-)
+ create mode 100644 commit-update3-log.txt
+ create mode 100644 commit-update3.bat
+Commit exit: 0 
+80a824d Update 3: NC calibration (house effect 4 to 6)
+9ce0891 Update 2: North Carolina county-level baseline (100 counties)
+1c0a557 Add NC county baseline data
+f0d9e20 Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+To https://github.com/cblais75/maine-needle.git
+   9ce0891..80a824d  main -> main
+Push exit: 0 
+=== Done === 
