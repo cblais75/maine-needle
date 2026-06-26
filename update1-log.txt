@@ -1,3 +1,50 @@
  
 === git-update1.bat === 
 === Staging === 
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/aggregate.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/update-polls.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-api-push.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-check.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push2.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push3.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-update1.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'push-log3.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/build-baseline-nc.mjs', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+=== Committing === 
+[main f0d9e20] Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+ 23 files changed, 675 insertions(+), 72 deletions(-)
+ create mode 100644 api-push-log.txt
+ create mode 100644 git-api-push.bat
+ create mode 100644 git-check.bat
+ create mode 100644 git-log.txt
+ create mode 100644 git-push.bat
+ create mode 100644 git-push2.bat
+ create mode 100644 git-push3.bat
+ create mode 100644 git-update1.bat
+ create mode 100644 push-log.txt
+ create mode 100644 push-log3.txt
+ create mode 100644 scripts/build-baseline-nc.mjs
+ create mode 100644 update1-log.txt
+Commit exit: 0 
+=== Log === 
+f0d9e20 Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+1291d00 add intro line
+4aaf3d3 Initial commit: maine-needle 2026 election dashboard
+HEAD SHA: f0d9e2085f9ee28f9065f6ce5e4346978e09324c 
+Token prefix: [gho_e] 
+=== Pushing via gh api === 
+{"message":"Object does not exist","documentation_url":"https://docs.github.com/rest/git/refs#update-a-reference","status":"422"}gh: Object does not exist (HTTP 422)
+Push exit: 1 
+=== Done === 

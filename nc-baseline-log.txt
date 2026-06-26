@@ -1,0 +1,21 @@
+ 
+=== build-nc-baseline.bat === 
+Downloading NC 2024 results... 
+Download done
+Extracting zip... 
+results.csv 23631041
+results.zip 3741131
+results_pct_20241105.txt 23861000
+Found results file: C:\Users\colin\AppData\Local\Temp\nc2024\results_pct_20241105.txt 
+=== File header + sample row: === 
+County	Election Date	Precinct	Contest Group ID	Contest Type	Contest Name	Choice	Choice Party	Vote For	Election Day	Early Voting	Absentee by Mail	Provisional	Total Votes	Real Precinct	
+BUNCOMBE	11/05/2024	01.1	7	C	CITY OF ASHEVILLE CITY COUNCIL	Write-In (Miscellaneous)		3	6	14	1	0	21	Y	
+=== End sample === 
+Converting TSV to CSV... 
+Column indices — county:0 contest:5 choice:6 party:7 votes:13
+Wrote 233510 data rows → C:\Users\colin\AppData\Local\Temp\nc2024\results.csv
+Building NC county baseline... 
+Wrote C:\Users\colin\OneDrive\Desktop\Maine Election App\maine-needle\data\nc-baseline.json
+Counties: 100 (expect 100) · statewide D two-party: 48.4%
+Build exit: 0 
+=== Done === 

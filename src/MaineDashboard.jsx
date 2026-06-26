@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause, SkipForward, RotateCcw, ChevronLeft } from "lucide-react";
+import ncBaseline from "../data/nc-baseline.json";
 
 const C = {
   ink: "#0E1422", panel: "#161E2E", panel2: "#1B2435", line: "#28344A",
@@ -66,14 +67,20 @@ const makeSenate = (pollMargin) => ({
 // NC's past results via dispatch). Until then NC runs on a single statewide unit centered on
 // polling: a valid poll-driven needle now, and a statewide live needle on election night.
 const NC_HOUSE = 4; // toward Whatley: NC leans Republican federally and undecideds have tended to break R
+// Real county baseline from NC's 2024 presidential results (scripts/build-baseline-nc.mjs):
+// lean = each county's Dem two-party share minus the statewide share (mean-zero); weight = two-party turnout.
+const NC_LEAN = ncBaseline.lean, NC_W = ncBaseline.weight;
+const ncUnits = (pollMargin) =>
+  Object.keys(NC_LEAN).map((n) =>
+    unit(n, clamp(0.5 + (pollMargin - NC_HOUSE) / 200 + NC_LEAN[n], 0.02, 0.98), NC_W[n]));
 const makeNCSenate = (pollMargin) => ({
   id: "nc_sen", state: "NC", title: "U.S. Senate",
   sub: "Cooper (D) vs Whatley (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley for North Carolina's Republican lean. County-level baseline is being added; the needle is currently statewide.`,
+  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley for North Carolina's Republican lean. County map built from 2024 results.`,
   left: { full: "Whatley", short: "Whatley", color: RED },
   right: { full: "Cooper", short: "Cooper", color: BLUE },
-  units: [unit("North Carolina", clamp(0.5 + (pollMargin - NC_HOUSE) / 200, 0.02, 0.98), 1)],
+  units: ncUnits(pollMargin),
 });
 
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.

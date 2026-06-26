@@ -1,0 +1,12 @@
+ 
+=== git-push-final.bat === 
+Token prefix: [gho_e] 
+=== Git log === 
+f0d9e20 Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+1291d00 add intro line
+4aaf3d3 Initial commit: maine-needle 2026 election dashboard
+=== Pushing === 
+To https://github.com/cblais75/maine-needle.git
+   1291d00..f0d9e20  main -> main
+Push exit: 0 
+=== Done === 

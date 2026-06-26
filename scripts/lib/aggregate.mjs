@@ -40,7 +40,9 @@ export function aggregate(rows, state = "ME") {
     const side = sideOf(race, r.party, r.candidate);
     if (!side) continue;
     // Maine reports by town and rolls up to county; NC already reports by county.
-    const county = state === "NC" ? String(r.town || r.county || "").trim() : lookupCounty(r.town);
+    const county = state === "NC"
+      ? String(r.town || r.county || "").trim().toUpperCase().replace(/\s+COUNTY$/, "")
+      : lookupCounty(r.town);
     if (!county) { unmatchedTowns.add(r.town); continue; }
     const votes = Number(String(r.votes).replace(/[^0-9.-]/g, "")) || 0;
     acc[race.id] = acc[race.id] || {};

@@ -1,0 +1,16 @@
+ 
+=== commit-nc-baseline.bat === 
+warning: in the working copy of 'data/nc-baseline.json', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 1c0a557] Add NC county baseline data
+ 1 file changed, 211 insertions(+)
+ create mode 100644 data/nc-baseline.json
+Commit exit: 0 
+1c0a557 Add NC county baseline data
+f0d9e20 Update 1: rename to The Needle Project, Maine probability fix, multi-state dashboard, North Carolina
+1291d00 add intro line
+4aaf3d3 Initial commit: maine-needle 2026 election dashboard
+To https://github.com/cblais75/maine-needle.git
+   f0d9e20..1c0a557  main -> main
+Push exit: 0 
+=== Done === 
