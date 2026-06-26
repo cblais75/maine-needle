@@ -343,6 +343,12 @@ export default function MaineDashboard() {
   return (
     <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: 16 }}>
       <div style={{ maxWidth: 480, margin: "0 auto" }}>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>Maine 2026 Election Needle</div>
+          <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginTop: 4 }}>
+            An independent, live-updating tracker for Maine's 2026 races — U.S. Senate, Governor, both U.S. House seats, and the statewide ballot question. Live on election night.
+          </div>
+        </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 1.4, color: anyLive ? RED : C.muted, fontFamily: mono, textTransform: "uppercase", marginBottom: 12 }}>
           <span style={{ width: 7, height: 7, borderRadius: 9, background: anyLive ? RED : C.muted, boxShadow: anyLive ? `0 0 8px ${RED}` : "none" }} />
           {anyLive ? "Live — real returns coming in" : "Simulation — not election night yet"}
