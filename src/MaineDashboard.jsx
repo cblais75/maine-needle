@@ -462,7 +462,7 @@ export default function MaineDashboard() {
     const snap = {}; const events = [];
     const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     for (const r of races) {
-      if (r.type === "rcv" || !r.units || !r.units.length) continue;
+      if (r.type === "rcv" || r.type === "three" || !r.right || !r.left || !r.units || !r.units.length) continue;
       const m = compute(r.units); const rt = rateOf(r, m);
       const cur = { pct: rt.pct, tag: tagOf(rt.pct), leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
       snap[r.id] = cur;
