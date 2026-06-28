@@ -391,6 +391,7 @@ export default function MaineDashboard() {
   const [running, setRunning] = useState(false);
   const [wire, setWire] = useState([]);
   const wirePrev = useRef(null);
+  const wireSeen = useRef({});
   const [speed, setSpeed] = useState(1);
   const [current, setCurrent] = useState(null);   // current polling outlook from public/current.json
   const [view, setView] = useState("dashboard");   // dashboard | <state code> | polls | method
@@ -475,12 +476,44 @@ export default function MaineDashboard() {
         if (cur.tag === "Called") events.push({ kind: "call", text: `Called: ${cur.leader} wins ${label(r)}.`, color: C.brass });
         else events.push({ kind: "tier", text: `${label(r)}: now ${rt.text} (${cur.pct}%).`, color: cur.color });
       }
+      // ---- county watch: pure comparison of each county's actual share to its baseline ----
+      const seen = (wireSeen.current[r.id] || (wireSeen.current[r.id] = { counties: new Set(), paths: new Set() }));
+      const totalW = r.units.reduce((s2, u) => s2 + u.weight, 0) || 1;
+      for (const u of r.units) {
+        if (seen.counties.has(u.name)) continue;
+        if (u.reported < 0.6 || u.finalShare == null) continue;
+        seen.counties.add(u.name);
+        if (u.weight / totalW < 0.025) continue;                 // skip tiny counties
+        const diff = Math.round(2 * (u.finalShare - u.prior) * 100); // margin points vs baseline
+        if (Math.abs(diff) < 3) continue;                        // skip "as expected"
+        const ahead = diff > 0 ? r.right : r.left;
+        events.push({ kind: "county", text: `${ahead.short} is running ${Math.abs(diff)} pts ahead of baseline in ${u.name}.`, color: ahead.color });
+      }
+      // ---- path to win: in close races, what is the trailing candidate's remaining vote? ----
+      const gap = Math.round(Math.abs(m.margin) * 100);
+      for (const M of [50, 80]) {
+        if (!(prev.frac < M / 100 && cur.frac >= M / 100) || seen.paths.has(M) || gap > 6) continue;
+        seen.paths.add(M);
+        const trailing = m.margin >= 0 ? r.left : r.right;
+        const trailIsD = trailing === r.right;
+        let remW = 0, best = null;
+        for (const u of r.units) {
+          if (u.reported >= 0.5) continue;
+          remW += u.weight;
+          const leansTrail = trailIsD ? u.prior > 0.5 : u.prior < 0.5;
+          if (leansTrail && (!best || u.weight > best.weight)) best = u;
+        }
+        const pctRem = Math.round((remW / totalW) * 100);
+        if (pctRem < 5) continue;
+        const tail = best ? `, including ${best.name}, a ${trailing.short}-leaning county` : "";
+        events.push({ kind: "path", text: `${trailing.short} trails by ${gap} with about ${pctRem}% of the vote still out${tail}.`, color: C.text });
+      }
     }
     wirePrev.current = snap;
     if (events.length) setWire((w) => [...events.map((e, i) => ({ ...e, id: `${Date.now()}-${i}`, t: now })), ...w].slice(0, 60));
   }, [races]);
 
-  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -760,7 +793,7 @@ function WireFeed({ events }) {
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>LIVE WIRE</div>
       <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Election Night Feed</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
-        Plain-language updates generated straight from the model as results come in: rating changes, lead flips, and reporting milestones. Start the simulation or wait for live results to see it move.
+        Plain-language updates generated straight from the model as results come in: rating changes, lead flips, reporting milestones, and county-by-county overperformance versus baseline. Every line is arithmetic on the numbers, never written commentary. County lines only carry meaning on real returns; in the simulation the county figures are random.
       </div>
       {events.length === 0 ? (
         <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "18px 0" }}>Waiting for results…</div>

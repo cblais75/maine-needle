@@ -1,2 +1,20 @@
  
 === commit-update11.bat === 
+warning: in the working copy of 'commit-update10-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update11.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main f9d827c] Update 11
+ 4 files changed, 55 insertions(+), 1 deletion(-)
+ create mode 100644 commit-update11-log.txt
+ create mode 100644 commit-update11.bat
+Commit exit: 0 
+f9d827c Update 11
+8467b46 Update 10
+7282f15 Update 9
+8d0786f Update 8
+To https://github.com/cblais75/maine-needle.git
+   8467b46..f9d827c  main -> main
+Push exit: 0 
+=== Done === 
