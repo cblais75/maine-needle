@@ -389,6 +389,8 @@ export default function MaineDashboard() {
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
   const [sel, setSel] = useState(null);
   const [running, setRunning] = useState(false);
+  const [wire, setWire] = useState([]);
+  const wirePrev = useRef(null);
   const [speed, setSpeed] = useState(1);
   const [current, setCurrent] = useState(null);   // current polling outlook from public/current.json
   const [view, setView] = useState("dashboard");   // dashboard | <state code> | polls | method
@@ -454,7 +456,31 @@ export default function MaineDashboard() {
     return () => clearInterval(id);
   }, []);
 
-  const reset = () => { setRunning(false); setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin), resultsRef.current)); };
+  useEffect(() => {
+    const tagOf = (pct) => pct >= 97 ? "Called" : pct >= 85 ? "Likely" : pct >= 65 ? "Leans" : "Toss-up";
+    const label = (r) => { const st = STATES.find((s) => s.code === r.state); return `${st ? st.label : ""} ${r.title.replace("U.S. ", "").replace(" (special)", "")}`.trim(); };
+    const snap = {}; const events = [];
+    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    for (const r of races) {
+      if (r.type === "rcv" || !r.units || !r.units.length) continue;
+      const m = compute(r.units); const rt = rateOf(r, m);
+      const cur = { pct: rt.pct, tag: tagOf(rt.pct), leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
+      snap[r.id] = cur;
+      const prev = wirePrev.current ? wirePrev.current[r.id] : null;
+      if (!prev || cur.frac === 0) continue;
+      if (prev.frac === 0) events.push({ kind: "open", text: `First results in from ${label(r)}.`, color: C.muted });
+      for (const M of [25, 50, 75, 90, 99]) if (prev.frac < M / 100 && cur.frac >= M / 100) events.push({ kind: "mile", text: `${label(r)}: ${M}% of expected vote in.`, color: C.muted });
+      if (prev.leader !== cur.leader) events.push({ kind: "flip", text: `Lead flip — ${cur.leader} now ahead in ${label(r)} (${cur.pct}%).`, color: cur.color });
+      else if (prev.tag !== cur.tag) {
+        if (cur.tag === "Called") events.push({ kind: "call", text: `Called: ${cur.leader} wins ${label(r)}.`, color: C.brass });
+        else events.push({ kind: "tier", text: `${label(r)}: now ${rt.text} (${cur.pct}%).`, color: cur.color });
+      }
+    }
+    wirePrev.current = snap;
+    if (events.length) setWire((w) => [...events.map((e, i) => ({ ...e, id: `${Date.now()}-${i}`, t: now })), ...w].slice(0, 60));
+  }, [races]);
+
+  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -494,7 +520,7 @@ export default function MaineDashboard() {
         ) : (
           <>
             <div style={{ display: "flex", gap: 6, marginBottom: 14, overflowX: "auto", paddingBottom: 2 }}>
-              {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
+              {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
                 <button key={k} onClick={() => setView(k)}
                   style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
                     background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
@@ -529,9 +555,10 @@ export default function MaineDashboard() {
               </div>
             )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} />}
+            {view === "wire" && <WireFeed events={wire} />}
             {view === "method" && <MethodView />}
 
-            {(view === "dashboard" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
+            {(view === "dashboard" || view === "wire" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -727,13 +754,40 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
   );
 }
 
+function WireFeed({ events }) {
+  return (
+    <div>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>LIVE WIRE</div>
+      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Election Night Feed</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
+        Plain-language updates generated straight from the model as results come in: rating changes, lead flips, and reporting milestones. Start the simulation or wait for live results to see it move.
+      </div>
+      {events.length === 0 ? (
+        <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "18px 0" }}>Waiting for results…</div>
+      ) : (
+        <div>
+          {events.map((e) => (
+            <div key={e.id} style={{ display: "flex", gap: 10, padding: "9px 2px", borderBottom: `1px solid ${C.line}` }}>
+              <span style={{ fontSize: 11, fontFamily: mono, color: C.muted, flexShrink: 0, paddingTop: 1, width: 62 }}>{e.t}</span>
+              <span style={{ fontSize: 13, color: e.color || C.text, lineHeight: 1.45, fontWeight: (e.kind === "call" || e.kind === "flip") ? 700 : 400 }}>{e.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RcvMini({ race }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-      <div style={{ fontSize: 11.5, color: "#9FB3CE", lineHeight: 1.5 }}>
-        Decided by ranked-choice rounds Alaska tabulates about two weeks after election night, not a single count.
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{ fontSize: 12, color: "#9FB3CE", lineHeight: 1.5 }}>
+        Decided by ranked-choice rounds that Alaska tabulates about two weeks after election night, not a single count.
       </div>
-      <div style={{ fontSize: 10, fontFamily: mono, color: C.brass, letterSpacing: 0.8 }}>LEAN R \u00b7 NO ELECTION-NIGHT CALL \u00b7 TAP FOR HOW IT WORKS</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+        <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, letterSpacing: 0.5, color: RED, border: `1px solid ${RED}66`, borderRadius: 5, padding: "2px 7px" }}>LEAN R</span>
+        <span style={{ fontSize: 11.5, color: C.muted }}>No call on the night — tap to see how it works</span>
+      </div>
     </div>
   );
 }
