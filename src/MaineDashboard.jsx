@@ -150,6 +150,16 @@ const makeIowaSenate = (pollMargin) => ({
   units: iaUnits(pollMargin),
 });
 
+// ---- ALASKA ---- (ranked-choice; deliberately not a needle)
+// Sullivan (R, incumbent) vs Peltola (D) headline a top-four ranked-choice race. The four-candidate
+// field is set at the Aug 18 primary, and Alaska does not tabulate the ranked rounds until about two
+// weeks after election day, so this race is shown as an explainer panel rather than a win-prob needle.
+const makeAlaskaSenate = () => ({
+  id: "ak_sen", state: "AK", title: "U.S. Senate",
+  sub: "Sullivan (R) vs Peltola (D)",
+  system: "Ranked-Choice", real: true, type: "rcv", units: [],
+});
+
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
 const GOV_LEAN = { Cumberland: +0.145, York: +0.005, Penobscot: -0.088, Kennebec: -0.040, Androscoggin: -0.054, Aroostook: -0.105, Hancock: +0.008, Oxford: -0.095, Somerset: -0.158, Knox: +0.053, Sagadahoc: +0.021, Waldo: -0.024, Lincoln: -0.004, Washington: -0.137, Franklin: -0.062, Piscataquis: -0.172 };
 
@@ -348,7 +358,7 @@ function applyAllLive(races, results) {
 const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
-const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }];
+const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "AK", label: "Alaska" }];
 
 export default function MaineDashboard() {
   const DEFAULT_MARGIN = 3; // Platner D+3 two-party, a mid estimate of current polls
@@ -373,6 +383,7 @@ export default function MaineDashboard() {
     rollRace(makeOhioSenate(ohm)),
     rollRace(makeTexasSenate(txm)),
     rollRace(makeIowaSenate(iam)),
+    makeAlaskaSenate(),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
@@ -520,7 +531,7 @@ export default function MaineDashboard() {
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} />}
             {view === "method" && <MethodView />}
 
-            {(view === "dashboard" || STATES.some((s) => s.code === view)) && (
+            {(view === "dashboard" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -605,7 +616,7 @@ function Overview({ races, onPick }) {
             </div>
           </div>
           <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 9 }}>{r.sub}</div>
-          {r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
+          {r.type === "rcv" ? <RcvMini race={r} /> : r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
         </button>
       ))}
     </div>
@@ -716,8 +727,56 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
   );
 }
 
+function RcvMini({ race }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+      <div style={{ fontSize: 11.5, color: "#9FB3CE", lineHeight: 1.5 }}>
+        Decided by ranked-choice rounds Alaska tabulates about two weeks after election night, not a single count.
+      </div>
+      <div style={{ fontSize: 10, fontFamily: mono, color: C.brass, letterSpacing: 0.8 }}>LEAN R \u00b7 NO ELECTION-NIGHT CALL \u00b7 TAP FOR HOW IT WORKS</div>
+    </div>
+  );
+}
+
+function AlaskaDetail({ race, onBack }) {
+  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+  const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
+  const body = { fontSize: 13, color: "#C7D4E6", lineHeight: 1.6 };
+  return (
+    <div>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
+        <ChevronLeft size={16} /> All races
+      </button>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALASKA \u00b7 RANKED-CHOICE</div>
+      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
+
+      <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
+        <div style={h2}>WON'T BE CALLED ON ELECTION NIGHT</div>
+        <div style={body}>Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.</div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>HOW THIS RACE WORKS</div>
+        <div style={body}>Alaska uses a top-four open primary on August 18: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.</div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>THE MATCHUP</div>
+        <div style={body}>Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent, so he starts ahead; Peltola's crossover appeal and the ranked-choice format keep it competitive. Rated lean Republican.</div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>WHY THERE'S NO NEEDLE HERE</div>
+        <div style={body}>Everywhere else on this site the needle is a win probability. For a race decided by rounds tabulated weeks after the night, a live probability would imply a precision that doesn't exist. Once the August 18 primary sets the four-candidate field, this panel will show first-choice polling and, on election night, a live first-choice count with a clear flag for whether it's heading to an instant runoff.</div>
+      </div>
+    </div>
+  );
+}
+
 function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, govMargin, onGov, current }) {
   if (race.type === "three") return <GovDetail race={race} onBack={onBack} govB={govB} govMargin={govMargin} onGov={onGov} current={current} />;
+  if (race.type === "rcv") return <AlaskaDetail race={race} onBack={onBack} />;
   const m = compute(race.units);
   const rt = rateOf(race, m);
   const lead = m.margin >= 0 ? race.right : race.left;
@@ -961,7 +1020,8 @@ function MethodView() {
             <b style={{ color: C.brass }}>North Carolina — Senate</b> — Cooper vs Whatley, an open seat, on a county map from NC's past results.<br />
             <b style={{ color: C.brass }}>Ohio — Senate (special)</b> — Brown vs Husted, the special election for JD Vance's old seat, on a county map from Ohio's past results.<br />
             <b style={{ color: C.brass }}>Texas — Senate</b> — Paxton vs Talarico, on a county map from Texas's past results.<br />
-            <b style={{ color: C.brass }}>Iowa — Senate</b> — Hinson vs Turek, an open seat. County baseline from Iowa's past results is being added; centered on fundamentals until public polls appear.
+            <b style={{ color: C.brass }}>Iowa — Senate</b> — Hinson vs Turek, an open seat. County baseline from Iowa's past results is being added; centered on fundamentals until public polls appear.<br />
+            <b style={{ color: C.brass }}>Alaska — Senate</b> — Sullivan vs Peltola, ranked-choice. Shown as an explainer panel, not a needle, because the result is tabulated about two weeks after election night (see the Alaska tab).
           </div>
         </div>
       </div>
