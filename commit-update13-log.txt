@@ -1,2 +1,20 @@
  
 === commit-update13.bat === 
+warning: in the working copy of 'commit-update12-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update13.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main ff400a7] Update 13
+ 4 files changed, 55 insertions(+), 2 deletions(-)
+ create mode 100644 commit-update13-log.txt
+ create mode 100644 commit-update13.bat
+Commit exit: 0 
+ff400a7 Update 13
+ed08e23 Update 12
+f9d827c Update 11
+8467b46 Update 10
+To https://github.com/cblais75/maine-needle.git
+   ed08e23..ff400a7  main -> main
+Push exit: 0 
+=== Done === 
