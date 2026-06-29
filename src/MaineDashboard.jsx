@@ -552,7 +552,7 @@ export default function MaineDashboard() {
             govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
         ) : (
           <>
-            <div style={{ display: "flex", gap: 6, marginBottom: 14, overflowX: "auto", paddingBottom: 2 }}>
+            <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
               {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
                 <button key={k} onClick={() => setView(k)}
                   style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
@@ -834,7 +834,7 @@ function AlaskaDetail({ race, onBack }) {
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
         <ChevronLeft size={16} /> All races
       </button>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALASKA \u00b7 RANKED-CHOICE</div>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALASKA · RANKED-CHOICE</div>
       <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
 
