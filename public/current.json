@@ -1,14 +1,50 @@
 {
-  "updated": "2026-06-26",
+  "updated": "2026-06-29",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 5,
-    "nPolls": 3,
+    "margin": 3,
+    "nPolls": 7,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-06-26",
+        "rating": 0.95,
+        "dem": 49,
+        "rep": 47,
+        "ind": null,
+        "weightPct": 35
+      },
+      {
+        "pollster": "Wick/2WAY",
+        "date": "2026-06-13",
+        "rating": 0.6,
+        "dem": 48,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 14
+      },
+      {
+        "pollster": "Tavern Research",
+        "date": "2026-06-08",
+        "rating": 0.55,
+        "dem": 51,
+        "rep": 49,
+        "ind": null,
+        "weightPct": 11
+      },
+      {
+        "pollster": "Public Policy Polling (D)",
+        "date": "2026-06-03",
+        "rating": 0.5,
+        "dem": 49,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 9
+      },
       {
         "pollster": "Fabrizio Lee (R)",
         "date": "2026-06-02",
@@ -16,7 +52,7 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "weightPct": 30
+        "weightPct": 9
       },
       {
         "pollster": "UNH Survey Center",
@@ -25,7 +61,7 @@
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "weightPct": 38
+        "weightPct": 12
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -34,7 +70,7 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 32
+        "weightPct": 10
       }
     ]
   },
@@ -61,11 +97,20 @@
     "polls": []
   },
   "nc_sen": {
-    "margin": 11,
-    "nPolls": 2,
+    "margin": 13,
+    "nPolls": 3,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Catawba College/YouGov",
+        "date": "2026-06-10",
+        "rating": 0.9,
+        "dem": 48,
+        "rep": 34,
+        "ind": null,
+        "weightPct": 76
+      },
       {
         "pollster": "Carolina Journal/Civitas (R)",
         "date": "2026-05-15",
@@ -73,7 +118,7 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "weightPct": 88
+        "weightPct": 21
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -82,7 +127,7 @@
         "dem": 48.9,
         "rep": 41.1,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 3
       }
     ]
   },
@@ -146,7 +191,7 @@
     "note": "",
     "polls": [
       {
-        "pollster": "UT / Texas Politics Project",
+        "pollster": "UT Politics Project",
         "date": "2026-06-12",
         "rating": 0.85,
         "dem": 42,
@@ -155,7 +200,7 @@
         "weightPct": 70
       },
       {
-        "pollster": "Texas Public Opinion Research",
+        "pollster": "TX Opinion Research",
         "date": "2026-05-28",
         "rating": 0.6,
         "dem": 47,
@@ -166,10 +211,20 @@
     ]
   },
   "ia_sen": {
-    "margin": null,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "No public Iowa Senate polls yet; centered on fundamentals.",
-    "polls": []
+    "margin": 2,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "Public Policy Polling (D)",
+        "date": "2026-06-04",
+        "rating": 0.55,
+        "dem": 47,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   }
 }
