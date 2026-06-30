@@ -1,2 +1,19 @@
  
 === commit-rebuild-polls.bat === 
+warning: in the working copy of 'commit-polls-june29-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-rebuild-polls.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 8c42d6c] Rebuild poll averages
+ 4 files changed, 124 insertions(+), 17 deletions(-)
+ create mode 100644 commit-rebuild-polls-log.txt
+ create mode 100644 commit-rebuild-polls.bat
+Commit exit: 0 
+8c42d6c Rebuild poll averages
+07bf687 Poll update June 29: add senate, IA senate polls
+ff400a7 Update 13
+ed08e23 Update 12
+To https://github.com/cblais75/maine-needle.git
+   07bf687..8c42d6c  main -> main
+Push exit: 0 
+=== Done === 

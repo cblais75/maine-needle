@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-29",
+  "updated": "2026-06-30",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -186,10 +186,19 @@
   },
   "tx_sen": {
     "margin": 0,
-    "nPolls": 2,
+    "nPolls": 3,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-06-30",
+        "rating": 0.95,
+        "dem": 47,
+        "rep": 47,
+        "ind": null,
+        "weightPct": 59
+      },
       {
         "pollster": "UT Politics Project",
         "date": "2026-06-12",
@@ -197,7 +206,7 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "weightPct": 70
+        "weightPct": 29
       },
       {
         "pollster": "TX Opinion Research",
@@ -206,16 +215,25 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 30
+        "weightPct": 12
       }
     ]
   },
   "ia_sen": {
     "margin": 2,
-    "nPolls": 1,
+    "nPolls": 2,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "DSCC Internal (D)",
+        "date": "2026-06-10",
+        "rating": 0.45,
+        "dem": 47,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 50
+      },
       {
         "pollster": "Public Policy Polling (D)",
         "date": "2026-06-04",
@@ -223,7 +241,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 100
+        "weightPct": 50
       }
     ]
   }
