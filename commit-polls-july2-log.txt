@@ -1,3 +1,21 @@
  
 === commit-polls-july2.bat === 
 Removed stale index.lock 
+warning: in the working copy of 'commit-polls-june30-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-july2.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 92fbdb0] Poll update July 2: ME senate Quantus+Fox, ME gov NYT/Siena, NC/OH/IA NYT/Siena, IA Fox
+ 5 files changed, 200 insertions(+), 32 deletions(-)
+ create mode 100644 commit-polls-july2-log.txt
+ create mode 100644 commit-polls-july2.bat
+Commit exit: 0 
+92fbdb0 Poll update July 2: ME senate Quantus+Fox, ME gov NYT/Siena, NC/OH/IA NYT/Siena, IA Fox
+f5d1c6e Poll update June 30: add TX NYT/Siena, IA DSCC polls
+8c42d6c Rebuild poll averages
+07bf687 Poll update June 29: add senate, IA senate polls
+To https://github.com/cblais75/maine-needle.git
+   f5d1c6e..92fbdb0  main -> main
+Push exit: 0 
+=== Done === 

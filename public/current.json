@@ -93,7 +93,7 @@
     ]
   },
   "governor": {
-    "bennett": 0,
+    "bennett": 8,
     "margin": 14,
     "nPolls": 1,
     "fallback": false,
@@ -105,7 +105,7 @@
         "rating": 0.95,
         "dem": 50,
         "rep": 36,
-        "ind": null,
+        "ind": 8,
         "weightPct": 100
       }
     ]
