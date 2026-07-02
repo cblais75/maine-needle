@@ -1,0 +1,3 @@
+ 
+=== commit-polls-july2.bat === 
+Removed stale index.lock 

@@ -1,12 +1,12 @@
 {
-  "updated": "2026-06-30",
+  "updated": "2026-07-02",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 3,
-    "nPolls": 7,
+    "margin": 2,
+    "nPolls": 9,
     "fallback": false,
     "polls": [
       {
@@ -16,7 +16,16 @@
         "dem": 49,
         "rep": 47,
         "ind": null,
-        "weightPct": 35
+        "weightPct": 24
+      },
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-06-25",
+        "rating": 0.9,
+        "dem": 47,
+        "rep": 50,
+        "ind": null,
+        "weightPct": 22
       },
       {
         "pollster": "Wick/2WAY",
@@ -25,7 +34,16 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 10
+      },
+      {
+        "pollster": "Quantus Insights",
+        "date": "2026-06-10",
+        "rating": 0.6,
+        "dem": 46,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 9
       },
       {
         "pollster": "Tavern Research",
@@ -34,7 +52,7 @@
         "dem": 51,
         "rep": 49,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 8
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -43,7 +61,7 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 6
       },
       {
         "pollster": "Fabrizio Lee (R)",
@@ -52,7 +70,7 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 6
       },
       {
         "pollster": "UNH Survey Center",
@@ -61,7 +79,7 @@
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 8
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -70,17 +88,27 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 7
       }
     ]
   },
   "governor": {
-    "bennett": 18,
-    "margin": 6,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "No public three-way polls yet; using a placeholder until real surveys appear.",
-    "polls": []
+    "bennett": 0,
+    "margin": 14,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "NYT/PPH/Siena",
+        "date": "2026-06-26",
+        "rating": 0.95,
+        "dem": 50,
+        "rep": 36,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   },
   "cd1": {
     "margin": null,
@@ -97,11 +125,20 @@
     "polls": []
   },
   "nc_sen": {
-    "margin": 13,
-    "nPolls": 3,
+    "margin": 10,
+    "nPolls": 4,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-06-27",
+        "rating": 0.95,
+        "dem": 50,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 58
+      },
       {
         "pollster": "Catawba College/YouGov",
         "date": "2026-06-10",
@@ -109,7 +146,7 @@
         "dem": 48,
         "rep": 34,
         "ind": null,
-        "weightPct": 76
+        "weightPct": 32
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -118,7 +155,7 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 9
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -127,16 +164,25 @@
         "dem": 48.9,
         "rep": 41.1,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 1
       }
     ]
   },
   "oh_sen": {
-    "margin": 4,
-    "nPolls": 5,
+    "margin": 1,
+    "nPolls": 6,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-06-29",
+        "rating": 0.95,
+        "dem": 47,
+        "rep": 50,
+        "ind": null,
+        "weightPct": 48
+      },
       {
         "pollster": "AARP (Impact/Fabrizio)",
         "date": "2026-06-16",
@@ -144,7 +190,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 55
+        "weightPct": 28
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -153,7 +199,7 @@
         "dem": 53,
         "rep": 45,
         "ind": null,
-        "weightPct": 35
+        "weightPct": 18
       },
       {
         "pollster": "BGSU/YouGov",
@@ -162,7 +208,7 @@
         "dem": 47,
         "rep": 50,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 4
       },
       {
         "pollster": "Quantus Insights",
@@ -171,7 +217,7 @@
         "dem": 44,
         "rep": 46,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "On Message Inc. (R)",
@@ -220,11 +266,29 @@
     ]
   },
   "ia_sen": {
-    "margin": 2,
-    "nPolls": 2,
+    "margin": 1,
+    "nPolls": 4,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-06-27",
+        "rating": 0.95,
+        "dem": 46,
+        "rep": 48,
+        "ind": null,
+        "weightPct": 41
+      },
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-06-25",
+        "rating": 0.9,
+        "dem": 50,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 37
+      },
       {
         "pollster": "DSCC Internal (D)",
         "date": "2026-06-10",
@@ -232,7 +296,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 50
+        "weightPct": 11
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -241,7 +305,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 50
+        "weightPct": 11
       }
     ]
   }
