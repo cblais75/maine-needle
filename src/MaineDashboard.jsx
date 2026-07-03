@@ -855,7 +855,7 @@ function AlaskaDetail({ race, onBack }) {
 
       <div style={card}>
         <div style={h2}>WHY THERE'S NO NEEDLE HERE</div>
-        <div style={body}>Everywhere else on this site the needle is a win probability. For a race decided by rounds tabulated weeks after the night, a live probability would imply a precision that doesn't exist. Once the August 18 primary sets the four-candidate field, this panel will show first-choice polling and, on election night, a live first-choice count with a clear flag for whether it's heading to an instant runoff.</div>
+        <div style={body}>Everywhere else on this site the needle is a win probability. For a race decided by rounds tabulated weeks after the night, a live probability would imply a precision that doesn't exist. Head-to-head polling for this race is tracked on the Polls tab. Once the August 18 primary sets the four-candidate field, election night will show a live first-choice count with a clear flag for whether it's heading to an instant runoff.</div>
       </div>
     </div>
   );
@@ -1040,6 +1040,11 @@ function PollsView({ current, loaded }) {
           <PollRace title="U.S. Senate" lead={current.tx_sen} demName="Talarico" repName="Paxton" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Iowa</div>
           <PollRace title="U.S. Senate" lead={current.ia_sen} demName="Turek" repName="Hinson" />
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Alaska</div>
+          <PollRace title="U.S. Senate" lead={current.ak_sen} demName="Peltola" repName="Sullivan" />
+          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 6 }}>
+            Alaska polls are head-to-head surveys. The election itself is ranked-choice with a top-four field set at the August 18 primary, so these track sentiment, not a projected final result.
+          </div>
         </>
       )}
       <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.5, marginTop: 4 }}>

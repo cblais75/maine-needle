@@ -42,6 +42,7 @@ const nc = summarize(polls.nc_sen || []);
 const oh = summarize(polls.oh_sen || []);
 const tx = summarize(polls.tx_sen || []);
 const ia = summarize(polls.ia_sen || []);
+const ak = summarize(polls.ak_sen || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
   method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower." },
@@ -63,6 +64,8 @@ const current = {
     note: tx.nPolls === 0 ? "No public Texas Senate polls yet." : "", polls: tx.polls },
   ia_sen: { margin: ia.margin, nPolls: ia.nPolls, fallback: ia.margin === null,
     note: ia.nPolls === 0 ? "No public Iowa Senate polls yet; centered on fundamentals." : "", polls: ia.polls },
+  ak_sen: { margin: ak.margin, nPolls: ak.nPolls, fallback: ak.margin === null,
+    note: ak.nPolls === 0 ? "No public Alaska Senate polls yet." : "", polls: ak.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
 console.log(`Senate: ${current.senate.margin >= 0 ? "Platner +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
@@ -72,3 +75,4 @@ console.log(`NC Senate: ${current.nc_sen.margin >= 0 ? "Cooper +" : "Whatley +"}
 console.log(`OH Senate: ${current.oh_sen.margin >= 0 ? "Brown +" : "Husted +"}${Math.abs(current.oh_sen.margin)} from ${current.oh_sen.nPolls} polls`);
 console.log(`TX Senate: ${current.tx_sen.margin >= 0 ? "Talarico +" : "Paxton +"}${Math.abs(current.tx_sen.margin)} from ${current.tx_sen.nPolls} polls`);
 console.log(`IA Senate: ${current.ia_sen.nPolls} polls${current.ia_sen.nPolls ? " (" + (current.ia_sen.margin>=0?"Turek +":"Hinson +") + Math.abs(current.ia_sen.margin) + ")" : " (fundamentals)"}`);
+console.log(`AK Senate: ${current.ak_sen.nPolls} polls${current.ak_sen.nPolls ? " (" + (current.ak_sen.margin>=0?"Peltola +":"Sullivan +") + Math.abs(current.ak_sen.margin) + ")" : ""}`);

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-02",
+  "updated": "2026-07-03",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -306,6 +306,23 @@
         "rep": 45,
         "ind": null,
         "weightPct": 11
+      }
+    ]
+  },
+  "ak_sen": {
+    "margin": -2,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-06-27",
+        "rating": 0.95,
+        "dem": 45,
+        "rep": 47,
+        "ind": null,
+        "weightPct": 100
       }
     ]
   }

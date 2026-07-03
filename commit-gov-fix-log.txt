@@ -1,2 +1,20 @@
  
 === commit-gov-fix.bat === 
+warning: in the working copy of 'commit-polls-july2-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-gov-fix.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main c892002] Fix governor poll -- add Bennett
+ 5 files changed, 251 insertions(+), 30 deletions(-)
+ create mode 100644 commit-gov-fix-log.txt
+ create mode 100644 commit-gov-fix.bat
+Commit exit: 0 
+c892002 Fix governor poll -- add Bennett
+92fbdb0 Poll update July 2: ME senate Quantus+Fox, ME gov NYT/Siena, NC/OH/IA NYT/Siena, IA Fox
+f5d1c6e Poll update June 30: add TX NYT/Siena, IA DSCC polls
+8c42d6c Rebuild poll averages
+To https://github.com/cblais75/maine-needle.git
+   92fbdb0..c892002  main -> main
+Push exit: 0 
+=== Done === 

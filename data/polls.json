@@ -203,5 +203,14 @@
       "dem": 46,
       "rep": 48
     }
+  ],
+  "ak_sen": [
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-06-27",
+      "dem": 45,
+      "rep": 47
+    }
   ]
 }
