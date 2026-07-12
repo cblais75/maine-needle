@@ -1,0 +1,9 @@
+{
+  "builtAt": null,
+  "source": "placeholder \u2014 run scripts/build-baseline.mjs --out data/ga-baseline.json --file <georgia county results> via dispatch",
+  "basis": "president",
+  "statewideDemTwoParty": null,
+  "nCounties": 0,
+  "lean": {},
+  "weight": {}
+}

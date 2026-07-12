@@ -4,6 +4,7 @@ import ncBaseline from "../data/nc-baseline.json";
 import ohBaseline from "../data/oh-baseline.json";
 import txBaseline from "../data/tx-baseline.json";
 import iaBaseline from "../data/ia-baseline.json";
+import gaBaseline from "../data/ga-baseline.json";
 
 const C = {
   ink: "#0E1422", panel: "#161E2E", panel2: "#1B2435", line: "#28344A",
@@ -54,14 +55,12 @@ const SEN_HOUSE = 4;
 const senateUnits = (pollMargin) =>
   Object.keys(SEN_LEAN).map((n) =>
     unit(n, clamp(0.5 + (pollMargin - SEN_HOUSE) / 200 + SEN_LEAN[n], 0.02, 0.98), SEN_W[n]));
-const makeSenate = (pollMargin) => ({
+const makeSenate = () => ({
   id: "sen", state: "ME", title: "U.S. Senate",
-  sub: "Platner (D) vs Collins (R)",
-  system: "Ranked-Choice Voting", real: true,
-  note: `Centered on polls, then shifted ${SEN_HOUSE} pts toward Collins, who has consistently outrun her polls (she trailed in nearly every 2020 survey and won by ~9).`,
-  left: { full: "Collins", short: "Collins", color: RED },
-  right: { full: "Platner", short: "Platner", color: BLUE },
-  units: senateUnits(pollMargin),
+  sub: "TBD (D) vs Collins (R)",
+  system: "Ranked-Choice Voting", real: true, type: "tbd", units: [],
+  tbdChip: "NOMINEE TBD · JUL 27",
+  tbdNote: "Graham Platner withdrew from the race on July 10 after sexual assault allegations, which he denies. Maine Democrats will choose a replacement nominee by July 27.",
 });
 
 // ---- NORTH CAROLINA ----
@@ -150,6 +149,27 @@ const makeIowaSenate = (pollMargin) => ({
   units: iaUnits(pollMargin),
 });
 
+// ---- GEORGIA ----
+// Ossoff (D, incumbent) vs Collins (R), the GOP runoff winner. Georgia is nearly even federally
+// (Trump +2 in 2024) with a Democratic incumbent defending; the center gets a small shift toward
+// Collins for the state's lean. Georgia law requires a December 1 runoff if no candidate tops 50%.
+const GA_HOUSE = 2;
+const GA_LEAN = gaBaseline.lean || {}, GA_W = gaBaseline.weight || {};
+const GA_HAS_COUNTIES = Object.keys(GA_LEAN).length > 0;
+const gaUnits = (pollMargin) =>
+  GA_HAS_COUNTIES
+    ? Object.keys(GA_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - GA_HOUSE) / 200 + GA_LEAN[n], 0.02, 0.98), GA_W[n]))
+    : [unit("Georgia", clamp(0.5 + (pollMargin - GA_HOUSE) / 200, 0.02, 0.98), 1)];
+const makeGeorgiaSenate = (pollMargin) => ({
+  id: "ga_sen", state: "GA", title: "U.S. Senate",
+  sub: "Ossoff (D) vs Collins (R)",
+  system: "Majority (runoff Dec 1 if no one tops 50%)", real: true,
+  note: `Ossoff is the incumbent; Collins won the Republican runoff. The poll center is shifted ${GA_HOUSE} pts toward Collins for Georgia's slight Republican lean. If no candidate wins a majority in November, the race goes to a December 1 runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  left: { full: "Collins", short: "Collins", color: RED },
+  right: { full: "Ossoff", short: "Ossoff", color: BLUE },
+  units: gaUnits(pollMargin),
+});
+
 // ---- ALASKA ---- (ranked-choice; deliberately not a needle)
 // Sullivan (R, incumbent) vs Peltola (D) headline a top-four ranked-choice race. The four-candidate
 // field is set at the Aug 18 primary, and Alaska does not tabulate the ranked rounds until about two
@@ -158,6 +178,15 @@ const makeAlaskaSenate = () => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
   sub: "Sullivan (R) vs Peltola (D)",
   system: "Ranked-Choice", real: true, type: "rcv", units: [],
+});
+
+// ---- MICHIGAN ---- (placeholder until the Aug. 4 primary sets the nominees)
+const makeMichiganSenate = () => ({
+  id: "mi_sen", state: "MI", title: "U.S. Senate",
+  sub: "Open seat — nominees set Aug. 4",
+  system: "Plurality", real: true, type: "tbd", units: [],
+  tbdChip: "TBD · AUG 4",
+  tbdNote: "An open seat with no nominees yet. Both parties choose their candidates in the August 4 primary; full coverage follows once the field is set.",
 });
 
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
@@ -358,7 +387,7 @@ function applyAllLive(races, results) {
 const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
-const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "AK", label: "Alaska" }];
+const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }];
 
 export default function MaineDashboard() {
   const DEFAULT_MARGIN = 3; // Platner D+3 two-party, a mid estimate of current polls
@@ -366,16 +395,18 @@ export default function MaineDashboard() {
   const DEFAULT_OH_MARGIN = 4; // Brown D+4, mid of recent Ohio polls
   const DEFAULT_TX_MARGIN = 0; // ~even, mid of recent Texas polls
   const DEFAULT_IA_MARGIN = 0; // no public polls yet; fundamentals via house effect
+  const DEFAULT_GA_MARGIN = 4; // Ossoff has polled near 50 and ahead of the GOP field; incumbent edge
   const [pollMargin, setPollMargin] = useState(DEFAULT_MARGIN);
   const [ncMargin, setNcMargin] = useState(DEFAULT_NC_MARGIN);
   const [ohMargin, setOhMargin] = useState(DEFAULT_OH_MARGIN);
   const [txMargin, setTxMargin] = useState(DEFAULT_TX_MARGIN);
   const [iaMargin, setIaMargin] = useState(DEFAULT_IA_MARGIN);
+  const [gaMargin, setGaMargin] = useState(DEFAULT_GA_MARGIN);
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN) => [
-    rollRace(makeSenate(pm)),
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN) => [
+    makeSenate(),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
     rollRace(makeCD2(dc, cd2m)),
@@ -383,13 +414,16 @@ export default function MaineDashboard() {
     rollRace(makeOhioSenate(ohm)),
     rollRace(makeTexasSenate(txm)),
     rollRace(makeIowaSenate(iam)),
+    rollRace(makeGeorgiaSenate(gam)),
     makeAlaskaSenate(),
+    makeMichiganSenate(),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
   const [sel, setSel] = useState(null);
   const [running, setRunning] = useState(false);
   const [wire, setWire] = useState([]);
+  const [briefing, setBriefing] = useState(null);
   const wirePrev = useRef(null);
   const wireSeen = useRef({});
   const [speed, setSpeed] = useState(1);
@@ -435,8 +469,9 @@ export default function MaineDashboard() {
         if (c?.oh_sen) setOhMargin(c.oh_sen.margin ?? DEFAULT_OH_MARGIN);
         if (c?.tx_sen) setTxMargin(c.tx_sen.margin ?? DEFAULT_TX_MARGIN);
         if (c?.ia_sen) setIaMargin(c.ia_sen.margin ?? DEFAULT_IA_MARGIN);
+        if (c?.ga_sen) setGaMargin(c.ga_sen.margin ?? DEFAULT_GA_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -458,12 +493,16 @@ export default function MaineDashboard() {
   }, []);
 
   useEffect(() => {
+    fetch("/briefing.json?t=" + Date.now()).then((r) => r.ok ? r.json() : []).then((b) => setBriefing(Array.isArray(b) ? b : [])).catch(() => setBriefing([]));
+  }, []);
+
+  useEffect(() => {
     const tagOf = (pct) => pct >= 97 ? "Called" : pct >= 85 ? "Likely" : pct >= 65 ? "Leans" : "Toss-up";
     const label = (r) => { const st = STATES.find((s) => s.code === r.state); return `${st ? st.label : ""} ${r.title.replace("U.S. ", "").replace(" (special)", "")}`.trim(); };
     const snap = {}; const events = [];
     const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     for (const r of races) {
-      if (r.type === "rcv" || r.type === "three" || !r.right || !r.left || !r.units || !r.units.length) continue;
+      if (r.type === "rcv" || r.type === "tbd" || r.type === "three" || !r.right || !r.left || !r.units || !r.units.length) continue;
       const m = compute(r.units); const rt = rateOf(r, m);
       const cur = { pct: rt.pct, tag: tagOf(rt.pct), leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
       snap[r.id] = cur;
@@ -513,7 +552,7 @@ export default function MaineDashboard() {
     if (events.length) setWire((w) => [...events.map((e, i) => ({ ...e, id: `${Date.now()}-${i}`, t: now })), ...w].slice(0, 60));
   }, [races]);
 
-  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -553,7 +592,7 @@ export default function MaineDashboard() {
         ) : (
           <>
             <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
-              {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
+              {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["wire", "Wire"], ["briefing", "Briefing"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
                 <button key={k} onClick={() => setView(k)}
                   style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
                     background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
@@ -589,9 +628,10 @@ export default function MaineDashboard() {
             )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} />}
             {view === "wire" && <WireFeed events={wire} />}
+            {view === "briefing" && <BriefingView posts={briefing} />}
             {view === "method" && <MethodView />}
 
-            {(view === "dashboard" || view === "wire" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
+            {(view === "dashboard" || view === "wire" || (STATES.some((s) => s.code === view) && view !== "AK" && view !== "MI")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -676,7 +716,7 @@ function Overview({ races, onPick }) {
             </div>
           </div>
           <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 9 }}>{r.sub}</div>
-          {r.type === "rcv" ? <RcvMini race={r} /> : r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
+          {r.type === "tbd" ? <TbdMini race={r} /> : r.type === "rcv" ? <RcvMini race={r} /> : r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
         </button>
       ))}
     </div>
@@ -787,6 +827,34 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
   );
 }
 
+function BriefingView({ posts }) {
+  const sorted = (posts || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  return (
+    <div>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BRIEFING</div>
+      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>State of the Races</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: 16, lineHeight: 1.5 }}>
+        Written analysis and notes from the editor. The needles are math; this is the story around them.
+      </div>
+      {posts === null ? (
+        <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "16px 0" }}>Loading…</div>
+      ) : sorted.length === 0 ? (
+        <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "16px 0" }}>No briefings posted yet.</div>
+      ) : (
+        sorted.map((p, i) => (
+          <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
+            <div style={{ fontSize: 10.5, fontFamily: mono, color: C.brass, letterSpacing: 0.8, marginBottom: 4 }}>{p.date}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.2, marginBottom: 8 }}>{p.title}</div>
+            {String(p.body || "").split(/\n\s*\n/).map((para, j) => (
+              <div key={j} style={{ fontSize: 13.5, color: "#C7D4E6", lineHeight: 1.65, marginBottom: 8 }}>{para}</div>
+            ))}
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
 function WireFeed({ events }) {
   return (
     <div>
@@ -807,6 +875,82 @@ function WireFeed({ events }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function TbdMini({ race }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{ fontSize: 12, color: "#9FB3CE", lineHeight: 1.5 }}>{race.tbdNote}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+        <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, letterSpacing: 0.5, color: C.brass, border: `1px solid ${C.brass}66`, borderRadius: 5, padding: "2px 7px" }}>{race.tbdChip}</span>
+        <span style={{ fontSize: 11.5, color: C.muted }}>tap for details</span>
+      </div>
+    </div>
+  );
+}
+
+function MaineSenateTbdDetail({ race, onBack }) {
+  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+  const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
+  const body = { fontSize: 13, color: "#C7D4E6", lineHeight: 1.6 };
+  return (
+    <div>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
+        <ChevronLeft size={16} /> All races
+      </button>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MAINE · RANKED-CHOICE</div>
+      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
+
+      <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
+        <div style={h2}>DEMOCRATIC NOMINEE TBD</div>
+        <div style={body}>Graham Platner, who won the June 9 primary, withdrew from the race on July 10 after sexual assault allegations by a former partner, which he denies. His name will not appear on the November ballot, and Maine Democrats will select a replacement nominee to face Susan Collins.</div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>THE REPLACEMENT PROCESS</div>
+        <div style={body}>The Maine Democratic Party is holding a nominating convention of roughly 600 delegates. Candidates had until July 15 to declare and gather signatures from at least 8 of Maine's 16 counties, and the party must certify its new nominee by July 27.</div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>WHO'S RUNNING</div>
+        <div style={body}>Declared candidates so far include former state Senate President Troy Jackson, former Maine CDC director Nirav Shah, Secretary of State Shenna Bellows, Maine Beer Company co-founder Dan Kleban, former congressional candidate Jordan Wood, and social worker Paige Loud.</div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>WHAT HAPPENS TO THE NEEDLE</div>
+        <div style={body}>This needle is suspended. The polling average it ran on was a Platner–Collins matchup, which no longer exists, so showing a probability now would be dishonest. Once the new nominee is set, the needle returns — rebuilt on fresh head-to-head polling as it arrives.</div>
+      </div>
+    </div>
+  );
+}
+
+function MichiganDetail({ race, onBack }) {
+  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+  const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
+  const body = { fontSize: 13, color: "#C7D4E6", lineHeight: 1.6 };
+  return (
+    <div>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
+        <ChevronLeft size={16} /> All races
+      </button>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MICHIGAN · U.S. SENATE</div>
+      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
+      <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
+        <div style={h2}>COMING AFTER THE AUGUST 4 PRIMARY</div>
+        <div style={body}>Michigan's Senate seat is open — Gary Peters is retiring — and neither party has a nominee yet. Both fields are decided in the August 4 primary, so there is no matchup to model or poll here until then.</div>
+      </div>
+      <div style={card}>
+        <div style={h2}>WHAT'S COMING</div>
+        <div style={body}>Once the primary sets the candidates, Michigan gets the full treatment: a county-level needle built from Michigan's past results, weighted poll tracking, and live first-results coverage on election night — the same as the other states on the board.</div>
+      </div>
+      <div style={card}>
+        <div style={h2}>WHY IT MATTERS</div>
+        <div style={body}>Michigan is one of the marquee races of the cycle: an open seat in a genuine swing state, likely to be among the closest in the country and potentially decisive for control of the Senate.</div>
+      </div>
     </div>
   );
 }
@@ -864,6 +1008,7 @@ function AlaskaDetail({ race, onBack }) {
 function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, govMargin, onGov, current }) {
   if (race.type === "three") return <GovDetail race={race} onBack={onBack} govB={govB} govMargin={govMargin} onGov={onGov} current={current} />;
   if (race.type === "rcv") return <AlaskaDetail race={race} onBack={onBack} />;
+  if (race.type === "tbd") return race.id === "sen" ? <MaineSenateTbdDetail race={race} onBack={onBack} /> : <MichiganDetail race={race} onBack={onBack} />;
   const m = compute(race.units);
   const rt = rateOf(race, m);
   const lead = m.margin >= 0 ? race.right : race.left;
@@ -1028,7 +1173,10 @@ function PollsView({ current, loaded }) {
       ) : (
         <>
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "2px 0 8px" }}>Maine</div>
-          <PollRace title="U.S. Senate" lead={current.senate} demName="Platner" repName="Collins" />
+          <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>U.S. Senate</div>
+            <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5 }}>Polling paused. The Democratic nominee is being replaced (chosen by July 27), so Platner-era surveys no longer describe this race. Tracking resumes with the new matchup.</div>
+          </div>
           <PollRace title="Governor" lead={current.governor} demName="Pingree" repName="Charles" indName="Bennett" />
           <PollRace title="U.S. House · District 1" lead={current.cd1} demName="Pingree" repName="Russell" />
           <PollRace title="U.S. House · District 2" lead={current.cd2} demName="Dunlap" repName="LePage" />
@@ -1040,6 +1188,8 @@ function PollsView({ current, loaded }) {
           <PollRace title="U.S. Senate" lead={current.tx_sen} demName="Talarico" repName="Paxton" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Iowa</div>
           <PollRace title="U.S. Senate" lead={current.ia_sen} demName="Turek" repName="Hinson" />
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Georgia</div>
+          <PollRace title="U.S. Senate" lead={current.ga_sen} demName="Ossoff" repName="Collins" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Alaska</div>
           <PollRace title="U.S. Senate" lead={current.ak_sen} demName="Peltola" repName="Sullivan" />
           <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 6 }}>
@@ -1105,7 +1255,7 @@ function MethodView() {
         <div style={body}>
           Built from real past results (OpenElections public data).
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.brass }}>Maine — Senate</b> — a blend of the 2020 Collins–Gideon Senate map (60%) and the 2020 + 2016 presidential maps (40%), re-centered on current polling.<br />
+            <b style={{ color: C.brass }}>Maine — Senate</b> — needle suspended while Democrats replace their nominee (by July 27); it returns with the new matchup, on a blend of the 2020 Senate and recent presidential maps.<br />
             <b style={{ color: C.brass }}>Maine — House 1 &amp; 2</b> — the actual 2020 U.S. House results by county. District 2 also has a dial that fades the former incumbent's personal vote toward the district's fundamentals, since the seat is open.<br />
             <b style={{ color: C.brass }}>Maine — Governor</b> — the blended presidential map for shape, with a polling-set split. A three-way plurality race (Pingree, Charles, independent Bennett), so it shows three win-probability meters.<br />
             <b style={{ color: C.brass }}>Maine — Ballot question</b> — illustrative only; a brand-new question has no prior election to map.<br />
@@ -1113,6 +1263,7 @@ function MethodView() {
             <b style={{ color: C.brass }}>Ohio — Senate (special)</b> — Brown vs Husted, the special election for JD Vance's old seat, on a county map from Ohio's past results.<br />
             <b style={{ color: C.brass }}>Texas — Senate</b> — Paxton vs Talarico, on a county map from Texas's past results.<br />
             <b style={{ color: C.brass }}>Iowa — Senate</b> — Hinson vs Turek, an open seat. County baseline from Iowa's past results is being added; centered on fundamentals until public polls appear.<br />
+            <b style={{ color: C.brass }}>Georgia — Senate</b> — Ossoff vs Collins. County baseline from Georgia's past results is being added. Georgia goes to a December 1 runoff if no candidate tops 50% in November.<br />
             <b style={{ color: C.brass }}>Alaska — Senate</b> — Sullivan vs Peltola, ranked-choice. Shown as an explainer panel, not a needle, because the result is tabulated about two weeks after election night (see the Alaska tab).
           </div>
         </div>
@@ -1123,11 +1274,12 @@ function MethodView() {
         <div style={body}>
           Each race's center is a recency- and quality-weighted polling average (see the Polls tab). Two races then get a documented house-effect adjustment, because a raw poll average has a known directional bias in that state:
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.text }}>Maine Senate</b> — shifted toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
+            <b style={{ color: C.text }}>Maine Senate</b> — suspended until the replacement nominee is set; when it returns, the center keeps a shift toward Collins, who has repeatedly outrun her polls.<br />
             <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.<br />
             <b style={{ color: C.text }}>Ohio Senate</b> — shifted toward Husted for Ohio's Republican lean at the federal level.<br />
             <b style={{ color: C.text }}>Texas Senate</b> — shifted toward Paxton for Texas's strong Republican lean.<br />
-            <b style={{ color: C.text }}>Iowa Senate</b> — shifted toward Hinson for Iowa's strong Republican lean at the federal level.
+            <b style={{ color: C.text }}>Iowa Senate</b> — shifted toward Hinson for Iowa's strong Republican lean at the federal level.<br />
+            <b style={{ color: C.text }}>Georgia Senate</b> — shifted slightly toward Collins for Georgia's narrow Republican lean at the presidential level.
           </div>
         </div>
       </div>

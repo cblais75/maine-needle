@@ -43,6 +43,7 @@ const oh = summarize(polls.oh_sen || []);
 const tx = summarize(polls.tx_sen || []);
 const ia = summarize(polls.ia_sen || []);
 const ak = summarize(polls.ak_sen || []);
+const ga = summarize(polls.ga_sen || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
   method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower." },
@@ -66,6 +67,8 @@ const current = {
     note: ia.nPolls === 0 ? "No public Iowa Senate polls yet; centered on fundamentals." : "", polls: ia.polls },
   ak_sen: { margin: ak.margin, nPolls: ak.nPolls, fallback: ak.margin === null,
     note: ak.nPolls === 0 ? "No public Alaska Senate polls yet." : "", polls: ak.polls },
+  ga_sen: { margin: ga.margin, nPolls: ga.nPolls, fallback: ga.margin === null,
+    note: ga.nPolls === 0 ? "No public Georgia Senate polls since the runoff; centered on fundamentals." : "", polls: ga.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
 console.log(`Senate: ${current.senate.margin >= 0 ? "Platner +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
@@ -76,3 +79,4 @@ console.log(`OH Senate: ${current.oh_sen.margin >= 0 ? "Brown +" : "Husted +"}${
 console.log(`TX Senate: ${current.tx_sen.margin >= 0 ? "Talarico +" : "Paxton +"}${Math.abs(current.tx_sen.margin)} from ${current.tx_sen.nPolls} polls`);
 console.log(`IA Senate: ${current.ia_sen.nPolls} polls${current.ia_sen.nPolls ? " (" + (current.ia_sen.margin>=0?"Turek +":"Hinson +") + Math.abs(current.ia_sen.margin) + ")" : " (fundamentals)"}`);
 console.log(`AK Senate: ${current.ak_sen.nPolls} polls${current.ak_sen.nPolls ? " (" + (current.ak_sen.margin>=0?"Peltola +":"Sullivan +") + Math.abs(current.ak_sen.margin) + ")" : ""}`);
+console.log(`GA Senate: ${current.ga_sen.nPolls} polls${current.ga_sen.nPolls ? " (" + (current.ga_sen.margin>=0?"Ossoff +":"Collins +") + Math.abs(current.ga_sen.margin) + ")" : " (fundamentals)"}`);

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-03",
+  "updated": "2026-07-12",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -325,5 +325,12 @@
         "weightPct": 100
       }
     ]
+  },
+  "ga_sen": {
+    "margin": null,
+    "nPolls": 0,
+    "fallback": true,
+    "note": "No public Georgia Senate polls since the runoff; centered on fundamentals.",
+    "polls": []
   }
 }
