@@ -1,2 +1,20 @@
  
 === commit-polls-july12.bat === 
+warning: in the working copy of 'commit-update15b-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-july12.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 9684f44] Polls
+ 5 files changed, 185 insertions(+), 9 deletions(-)
+ create mode 100644 commit-polls-july12-log.txt
+ create mode 100644 commit-polls-july12.bat
+Commit exit: 0 
+9684f44 Polls
+bd4abb7 Update 15
+0a23960 Update 14
+c892002 Fix governor poll -- add Bennett
+To https://github.com/cblais75/maine-needle.git
+   bd4abb7..9684f44  main -> main
+Push exit: 0 
+=== Done === 

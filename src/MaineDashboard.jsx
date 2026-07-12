@@ -421,6 +421,7 @@ export default function MaineDashboard() {
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
   const [sel, setSel] = useState(null);
+  const [navOpen, setNavOpen] = useState(false);
   const [running, setRunning] = useState(false);
   const [wire, setWire] = useState([]);
   const [briefing, setBriefing] = useState(null);
@@ -429,6 +430,7 @@ export default function MaineDashboard() {
   const [speed, setSpeed] = useState(1);
   const [current, setCurrent] = useState(null);   // current polling outlook from public/current.json
   const [view, setView] = useState("dashboard");   // dashboard | <state code> | polls | method
+  useEffect(() => { window.scrollTo(0, 0); }, [view, sel]);
   const [currentLoaded, setCurrentLoaded] = useState(false);
   const [results, setResults] = useState(null);   // live returns from public/results.json
   const resultsRef = useRef(null);
@@ -552,6 +554,17 @@ export default function MaineDashboard() {
     if (events.length) setWire((w) => [...events.map((e, i) => ({ ...e, id: `${Date.now()}-${i}`, t: now })), ...w].slice(0, 60));
   }, [races]);
 
+  const openState = (code) => {
+    setNavOpen(false);
+    const stateRaces = races.filter((r) => r.state === code);
+    if (code !== "ME" && stateRaces.length === 1) { setView(code); setSel(stateRaces[0].id); }
+    else { setView(code); setSel(null); }
+  };
+  const backFromDetail = () => {
+    const r = races.find((x) => x.id === sel);
+    setSel(null);
+    if (r && r.state !== "ME" && races.filter((x) => x.state === r.state).length === 1) setView("dashboard");
+  };
   const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
@@ -585,20 +598,42 @@ export default function MaineDashboard() {
         </div>
 
         {sel !== null ? (
-          <Detail race={races.find((r) => r.id === sel)} onBack={() => setSel(null)}
+          <Detail race={races.find((r) => r.id === sel)} onBack={backFromDetail}
             pollMargin={pollMargin} onPoll={setPoll}
             cd2Decay={cd2Decay} onDecay={setDecay}
             govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
         ) : (
           <>
-            <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
-              {[["dashboard", "Dashboard"], ...STATES.map((s) => [s.code, s.label]), ["wire", "Wire"], ["briefing", "Briefing"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
-                <button key={k} onClick={() => setView(k)}
+            <div style={{ position: "relative", marginBottom: 14 }}>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                <button onClick={() => setNavOpen((o) => !o)}
                   style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
-                    background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
-                  {label}
+                    background: STATES.some((st) => st.code === view) ? C.panel2 : "transparent",
+                    color: STATES.some((st) => st.code === view) ? C.text : C.muted,
+                    border: `1px solid ${STATES.some((st) => st.code === view) || navOpen ? C.brass : C.line}` }}>
+                  {STATES.some((st) => st.code === view) ? STATES.find((st) => st.code === view).label : "States"} {navOpen ? "▴" : "▾"}
                 </button>
-              ))}
+                {[["dashboard", "Dashboard"], ["briefing", "Briefing"], ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
+                  <button key={k} onClick={() => { setNavOpen(false); setView(k); setSel(null); }}
+                    style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
+                      background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              {navOpen && (
+                <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 40, minWidth: 190,
+                  background: C.panel, border: `1px solid ${C.brass}55`, borderRadius: 10, padding: 6, boxShadow: "0 10px 28px rgba(0,0,0,0.5)" }}>
+                  {STATES.slice().sort((a, b) => a.label.localeCompare(b.label)).map((st) => (
+                    <button key={st.code} onClick={() => openState(st.code)}
+                      style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 12px", fontSize: 13, fontWeight: 700, fontFamily: mono,
+                        borderRadius: 7, cursor: "pointer", background: view === st.code ? C.panel2 : "transparent",
+                        color: view === st.code ? C.text : "#B9C7DB", border: "none" }}>
+                      {st.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {view === "dashboard" && (
