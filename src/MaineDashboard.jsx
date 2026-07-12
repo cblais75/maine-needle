@@ -883,6 +883,17 @@ function BriefingView({ posts }) {
             {String(p.body || "").split(/\n\s*\n/).map((para, j) => (
               <div key={j} style={{ fontSize: 13.5, color: "#C7D4E6", lineHeight: 1.65, marginBottom: 8 }}>{para}</div>
             ))}
+            {Array.isArray(p.links) && p.links.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
+                {p.links.map((l, k) => (
+                  <a key={k} href={l.url} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: 12, fontWeight: 700, fontFamily: mono, color: C.brass, textDecoration: "none",
+                      border: `1px solid ${C.brass}66`, borderRadius: 7, padding: "6px 11px" }}>
+                    {l.label} ↗
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         ))
       )}
