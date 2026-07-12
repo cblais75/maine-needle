@@ -310,8 +310,8 @@
     ]
   },
   "ak_sen": {
-    "margin": -2,
-    "nPolls": 1,
+    "margin": -1,
+    "nPolls": 2,
     "fallback": false,
     "note": "",
     "polls": [
@@ -322,15 +322,34 @@
         "dem": 45,
         "rep": 47,
         "ind": null,
-        "weightPct": 100
+        "weightPct": 93
+      },
+      {
+        "pollster": "Alaska Survey Research",
+        "date": "2026-04-19",
+        "rating": 0.75,
+        "dem": 49,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 7
       }
     ]
   },
   "ga_sen": {
-    "margin": null,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "No public Georgia Senate polls since the runoff; centered on fundamentals.",
-    "polls": []
+    "margin": 13,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-06-27",
+        "rating": 0.9,
+        "dem": 56,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   }
 }

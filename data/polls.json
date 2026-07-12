@@ -206,6 +206,13 @@
   ],
   "ak_sen": [
     {
+      "pollster": "Alaska Survey Research",
+      "rating": 0.75,
+      "date": "2026-04-19",
+      "dem": 49,
+      "rep": 43
+    },
+    {
       "pollster": "NYT/Siena",
       "rating": 0.95,
       "date": "2026-06-27",
@@ -213,5 +220,13 @@
       "rep": 47
     }
   ],
-  "ga_sen": []
+  "ga_sen": [
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-06-27",
+      "dem": 56,
+      "rep": 43
+    }
+  ]
 }
