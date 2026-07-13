@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-12",
+  "updated": "2026-07-13",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -351,5 +351,12 @@
         "weightPct": 100
       }
     ]
+  },
+  "ne_sen": {
+    "margin": null,
+    "nPolls": 0,
+    "fallback": true,
+    "note": "Limited Nebraska polling; centered on fundamentals.",
+    "polls": []
   }
 }

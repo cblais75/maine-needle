@@ -1,0 +1,9 @@
+{
+  "builtAt": null,
+  "source": "placeholder \u2014 run scripts/build-baseline.mjs --out data/ne-baseline.json --file <nebraska county results> via dispatch",
+  "basis": "president",
+  "statewideDemTwoParty": null,
+  "nCounties": 0,
+  "lean": {},
+  "weight": {}
+}
