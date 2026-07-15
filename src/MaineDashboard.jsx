@@ -639,7 +639,7 @@ export default function MaineDashboard() {
                     border: `1px solid ${STATES.some((st) => st.code === view) || navOpen ? C.brass : C.line}` }}>
                   {STATES.some((st) => st.code === view) ? STATES.find((st) => st.code === view).label : "States"} {navOpen ? "▴" : "▾"}
                 </button>
-                {[["dashboard", "Dashboard"], ["briefing", "Briefing"], ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
+                {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
                   <button key={k} onClick={() => { setNavOpen(false); setView(k); setSel(null); }}
                     style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
                       background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
@@ -688,11 +688,12 @@ export default function MaineDashboard() {
               </div>
             )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} />}
+            {view === "control" && <SenateControlView races={races} />}
             {view === "wire" && <WireFeed events={wire} />}
             {view === "briefing" && <BriefingView posts={briefing} />}
             {view === "method" && <MethodView />}
 
-            {(view === "dashboard" || view === "wire" || (STATES.some((s) => s.code === view) && view !== "AK" && view !== "MI")) && (
+            {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK" && view !== "MI")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -923,6 +924,97 @@ function BriefingView({ posts }) {
           </div>
         ))
       )}
+    </div>
+  );
+}
+
+// ---- CONTROL OF THE SENATE ----
+// Baseline: 53R–47D. Untracked seats are assumed to hold their party:
+// safe-D bloc 45 (King and Sanders, who caucus D, included) and safe-R bloc 46.
+// The 9 tracked races are the live set. Democrats need 51 outright; 50-50 stays
+// Republican on the Vice President's tie-breaking vote. Osborn (I) counts for
+// neither party unless he declares a caucus.
+const D_SAFE_SEATS = 45, R_SAFE_SEATS = 46;
+const CONTROL_SET = [
+  { id: "sen",    label: "Maine",          holder: "R", note: "nominee TBD" },
+  { id: "nc_sen", label: "North Carolina", holder: "R" },
+  { id: "oh_sen", label: "Ohio",           holder: "R" },
+  { id: "tx_sen", label: "Texas",          holder: "R" },
+  { id: "ia_sen", label: "Iowa",           holder: "R" },
+  { id: "ga_sen", label: "Georgia",        holder: "D" },
+  { id: "ne_sen", label: "Nebraska",       holder: "R", indRight: true },
+  { id: "ak_sen", label: "Alaska",         holder: "R", note: "no election-night call (RCV)" },
+  { id: "mi_sen", label: "Michigan",       holder: "D", note: "nominees set Aug 4" },
+];
+
+function SenateControlView({ races }) {
+  const statuses = CONTROL_SET.map((c) => {
+    const r = races.find((x) => x.id === c.id);
+    let v = "U", sub = "";
+    if (r && r.type !== "rcv" && r.type !== "tbd" && r.units && r.units.length && r.left && r.right) {
+      const m = compute(r.units); const rt = rateOf(r, m);
+      sub = `${r.left.short} vs ${r.right.short}`;
+      if (rt.pct >= 97 && m.fracIn > 0) v = rt.leader === r.right ? (c.indRight ? "I" : "D") : "R";
+    } else if (r) { sub = r.sub; }
+    return { ...c, v, sub };
+  });
+  const dWins = statuses.filter((x) => x.v === "D").length;
+  const rWins = statuses.filter((x) => x.v === "R").length;
+  const iWins = statuses.filter((x) => x.v === "I").length;
+  const un = statuses.length - dWins - rWins - iWins;
+  const D = D_SAFE_SEATS + dWins, R = R_SAFE_SEATS + rWins, I = iWins;
+
+  let banner, color;
+  if (D >= 51) { banner = "DEMOCRATS TAKE THE SENATE"; color = BLUE; }
+  else if (R >= 51) { banner = "REPUBLICANS RETAIN CONTROL"; color = RED; }
+  else if (R === 50 && un === 0) { banner = "REPUBLICANS RETAIN — 50-50, VP BREAKS TIES"; color = RED; }
+  else if (un === 0 && I > 0) { banner = "OSBORN DECIDES THE SENATE"; color = TEAL; }
+  else { banner = `CONTROL UNDECIDED — ${un} TRACKED SEAT${un === 1 ? "" : "S"} OUTSTANDING`; color = C.brass; }
+
+  const chip = (v) => v === "D" ? { t: "DEM", c: BLUE } : v === "R" ? { t: "GOP", c: RED } : v === "I" ? { t: "IND", c: TEAL } : { t: "—", c: C.muted };
+  const seg = (w, bg) => ({ width: `${w}%`, background: bg, height: "100%" });
+
+  return (
+    <div>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BIG PICTURE</div>
+      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Control of the Senate</div>
+      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
+        Every untracked seat is assumed to hold its party. The nine tracked races below flip automatically when their needle crosses the calling threshold — in the simulation now, and on real returns on election night.
+      </div>
+
+      <div style={{ fontSize: 15, fontWeight: 800, fontFamily: mono, letterSpacing: 0.6, color, marginBottom: 10 }}>{banner}</div>
+
+      <div style={{ display: "flex", height: 34, borderRadius: 9, overflow: "hidden", border: `1px solid ${C.line}`, marginBottom: 4 }}>
+        <div style={seg(D, BLUE)} />
+        {I > 0 && <div style={seg(I, TEAL)} />}
+        <div style={seg(un, "#3A4A66")} />
+        <div style={seg(R, RED)} />
+      </div>
+      <div style={{ position: "relative", height: 15, marginBottom: 6 }}>
+        <div style={{ position: "absolute", left: "50%", top: -42, height: 42, width: 2, background: C.brass, opacity: 0.85 }} />
+        <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", fontSize: 10, fontFamily: mono, color: C.brass }}>50</div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", fontFamily: mono, fontSize: 13, marginBottom: 6 }}>
+        <span style={{ color: BLUE, fontWeight: 700 }}>DEM {D}</span>
+        {I > 0 && <span style={{ color: TEAL, fontWeight: 700 }}>IND {I}</span>}
+        <span style={{ color: C.muted }}>{un} uncalled</span>
+        <span style={{ color: RED, fontWeight: 700 }}>GOP {R}</span>
+      </div>
+      <div style={{ fontSize: 11, color: C.muted, marginBottom: 16, lineHeight: 1.5 }}>
+        Democrats need <b style={{ color: BLUE }}>51</b> to take control; a 50-50 Senate stays Republican on the Vice President's tie-breaking vote. Osborn counts for neither party unless he declares a caucus.
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
+        {statuses.map((x) => { const k = chip(x.v); return (
+          <div key={x.id} style={{ background: C.panel, border: `1px solid ${x.v === "U" ? C.line : k.c}`, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 13, fontWeight: 700 }}>{x.label}</span>
+              <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, color: k.c, border: `1px solid ${k.c}66`, borderRadius: 5, padding: "2px 6px" }}>{k.t}</span>
+            </div>
+            <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{x.sub || ""}{x.note ? ` · ${x.note}` : ""} · {x.holder}-held</div>
+          </div>
+        ); })}
+      </div>
     </div>
   );
 }

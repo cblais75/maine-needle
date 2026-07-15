@@ -1,2 +1,27 @@
  
 === commit-update18.bat === 
+warning: in the working copy of 'commit-update17-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/briefing.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/aggregate.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/update-polls.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update18.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/ne-baseline.json', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 83eeac2] Update 18
+ 9 files changed, 120 insertions(+), 8 deletions(-)
+ create mode 100644 commit-update18-log.txt
+ create mode 100644 commit-update18.bat
+ create mode 100644 data/ne-baseline.json
+Commit exit: 0 
+83eeac2 Update 18
+6820740 Update 17
+295d949 Update 16
+9684f44 Polls
+To https://github.com/cblais75/maine-needle.git
+   6820740..83eeac2  main -> main
+Push exit: 0 
+=== Done === 
