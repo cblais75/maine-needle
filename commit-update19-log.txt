@@ -1,2 +1,24 @@
  
 === commit-update19.bat === 
+warning: in the working copy of 'commit-update18-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/briefing.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'STATUS-UPDATE18.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update19.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 34273d8] Update 19
+ 7 files changed, 176 insertions(+), 3 deletions(-)
+ create mode 100644 STATUS-UPDATE18.txt
+ create mode 100644 commit-update19-log.txt
+ create mode 100644 commit-update19.bat
+Commit exit: 0 
+34273d8 Update 19
+83eeac2 Update 18
+6820740 Update 17
+295d949 Update 16
+To https://github.com/cblais75/maine-needle.git
+   83eeac2..34273d8  main -> main
+Push exit: 0 
+=== Done === 
