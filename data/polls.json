@@ -105,6 +105,13 @@
       "date": "2026-06-27",
       "dem": 50,
       "rep": 43
+    },
+    {
+      "pollster": "Public Policy Polling (D)",
+      "rating": 0.55,
+      "date": "2026-07-10",
+      "dem": 48,
+      "rep": 44
     }
   ],
   "oh_sen": [

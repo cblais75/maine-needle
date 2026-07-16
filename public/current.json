@@ -125,11 +125,20 @@
     "polls": []
   },
   "nc_sen": {
-    "margin": 10,
-    "nPolls": 4,
+    "margin": 8,
+    "nPolls": 5,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Public Policy Polling (D)",
+        "date": "2026-07-10",
+        "rating": 0.55,
+        "dem": 48,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 34
+      },
       {
         "pollster": "NYT/Siena",
         "date": "2026-06-27",
@@ -137,7 +146,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 58
+        "weightPct": 38
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -146,7 +155,7 @@
         "dem": 48,
         "rep": 34,
         "ind": null,
-        "weightPct": 32
+        "weightPct": 21
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -155,7 +164,7 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 6
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
