@@ -1,2 +1,19 @@
  
 === commit-update19b.bat === 
+warning: in the working copy of 'commit-update19-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update19b.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 19435c5] Update 19
+ 3 files changed, 62 insertions(+)
+ create mode 100644 commit-update19b-log.txt
+ create mode 100644 commit-update19b.bat
+Commit exit: 0 
+19435c5 Update 19
+34273d8 Update 19
+83eeac2 Update 18
+6820740 Update 17
+To https://github.com/cblais75/maine-needle.git
+   34273d8..19435c5  main -> main
+Push exit: 0 
+=== Done === 

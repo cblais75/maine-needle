@@ -1,0 +1,4 @@
+ 
+=== deploy-update19.bat === 
+Removed stale index.lock 
+Removed vite temp files 
