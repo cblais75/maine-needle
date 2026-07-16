@@ -1,0 +1,197 @@
+=== deploy-update21.bat === 
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Thursday, July 16, 2026 4:00:52 PM
+   Source : C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\
+     Dest : C:\Users\colin\OneDrive\Desktop\Maine Election App\maine-needle\
+
+    Files : *.*
+	    
+ Exc Dirs : data
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                  67	C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\
+	*EXTRA Dir        -1	C:\Users\colin\OneDrive\Desktop\Maine Election App\maine-needle\.git\
+	*EXTRA Dir        -1	C:\Users\colin\OneDrive\Desktop\Maine Election App\maine-needle\dist\
+	*EXTRA Dir        -1	C:\Users\colin\OneDrive\Desktop\Maine Election App\maine-needle\node_modules\
+	  *EXTRA File 		     409	commit-polls-final-log.txt
+	  *EXTRA File 		     827	commit-polls-final.bat
+	  *EXTRA File 		     889	commit-polls-july12-log.txt
+	  *EXTRA File 		    1131	commit-polls-july12.bat
+	  *EXTRA File 		    1127	commit-update15.bat
+	  *EXTRA File 		   10159	commit-update15b-log.txt
+	  *EXTRA File 		    1129	commit-update15b.bat
+	  *EXTRA File 		     976	commit-update16-log.txt
+	  *EXTRA File 		    1127	commit-update16.bat
+	  *EXTRA File 		    1083	commit-update17-log.txt
+	  *EXTRA File 		    1127	commit-update17.bat
+	  *EXTRA File 		    1584	commit-update18-log.txt
+	  *EXTRA File 		    1127	commit-update18.bat
+	  *EXTRA File 		    1241	commit-update19-log.txt
+	  *EXTRA File 		    1127	commit-update19.bat
+	  *EXTRA File 		     736	commit-update19b-log.txt
+	  *EXTRA File 		    1129	commit-update19b.bat
+	  *EXTRA File 		   11684	deploy-update19-log.txt
+	  *EXTRA File 		    1255	deploy-update19.bat
+	  *EXTRA File 		     890	deploy-update20-log.txt
+	  *EXTRA File 		    1255	deploy-update20.bat
+	  *EXTRA File 		      30	deploy-update21-log.txt
+	  *EXTRA File 		    1952	deploy-update21.bat
+	  *EXTRA File 		      76	STATUS-UPDATE18.txt
+	    Newer     		      42	.gitignore100%  
+	    Newer     		     503	api-push-log.txt100%  
+	    Newer     		    2245	build-nc-baseline.bat100%  
+	    Newer     		      47	cleanup-windows.bat100%  
+	    Newer     		    1030	commit-gov-fix-log.txt100%  
+	    Newer     		    1148	commit-gov-fix.bat100%  
+	    Newer     		    1073	commit-nc-baseline.bat100%  
+	    Newer     		     636	commit-nc-log.txt100%  
+	    Newer     		    1144	commit-polls-july2-log.txt100%  
+	    Newer     		    1243	commit-polls-july2.bat100%  
+	    Newer     		     831	commit-polls-june29-log.txt100%  
+	    Newer     		    1072	commit-polls-june29.bat100%  
+	    Newer     		    1052	commit-polls-june30-log.txt100%  
+	    Newer     		    1076	commit-polls-june30.bat100%  
+	    Newer     		    1072	commit-polls.bat100%  
+	    Newer     		     831	commit-rebuild-polls-log.txt100%  
+	    Newer     		    1047	commit-rebuild-polls.bat100%  
+	    Newer     		     968	commit-update10-log.txt100%  
+	    Newer     		    1025	commit-update10.bat100%  
+	    Newer     		     854	commit-update11-log.txt100%  
+	    Newer     		    1025	commit-update11.bat100%  
+	    Newer     		     856	commit-update12-log.txt100%  
+	    Newer     		    1025	commit-update12.bat100%  
+	    Newer     		     857	commit-update13-log.txt100%  
+	    Newer     		    1025	commit-update13.bat100%  
+	    Newer     		      31	commit-update14-log.txt100%  
+	    Newer     		    1127	commit-update14.bat100%  
+	    Newer     		    2516	commit-update2-log.txt100%  
+	    Newer     		    1170	commit-update2.bat100%  
+	    Newer     		    1197	commit-update3-log.txt100%  
+	    Newer     		    1060	commit-update3.bat100%  
+	    Newer     		     794	commit-update4-log.txt100%  
+	    Newer     		    1091	commit-update4.bat100%  
+	    Newer     		    1557	commit-update5-log.txt100%  
+	    Newer     		    1076	commit-update5.bat100%  
+	    Newer     		     786	commit-update6-log.txt100%  
+	    Newer     		    1071	commit-update6.bat100%  
+	    Newer     		    1801	commit-update7-log.txt100%  
+	    Newer     		    1022	commit-update7.bat100%  
+	    Newer     		    1763	commit-update8-log.txt100%  
+	    Newer     		    1022	commit-update8.bat100%  
+	    Newer     		     897	commit-update9-log.txt100%  
+	    Newer     		    1022	commit-update9.bat100%  
+	    Newer     		     198	demo.bat100%  
+	    Newer     		    1018	git-api-push.bat100%  
+	    Newer     		     406	git-check.bat100%  
+	    Newer     		     260	git-log.txt100%  
+	    Newer     		    1185	git-push-final.bat100%  
+	    Newer     		    1356	git-push.bat100%  
+	    Newer     		    1674	git-push2.bat100%  
+	    Newer     		    2520	git-push3.bat100%  
+	    Newer     		    1502	git-update1.bat100%  
+	    Newer     		    4721	github-setup-v2.bat100%  
+	    Newer     		    4132	github-setup-v3.bat100%  
+	    Newer     		    2418	github-setup.bat100%  
+	    Newer     		    1453	index.html100%  
+	    Newer     		     984	nc-baseline-log.txt100%  
+	    Newer     		   61166	package-lock.json100%  
+	    Newer     		     603	package.json100%  
+	    Older     		     390	push-final-log.txt100%  
+	    Newer     		     241	push-log.txt100%  
+	    Newer     		     611	push-log3.txt100%  
+	    Newer     		    5062	README.md100%  
+	    Newer     		     565	run.bat100%  
+	    Newer     		    3373	update1-log.txt100%  
+	    Newer     		     144	vercel.json100%  
+	    Newer     		     174	vite.config.js100%  
+	                   1	C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\api\
+	    Newer     		    1472	results.js100%  
+	                   5	C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\public\
+	    Newer     		    3414	briefing.json100%  
+	    Older     		    7115	current.json100%  
+	    Newer     		     599	favicon.svg100%  
+	    Newer     		   31362	og-image.png100%  
+	    Newer     		      57	results.json100%  
+	                   5	C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\scripts\
+	    Newer     		    6581	build-baseline-nc.mjs100%  
+	    Newer     		    6768	build-baseline.mjs100%  
+	    Newer     		    2065	convert-tsv-to-csv.mjs100%  
+	    Newer     		    5904	update-polls.mjs100%  
+	    Newer     		    2318	update-results.mjs100%  
+	                   3	C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\scripts\lib\
+	    Newer     		    4165	aggregate.mjs100%  
+	    Newer     		    2635	parse-sources.mjs100%  
+	    Newer     		   15044	town-county.mjs100%  
+	                   2	C:\Users\colin\AppData\Local\Temp\update21\the-needle-project_2026-07-16_update-21_analytics\src\
+	    Newer     		     318	main.jsx100%  
+	    Newer     		   96925	MaineDashboard.jsx100%  
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         7         0         7         0         0         3
+   Files :        83        83         0         0         0        24
+   Bytes :   319.9 k   319.9 k         0         0         0    43.0 k
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+
+
+   Speed :           3,765,839 Bytes/sec.
+   Speed :             215.483 MegaBytes/min.
+   Ended : Thursday, July 16, 2026 4:00:52 PM
+
+
+added 1 package, removed 46 packages, and audited 75 packages in 2s
+
+7 packages are looking for funding
+  run `npm fund` for details
+
+3 vulnerabilities (1 moderate, 2 high)
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+npm notice
+npm notice New major version of npm available! 11.13.0 -> 12.0.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.1
+npm notice To update run: npm install -g npm@12.0.1
+npm notice
+npm install exit: 0 
+
+> the-needle-project@0.1.0 polls
+> node scripts/update-polls.mjs
+
+Senate: Platner +2 from 9 polls
+Governor: 1 polls (live)
+CD1: 0 polls · CD2: 0 polls
+NC Senate: Cooper +8 from 5 polls
+OH Senate: Brown +1 from 6 polls
+TX Senate: Talarico +0 from 3 polls
+IA Senate: 4 polls (Turek +1)
+AK Senate: 2 polls (Sullivan +1)
+GA Senate: 1 polls (Ossoff +13)
+NE Senate: 0 polls (fundamentals)
+polls exit: 0 
+
+> the-needle-project@0.1.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 1507 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                [39m[1m[2m  1.48 kB[22m[1m[22m[2m │ gzip:  0.53 kB[22m
+[2mdist/[22m[36massets/index-Bfhr3b3q.js  [39m[1m[2m231.86 kB[22m[1m[22m[2m │ gzip: 74.68 kB[22m
+[32m✓ built in 2.47s[39m
+build exit: 0 

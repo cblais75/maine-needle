@@ -1,3 +1,21 @@
  
 === deploy-update20.bat === 
 Removed vite temp files 
+warning: in the working copy of 'deploy-update19-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main a8ef226] Update 20
+ 4 files changed, 184 insertions(+), 5 deletions(-)
+ create mode 100644 deploy-update20-log.txt
+ create mode 100644 deploy-update20.bat
+Commit exit: 0 
+a8ef226 Update 20
+3a0324c Update 19
+19435c5 Update 19
+34273d8 Update 19
+To https://github.com/cblais75/maine-needle.git
+   3a0324c..a8ef226  main -> main
+Push exit: 0 
+=== Done === 

@@ -1,0 +1,11 @@
+ 
+=== commit-polls-final.bat === 
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 4f23d3f] Polls
+ 2 files changed, 22 insertions(+), 6 deletions(-)
+Commit exit: 0 
+4f23d3f Polls
+a8ef226 Update 20
+3a0324c Update 19
