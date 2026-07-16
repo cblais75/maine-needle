@@ -948,6 +948,7 @@ const CONTROL_SET = [
 ];
 
 function SenateControlView({ races }) {
+  const [ovr, setOvr] = useState({});
   const statuses = CONTROL_SET.map((c) => {
     const r = races.find((x) => x.id === c.id);
     let v = "U", sub = "";
@@ -956,8 +957,19 @@ function SenateControlView({ races }) {
       sub = `${r.left.short} vs ${r.right.short}`;
       if (rt.pct >= 97 && m.fracIn > 0) v = rt.leader === r.right ? (c.indRight ? "I" : "D") : "R";
     } else if (r) { sub = r.sub; }
-    return { ...c, v, sub };
+    return { ...c, live: v, v: ovr[c.id] ?? v, sub };
   });
+  const scenario = Object.keys(ovr).length > 0;
+  const cycleTile = (c) => {
+    const opts = c.indRight ? ["U", "I", "R"] : ["U", "D", "R"];
+    setOvr((o) => {
+      const cur = o[c.id] ?? c.live;
+      const next = opts[(opts.indexOf(cur) + 1) % opts.length];
+      const n = { ...o, [c.id]: next };
+      if (next === c.live) delete n[c.id];
+      return n;
+    });
+  };
   const dWins = statuses.filter((x) => x.v === "D").length;
   const rWins = statuses.filter((x) => x.v === "R").length;
   const iWins = statuses.filter((x) => x.v === "I").length;
@@ -979,10 +991,18 @@ function SenateControlView({ races }) {
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BIG PICTURE</div>
       <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Control of the Senate</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
-        Every untracked seat is assumed to hold its party. The nine tracked races below flip automatically when their needle crosses the calling threshold — in the simulation now, and on real returns on election night.
+        Every untracked seat is assumed to hold its party. The nine tracked races below flip automatically when their needle crosses the calling threshold — in the simulation now, and on real returns on election night. Tap any tile to explore what-if scenarios; a scenario never changes the needles, and one tap brings you back to live.
       </div>
 
-      <div style={{ fontSize: 15, fontWeight: 800, fontFamily: mono, letterSpacing: 0.6, color, marginBottom: 10 }}>{banner}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+        <div style={{ fontSize: 15, fontWeight: 800, fontFamily: mono, letterSpacing: 0.6, color }}>{banner}</div>
+        {scenario && (
+          <button onClick={() => setOvr({})}
+            style={{ fontSize: 10.5, fontWeight: 700, fontFamily: mono, letterSpacing: 0.5, color: C.ink, background: C.brass, border: "none", borderRadius: 6, padding: "4px 9px", cursor: "pointer" }}>
+            SCENARIO — TAP TO RETURN TO LIVE
+          </button>
+        )}
+      </div>
 
       <div style={{ display: "flex", height: 34, borderRadius: 9, overflow: "hidden", border: `1px solid ${C.line}`, marginBottom: 4 }}>
         <div style={seg(D, BLUE)} />
@@ -1006,13 +1026,14 @@ function SenateControlView({ races }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
         {statuses.map((x) => { const k = chip(x.v); return (
-          <div key={x.id} style={{ background: C.panel, border: `1px solid ${x.v === "U" ? C.line : k.c}`, borderRadius: 10, padding: "10px 12px" }}>
+          <button key={x.id} onClick={() => cycleTile(x)}
+            style={{ textAlign: "left", color: C.text, cursor: "pointer", background: ovr[x.id] != null ? C.panel2 : C.panel, border: `1px solid ${x.v === "U" ? C.line : k.c}`, borderRadius: 10, padding: "10px 12px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ fontSize: 13, fontWeight: 700 }}>{x.label}</span>
               <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, color: k.c, border: `1px solid ${k.c}66`, borderRadius: 5, padding: "2px 6px" }}>{k.t}</span>
             </div>
             <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{x.sub || ""}{x.note ? ` · ${x.note}` : ""} · {x.holder}-held</div>
-          </div>
+          </button>
         ); })}
       </div>
     </div>
