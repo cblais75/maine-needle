@@ -195,3 +195,99 @@ computing gzip size...
 [2mdist/[22m[36massets/index-Bfhr3b3q.js  [39m[1m[2m231.86 kB[22m[1m[22m[2m │ gzip: 74.68 kB[22m
 [32m✓ built in 2.47s[39m
 build exit: 0 
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'api-push-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'api/results.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'build-nc-baseline.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'cleanup-windows.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-gov-fix-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-gov-fix.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-nc-baseline.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-nc-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-july2-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-july2.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-june29-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-june29.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-june30-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-june30.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-rebuild-polls-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-rebuild-polls.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update10-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update10.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update11-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update11.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update12-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update12.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update13-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update13.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update14-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update14.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update2-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update2.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update3-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update3.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update4-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update4.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update5-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update5.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update6-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update6.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update7-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update7.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update8-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update8.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update9-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-update9.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'demo.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'deploy-update20-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-api-push.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-check.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push-final.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push2.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push3.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-update1.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'github-setup-v2.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'github-setup-v3.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'github-setup.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'nc-baseline-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/briefing.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/favicon.svg', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'push-final-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'push-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'push-log3.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'run.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/build-baseline-nc.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/build-baseline.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/convert-tsv-to-csv.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/aggregate.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/parse-sources.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lib/town-county.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/update-polls.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/update-results.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/main.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'update1-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'vercel.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'vite.config.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-polls-final-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'deploy-update21.bat', LF will be replaced by CRLF the next time Git touches it
+add exit: 0 
+[main e87f6bd] Update 21
+ 8 files changed, 356 insertions(+)
+ create mode 100644 commit-polls-final-log.txt
+ create mode 100644 commit-polls-final.bat
+ create mode 100644 deploy-update21-log.txt
+ create mode 100644 deploy-update21.bat
+commit exit: 0 
+e87f6bd Update 21
+4f23d3f Polls
+a8ef226 Update 20
