@@ -1,0 +1,11 @@
+=== commit-errorboundary.bat === 
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/ErrorBoundary.jsx', LF will be replaced by CRLF the next time Git touches it
+add exit: 0 
+[main ff1de03] Error boundary
+ 2 files changed, 56 insertions(+), 5 deletions(-)
+ create mode 100644 src/ErrorBoundary.jsx
+commit exit: 0 
+ff1de03 Error boundary
+0cfd0d6 Update 23
+8d30781 Briefing — Osborn
