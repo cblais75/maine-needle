@@ -696,6 +696,7 @@ export default function MaineDashboard() {
             {view === "wire" && <WireFeed events={wire} />}
             {view === "briefing" && <BriefingView posts={briefing} />}
             {view === "method" && <MethodView />}
+            {["dashboard", "briefing", "polls", "method"].includes(view) && <CoffeeButton />}
 
             {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK" && view !== "MI")) && (
               <>
@@ -1043,6 +1044,20 @@ function SenateControlView({ races }) {
           </button>
         ); })}
       </div>
+    </div>
+  );
+}
+
+function CoffeeButton() {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", padding: "26px 0 8px" }}>
+      <a href="https://buymeacoffee.com/colinblais" target="_blank" rel="noopener noreferrer"
+        style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#5F7FFF", color: "#ffffff",
+          borderRadius: 10, padding: "11px 18px", fontSize: 14.5, fontWeight: 700, textDecoration: "none",
+          fontFamily: "'Lato', system-ui, sans-serif", border: "1px solid #000000",
+          boxShadow: "0 3px 10px rgba(0,0,0,0.35)" }}>
+        <span style={{ fontSize: 17 }}>☕</span> Buy me a coffee
+      </a>
     </div>
   );
 }
