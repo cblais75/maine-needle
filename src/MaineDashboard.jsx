@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause, SkipForward, RotateCcw, ChevronLeft } from "lucide-react";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 import ncBaseline from "../data/nc-baseline.json";
 import ohBaseline from "../data/oh-baseline.json";
 import txBaseline from "../data/tx-baseline.json";
@@ -624,10 +625,12 @@ export default function MaineDashboard() {
         </div>
 
         {sel !== null ? (
-          <Detail race={races.find((r) => r.id === sel)} onBack={backFromDetail}
-            pollMargin={pollMargin} onPoll={setPoll}
-            cd2Decay={cd2Decay} onDecay={setDecay}
-            govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
+          <ErrorBoundary label="This race view hit an error">
+            <Detail race={races.find((r) => r.id === sel)} onBack={backFromDetail}
+              pollMargin={pollMargin} onPoll={setPoll}
+              cd2Decay={cd2Decay} onDecay={setDecay}
+              govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
+          </ErrorBoundary>
         ) : (
           <>
             <div style={{ position: "relative", marginBottom: 14 }}>
@@ -662,6 +665,7 @@ export default function MaineDashboard() {
               )}
             </div>
 
+            <ErrorBoundary key={view} label="This section hit an error">
             {view === "dashboard" && (
               <div>
                 <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALL RACES · NOVEMBER 2026</div>
@@ -714,6 +718,7 @@ export default function MaineDashboard() {
                 </div>
               </>
             )}
+          </ErrorBoundary>
           </>
         )}
       </div>
@@ -766,7 +771,8 @@ function Overview({ races, onPick }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       {races.map((r) => (
-        <button key={r.id} onClick={() => onPick(r.id)}
+        <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
+        <button onClick={() => onPick(r.id)}
           style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", cursor: "pointer", color: C.text }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div style={{ fontSize: 15, fontWeight: 700 }}>{r.title}</div>
@@ -780,6 +786,7 @@ function Overview({ races, onPick }) {
           <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 9 }}>{r.sub}</div>
           {r.type === "tbd" ? <TbdMini race={r} /> : r.type === "rcv" ? <RcvMini race={r} /> : r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
         </button>
+        </ErrorBoundary>
       ))}
     </div>
   );
