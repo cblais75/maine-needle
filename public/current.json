@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-19",
+  "updated": "2026-07-20",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."

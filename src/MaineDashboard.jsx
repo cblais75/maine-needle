@@ -61,8 +61,8 @@ const makeSenate = () => ({
   id: "sen", state: "ME", title: "U.S. Senate",
   sub: "TBD (D) vs Collins (R)",
   system: "Ranked-Choice Voting", real: true, type: "tbd", units: [],
-  tbdChip: "NOMINEE TBD · JUL 27",
-  tbdNote: "Graham Platner withdrew from the race on July 10 after sexual assault allegations, which he denies. Maine Democrats will choose a replacement nominee by July 27.",
+  tbdChip: "LIKELY: JACKSON · JUL 25",
+  tbdNote: "Graham Platner withdrew on July 10 after sexual assault allegations, which he denies. Former state Senate President Troy Jackson is now the overwhelming favorite to replace him, to be made official at the July 25 convention. The needle stays suspended until then.",
 });
 
 // ---- NORTH CAROLINA ----
@@ -323,15 +323,7 @@ const ballotUnits = (yesCenter, corr) =>
   all16.map((n) => unit(n, clamp(yesCenter + corr * (CO[n][0] - 0.5), 0.08, 0.92), CO[n][1]));
 
 // the ballot question(s). Illustrative — a new question has no prior election to map.
-const OTHER_RACES = [
-  {
-    id: "q1", state: "ME", title: "Question 1",
-    sub: "Do you want to change civil rights and education laws to require public schools to restrict access to bathrooms and sports based on the gender on the child's original birth certificate and allow students to sue the schools?",
-    system: "Majority",
-    left: { full: "No", short: "No", color: AMBER }, right: { full: "Yes", short: "Yes", color: TEAL },
-    units: ballotUnits(0.49, -0.5),
-  },
-];
+const OTHER_RACES = []; // ballot question (transgender-sports referendum) struck from the Nov ballot by the Maine SJC on 2026-07-10
 
 // ---- stats ----
 function erf(x) {
@@ -1112,23 +1104,23 @@ function MaineSenateTbdDetail({ race, onBack }) {
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
 
       <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
-        <div style={h2}>DEMOCRATIC NOMINEE TBD</div>
-        <div style={body}>Graham Platner, who won the June 9 primary, withdrew from the race on July 10 after sexual assault allegations by a former partner, which he denies. His name will not appear on the November ballot, and Maine Democrats will select a replacement nominee to face Susan Collins.</div>
+        <div style={h2}>NOMINEE ALL BUT DECIDED</div>
+        <div style={body}>Graham Platner, who won the June 9 primary, withdrew on July 10 after a former partner's accusation of sexual assault, which he denies. Former state Senate President Troy Jackson has since emerged as the overwhelming favorite to replace him and face Susan Collins.</div>
       </div>
 
       <div style={card}>
         <div style={h2}>THE REPLACEMENT PROCESS</div>
-        <div style={body}>The Maine Democratic Party is holding a nominating convention of roughly 600 delegates. Candidates had until July 15 to declare and gather signatures from at least 8 of Maine's 16 counties, and the party must certify its new nominee by July 27.</div>
+        <div style={body}>The nominee is chosen by roughly 600 delegates at a state convention in Bangor on July 25. Over a single weekend of county caucuses, Jackson's supporters swept the delegate slates, winning more than 460 of the 500 seats up for grabs.</div>
       </div>
 
       <div style={card}>
-        <div style={h2}>WHO'S RUNNING</div>
-        <div style={body}>Declared candidates so far include former state Senate President Troy Jackson, former Maine CDC director Nirav Shah, Secretary of State Shenna Bellows, Maine Beer Company co-founder Dan Kleban, former congressional candidate Jordan Wood, and social worker Paige Loud.</div>
+        <div style={h2}>THE PRESUMPTIVE NOMINEE</div>
+        <div style={body}>By the end of that weekend Jackson's major rivals had dropped out and endorsed him, including Shenna Bellows, Nirav Shah, Jordan Wood, and Dan Kleban. A logger and former Senate President, Jackson runs on a working-class platform close to Platner's. Delegates are not legally bound, so it is not final until the convention, but his lead makes the nomination a formality.</div>
       </div>
 
       <div style={card}>
         <div style={h2}>WHAT HAPPENS TO THE NEEDLE</div>
-        <div style={body}>This needle is suspended. The polling average it ran on was a Platner–Collins matchup, which no longer exists, so showing a probability now would be dishonest. Once the new nominee is set, the needle returns — rebuilt on fresh head-to-head polling as it arrives.</div>
+        <div style={body}>This needle is suspended. The polling average it ran on was a Platner–Collins matchup, which no longer exists, so showing a probability now would be dishonest. Once the convention makes Jackson official on July 25, the needle returns as a Jackson vs Collins race, rebuilt on fresh head-to-head polling as it arrives.</div>
       </div>
     </div>
   );
