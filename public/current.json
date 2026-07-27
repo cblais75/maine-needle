@@ -1,94 +1,22 @@
 {
-  "updated": "2026-07-20",
+  "updated": "2026-07-27",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 2,
-    "nPolls": 9,
+    "margin": 3,
+    "nPolls": 1,
     "fallback": false,
     "polls": [
       {
-        "pollster": "NYT/Siena",
-        "date": "2026-06-26",
-        "rating": 0.95,
+        "pollster": "UNH Survey Center",
+        "date": "2026-07-20",
+        "rating": 0.8,
         "dem": 49,
-        "rep": 47,
-        "ind": null,
-        "weightPct": 24
-      },
-      {
-        "pollster": "Fox News (Beacon/Shaw)",
-        "date": "2026-06-25",
-        "rating": 0.9,
-        "dem": 47,
-        "rep": 50,
-        "ind": null,
-        "weightPct": 22
-      },
-      {
-        "pollster": "Wick/2WAY",
-        "date": "2026-06-13",
-        "rating": 0.6,
-        "dem": 48,
-        "rep": 45,
-        "ind": null,
-        "weightPct": 10
-      },
-      {
-        "pollster": "Quantus Insights",
-        "date": "2026-06-10",
-        "rating": 0.6,
-        "dem": 46,
-        "rep": 45,
-        "ind": null,
-        "weightPct": 9
-      },
-      {
-        "pollster": "Tavern Research",
-        "date": "2026-06-08",
-        "rating": 0.55,
-        "dem": 51,
-        "rep": 49,
-        "ind": null,
-        "weightPct": 8
-      },
-      {
-        "pollster": "Public Policy Polling (D)",
-        "date": "2026-06-03",
-        "rating": 0.5,
-        "dem": 49,
-        "rep": 45,
-        "ind": null,
-        "weightPct": 6
-      },
-      {
-        "pollster": "Fabrizio Lee (R)",
-        "date": "2026-06-02",
-        "rating": 0.55,
-        "dem": 46,
         "rep": 46,
         "ind": null,
-        "weightPct": 6
-      },
-      {
-        "pollster": "UNH Survey Center",
-        "date": "2026-05-27",
-        "rating": 0.85,
-        "dem": 51,
-        "rep": 42,
-        "ind": null,
-        "weightPct": 8
-      },
-      {
-        "pollster": "UMass Lowell/YouGov",
-        "date": "2026-05-20",
-        "rating": 0.9,
-        "dem": 48,
-        "rep": 43,
-        "ind": null,
-        "weightPct": 7
+        "weightPct": 100
       }
     ]
   },

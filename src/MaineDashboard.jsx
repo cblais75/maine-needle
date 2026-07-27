@@ -49,7 +49,7 @@ const SEN_W = {
   Somerset: 25216, Knox: 23895, Sagadahoc: 22345, Waldo: 22306,
   Lincoln: 22177, Washington: 16447, Franklin: 16093, Piscataquis: 9258,
 };
-// pollMargin = Platner two-party lead in points (D+). center share = 0.5 + margin/200.
+// pollMargin = the Democrat's two-party lead in points (D+). center share = 0.5 + margin/200.
 // SEN_HOUSE shifts the center toward Collins: she has consistently outrun her polling
 // (she trailed in nearly every 2020 public poll and won by about 9 points), so a raw
 // poll average structurally overstates the Democrat in Maine. This keeps a tossup a tossup.
@@ -57,12 +57,14 @@ const SEN_HOUSE = 4;
 const senateUnits = (pollMargin) =>
   Object.keys(SEN_LEAN).map((n) =>
     unit(n, clamp(0.5 + (pollMargin - SEN_HOUSE) / 200 + SEN_LEAN[n], 0.02, 0.98), SEN_W[n]));
-const makeSenate = () => ({
+const makeSenate = (pollMargin) => ({
   id: "sen", state: "ME", title: "U.S. Senate",
-  sub: "TBD (D) vs Collins (R)",
-  system: "Ranked-Choice Voting", real: true, type: "tbd", units: [],
-  tbdChip: "LIKELY: JACKSON · JUL 25",
-  tbdNote: "Graham Platner withdrew on July 10 after sexual assault allegations, which he denies. Former state Senate President Troy Jackson is now the overwhelming favorite to replace him, to be made official at the July 25 convention. The needle stays suspended until then.",
+  sub: "Jackson (D) vs Collins (R)",
+  system: "Ranked-Choice Voting", real: true,
+  note: `Troy Jackson (D) won the July 25 Democratic convention to replace Graham Platner and faces Susan Collins. Centered on polls, then shifted ${SEN_HOUSE} pts toward Collins, who has consistently outrun her polling (she trailed in nearly every 2020 survey and won by about 9). The county map blends the 2020 Collins-Gideon Senate results with recent presidential results.`,
+  left: { full: "Collins", short: "Collins", color: RED },
+  right: { full: "Jackson", short: "Jackson", color: BLUE },
+  units: senateUnits(pollMargin),
 });
 
 // ---- NORTH CAROLINA ----
@@ -405,7 +407,7 @@ const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#
 const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "NE", label: "Nebraska" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }];
 
 export default function MaineDashboard() {
-  const DEFAULT_MARGIN = 3; // Platner D+3 two-party, a mid estimate of current polls
+  const DEFAULT_MARGIN = 3; // Jackson D+3 two-party (UNH Jul 2026), a mid estimate of current polls
   const DEFAULT_NC_MARGIN = 9; // Cooper D+9, mid of recent NC polls
   const DEFAULT_OH_MARGIN = 4; // Brown D+4, mid of recent Ohio polls
   const DEFAULT_TX_MARGIN = 0; // ~even, mid of recent Texas polls
@@ -423,7 +425,7 @@ export default function MaineDashboard() {
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
   const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN) => [
-    makeSenate(),
+    rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
     rollRace(makeCD2(dc, cd2m)),
@@ -1254,16 +1256,16 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
             <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.muted, textTransform: "uppercase" }}>Polling dial</span>
             <span style={{ fontSize: 13, fontFamily: mono, fontWeight: 700, color: pollMargin >= 0 ? BLUE : RED }}>
-              {pollMargin >= 0 ? "Platner" : "Collins"} +{Math.abs(pollMargin)}
+              {pollMargin >= 0 ? "Jackson" : "Collins"} +{Math.abs(pollMargin)}
             </span>
           </div>
           <input type="range" min="-6" max="12" step="1" value={pollMargin} onChange={(e) => onPoll(parseInt(e.target.value))} style={{ width: "100%", accentColor: C.brass }} />
           <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.5, marginTop: 6, fontFamily: mono }}>
-            Sets the statewide center. Each county starts at this margin plus its real historical lean. Recent polls run about Platner +2 to +3.
+            Sets the statewide center. Each county starts at this margin plus its real historical lean. Recent polls run about Jackson +3.
           </div>
           {current && (
             <button onClick={() => onPoll(current.senate.margin)} style={RBTN}>
-              ↻ Restore to current polling ({current.senate.margin >= 0 ? "Platner" : "Collins"} +{Math.abs(current.senate.margin)})
+              ↻ Restore to current polling ({current.senate.margin >= 0 ? "Jackson" : "Collins"} +{Math.abs(current.senate.margin)})
             </button>
           )}
         </div>
@@ -1372,10 +1374,7 @@ function PollsView({ current, loaded }) {
       ) : (
         <>
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "2px 0 8px" }}>Maine</div>
-          <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>U.S. Senate</div>
-            <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5 }}>Polling paused. The Democratic nominee is being replaced (chosen by July 27), so Platner-era surveys no longer describe this race. Tracking resumes with the new matchup.</div>
-          </div>
+          <PollRace title="U.S. Senate" lead={current.senate} demName="Jackson" repName="Collins" />
           <PollRace title="Governor" lead={current.governor} demName="Pingree" repName="Charles" indName="Bennett" />
           <PollRace title="U.S. House · District 1" lead={current.cd1} demName="Pingree" repName="Russell" />
           <PollRace title="U.S. House · District 2" lead={current.cd2} demName="Dunlap" repName="LePage" />
@@ -1456,7 +1455,7 @@ function MethodView() {
         <div style={body}>
           Built from real past results (OpenElections public data).
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.brass }}>Maine — Senate</b> — needle suspended while Democrats replace their nominee (by July 27); it returns with the new matchup, on a blend of the 2020 Senate and recent presidential maps.<br />
+            <b style={{ color: C.brass }}>Maine — Senate</b> — Jackson vs Collins, an RCV race. The county map blends the 2020 Collins-Gideon Senate results (60%) with the 2020 and 2016 presidential maps (40%), re-centered on current polling.<br />
             <b style={{ color: C.brass }}>Maine — House 1 &amp; 2</b> — the actual 2020 U.S. House results by county. District 2 also has a dial that fades the former incumbent's personal vote toward the district's fundamentals, since the seat is open.<br />
             <b style={{ color: C.brass }}>Maine — Governor</b> — the blended presidential map for shape, with a polling-set split. A three-way plurality race (Pingree, Charles, independent Bennett), so it shows three win-probability meters.<br />
             <b style={{ color: C.brass }}>Maine — Ballot question</b> — illustrative only; a brand-new question has no prior election to map.<br />
@@ -1476,7 +1475,7 @@ function MethodView() {
         <div style={body}>
           Each race's center is a recency- and quality-weighted polling average (see the Polls tab). Two races then get a documented house-effect adjustment, because a raw poll average has a known directional bias in that state:
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.text }}>Maine Senate</b> — suspended until the replacement nominee is set; when it returns, the center keeps a shift toward Collins, who has repeatedly outrun her polls.<br />
+            <b style={{ color: C.text }}>Maine Senate</b> — shifted toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
             <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.<br />
             <b style={{ color: C.text }}>Ohio Senate</b> — shifted toward Husted for Ohio's Republican lean at the federal level.<br />
             <b style={{ color: C.text }}>Texas Senate</b> — shifted toward Paxton for Texas's strong Republican lean.<br />

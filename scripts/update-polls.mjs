@@ -74,7 +74,7 @@ const current = {
     note: ne.nPolls === 0 ? "Limited Nebraska polling; centered on fundamentals." : "", polls: ne.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
-console.log(`Senate: ${current.senate.margin >= 0 ? "Platner +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
+console.log(`Senate: ${current.senate.margin >= 0 ? "Jackson +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
 console.log(`Governor: ${current.governor.nPolls} polls (${current.governor.fallback ? "placeholder" : "live"})`);
 console.log(`CD1: ${current.cd1.nPolls} polls · CD2: ${current.cd2.nPolls} polls`);
 console.log(`NC Senate: ${current.nc_sen.margin >= 0 ? "Cooper +" : "Whatley +"}${Math.abs(current.nc_sen.margin)} from ${current.nc_sen.nPolls} polls`);
