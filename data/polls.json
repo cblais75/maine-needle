@@ -17,6 +17,14 @@
       "dem": 50,
       "rep": 36,
       "ind": 8
+    },
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-07-20",
+      "dem": 49,
+      "rep": 35,
+      "ind": 6
     }
   ],
   "cd1": [],
@@ -177,6 +185,13 @@
       "rating": 0.9,
       "date": "2026-06-27",
       "dem": 56,
+      "rep": 43
+    },
+    {
+      "pollster": "AARP (Fabrizio/Impact)",
+      "rating": 0.85,
+      "date": "2026-07-16",
+      "dem": 52,
       "rep": 43
     }
   ],
