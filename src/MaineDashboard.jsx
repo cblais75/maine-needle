@@ -938,7 +938,7 @@ function BriefingView({ posts }) {
 // neither party unless he declares a caucus.
 const D_SAFE_SEATS = 45, R_SAFE_SEATS = 46;
 const CONTROL_SET = [
-  { id: "sen",    label: "Maine",          holder: "R", note: "nominee TBD" },
+  { id: "sen",    label: "Maine",          holder: "R" },
   { id: "nc_sen", label: "North Carolina", holder: "R" },
   { id: "oh_sen", label: "Ohio",           holder: "R" },
   { id: "tx_sen", label: "Texas",          holder: "R" },

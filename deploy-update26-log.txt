@@ -1,1 +1,19 @@
 === deploy-update26.bat === 
+warning: in the working copy of 'commit-update25-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/town-county.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/briefing.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/results.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/update-polls.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/MaineDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'deploy-update26.bat', LF will be replaced by CRLF the next time Git touches it
+add exit: 0 
+[main 91a6316] Update 26
+ 8 files changed, 204 insertions(+), 157 deletions(-)
+ create mode 100644 deploy-update26-log.txt
+ create mode 100644 deploy-update26.bat
+commit exit: 0 
+91a6316 Update 26
+a81c528 Update 25
+4fab93d Update 24
