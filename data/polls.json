@@ -131,6 +131,13 @@
       "date": "2026-06-30",
       "dem": 47,
       "rep": 47
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-07-17",
+      "dem": 45,
+      "rep": 40
     }
   ],
   "ia_sen": [
