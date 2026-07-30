@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-28",
+  "updated": "2026-07-30",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -178,10 +178,19 @@
   },
   "tx_sen": {
     "margin": 2,
-    "nPolls": 4,
+    "nPolls": 5,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Fox News",
+        "date": "2026-07-30",
+        "rating": 0.9,
+        "dem": 51,
+        "rep": 48,
+        "ind": null,
+        "weightPct": 49
+      },
       {
         "pollster": "Texas Public Opinion Research",
         "date": "2026-07-17",
@@ -189,7 +198,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 35
+        "weightPct": 18
       },
       {
         "pollster": "NYT/Siena",
@@ -198,7 +207,7 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "weightPct": 38
+        "weightPct": 19
       },
       {
         "pollster": "UT Politics Project",
@@ -207,7 +216,7 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 10
       },
       {
         "pollster": "TX Opinion Research",
@@ -216,7 +225,7 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 4
       }
     ]
   },
