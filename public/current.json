@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-30",
+  "updated": "2026-08-02",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -63,10 +63,19 @@
   },
   "nc_sen": {
     "margin": 8,
-    "nPolls": 5,
+    "nPolls": 6,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Fox News",
+        "date": "2026-07-27",
+        "rating": 0.9,
+        "dem": 53,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 49
+      },
       {
         "pollster": "Public Policy Polling (D)",
         "date": "2026-07-10",
@@ -74,7 +83,7 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "weightPct": 34
+        "weightPct": 17
       },
       {
         "pollster": "NYT/Siena",
@@ -83,7 +92,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 38
+        "weightPct": 19
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -92,7 +101,7 @@
         "dem": 48,
         "rep": 34,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 10
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -101,7 +110,7 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 3
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -110,7 +119,7 @@
         "dem": 48.9,
         "rep": 41.1,
         "ind": null,
-        "weightPct": 1
+        "weightPct": 0
       }
     ]
   },

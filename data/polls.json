@@ -64,6 +64,13 @@
       "date": "2026-07-10",
       "dem": 48,
       "rep": 44
+    },
+    {
+      "pollster": "Fox News",
+      "rating": 0.9,
+      "date": "2026-07-27",
+      "dem": 53,
+      "rep": 44
     }
   ],
   "oh_sen": [
