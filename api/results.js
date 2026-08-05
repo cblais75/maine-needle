@@ -6,7 +6,7 @@
 //
 // Election night setup (host dashboard -> Environment Variables):
 //   MAINE_RESULTS_URL, NC_RESULTS_URL, OH_RESULTS_URL, TX_RESULTS_URL,
-//   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL
+//   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL, MI_RESULTS_URL
 // Stress test: set TEST_RESULTS_URL to a hosted results.json in the final shape;
 // it overrides everything and is served as-is.
 // Any state without an env var is simply skipped. Any state that errors is skipped
@@ -23,6 +23,7 @@ const SOURCES = [
   { state: "IA", env: "IA_RESULTS_URL" },
   { state: "GA", env: "GA_RESULTS_URL" },
   { state: "NE", env: "NE_RESULTS_URL" },
+  { state: "MI", env: "MI_RESULTS_URL" },
 ];
 
 async function fetchState(url, state) {

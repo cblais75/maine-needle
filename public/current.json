@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-02",
+  "updated": "2026-08-05",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -340,5 +340,22 @@
     "fallback": true,
     "note": "Limited Nebraska polling; centered on fundamentals.",
     "polls": []
+  },
+  "mi_sen": {
+    "margin": -3,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "EPIC-MRA",
+        "date": "2026-07-31",
+        "rating": 0.8,
+        "dem": 43,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   }
 }

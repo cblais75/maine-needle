@@ -7,6 +7,7 @@ import txBaseline from "../data/tx-baseline.json";
 import iaBaseline from "../data/ia-baseline.json";
 import gaBaseline from "../data/ga-baseline.json";
 import neBaseline from "../data/ne-baseline.json";
+import miBaseline from "../data/mi-baseline.json";
 
 const C = {
   ink: "#0E1422", panel: "#161E2E", panel2: "#1B2435", line: "#28344A",
@@ -206,12 +207,25 @@ const makeAlaskaSenate = () => ({
 });
 
 // ---- MICHIGAN ---- (placeholder until the Aug. 4 primary sets the nominees)
-const makeMichiganSenate = () => ({
+// Michigan polls have underestimated Republicans repeatedly (about 4 pts in 2016,
+// 5 in 2020, 2 in 2024), but it is also the bluest state on this board at the
+// presidential level (Trump +1.4 in 2024) — narrower than Georgia, which carries a
+// 2-pt shift. The center is shifted 2 pts toward Rogers to keep the ordering honest.
+const MI_HOUSE = 2;
+const MI_LEAN = miBaseline.lean || {}, MI_W = miBaseline.weight || {};
+const MI_HAS_COUNTIES = Object.keys(MI_LEAN).length > 0;
+const miUnits = (pollMargin) =>
+  MI_HAS_COUNTIES
+    ? Object.keys(MI_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - MI_HOUSE) / 200 + MI_LEAN[n], 0.02, 0.98), MI_W[n]))
+    : [unit("Michigan", clamp(0.5 + (pollMargin - MI_HOUSE) / 200, 0.02, 0.98), 1)];
+const makeMichiganSenate = (pollMargin) => ({
   id: "mi_sen", state: "MI", title: "U.S. Senate",
-  sub: "Open seat — nominees set Aug. 4",
-  system: "Plurality", real: true, type: "tbd", units: [],
-  tbdChip: "TBD · AUG 4",
-  tbdNote: "An open seat with no nominees yet. Both parties choose their candidates in the August 4 primary; full coverage follows once the field is set.",
+  sub: "El-Sayed (D) vs Rogers (R)",
+  system: "Plurality", real: true,
+  note: `Open seat (Peters retiring). Abdul El-Sayed won the August 4 Democratic primary over Haley Stevens in a race decided by roughly a point; Mike Rogers was unopposed on the Republican side. Centered on polls, then shifted ${MI_HOUSE} pts toward Rogers — Michigan polling has underestimated Republicans in each of the last three presidential cycles, though the shift is held to 2 because Michigan is the narrowest state on this board at the presidential level. County map built from 2024 results.`,
+  left: { full: "Rogers", short: "Rogers", color: RED },
+  right: { full: "El-Sayed", short: "El-Sayed", color: BLUE },
+  units: miUnits(pollMargin),
 });
 
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
@@ -414,6 +428,7 @@ export default function MaineDashboard() {
   const DEFAULT_IA_MARGIN = 0; // no public polls yet; fundamentals via house effect
   const DEFAULT_GA_MARGIN = 4; // Ossoff has polled near 50 and ahead of the GOP field; incumbent edge
   const DEFAULT_NE_MARGIN = -1; // Osborn (I) polls a near-tie, ~1 pt behind Ricketts
+  const DEFAULT_MI_MARGIN = -3; // EPIC-MRA Jul 2026: Rogers 46, El-Sayed 43
   const [pollMargin, setPollMargin] = useState(DEFAULT_MARGIN);
   const [ncMargin, setNcMargin] = useState(DEFAULT_NC_MARGIN);
   const [ohMargin, setOhMargin] = useState(DEFAULT_OH_MARGIN);
@@ -421,10 +436,11 @@ export default function MaineDashboard() {
   const [iaMargin, setIaMargin] = useState(DEFAULT_IA_MARGIN);
   const [gaMargin, setGaMargin] = useState(DEFAULT_GA_MARGIN);
   const [neMargin, setNeMargin] = useState(DEFAULT_NE_MARGIN);
+  const [miMargin, setMiMargin] = useState(DEFAULT_MI_MARGIN);
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN) => [
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN, mim = DEFAULT_MI_MARGIN) => [
     rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
@@ -436,7 +452,7 @@ export default function MaineDashboard() {
     rollRace(makeGeorgiaSenate(gam)),
     rollRace(makeNebraskaSenate(nem)),
     makeAlaskaSenate(),
-    makeMichiganSenate(),
+    rollRace(makeMichiganSenate(mim)),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
@@ -493,8 +509,9 @@ export default function MaineDashboard() {
         if (c?.ia_sen) setIaMargin(c.ia_sen.margin ?? DEFAULT_IA_MARGIN);
         if (c?.ga_sen) setGaMargin(c.ga_sen.margin ?? DEFAULT_GA_MARGIN);
         if (c?.ne_sen) setNeMargin(c.ne_sen.margin ?? DEFAULT_NE_MARGIN);
+        if (c?.mi_sen) setMiMargin(c.mi_sen.margin ?? DEFAULT_MI_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN, c?.ne_sen?.margin ?? DEFAULT_NE_MARGIN), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN, c?.ne_sen?.margin ?? DEFAULT_NE_MARGIN, c?.mi_sen?.margin ?? DEFAULT_MI_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -586,7 +603,7 @@ export default function MaineDashboard() {
     setSel(null);
     if (r && r.state !== "ME" && races.filter((x) => x.state === r.state).length === 1) setView("dashboard");
   };
-  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin, neMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin, neMargin, miMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -692,7 +709,7 @@ export default function MaineDashboard() {
             {view === "method" && <MethodView />}
             {["dashboard", "briefing", "polls", "method"].includes(view) && <CoffeeButton />}
 
-            {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK" && view !== "MI")) && (
+            {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -946,7 +963,7 @@ const CONTROL_SET = [
   { id: "ga_sen", label: "Georgia",        holder: "D" },
   { id: "ne_sen", label: "Nebraska",       holder: "R", indRight: true },
   { id: "ak_sen", label: "Alaska",         holder: "R", note: "no election-night call (RCV)" },
-  { id: "mi_sen", label: "Michigan",       holder: "D", note: "nominees set Aug 4" },
+  { id: "mi_sen", label: "Michigan",       holder: "D" },
 ];
 
 function SenateControlView({ races }) {
@@ -1390,6 +1407,8 @@ function PollsView({ current, loaded }) {
           <PollRace title="U.S. Senate" lead={current.ga_sen} demName="Ossoff" repName="Collins" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Nebraska</div>
           <PollRace title="U.S. Senate" lead={current.ne_sen} demName="Osborn" repName="Ricketts" />
+          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Michigan</div>
+          <PollRace title="U.S. Senate" lead={current.mi_sen} demName="El-Sayed" repName="Rogers" />
           <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Alaska</div>
           <PollRace title="U.S. Senate" lead={current.ak_sen} demName="Peltola" repName="Sullivan" />
           <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 6 }}>
@@ -1465,6 +1484,7 @@ function MethodView() {
             <b style={{ color: C.brass }}>Iowa — Senate</b> — Hinson vs Turek, an open seat. County baseline from Iowa's past results is being added; centered on fundamentals until public polls appear.<br />
             <b style={{ color: C.brass }}>Georgia — Senate</b> — Ossoff vs Collins. County baseline from Georgia's past results is being added. Georgia goes to a December 1 runoff if no candidate tops 50% in November.<br />
             <b style={{ color: C.brass }}>Nebraska — Senate</b> — Ricketts (R) vs Osborn, an independent. County baseline is being added; the needle is statewide for now. Osborn is shown in teal to mark him as an independent, not a Democrat.<br />
+            <b style={{ color: C.brass }}>Michigan — Senate</b> — El-Sayed vs Rogers, an open seat. County map built from 2024 presidential results across all 83 counties.<br />
             <b style={{ color: C.brass }}>Alaska — Senate</b> — Sullivan vs Peltola, ranked-choice. Shown as an explainer panel, not a needle, because the result is tabulated about two weeks after election night (see the Alaska tab).
           </div>
         </div>
@@ -1481,7 +1501,8 @@ function MethodView() {
             <b style={{ color: C.text }}>Texas Senate</b> — shifted toward Paxton for Texas's strong Republican lean.<br />
             <b style={{ color: C.text }}>Iowa Senate</b> — shifted toward Hinson for Iowa's strong Republican lean at the federal level.<br />
             <b style={{ color: C.text }}>Georgia Senate</b> — shifted slightly toward Collins for Georgia's narrow Republican lean at the presidential level.<br />
-            <b style={{ color: C.text }}>Nebraska Senate</b> — shifted toward Ricketts for Nebraska's strong Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven.
+            <b style={{ color: C.text }}>Nebraska Senate</b> — shifted toward Ricketts for Nebraska's strong Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven.<br />
+            <b style={{ color: C.text }}>Michigan Senate</b> — shifted 2 pts toward Rogers. Michigan polls have underestimated Republicans in each of the last three cycles, but the state is the narrowest on this board at the presidential level (Trump +1.4 in 2024), so the shift is held to the same size as Georgia's rather than larger.
           </div>
         </div>
       </div>

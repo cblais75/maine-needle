@@ -1,5 +1,5 @@
 // test-night.mjs — election-night stress-test harness.
-// Fabricates a synthetic night for the six county-mapped states (NC, OH, TX, IA, GA, NE),
+// Fabricates a synthetic night for the seven county-mapped states (NC, OH, TX, IA, GA, NE, MI),
 // runs it through the REAL parser + aggregator (the same code election night uses),
 // and writes public/results.json snapshots the app picks up.
 //
@@ -39,6 +39,7 @@ const STATES = [
   { state: "IA", office: "U.S. Senate", dem: "Turek",    rep: "Hinson",   baseline: "ia-baseline.json" },
   { state: "GA", office: "U.S. Senate", dem: "Ossoff",   rep: "Collins",  baseline: "ga-baseline.json" },
   { state: "NE", office: "U.S. Senate", dem: "Osborn",   rep: "Ricketts", baseline: "ne-baseline.json" },
+  { state: "MI", office: "U.S. Senate", dem: "El-Sayed", rep: "Rogers",   baseline: "mi-baseline.json" },
 ];
 
 // One synthetic "truth" per run: statewide swing per state, county noise, county report order.

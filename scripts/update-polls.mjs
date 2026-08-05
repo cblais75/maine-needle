@@ -45,6 +45,7 @@ const ia = summarize(polls.ia_sen || []);
 const ak = summarize(polls.ak_sen || []);
 const ga = summarize(polls.ga_sen || []);
 const ne = summarize(polls.ne_sen || []);
+const mi = summarize(polls.mi_sen || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
   method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower." },
@@ -72,6 +73,8 @@ const current = {
     note: ga.nPolls === 0 ? "No public Georgia Senate polls since the runoff; centered on fundamentals." : "", polls: ga.polls },
   ne_sen: { margin: ne.margin, nPolls: ne.nPolls, fallback: ne.margin === null,
     note: ne.nPolls === 0 ? "Limited Nebraska polling; centered on fundamentals." : "", polls: ne.polls },
+  mi_sen: { margin: mi.margin, nPolls: mi.nPolls, fallback: mi.margin === null,
+    note: mi.nPolls === 0 ? "No public Michigan general-election polls yet." : "", polls: mi.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
 console.log(`Senate: ${current.senate.margin >= 0 ? "Jackson +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
@@ -84,3 +87,4 @@ console.log(`IA Senate: ${current.ia_sen.nPolls} polls${current.ia_sen.nPolls ? 
 console.log(`AK Senate: ${current.ak_sen.nPolls} polls${current.ak_sen.nPolls ? " (" + (current.ak_sen.margin>=0?"Peltola +":"Sullivan +") + Math.abs(current.ak_sen.margin) + ")" : ""}`);
 console.log(`GA Senate: ${current.ga_sen.nPolls} polls${current.ga_sen.nPolls ? " (" + (current.ga_sen.margin>=0?"Ossoff +":"Collins +") + Math.abs(current.ga_sen.margin) + ")" : " (fundamentals)"}`);
 console.log(`NE Senate: ${current.ne_sen.nPolls} polls${current.ne_sen.nPolls ? " (" + (current.ne_sen.margin>=0?"Osborn +":"Ricketts +") + Math.abs(current.ne_sen.margin) + ")" : " (fundamentals)"}`);
+console.log(`MI Senate: ${current.mi_sen.nPolls} polls${current.mi_sen.nPolls ? " (" + (current.mi_sen.margin>=0?"El-Sayed +":"Rogers +") + Math.abs(current.mi_sen.margin) + ")" : " (fundamentals)"}`);

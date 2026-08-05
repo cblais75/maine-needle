@@ -216,5 +216,14 @@
       "rep": 43
     }
   ],
-  "ne_sen": []
+  "ne_sen": [],
+  "mi_sen": [
+    {
+      "pollster": "EPIC-MRA",
+      "rating": 0.8,
+      "date": "2026-07-31",
+      "dem": 43,
+      "rep": 46
+    }
+  ]
 }
