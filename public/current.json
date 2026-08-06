@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05",
+  "updated": "2026-08-06",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -187,7 +187,7 @@
   },
   "tx_sen": {
     "margin": 2,
-    "nPolls": 5,
+    "nPolls": 6,
     "fallback": false,
     "note": "",
     "polls": [
@@ -198,7 +198,16 @@
         "dem": 51,
         "rep": 48,
         "ind": null,
-        "weightPct": 49
+        "weightPct": 35
+      },
+      {
+        "pollster": "Texas Southern University",
+        "date": "2026-07-30",
+        "rating": 0.75,
+        "dem": 47,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 29
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -207,7 +216,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 13
       },
       {
         "pollster": "NYT/Siena",
@@ -216,7 +225,7 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 14
       },
       {
         "pollster": "UT Politics Project",
@@ -225,7 +234,7 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 7
       },
       {
         "pollster": "TX Opinion Research",
@@ -234,16 +243,25 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 3
       }
     ]
   },
   "ia_sen": {
-    "margin": 1,
-    "nPolls": 4,
+    "margin": -1,
+    "nPolls": 5,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Emerson College/Nexstar",
+        "date": "2026-08-04",
+        "rating": 0.8,
+        "dem": 45,
+        "rep": 48,
+        "ind": null,
+        "weightPct": 55
+      },
       {
         "pollster": "NYT/Siena",
         "date": "2026-06-27",
@@ -251,7 +269,7 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "weightPct": 41
+        "weightPct": 19
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -260,7 +278,7 @@
         "dem": 50,
         "rep": 46,
         "ind": null,
-        "weightPct": 37
+        "weightPct": 16
       },
       {
         "pollster": "DSCC Internal (D)",
@@ -269,7 +287,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 5
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -278,7 +296,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 5
       }
     ]
   },

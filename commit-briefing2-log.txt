@@ -1,2 +1,19 @@
  
 === commit-briefing2.bat === 
+warning: in the working copy of 'commit-update28-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/briefing.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-briefing2.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main b9f01f2] Briefing
+ 4 files changed, 215 insertions(+)
+ create mode 100644 commit-briefing2-log.txt
+ create mode 100644 commit-briefing2.bat
+Commit exit: 0 
+b9f01f2 Briefing
+6cb75db Update 28
+f36ec2c Polls
+c187677 Polls
+To https://github.com/cblais75/maine-needle.git
+   6cb75db..b9f01f2  main -> main
+Push exit: 0 
+=== Done === 

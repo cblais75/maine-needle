@@ -152,6 +152,13 @@
       "date": "2026-07-30",
       "dem": 51,
       "rep": 48
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-07-30",
+      "dem": 47,
+      "rep": 45
     }
   ],
   "ia_sen": [
@@ -181,6 +188,13 @@
       "rating": 0.95,
       "date": "2026-06-27",
       "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "Emerson College/Nexstar",
+      "rating": 0.8,
+      "date": "2026-08-04",
+      "dem": 45,
       "rep": 48
     }
   ],
