@@ -1,14 +1,23 @@
 {
-  "updated": "2026-08-06",
+  "updated": "2026-08-07",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
     "margin": 3,
-    "nPolls": 1,
+    "nPolls": 2,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "Hart Research (Senate Majority PAC)",
+        "date": "2026-08-01",
+        "rating": 0.5,
+        "dem": 49,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 48
+      },
       {
         "pollster": "UNH Survey Center",
         "date": "2026-07-20",
@@ -16,7 +25,7 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "weightPct": 100
+        "weightPct": 52
       }
     ]
   },
