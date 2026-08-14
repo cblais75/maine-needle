@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-07",
+  "updated": "2026-08-14",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -71,11 +71,38 @@
     "polls": []
   },
   "nc_sen": {
-    "margin": 8,
-    "nPolls": 6,
+    "margin": 9,
+    "nPolls": 9,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Carolina Journal/Civitas (R)",
+        "date": "2026-08-10",
+        "rating": 0.5,
+        "dem": 51.5,
+        "rep": 39,
+        "ind": null,
+        "weightPct": 19
+      },
+      {
+        "pollster": "Change Research (Carolina Forward)",
+        "date": "2026-08-06",
+        "rating": 0.5,
+        "dem": 50,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 16
+      },
+      {
+        "pollster": "Elon University",
+        "date": "2026-07-31",
+        "rating": 0.8,
+        "dem": 53,
+        "rep": 42,
+        "ind": null,
+        "weightPct": 22
+      },
       {
         "pollster": "Fox News",
         "date": "2026-07-27",
@@ -83,7 +110,7 @@
         "dem": 53,
         "rep": 44,
         "ind": null,
-        "weightPct": 49
+        "weightPct": 21
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -92,7 +119,7 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 7
       },
       {
         "pollster": "NYT/Siena",
@@ -101,7 +128,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 8
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -110,7 +137,7 @@
         "dem": 48,
         "rep": 34,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 5
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -119,7 +146,7 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 1
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -195,11 +222,20 @@
     ]
   },
   "tx_sen": {
-    "margin": 2,
-    "nPolls": 6,
+    "margin": 3,
+    "nPolls": 8,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "254 Labs (D)",
+        "date": "2026-07-31",
+        "rating": 0.5,
+        "dem": 48,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 13
+      },
       {
         "pollster": "Fox News",
         "date": "2026-07-30",
@@ -207,7 +243,7 @@
         "dem": 51,
         "rep": 48,
         "ind": null,
-        "weightPct": 35
+        "weightPct": 23
       },
       {
         "pollster": "Texas Southern University",
@@ -216,7 +252,16 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 29
+        "weightPct": 19
+      },
+      {
+        "pollster": "Texas Pulse (Texas A&M/ReconMR)",
+        "date": "2026-07-30",
+        "rating": 0.8,
+        "dem": 47,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 21
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -225,7 +270,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 13
+        "weightPct": 8
       },
       {
         "pollster": "NYT/Siena",
@@ -234,7 +279,7 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 9
       },
       {
         "pollster": "UT Politics Project",
@@ -243,7 +288,7 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 4
       },
       {
         "pollster": "TX Opinion Research",
@@ -252,7 +297,7 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       }
     ]
   },
@@ -310,11 +355,20 @@
     ]
   },
   "ak_sen": {
-    "margin": -1,
-    "nPolls": 2,
+    "margin": 1,
+    "nPolls": 3,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Alaska Survey Research",
+        "date": "2026-08-05",
+        "rating": 0.8,
+        "dem": 51,
+        "rep": 49,
+        "ind": null,
+        "weightPct": 74
+      },
       {
         "pollster": "NYT/Siena",
         "date": "2026-06-27",
@@ -322,7 +376,7 @@
         "dem": 45,
         "rep": 47,
         "ind": null,
-        "weightPct": 93
+        "weightPct": 24
       },
       {
         "pollster": "Alaska Survey Research",
@@ -331,7 +385,7 @@
         "dem": 49,
         "rep": 43,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 2
       }
     ]
   },
@@ -369,11 +423,20 @@
     "polls": []
   },
   "mi_sen": {
-    "margin": -3,
-    "nPolls": 1,
+    "margin": -4,
+    "nPolls": 2,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-08-10",
+        "rating": 0.9,
+        "dem": 47,
+        "rep": 51,
+        "ind": null,
+        "weightPct": 61
+      },
       {
         "pollster": "EPIC-MRA",
         "date": "2026-07-31",
@@ -381,7 +444,7 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "weightPct": 100
+        "weightPct": 39
       }
     ]
   }
