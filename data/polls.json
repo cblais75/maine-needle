@@ -14,6 +14,13 @@
       "date": "2026-08-01",
       "dem": 49,
       "rep": 45
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-08-10",
+      "dem": 48,
+      "rep": 46
     }
   ],
   "governor": [
@@ -143,6 +150,13 @@
       "date": "2026-06-29",
       "dem": 47,
       "rep": 50
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-08-10",
+      "dem": 53,
+      "rep": 45
     }
   ],
   "tx_sen": [
@@ -201,6 +215,13 @@
       "date": "2026-07-31",
       "dem": 48,
       "rep": 45
+    },
+    {
+      "pollster": "Emerson College/Nexstar",
+      "rating": 0.85,
+      "date": "2026-08-10",
+      "dem": 46,
+      "rep": 47
     }
   ],
   "ia_sen": [

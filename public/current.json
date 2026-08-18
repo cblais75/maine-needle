@@ -1,14 +1,23 @@
 {
-  "updated": "2026-08-14",
+  "updated": "2026-08-18",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
     "margin": 3,
-    "nPolls": 2,
+    "nPolls": 3,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-08-10",
+        "rating": 0.9,
+        "dem": 48,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 54
+      },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
         "date": "2026-08-01",
@@ -16,7 +25,7 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "weightPct": 48
+        "weightPct": 22
       },
       {
         "pollster": "UNH Survey Center",
@@ -25,7 +34,7 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "weightPct": 52
+        "weightPct": 24
       }
     ]
   },
@@ -160,11 +169,20 @@
     ]
   },
   "oh_sen": {
-    "margin": 1,
-    "nPolls": 6,
+    "margin": 5,
+    "nPolls": 7,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Fox News (Beacon/Shaw)",
+        "date": "2026-08-10",
+        "rating": 0.9,
+        "dem": 53,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 65
+      },
       {
         "pollster": "NYT/Siena",
         "date": "2026-06-29",
@@ -172,7 +190,7 @@
         "dem": 47,
         "rep": 50,
         "ind": null,
-        "weightPct": 48
+        "weightPct": 17
       },
       {
         "pollster": "AARP (Impact/Fabrizio)",
@@ -181,7 +199,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 28
+        "weightPct": 10
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -190,7 +208,7 @@
         "dem": 53,
         "rep": 45,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 6
       },
       {
         "pollster": "BGSU/YouGov",
@@ -199,7 +217,7 @@
         "dem": 47,
         "rep": 50,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 1
       },
       {
         "pollster": "Quantus Insights",
@@ -208,7 +226,7 @@
         "dem": 44,
         "rep": 46,
         "ind": null,
-        "weightPct": 1
+        "weightPct": 0
       },
       {
         "pollster": "On Message Inc. (R)",
@@ -217,16 +235,25 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 1
+        "weightPct": 0
       }
     ]
   },
   "tx_sen": {
-    "margin": 3,
-    "nPolls": 8,
+    "margin": 2,
+    "nPolls": 9,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Emerson College/Nexstar",
+        "date": "2026-08-10",
+        "rating": 0.85,
+        "dem": 46,
+        "rep": 47,
+        "ind": null,
+        "weightPct": 24
+      },
       {
         "pollster": "254 Labs (D)",
         "date": "2026-07-31",
@@ -234,7 +261,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 13
+        "weightPct": 10
       },
       {
         "pollster": "Fox News",
@@ -243,7 +270,7 @@
         "dem": 51,
         "rep": 48,
         "ind": null,
-        "weightPct": 23
+        "weightPct": 18
       },
       {
         "pollster": "Texas Southern University",
@@ -252,7 +279,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 15
       },
       {
         "pollster": "Texas Pulse (Texas A&M/ReconMR)",
@@ -261,7 +288,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 16
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -270,7 +297,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "NYT/Siena",
@@ -279,7 +306,7 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 7
       },
       {
         "pollster": "UT Politics Project",
@@ -288,7 +315,7 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "TX Opinion Research",
@@ -297,7 +324,7 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       }
     ]
   },
