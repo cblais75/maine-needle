@@ -843,24 +843,60 @@ function ThreeBar({ race }) {
 }
 
 function NeedleGrid({ races, onPick }) {
+  // Scoreboard rows: state, favored candidate, win %, and a plain-language rating.
+  // No bars — just the number and who's ahead, scannable at a glance.
+  const readOf = (r) => {
+    if (r.type === "tbd") return { fav: "TBD", pct: null, tag: r.tbdChip || "TBD", color: C.brass, sub: r.sub };
+    if (r.type === "rcv") return { fav: r.left.short, pct: null, tag: "Lean R · RCV", color: r.left.color, sub: r.sub };
+    if (r.type === "three") {
+      const m = compute3(r.units);
+      const parts = r.cands.map((c) => ({ ...c, win: m.win[c.key] }));
+      const lead = [...parts].sort((a, b) => b.win - a.win)[0];
+      const pct = Math.round(lead.win * 100);
+      const tag = pct >= 90 ? "Likely" : pct >= 60 ? "Leans" : "Toss-up";
+      return { fav: lead.short, pct, tag, color: lead.color, frac: m.fracIn };
+    }
+    const m = compute(r.units); const rt = rateOf(r, m);
+    const tag = rt.text.split(" ")[0];
+    return { fav: rt.leader.short, pct: rt.pct, tag, color: rt.leader.color, frac: m.fracIn };
+  };
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 8 }}>
-      {races.map((r) => (
-        <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
-          <button onClick={() => onPick(r.id)}
-            style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "9px 11px", cursor: "pointer", color: C.text }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.brass, textTransform: "uppercase" }}>{r.state}</span>
-              {r.liveOn && <span style={{ fontSize: 8, fontFamily: mono, letterSpacing: 0.5, padding: "1px 4px", borderRadius: 3, color: "#fff", background: RED, fontWeight: 700 }}>LIVE</span>}
-            </div>
-            {r.type === "tbd" ? <TbdMini race={r} /> : r.type === "rcv" ? <RcvMini race={r} /> : r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
-          </button>
-        </ErrorBoundary>
-      ))}
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(168px, 1fr))", gap: 8 }}>
+      {races.map((r) => {
+        const d = readOf(r);
+        return (
+          <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
+            <button onClick={() => onPick(r.id)}
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "11px 13px", cursor: "pointer", color: C.text, width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
+                <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.brass }}>{r.state}</span>
+                {r.liveOn
+                  ? <span style={{ fontSize: 8, fontFamily: mono, letterSpacing: 0.5, padding: "1px 4px", borderRadius: 3, color: "#fff", background: RED, fontWeight: 700 }}>LIVE</span>
+                  : (d.frac > 0 && <span style={{ fontSize: 9.5, fontFamily: mono, color: C.muted }}>{Math.round(d.frac * 100)}% in</span>)}
+              </div>
+              {d.pct == null ? (
+                <>
+                  <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: -0.5, color: d.color, lineHeight: 1.05 }}>{d.fav}</div>
+                  <div style={{ fontSize: 10.5, fontFamily: mono, color: C.muted, marginTop: 3 }}>{d.tag}</div>
+                </>
+              ) : (
+                <>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
+                    <span style={{ fontSize: 26, fontWeight: 800, letterSpacing: -1, color: d.color, fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>{d.pct}%</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: d.color }}>{d.fav}</span>
+                  </div>
+                  <div style={{ fontSize: 10.5, fontFamily: mono, color: C.muted, marginTop: 4, textTransform: "uppercase", letterSpacing: 0.5 }}>
+                    {d.tag === "Toss-up" ? "Toss-up" : `${d.tag} ${d.fav}`}
+                  </div>
+                </>
+              )}
+            </button>
+          </ErrorBoundary>
+        );
+      })}
     </div>
   );
 }
-
 function Overview({ races, onPick }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
