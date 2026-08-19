@@ -437,6 +437,19 @@ const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
 const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "NE", label: "Nebraska" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }];
 
+// Width-based layout switch: >=1000px gets the desktop three-zone layout, anything
+// narrower keeps the exact mobile column. Width (not device sniffing) so a resized
+// window or a landscape tablet just works.
+function useWide(px = 1000) {
+  const [wide, setWide] = React.useState(typeof window !== "undefined" ? window.innerWidth >= px : false);
+  React.useEffect(() => {
+    const on = () => setWide(window.innerWidth >= px);
+    on(); window.addEventListener("resize", on);
+    return () => window.removeEventListener("resize", on);
+  }, [px]);
+  return wide;
+}
+
 export default function MaineDashboard() {
   const DEFAULT_MARGIN = 3; // Jackson D+3 two-party (UNH Jul 2026), a mid estimate of current polls
   const DEFAULT_NC_MARGIN = 9; // Cooper D+9, mid of recent NC polls
@@ -474,6 +487,7 @@ export default function MaineDashboard() {
   ];
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
   const [sel, setSel] = useState(null);
+  const wide = useWide(1000);
   const [navOpen, setNavOpen] = useState(false);
   const [boardView, setBoardView] = useState("cards"); // "cards" | "needles"
   const [running, setRunning] = useState(false);
@@ -636,9 +650,8 @@ export default function MaineDashboard() {
   })));
 
   const anyLive = races.some((r) => r.liveOn);
-  return (
-    <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: 16 }}>
-      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+  const headerBlock = (
+      <>
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
             <svg viewBox="0 0 64 64" width="26" height="26" style={{ flexShrink: 0 }} aria-hidden="true">
@@ -657,16 +670,17 @@ export default function MaineDashboard() {
           <span style={{ width: 7, height: 7, borderRadius: 9, background: anyLive ? RED : C.muted, boxShadow: anyLive ? `0 0 8px ${RED}` : "none" }} />
           {anyLive ? "Live — real returns coming in" : "Simulation — not election night yet"}
         </div>
-
-        {sel !== null ? (
-          <ErrorBoundary label="This race view hit an error">
+      </>
+  );
+  const detailBlock = (
+      <ErrorBoundary label="This race view hit an error">
             <Detail race={races.find((r) => r.id === sel)} onBack={backFromDetail}
               pollMargin={pollMargin} onPoll={setPoll}
               cd2Decay={cd2Decay} onDecay={setDecay}
               govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
           </ErrorBoundary>
-        ) : (
-          <>
+  );
+  const mobileNav = (
             <div style={{ position: "relative", marginBottom: 14 }}>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                 <button onClick={() => setNavOpen((o) => !o)}
@@ -698,7 +712,8 @@ export default function MaineDashboard() {
                 </div>
               )}
             </div>
-
+  );
+  const tabBody = (
             <ErrorBoundary key={view} label="This section hit an error">
             {view === "dashboard" && (
               <div>
@@ -769,9 +784,86 @@ export default function MaineDashboard() {
               </>
             )}
           </ErrorBoundary>
-          </>
-        )}
+  );
+  const desktopNav = (
+        <nav style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
+            <svg viewBox="0 0 64 64" width="26" height="26" style={{ flexShrink: 0 }} aria-hidden="true">
+              <path d="M10 42 A22 22 0 0 1 32 20" fill="none" stroke={RED} strokeWidth="5.5" strokeLinecap="round" />
+              <path d="M32 20 A22 22 0 0 1 54 42" fill="none" stroke={BLUE} strokeWidth="5.5" strokeLinecap="round" />
+              <line x1="30.4" y1="46.8" x2="37.9" y2="23.9" stroke={C.brass} strokeWidth="3.2" strokeLinecap="round" />
+              <circle cx="32" cy="42" r="3.4" fill={C.brass} />
+            </svg>
+            <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: -0.4, lineHeight: 1.12 }}>The Needle<br />Project</div>
+          </div>
+          {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => {
+            const on = view === k && sel === null;
+            return (
+              <button key={k} onClick={() => { setView(k); setSel(null); }}
+                style={{ display: "block", width: "100%", textAlign: "left", cursor: "pointer",
+                  background: on ? C.panel2 : "transparent", color: on ? C.text : "#9FB0C6",
+                  border: "none", borderLeft: `2px solid ${on ? C.brass : "transparent"}`,
+                  borderRadius: on ? 7 : 0, padding: "8px 11px", fontSize: 13, fontWeight: 700, fontFamily: mono, marginBottom: 1 }}>
+                {label}
+              </button>
+            );
+          })}
+          <div style={{ fontSize: 10, fontFamily: mono, letterSpacing: 1.4, color: C.muted, margin: "16px 0 7px 11px" }}>STATES</div>
+          <div style={{ overflowY: "auto", minHeight: 0 }}>
+            {STATES.slice().sort((a, b) => a.label.localeCompare(b.label)).map((st) => {
+              const on = view === st.code && sel === null;
+              return (
+                <button key={st.code} onClick={() => openState(st.code)}
+                  style={{ display: "block", width: "100%", textAlign: "left", cursor: "pointer",
+                    background: on ? C.panel2 : "transparent", color: on ? C.text : "#B9C7DB",
+                    border: "none", borderLeft: `2px solid ${on ? C.brass : "transparent"}`,
+                    borderRadius: on ? 6 : 0, padding: "7px 11px 7px 16px", fontSize: 12.5, fontWeight: 700, marginBottom: 1 }}>
+                  {st.label}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      );
+
+  // ── MOBILE (< 1000px): byte-for-byte the original single column ──────────
+  if (!wide) {
+    return (
+      <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: 16 }}>
+        <div style={{ maxWidth: 480, margin: "0 auto" }}>
+          {headerBlock}
+          {sel !== null ? detailBlock : (<>{mobileNav}{tabBody}</>)}
+        </div>
       </div>
+    );
+  }
+
+  // ── DESKTOP (>= 1000px): three-zone control room ─────────────────────────
+  const anyLiveD = races.some((r) => r.liveOn);
+  return (
+    <div style={{ height: "100vh", background: C.ink, color: C.text, fontFamily: sans, display: "flex", flexDirection: "column" }}>
+      <style>{`::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:${C.line};border-radius:9px}::-webkit-scrollbar-track{background:transparent}`}</style>
+      <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "216px minmax(0,1fr) 336px", maxWidth: 1720, width: "100%", margin: "0 auto" }}>
+        <div style={{ borderRight: `1px solid ${C.line}`, padding: "22px 12px 18px 20px", minHeight: 0 }}>
+          {desktopNav}
+        </div>
+        <main style={{ overflowY: "auto", minHeight: 0, padding: "24px 30px 40px" }}>
+          {sel !== null ? detailBlock : tabBody}
+        </main>
+        <div style={{ borderLeft: `1px solid ${C.line}`, padding: "22px 18px 18px", minHeight: 0, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <span style={{ width: 7, height: 7, borderRadius: 9, background: anyLiveD ? RED : C.muted, boxShadow: anyLiveD ? `0 0 8px ${RED}` : "none" }} />
+            <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.6, color: anyLiveD ? RED : C.brass }}>LIVE WIRE</span>
+          </div>
+          <div style={{ flex: 1, minHeight: 0, overflowY: "auto", borderTop: `1px solid ${C.line}`, paddingTop: 4 }}>
+            <ErrorBoundary mini label="Wire unavailable"><WireFeed events={wire} embedded /></ErrorBoundary>
+          </div>
+        </div>
+      </div>
+      <footer style={{ borderTop: `1px solid ${C.line}`, padding: "9px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 11, fontFamily: mono, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>
+        <span style={{ color: anyLiveD ? RED : C.muted }}>{anyLiveD ? "Live — real returns coming in" : "Simulation — not election night yet"}</span>
+        <span>The Needle Project</span>
+      </footer>
     </div>
   );
 }
@@ -1177,14 +1269,18 @@ function CoffeeButton() {
   );
 }
 
-function WireFeed({ events }) {
+function WireFeed({ events, embedded }) {
   return (
     <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>LIVE WIRE</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Election Night Feed</div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
-        Plain-language updates generated straight from the model as results come in: rating changes, lead flips, reporting milestones, and county-by-county overperformance versus baseline. Every line is arithmetic on the numbers, never written commentary. County lines only carry meaning on real returns; in the simulation the county figures are random.
-      </div>
+      {!embedded && (
+        <>
+          <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>LIVE WIRE</div>
+          <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Election Night Feed</div>
+          <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
+            Plain-language updates generated straight from the model as results come in: rating changes, lead flips, reporting milestones, and county-by-county overperformance versus baseline. Every line is arithmetic on the numbers, never written commentary. County lines only carry meaning on real returns; in the simulation the county figures are random.
+          </div>
+        </>
+      )}
       {events.length === 0 ? (
         <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "18px 0" }}>Waiting for results…</div>
       ) : (
