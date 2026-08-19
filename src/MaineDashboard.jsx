@@ -475,6 +475,7 @@ export default function MaineDashboard() {
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY));
   const [sel, setSel] = useState(null);
   const [navOpen, setNavOpen] = useState(false);
+  const [boardView, setBoardView] = useState("cards"); // "cards" | "needles"
   const [running, setRunning] = useState(false);
   const [wire, setWire] = useState([]);
   const [briefing, setBriefing] = useState(null);
@@ -701,19 +702,34 @@ export default function MaineDashboard() {
             <ErrorBoundary key={view} label="This section hit an error">
             {view === "dashboard" && (
               <div>
-                <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALL RACES · NOVEMBER 2026</div>
-                <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 14 }}>Election Night Board</div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
+                  <div>
+                    <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALL RACES · NOVEMBER 2026</div>
+                    <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4 }}>Election Night Board</div>
+                  </div>
+                  <div style={{ display: "inline-flex", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9, padding: 2 }}>
+                    {[["cards", "Cards"], ["needles", "Needles"]].map(([k, lbl]) => (
+                      <button key={k} onClick={() => setBoardView(k)}
+                        style={{ padding: "5px 12px", fontSize: 11.5, fontWeight: 700, fontFamily: mono, borderRadius: 7, cursor: "pointer", border: "none",
+                          background: boardView === k ? C.panel2 : "transparent", color: boardView === k ? C.text : C.muted }}>
+                        {lbl}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 {STATES.map((st) => {
                   const sr = races.filter((r) => r.state === st.code);
                   if (!sr.length) return null;
                   return (
-                    <div key={st.code} style={{ marginBottom: 18 }}>
+                    <div key={st.code} style={{ marginBottom: boardView === "needles" ? 14 : 18 }}>
                       <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", marginBottom: 8 }}>{st.label}</div>
-                      <Overview races={sr} onPick={setSel} />
+                      {boardView === "needles"
+                        ? <NeedleGrid races={sr} onPick={setSel} />
+                        : <Overview races={sr} onPick={setSel} />}
                     </div>
                   );
                 })}
-                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, fontFamily: mono }}>Tap any race to open its needle.</div>
+                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, fontFamily: mono }}>Tap any race to open its needle{boardView === "cards" ? "" : " and county board"}.</div>
               </div>
             )}
             {STATES.some((s) => s.code === view) && (
@@ -826,6 +842,25 @@ function ThreeBar({ race }) {
   );
 }
 
+function NeedleGrid({ races, onPick }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 8 }}>
+      {races.map((r) => (
+        <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
+          <button onClick={() => onPick(r.id)}
+            style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "9px 11px", cursor: "pointer", color: C.text }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
+              <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.brass, textTransform: "uppercase" }}>{r.state}</span>
+              {r.liveOn && <span style={{ fontSize: 8, fontFamily: mono, letterSpacing: 0.5, padding: "1px 4px", borderRadius: 3, color: "#fff", background: RED, fontWeight: 700 }}>LIVE</span>}
+            </div>
+            {r.type === "tbd" ? <TbdMini race={r} /> : r.type === "rcv" ? <RcvMini race={r} /> : r.type === "three" ? <ThreeBar race={r} /> : <TiltBar race={r} />}
+          </button>
+        </ErrorBoundary>
+      ))}
+    </div>
+  );
+}
+
 function Overview({ races, onPick }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -872,24 +907,9 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 12 }}>{race.sub}</div>
 
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 14px", marginBottom: 12 }}>
-        <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.muted, textTransform: "uppercase", marginBottom: 8 }}>Polling dial</div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, fontFamily: mono, marginBottom: 2 }}>
-          <span style={{ color: IND }}>Bennett (I)</span><span style={{ color: IND, fontWeight: 700 }}>{govB}%</span>
+        <div style={{ fontSize: 10.5, color: "#9FB3CE", lineHeight: 1.6, fontFamily: mono }}>
+          Bennett (I) has no past election to map, so this three-way leans on polling for its starting point: Bennett {govB}%, {govMargin >= 0 ? "Pingree" : "Charles"} +{Math.abs(govMargin)} between the majors.
         </div>
-        <input type="range" min="0" max="35" step="1" value={govB} onChange={(e) => onGov(parseInt(e.target.value), govMargin)} style={{ width: "100%", accentColor: IND }} />
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, fontFamily: mono, margin: "8px 0 2px" }}>
-          <span style={{ color: C.muted }}>Pingree vs Charles</span>
-          <span style={{ fontWeight: 700, color: govMargin >= 0 ? BLUE : RED }}>{govMargin >= 0 ? "Pingree" : "Charles"} +{Math.abs(govMargin)}</span>
-        </div>
-        <input type="range" min="-10" max="14" step="1" value={govMargin} onChange={(e) => onGov(govB, parseInt(e.target.value))} style={{ width: "100%", accentColor: C.brass }} />
-        <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.5, marginTop: 6, fontFamily: mono }}>
-          Bennett has no past election to map, so this race leans on polling for its starting point. Drag to explore scenarios.
-        </div>
-        {current && (
-          <button onClick={() => onGov(current.governor.bennett, current.governor.margin)} style={RBTN}>
-            ↻ Restore to current outlook (Bennett {current.governor.bennett}%, {current.governor.margin >= 0 ? "Pingree" : "Charles"} +{Math.abs(current.governor.margin)})
-          </button>
-        )}
       </div>
 
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, padding: "16px 14px" }}>
@@ -1315,42 +1335,7 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
       <div style={{ fontSize: 12, color: C.muted, marginBottom: race.note ? 6 : 12 }}>{race.sub}</div>
       {race.note && <div style={{ fontSize: 11, color: "#9FB3CE", lineHeight: 1.5, marginBottom: 12, padding: "8px 10px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8 }}>{race.note}</div>}
 
-      {race.id === "sen" && (
-        <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 14px", marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-            <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.muted, textTransform: "uppercase" }}>Polling dial</span>
-            <span style={{ fontSize: 13, fontFamily: mono, fontWeight: 700, color: pollMargin >= 0 ? BLUE : RED }}>
-              {pollMargin >= 0 ? "Jackson" : "Collins"} +{Math.abs(pollMargin)}
-            </span>
-          </div>
-          <input type="range" min="-6" max="12" step="1" value={pollMargin} onChange={(e) => onPoll(parseInt(e.target.value))} style={{ width: "100%", accentColor: C.brass }} />
-          <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.5, marginTop: 6, fontFamily: mono }}>
-            Sets the statewide center. Each county starts at this margin plus its real historical lean. Recent polls run about Jackson +3.
-          </div>
-          {current && (
-            <button onClick={() => onPoll(current.senate.margin)} style={RBTN}>
-              ↻ Restore to current polling ({current.senate.margin >= 0 ? "Jackson" : "Collins"} +{Math.abs(current.senate.margin)})
-            </button>
-          )}
-        </div>
-      )}
-
-      {race.id === "cd2" && (
-        <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 14px", marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-            <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.muted, textTransform: "uppercase" }}>Golden personal-vote dial</span>
-            <span style={{ fontSize: 13, fontFamily: mono, fontWeight: 700, color: C.brass }}>{Math.round(cd2Decay * 100)}% kept</span>
-          </div>
-          <input type="range" min="0" max="1" step="0.05" value={cd2Decay} onChange={(e) => onDecay(parseFloat(e.target.value))} style={{ width: "100%", accentColor: C.brass }} />
-          <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.5, marginTop: 6, fontFamily: mono }}>
-            100% = Golden's full 2020 map (D+5.8). 0% = the district's generic-D fundamentals (R+8.4). Open seat, so default is low.
-          </div>
-          <button onClick={() => onDecay(DEFAULT_DECAY)} style={RBTN}>
-            ↻ Restore to default ({Math.round(DEFAULT_DECAY * 100)}% kept)
-          </button>
-        </div>
-      )}
-
+      
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, padding: "18px 14px 14px" }}>
         <svg viewBox="0 0 320 188" style={{ width: "100%", display: "block" }}>
           {ticks}
