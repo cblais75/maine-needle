@@ -732,18 +732,26 @@ export default function MaineDashboard() {
                     ))}
                   </div>
                 </div>
-                {STATES.map((st) => {
-                  const sr = races.filter((r) => r.state === st.code);
-                  if (!sr.length) return null;
-                  return (
-                    <div key={st.code} style={{ marginBottom: boardView === "needles" ? 14 : 18 }}>
-                      <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", marginBottom: 8 }}>{st.label}</div>
-                      {boardView === "needles"
-                        ? <NeedleGrid races={sr} onPick={setSel} />
-                        : <Overview races={sr} onPick={setSel} />}
-                    </div>
-                  );
-                })}
+                {wide && boardView === "needles" ? (
+                  // Desktop needles: one flat grid of all races (each tile shows its own
+                  // state code), so single-race states don't each get a lonely row.
+                  <div style={{ marginBottom: 14 }}>
+                    <NeedleGrid races={races} onPick={setSel} />
+                  </div>
+                ) : (
+                  STATES.map((st) => {
+                    const sr = races.filter((r) => r.state === st.code);
+                    if (!sr.length) return null;
+                    return (
+                      <div key={st.code} style={{ marginBottom: boardView === "needles" ? 14 : 18 }}>
+                        <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", marginBottom: 8 }}>{st.label}</div>
+                        {boardView === "needles"
+                          ? <NeedleGrid races={sr} onPick={setSel} />
+                          : <Overview races={sr} onPick={setSel} />}
+                      </div>
+                    );
+                  })
+                )}
                 <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, fontFamily: mono }}>Tap any race to open its needle{boardView === "cards" ? "" : " and county board"}.</div>
               </div>
             )}
