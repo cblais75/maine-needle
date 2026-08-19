@@ -847,7 +847,7 @@ function NeedleGrid({ races, onPick }) {
   // No bars — just the number and who's ahead, scannable at a glance.
   const readOf = (r) => {
     if (r.type === "tbd") return { fav: "TBD", pct: null, tag: r.tbdChip || "TBD", color: C.brass, sub: r.sub };
-    if (r.type === "rcv") return { fav: r.left.short, pct: null, tag: "Lean R · RCV", color: r.left.color, sub: r.sub };
+    if (r.type === "rcv") return { fav: "RCV", pct: null, tag: "No night-of call", color: C.muted, sub: r.sub };
     if (r.type === "three") {
       const m = compute3(r.units);
       const parts = r.cands.map((c) => ({ ...c, win: m.win[c.key] }));
@@ -856,6 +856,7 @@ function NeedleGrid({ races, onPick }) {
       const tag = pct >= 90 ? "Likely" : pct >= 60 ? "Leans" : "Toss-up";
       return { fav: lead.short, pct, tag, color: lead.color, frac: m.fracIn };
     }
+    if (!r.left || !r.right || !r.units || !r.units.length) return { fav: r.title, pct: null, tag: r.system || "", color: C.muted, sub: r.sub };
     const m = compute(r.units); const rt = rateOf(r, m);
     const tag = rt.text.split(" ")[0];
     return { fav: rt.leader.short, pct: rt.pct, tag, color: rt.leader.color, frac: m.fracIn };
