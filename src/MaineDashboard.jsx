@@ -316,7 +316,7 @@ function compute3(units) {
   const projOne = (fk, pk, sw) => units.reduce((s, u) => s + u.weight * (u.reported >= 0.92 ? u[fk] : clamp(u[pk] + sw, 0.01, 0.98)), 0) / totalW;
   let P = projOne("fP", "pP", sP), C = projOne("fC", "pC", sC), B = projOne("fB", "pB", sB);
   const tot = P + C + B; P /= tot; C /= tot; B /= tot;
-  const se = 0.06 * Math.sqrt(1 - fracIn) + 0.005;
+  const se = 0.06 * Math.sqrt(1 - fracIn) + 0.03 * (1 - fracIn) + 0.005;
   // P(candidate i finishes first) = integral of f_i(x) * prod_{j!=i} F_j(x) dx.
   // Deterministic numerical integration (no randomness), so the readout is stable across renders.
   const npdf = (z) => Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
@@ -373,14 +373,23 @@ function compute(units) {
     return s + u.weight * (known ? u.finalShare : clamp(u.prior + swing, 0.02, 0.98));
   }, 0) / totalW;
   const margin = 2 * proj - 1;
-  const se = 0.095 * Math.sqrt(1 - fracIn) + 0.004;
+  // Confidence band: wide when little is in (so a sliver can't "call" a race),
+  // tightening as real vote accumulates. Floor keeps very-early calls impossible.
+  const se = 0.095 * Math.sqrt(1 - fracIn) + 0.03 * (1 - fracIn) + 0.004;
   return { fracIn, swing, margin, se, winRight: ncdf(margin / se) };
 }
 function rateOf(race, m) {
   const p = m.margin >= 0 ? m.winRight : 1 - m.winRight;
   const leader = m.margin >= 0 ? race.right : race.left;
   const pct = Math.round(p * 100);
-  const tag = pct >= 97 ? "Called" : pct >= 85 ? "Likely" : pct >= 65 ? "Leans" : "Toss-up";
+  // A race cannot be "Called" until enough vote is actually in, no matter how lopsided
+  // the early sliver looks. Below that, the strongest it can read is "Likely".
+  const canCall = m.fracIn >= 0.5;
+  let tag;
+  if (pct >= 97) tag = canCall ? "Called" : "Likely";
+  else if (pct >= 85) tag = "Likely";
+  else if (pct >= 65) tag = "Leans";
+  else tag = "Toss-up";
   return { pct, leader, text: tag === "Toss-up" ? "Toss-up" : `${tag} ${leader.short}` };
 }
 
@@ -390,10 +399,18 @@ function liveTwoWay(units, counties) {
   return units.map((u) => {
     const c = counties[u.name];
     const counted = c ? (c.dem || 0) + (c.rep || 0) : 0;
-    if (counted <= 0) return { ...u, reported: 0 };
-    return { ...u, reported: clamp(counted / u.weight, 0, 1), finalShare: c.dem / counted };
+    if (counted <= 0) return { ...u, reported: 0, vDem: 0, vRep: 0 };
+    return { ...u, reported: clamp(counted / u.weight, 0, 1), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0 };
   });
 }
+// Sum raw votes across a race's units for the live scoreboard.
+function voteTotals(units) {
+  let dem = 0, rep = 0;
+  for (const u of units) { dem += u.vDem || 0; rep += u.vRep || 0; }
+  return { dem, rep, total: dem + rep };
+}
+const fmtVotes = (n) => n.toLocaleString("en-US");
+const pctOf = (part, whole) => whole > 0 ? (part / whole * 100) : 0;
 function liveThree(units, counties) {
   return units.map((u) => {
     const c = counties[u.name];
@@ -539,6 +556,7 @@ export default function MaineDashboard() {
   useEffect(() => {
     const tagOf = (pct) => pct >= 97 ? "Called" : pct >= 85 ? "Likely" : pct >= 65 ? "Leans" : "Toss-up";
     const label = (r) => { const st = STATES.find((s) => s.code === r.state); return `${st ? st.label : ""} ${r.title.replace("U.S. ", "").replace(" (special)", "")}`.trim(); };
+    const abbr = (r) => r.state; // 2-letter state code, e.g. "NC"
     const snap = {}; const events = [];
     const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     for (const r of races) {
@@ -548,13 +566,17 @@ export default function MaineDashboard() {
       snap[r.id] = cur;
       const prev = wirePrev.current ? wirePrev.current[r.id] : null;
       if (!prev || cur.frac === 0) continue;
-      if (prev.frac === 0) events.push({ kind: "open", text: `First results in from ${label(r)}.`, color: C.muted });
-      for (const M of [25, 50, 75, 90, 99]) if (prev.frac < M / 100 && cur.frac >= M / 100) events.push({ kind: "mile", text: `${label(r)}: ${M}% of expected vote in.`, color: C.muted });
-      if (prev.leader !== cur.leader) events.push({ kind: "flip", text: `Lead flip — ${cur.leader} now ahead in ${label(r)} (${cur.pct}%).`, color: cur.color });
-      else if (prev.tag !== cur.tag) {
-        if (cur.tag === "Called") events.push({ kind: "call", text: `Called: ${cur.leader} wins ${label(r)}.`, color: C.brass });
-        else events.push({ kind: "tier", text: `${label(r)}: now ${rt.text} (${cur.pct}%).`, color: cur.color });
+      const wasCalled = prev.tag === "Called";
+      // The moment of the call still fires; after that, this race goes quiet in the wire.
+      if (prev.frac === 0) events.push({ kind: "open", text: `${abbr(r)}: first results in.`, color: C.muted });
+      if (!wasCalled) for (const M of [25, 50, 75, 90, 99]) if (prev.frac < M / 100 && cur.frac >= M / 100) events.push({ kind: "mile", text: `${abbr(r)}: ${M}% of expected vote in.`, color: C.muted });
+      if (!wasCalled && prev.leader !== cur.leader) events.push({ kind: "flip", text: `${abbr(r)}: lead flip — ${cur.leader} now ahead (${cur.pct}%).`, color: cur.color });
+      else if (!wasCalled && prev.tag !== cur.tag) {
+        if (cur.tag === "Called") events.push({ kind: "call", text: `${abbr(r)}: called — ${cur.leader} wins.`, color: C.brass });
+        else events.push({ kind: "tier", text: `${abbr(r)}: now ${rt.text} (${cur.pct}%).`, color: cur.color });
       }
+      // Once called, skip all county-watch and path narration for this race.
+      if (cur.tag === "Called" || wasCalled) { continue; }
       // ---- county watch: pure comparison of each county's actual share to its baseline ----
       const seen = (wireSeen.current[r.id] || (wireSeen.current[r.id] = { counties: new Set(), paths: new Set() }));
       const totalW = r.units.reduce((s2, u) => s2 + u.weight, 0) || 1;
@@ -566,7 +588,7 @@ export default function MaineDashboard() {
         const diff = Math.round(2 * (u.finalShare - u.prior) * 100); // margin points vs baseline
         if (Math.abs(diff) < 3) continue;                        // skip "as expected"
         const ahead = diff > 0 ? r.right : r.left;
-        events.push({ kind: "county", text: `${ahead.short} is running ${Math.abs(diff)} pts ahead of baseline in ${u.name}.`, color: ahead.color });
+        events.push({ kind: "county", text: `${abbr(r)}: ${ahead.short} running ${Math.abs(diff)} pts ahead of baseline in ${u.name}.`, color: ahead.color });
       }
       // ---- path to win: in close races, what is the trailing candidate's remaining vote? ----
       const gap = Math.round(Math.abs(m.margin) * 100);
@@ -585,7 +607,7 @@ export default function MaineDashboard() {
         const pctRem = Math.round((remW / totalW) * 100);
         if (pctRem < 5) continue;
         const tail = best ? `, including ${best.name}, a ${trailing.short}-leaning county` : "";
-        events.push({ kind: "path", text: `${trailing.short} trails by ${gap} with about ${pctRem}% of the vote still out${tail}.`, color: C.text });
+        events.push({ kind: "path", text: `${abbr(r)}: ${trailing.short} trails by ${gap} with about ${pctRem}% still out${tail}.`, color: C.text });
       }
     }
     wirePrev.current = snap;
@@ -754,6 +776,31 @@ function TiltBar({ race }) {
         <span style={{ fontSize: 12, fontWeight: 700, color: rt.leader.color }}>{rt.text}</span>
         <span style={{ fontSize: 11, color: C.muted }}>{rt.leader.short} +{Math.abs(m.margin * 100).toFixed(1)} · {Math.round(m.fracIn * 100)}% in</span>
       </div>
+      <Scoreboard race={race} compact />
+    </div>
+  );
+}
+
+// Live vote scoreboard: raw counts + percentages for each candidate. Renders only
+// once real votes are in (m.fracIn > 0); before that there is nothing to show.
+function Scoreboard({ race, compact }) {
+  const t = voteTotals(race.units);
+  if (t.total <= 0) return null;
+  const dPct = pctOf(t.dem, t.total), rPct = pctOf(t.rep, t.total);
+  const dLead = t.dem >= t.rep;
+  const row = (name, votes, pct, color, lead) => (
+    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+      <span style={{ fontSize: compact ? 11.5 : 13, fontWeight: lead ? 700 : 500, color }}>{name}</span>
+      <span style={{ fontFamily: mono, fontSize: compact ? 11.5 : 13, color: C.text }}>
+        <b style={{ color, fontWeight: lead ? 700 : 500 }}>{pct.toFixed(1)}%</b>
+        <span style={{ color: C.muted, marginLeft: 6 }}>{fmtVotes(votes)}</span>
+      </span>
+    </div>
+  );
+  return (
+    <div style={{ marginTop: compact ? 8 : 12, paddingTop: compact ? 8 : 10, borderTop: `1px solid ${C.line}`, display: "flex", flexDirection: "column", gap: compact ? 3 : 5 }}>
+      {row(race.right.short, t.dem, dPct, race.right.color, dLead)}
+      {row(race.left.short, t.rep, rPct, race.left.color, !dLead)}
     </div>
   );
 }
@@ -1326,6 +1373,7 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
             <Stat label="EST. VOTE IN" value={`${Math.round(m.fracIn * 100)}%`} />
           </div>
         </div>
+        {race.left && race.right && <Scoreboard race={race} />}
       </div>
 
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: "#C7D2E3" }}>{caption}</div>
