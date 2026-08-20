@@ -157,6 +157,13 @@
       "date": "2026-08-10",
       "dem": 53,
       "rep": 45
+    },
+    {
+      "pollster": "Wedgewood Polls",
+      "rating": 0.75,
+      "date": "2026-08-13",
+      "dem": 48,
+      "rep": 44
     }
   ],
   "tx_sen": [
@@ -298,6 +305,13 @@
       "date": "2026-07-16",
       "dem": 52,
       "rep": 43
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.75,
+      "date": "2026-08-17",
+      "dem": 50,
+      "rep": 43
     }
   ],
   "ne_sen": [],
@@ -315,6 +329,13 @@
       "date": "2026-08-10",
       "dem": 47,
       "rep": 51
+    },
+    {
+      "pollster": "Susquehanna Polling & Research",
+      "rating": 0.8,
+      "date": "2026-08-17",
+      "dem": 46,
+      "rep": 39
     }
   ]
 }

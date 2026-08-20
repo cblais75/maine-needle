@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-19",
+  "updated": "2026-08-20",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -170,10 +170,19 @@
   },
   "oh_sen": {
     "margin": 5,
-    "nPolls": 7,
+    "nPolls": 8,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Wedgewood Polls",
+        "date": "2026-08-13",
+        "rating": 0.75,
+        "dem": 48,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 37
+      },
       {
         "pollster": "Fox News (Beacon/Shaw)",
         "date": "2026-08-10",
@@ -181,7 +190,7 @@
         "dem": 53,
         "rep": 45,
         "ind": null,
-        "weightPct": 65
+        "weightPct": 41
       },
       {
         "pollster": "NYT/Siena",
@@ -190,7 +199,7 @@
         "dem": 47,
         "rep": 50,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 11
       },
       {
         "pollster": "AARP (Impact/Fabrizio)",
@@ -199,7 +208,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 6
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -208,7 +217,7 @@
         "dem": 53,
         "rep": 45,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 4
       },
       {
         "pollster": "BGSU/YouGov",
@@ -417,11 +426,20 @@
     ]
   },
   "ga_sen": {
-    "margin": 10,
-    "nPolls": 2,
+    "margin": 8,
+    "nPolls": 3,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "InsiderAdvantage",
+        "date": "2026-08-17",
+        "rating": 0.75,
+        "dem": 50,
+        "rep": 43,
+        "ind": null,
+        "weightPct": 62
+      },
       {
         "pollster": "AARP (Fabrizio/Impact)",
         "date": "2026-07-16",
@@ -429,7 +447,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 64
+        "weightPct": 24
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -438,7 +456,7 @@
         "dem": 56,
         "rep": 43,
         "ind": null,
-        "weightPct": 36
+        "weightPct": 14
       }
     ]
   },
@@ -450,11 +468,20 @@
     "polls": []
   },
   "mi_sen": {
-    "margin": -4,
-    "nPolls": 2,
+    "margin": 1,
+    "nPolls": 3,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Susquehanna Polling & Research",
+        "date": "2026-08-17",
+        "rating": 0.8,
+        "dem": 46,
+        "rep": 39,
+        "ind": null,
+        "weightPct": 41
+      },
       {
         "pollster": "Fox News (Beacon/Shaw)",
         "date": "2026-08-10",
@@ -462,7 +489,7 @@
         "dem": 47,
         "rep": 51,
         "ind": null,
-        "weightPct": 61
+        "weightPct": 36
       },
       {
         "pollster": "EPIC-MRA",
@@ -471,7 +498,7 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "weightPct": 39
+        "weightPct": 23
       }
     ]
   }
