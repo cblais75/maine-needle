@@ -236,6 +236,13 @@
       "date": "2026-08-10",
       "dem": 46,
       "rep": 47
+    },
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-08-13",
+      "dem": 42,
+      "rep": 39
     }
   ],
   "ia_sen": [

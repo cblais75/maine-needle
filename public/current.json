@@ -259,10 +259,19 @@
   },
   "tx_sen": {
     "margin": 2,
-    "nPolls": 9,
+    "nPolls": 10,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "UT/Texas Politics Project",
+        "date": "2026-08-13",
+        "rating": 0.85,
+        "dem": 42,
+        "rep": 39,
+        "ind": null,
+        "weightPct": 21
+      },
       {
         "pollster": "Emerson College/Nexstar",
         "date": "2026-08-10",
@@ -270,7 +279,7 @@
         "dem": 46,
         "rep": 47,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 19
       },
       {
         "pollster": "254 Labs (D)",
@@ -279,7 +288,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 8
       },
       {
         "pollster": "Fox News",
@@ -288,7 +297,7 @@
         "dem": 51,
         "rep": 48,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 14
       },
       {
         "pollster": "Texas Southern University",
@@ -297,7 +306,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 12
       },
       {
         "pollster": "Texas Pulse (Texas A&M/ReconMR)",
@@ -306,7 +315,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 16
+        "weightPct": 12
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -315,7 +324,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "NYT/Siena",
@@ -324,7 +333,7 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 5
       },
       {
         "pollster": "UT Politics Project",
