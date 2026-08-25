@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-20",
+  "updated": "2026-08-25",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -80,11 +80,20 @@
     "polls": []
   },
   "nc_sen": {
-    "margin": 9,
-    "nPolls": 9,
+    "margin": 8,
+    "nPolls": 10,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "High Point University Poll",
+        "date": "2026-08-12",
+        "rating": 0.8,
+        "dem": 50,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 24
+      },
       {
         "pollster": "Carolina Journal/Civitas (R)",
         "date": "2026-08-10",
@@ -92,7 +101,7 @@
         "dem": 51.5,
         "rep": 39,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 14
       },
       {
         "pollster": "Change Research (Carolina Forward)",
@@ -101,7 +110,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 16
+        "weightPct": 12
       },
       {
         "pollster": "Elon University",
@@ -110,7 +119,7 @@
         "dem": 53,
         "rep": 42,
         "ind": null,
-        "weightPct": 22
+        "weightPct": 16
       },
       {
         "pollster": "Fox News",
@@ -119,7 +128,7 @@
         "dem": 53,
         "rep": 44,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 16
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -128,7 +137,7 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "NYT/Siena",
@@ -137,7 +146,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -146,7 +155,7 @@
         "dem": 48,
         "rep": 34,
         "ind": null,
-        "weightPct": 5
+        "weightPct": 3
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -469,7 +478,7 @@
   },
   "mi_sen": {
     "margin": 1,
-    "nPolls": 3,
+    "nPolls": 4,
     "fallback": false,
     "note": "",
     "polls": [
@@ -480,7 +489,16 @@
         "dem": 46,
         "rep": 39,
         "ind": null,
-        "weightPct": 41
+        "weightPct": 30
+      },
+      {
+        "pollster": "AARP (Fabrizio/Impact)",
+        "date": "2026-08-11",
+        "rating": 0.85,
+        "dem": 48,
+        "rep": 47,
+        "ind": null,
+        "weightPct": 26
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -489,7 +507,7 @@
         "dem": 47,
         "rep": 51,
         "ind": null,
-        "weightPct": 36
+        "weightPct": 27
       },
       {
         "pollster": "EPIC-MRA",
@@ -498,7 +516,7 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "weightPct": 23
+        "weightPct": 17
       }
     ]
   }

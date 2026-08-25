@@ -1,0 +1,10 @@
+ 
+=== push-polls-aug20.bat === 
+aac0388 Polls
+efd2583 Update 34
+45bef49 Update 33
+22fdf81 Update 32
+To https://github.com/cblais75/maine-needle.git
+   efd2583..aac0388  main -> main
+Push exit: 0 
+=== Done === 

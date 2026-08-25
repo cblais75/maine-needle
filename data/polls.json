@@ -106,6 +106,13 @@
       "date": "2026-08-10",
       "dem": 51.5,
       "rep": 39
+    },
+    {
+      "pollster": "High Point University Poll",
+      "rating": 0.8,
+      "date": "2026-08-12",
+      "dem": 50,
+      "rep": 45
     }
   ],
   "oh_sen": [
@@ -336,6 +343,13 @@
       "date": "2026-08-17",
       "dem": 46,
       "rep": 39
+    },
+    {
+      "pollster": "AARP (Fabrizio/Impact)",
+      "rating": 0.85,
+      "date": "2026-08-11",
+      "dem": 48,
+      "rep": 47
     }
   ]
 }

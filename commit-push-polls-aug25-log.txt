@@ -1,0 +1,4 @@
+ 
+=== commit-push-polls-aug25.bat === 
+Removed HEAD.lock 
+Removed index.lock 
