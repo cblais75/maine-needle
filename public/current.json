@@ -12,11 +12,11 @@
       {
         "pollster": "Abacus Data",
         "date": "2026-08-22",
-        "rating": 0.75,
+        "rating": 0.55,
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 40
+        "weightPct": 33
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -25,7 +25,7 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "weightPct": 32
+        "weightPct": 36
       },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
@@ -34,7 +34,7 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "weightPct": 13
+        "weightPct": 15
       },
       {
         "pollster": "UNH Survey Center",
@@ -43,7 +43,7 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 16
       }
     ]
   },
