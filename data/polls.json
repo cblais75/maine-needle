@@ -21,6 +21,13 @@
       "date": "2026-08-10",
       "dem": 48,
       "rep": 46
+    },
+    {
+      "pollster": "Abacus Data",
+      "rating": 0.75,
+      "date": "2026-08-22",
+      "dem": 52,
+      "rep": 43
     }
   ],
   "governor": [
@@ -280,6 +287,13 @@
       "date": "2026-08-04",
       "dem": 45,
       "rep": 48
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-08-23",
+      "dem": 41,
+      "rep": 45
     }
   ],
   "ak_sen": [
@@ -357,6 +371,13 @@
       "date": "2026-08-11",
       "dem": 48,
       "rep": 47
+    },
+    {
+      "pollster": "EPIC-MRA",
+      "rating": 0.8,
+      "date": "2026-08-28",
+      "dem": 47,
+      "rep": 43
     }
   ]
 }
