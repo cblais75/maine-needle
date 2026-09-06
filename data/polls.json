@@ -49,7 +49,15 @@
     }
   ],
   "cd1": [],
-  "cd2": [],
+  "cd2": [
+    {
+      "pollster": "Tulchin Research (D)",
+      "rating": 0.55,
+      "date": "2026-07-16",
+      "dem": 49,
+      "rep": 48
+    }
+  ],
   "nc_sen": [
     {
       "pollster": "Carolina Journal/Civitas (R)",
@@ -250,6 +258,13 @@
       "date": "2026-08-13",
       "dem": 42,
       "rep": 39
+    },
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-08-25",
+      "dem": 42,
+      "rep": 39
     }
   ],
   "ia_sen": [
@@ -294,6 +309,20 @@
       "date": "2026-08-23",
       "dem": 41,
       "rep": 45
+    },
+    {
+      "pollster": "Wedgewood Polls",
+      "rating": 0.75,
+      "date": "2026-08-29",
+      "dem": 48,
+      "rep": 50
+    },
+    {
+      "pollster": "Emerson College/Nexstar",
+      "rating": 0.8,
+      "date": "2026-09-01",
+      "dem": 45,
+      "rep": 50
     }
   ],
   "ak_sen": [
@@ -315,6 +344,13 @@
       "pollster": "Alaska Survey Research",
       "rating": 0.8,
       "date": "2026-08-05",
+      "dem": 51,
+      "rep": 49
+    },
+    {
+      "pollster": "Alaska Survey Research",
+      "rating": 0.8,
+      "date": "2026-08-23",
       "dem": 51,
       "rep": 49
     }
@@ -378,6 +414,13 @@
       "date": "2026-08-28",
       "dem": 47,
       "rep": 43
+    },
+    {
+      "pollster": "MSU/IPPSR",
+      "rating": 0.8,
+      "date": "2026-08-20",
+      "dem": 50,
+      "rep": 45
     }
   ]
 }

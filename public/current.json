@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-01",
+  "updated": "2026-09-06",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -82,11 +82,21 @@
     "polls": []
   },
   "cd2": {
-    "margin": null,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "No public District 2 polls yet; using the personal-vote-adjusted baseline.",
-    "polls": []
+    "margin": 1,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "Tulchin Research (D)",
+        "date": "2026-07-16",
+        "rating": 0.55,
+        "dem": 49,
+        "rep": 48,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   },
   "nc_sen": {
     "margin": 8,
@@ -268,10 +278,19 @@
   },
   "tx_sen": {
     "margin": 2,
-    "nPolls": 10,
+    "nPolls": 11,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "UT/Texas Politics Project",
+        "date": "2026-08-25",
+        "rating": 0.85,
+        "dem": 42,
+        "rep": 39,
+        "ind": null,
+        "weightPct": 24
+      },
       {
         "pollster": "UT/Texas Politics Project",
         "date": "2026-08-13",
@@ -279,7 +298,7 @@
         "dem": 42,
         "rep": 39,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 16
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -288,7 +307,7 @@
         "dem": 46,
         "rep": 47,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 14
       },
       {
         "pollster": "254 Labs (D)",
@@ -297,7 +316,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "Fox News",
@@ -306,7 +325,7 @@
         "dem": 51,
         "rep": 48,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 11
       },
       {
         "pollster": "Texas Southern University",
@@ -315,7 +334,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 9
       },
       {
         "pollster": "Texas Pulse (Texas A&M/ReconMR)",
@@ -324,7 +343,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 9
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -333,7 +352,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "NYT/Siena",
@@ -342,7 +361,7 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "UT Politics Project",
@@ -351,7 +370,7 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "TX Opinion Research",
@@ -366,10 +385,28 @@
   },
   "ia_sen": {
     "margin": -3,
-    "nPolls": 6,
+    "nPolls": 8,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Emerson College/Nexstar",
+        "date": "2026-09-01",
+        "rating": 0.8,
+        "dem": 45,
+        "rep": 50,
+        "ind": null,
+        "weightPct": 30
+      },
+      {
+        "pollster": "Wedgewood Polls",
+        "date": "2026-08-29",
+        "rating": 0.75,
+        "dem": 48,
+        "rep": 50,
+        "ind": null,
+        "weightPct": 26
+      },
       {
         "pollster": "Suffolk University",
         "date": "2026-08-23",
@@ -377,7 +414,7 @@
         "dem": 41,
         "rep": 45,
         "ind": null,
-        "weightPct": 51
+        "weightPct": 22
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -386,7 +423,7 @@
         "dem": 45,
         "rep": 48,
         "ind": null,
-        "weightPct": 27
+        "weightPct": 12
       },
       {
         "pollster": "NYT/Siena",
@@ -395,7 +432,7 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 4
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -404,7 +441,7 @@
         "dem": 50,
         "rep": 46,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 4
       },
       {
         "pollster": "DSCC Internal (D)",
@@ -413,7 +450,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -422,16 +459,25 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       }
     ]
   },
   "ak_sen": {
-    "margin": 1,
-    "nPolls": 3,
+    "margin": 2,
+    "nPolls": 4,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Alaska Survey Research",
+        "date": "2026-08-23",
+        "rating": 0.8,
+        "dem": 51,
+        "rep": 49,
+        "ind": null,
+        "weightPct": 57
+      },
       {
         "pollster": "Alaska Survey Research",
         "date": "2026-08-05",
@@ -439,7 +485,7 @@
         "dem": 51,
         "rep": 49,
         "ind": null,
-        "weightPct": 74
+        "weightPct": 32
       },
       {
         "pollster": "NYT/Siena",
@@ -448,7 +494,7 @@
         "dem": 45,
         "rep": 47,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 10
       },
       {
         "pollster": "Alaska Survey Research",
@@ -457,7 +503,7 @@
         "dem": 49,
         "rep": 43,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       }
     ]
   },
@@ -505,7 +551,7 @@
   },
   "mi_sen": {
     "margin": 2,
-    "nPolls": 5,
+    "nPolls": 6,
     "fallback": false,
     "note": "",
     "polls": [
@@ -516,7 +562,16 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 30
+        "weightPct": 24
+      },
+      {
+        "pollster": "MSU/IPPSR",
+        "date": "2026-08-20",
+        "rating": 0.8,
+        "dem": 50,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 19
       },
       {
         "pollster": "Susquehanna Polling & Research",
@@ -525,7 +580,7 @@
         "dem": 46,
         "rep": 39,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 17
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -534,7 +589,7 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 15
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -543,7 +598,7 @@
         "dem": 47,
         "rep": 51,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 15
       },
       {
         "pollster": "EPIC-MRA",
@@ -552,7 +607,7 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 10
       }
     ]
   }
