@@ -49,15 +49,7 @@
     }
   ],
   "cd1": [],
-  "cd2": [
-    {
-      "pollster": "Tulchin Research (D)",
-      "rating": 0.55,
-      "date": "2026-07-16",
-      "dem": 49,
-      "rep": 48
-    }
-  ],
+  "cd2": [],
   "nc_sen": [
     {
       "pollster": "Carolina Journal/Civitas (R)",

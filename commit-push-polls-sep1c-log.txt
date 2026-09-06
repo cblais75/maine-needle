@@ -1,2 +1,20 @@
  
 === commit-push-polls-sep1c.bat === 
+warning: in the working copy of 'commit-push-polls-sep1b-log.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'commit-push-polls-sep1c.bat', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 544c390] Polls
+ 5 files changed, 189 insertions(+), 35 deletions(-)
+ create mode 100644 commit-push-polls-sep1c-log.txt
+ create mode 100644 commit-push-polls-sep1c.bat
+Commit exit: 0 
+544c390 Polls
+f7962f9 Polls
+3be963e Polls
+04719c3 Polls
+To https://github.com/cblais75/maine-needle.git
+   f7962f9..544c390  main -> main
+Push exit: 0 
+=== Done === 

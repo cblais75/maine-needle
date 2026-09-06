@@ -82,21 +82,11 @@
     "polls": []
   },
   "cd2": {
-    "margin": 1,
-    "nPolls": 1,
-    "fallback": false,
-    "note": "",
-    "polls": [
-      {
-        "pollster": "Tulchin Research (D)",
-        "date": "2026-07-16",
-        "rating": 0.55,
-        "dem": 49,
-        "rep": 48,
-        "ind": null,
-        "weightPct": 100
-      }
-    ]
+    "margin": null,
+    "nPolls": 0,
+    "fallback": true,
+    "note": "No public District 2 polls yet; using the personal-vote-adjusted baseline.",
+    "polls": []
   },
   "nc_sen": {
     "margin": 8,
