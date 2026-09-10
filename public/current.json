@@ -1,14 +1,23 @@
 {
-  "updated": "2026-09-06",
+  "updated": "2026-09-10",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 5,
-    "nPolls": 4,
+    "margin": 4,
+    "nPolls": 5,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "CNN/SSRS",
+        "date": "2026-09-06",
+        "rating": 0.9,
+        "dem": 48,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 47
+      },
       {
         "pollster": "Abacus Data",
         "date": "2026-08-22",
@@ -16,7 +25,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 33
+        "weightPct": 17
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -25,7 +34,7 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "weightPct": 36
+        "weightPct": 19
       },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
@@ -34,7 +43,7 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 8
       },
       {
         "pollster": "UNH Survey Center",
@@ -43,7 +52,7 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "weightPct": 16
+        "weightPct": 9
       }
     ]
   },
@@ -455,10 +464,19 @@
   },
   "ak_sen": {
     "margin": 2,
-    "nPolls": 4,
+    "nPolls": 5,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Alaska Survey Research",
+        "date": "2026-09-02",
+        "rating": 0.8,
+        "dem": 51,
+        "rep": 49,
+        "ind": null,
+        "weightPct": 44
+      },
       {
         "pollster": "Alaska Survey Research",
         "date": "2026-08-23",
@@ -466,7 +484,7 @@
         "dem": 51,
         "rep": 49,
         "ind": null,
-        "weightPct": 57
+        "weightPct": 32
       },
       {
         "pollster": "Alaska Survey Research",
@@ -475,7 +493,7 @@
         "dem": 51,
         "rep": 49,
         "ind": null,
-        "weightPct": 32
+        "weightPct": 18
       },
       {
         "pollster": "NYT/Siena",
@@ -484,7 +502,7 @@
         "dem": 45,
         "rep": 47,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 6
       },
       {
         "pollster": "Alaska Survey Research",
@@ -493,7 +511,7 @@
         "dem": 49,
         "rep": 43,
         "ind": null,
-        "weightPct": 1
+        "weightPct": 0
       }
     ]
   },
@@ -540,11 +558,20 @@
     "polls": []
   },
   "mi_sen": {
-    "margin": 2,
-    "nPolls": 6,
+    "margin": 3,
+    "nPolls": 7,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "CNN/SSRS",
+        "date": "2026-09-06",
+        "rating": 0.9,
+        "dem": 47,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 27
+      },
       {
         "pollster": "EPIC-MRA",
         "date": "2026-08-28",
@@ -552,7 +579,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 18
       },
       {
         "pollster": "MSU/IPPSR",
@@ -561,7 +588,7 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 14
       },
       {
         "pollster": "Susquehanna Polling & Research",
@@ -570,7 +597,7 @@
         "dem": 46,
         "rep": 39,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 12
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -579,7 +606,7 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 11
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -588,7 +615,7 @@
         "dem": 47,
         "rep": 51,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 11
       },
       {
         "pollster": "EPIC-MRA",
@@ -597,7 +624,7 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 7
       }
     ]
   }
