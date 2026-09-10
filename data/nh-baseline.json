@@ -1,0 +1,31 @@
+{
+  "builtAt": "2026-09-10T02:53:56.710Z",
+  "source": "file:nh2024.csv",
+  "basis": "president",
+  "statewideDemTwoParty": 0.5141,
+  "nCounties": 10,
+  "lean": {
+    "BELKNAP": -0.0799,
+    "CARROLL": -0.0225,
+    "CHESHIRE": 0.0355,
+    "COOS": -0.0836,
+    "GRAFTON": 0.0869,
+    "HILLSBOROUGH": 0.0005,
+    "MERRIMACK": 0.0122,
+    "ROCKINGHAM": -0.0264,
+    "STRAFFORD": 0.0469,
+    "SULLIVAN": -0.0174
+  },
+  "weight": {
+    "BELKNAP": 40234,
+    "CARROLL": 34234,
+    "CHESHIRE": 44721,
+    "COOS": 17086,
+    "GRAFTON": 54909,
+    "HILLSBOROUGH": 230848,
+    "MERRIMACK": 91546,
+    "ROCKINGHAM": 200158,
+    "STRAFFORD": 75537,
+    "SULLIVAN": 24801
+  }
+}

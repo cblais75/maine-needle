@@ -1,0 +1,36 @@
+ 
+=== deploy-update35.bat === 
+Clearing dist... 
+dist cleared 
+Running npm run polls... 
+
+> the-needle-project@0.1.0 polls
+> node scripts/update-polls.mjs
+
+Senate: Jackson +4 from 5 polls
+Governor: 2 polls (live)
+CD1: 0 polls · CD2: 0 polls
+NC Senate: Cooper +8 from 10 polls
+OH Senate: Brown +5 from 8 polls
+TX Senate: Talarico +2 from 11 polls
+IA Senate: 8 polls (Hinson +3)
+AK Senate: 5 polls (Peltola +2)
+GA Senate: 3 polls (Ossoff +8)
+NE Senate: 0 polls (fundamentals)
+MI Senate: 7 polls (El-Sayed +3)
+NH Senate: 4 polls (Sununu +1)
+Polls exit: 0 
+Running npm run build... 
+
+> the-needle-project@0.1.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 1510 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                [39m[1m[2m  2.08 kB[22m[1m[22m[2m │ gzip:  0.73 kB[22m
+[2mdist/[22m[36massets/index-C6RCnuPq.js  [39m[1m[2m251.03 kB[22m[1m[22m[2m │ gzip: 81.83 kB[22m
+[32m✓ built in 2.30s[39m
+Build exit: 0 

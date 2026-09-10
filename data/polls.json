@@ -435,5 +435,35 @@
       "dem": 47,
       "rep": 44
     }
+  ],
+  "nh_sen": [
+    {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-03-23",
+      "dem": 45,
+      "rep": 44
+    },
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-06-20",
+      "dem": 47,
+      "rep": 44
+    },
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-08-26",
+      "dem": 43,
+      "rep": 45
+    },
+    {
+      "pollster": "Fabrizio Lee (R)",
+      "rating": 0.5,
+      "date": "2026-08-30",
+      "dem": 36,
+      "rep": 37
+    }
   ]
 }

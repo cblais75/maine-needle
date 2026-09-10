@@ -627,5 +627,49 @@
         "weightPct": 7
       }
     ]
+  },
+  "nh_sen": {
+    "margin": -1,
+    "nPolls": 4,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "Fabrizio Lee (R)",
+        "date": "2026-08-30",
+        "rating": 0.5,
+        "dem": 36,
+        "rep": 37,
+        "ind": null,
+        "weightPct": 39
+      },
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-08-26",
+        "rating": 0.8,
+        "dem": 43,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 55
+      },
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-06-20",
+        "rating": 0.8,
+        "dem": 47,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 6
+      },
+      {
+        "pollster": "Emerson College",
+        "date": "2026-03-23",
+        "rating": 0.85,
+        "dem": 45,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 0
+      }
+    ]
   }
 }
