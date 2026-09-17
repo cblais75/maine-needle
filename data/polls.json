@@ -360,7 +360,7 @@
     },
     {
       "pollster": "Rasmussen Reports",
-      "rating": 0.55,
+      "rating": 0.5,
       "date": "2026-09-10",
       "dem": 45,
       "rep": 40
@@ -404,7 +404,7 @@
     },
     {
       "pollster": "Rasmussen Reports",
-      "rating": 0.55,
+      "rating": 0.5,
       "date": "2026-09-14",
       "dem": 39,
       "rep": 39
@@ -434,13 +434,21 @@
     },
     {
       "pollster": "Rasmussen Reports",
-      "rating": 0.55,
+      "rating": 0.5,
       "date": "2026-09-14",
       "dem": 51,
       "rep": 42
     }
   ],
-  "ne_sen": [],
+  "ne_sen": [
+    {
+      "pollster": "SurveyUSA",
+      "rating": 0.8,
+      "date": "2026-09-13",
+      "dem": 46,
+      "rep": 42
+    }
+  ],
   "mi_sen": [
     {
       "pollster": "EPIC-MRA",
@@ -537,7 +545,7 @@
     },
     {
       "pollster": "Rasmussen Reports",
-      "rating": 0.55,
+      "rating": 0.5,
       "date": "2026-09-10",
       "dem": 45,
       "rep": 34

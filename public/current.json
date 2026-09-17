@@ -428,7 +428,7 @@
     ]
   },
   "ia_sen": {
-    "margin": -1,
+    "margin": -2,
     "nPolls": 9,
     "fallback": false,
     "note": "",
@@ -436,11 +436,11 @@
       {
         "pollster": "Rasmussen Reports",
         "date": "2026-09-10",
-        "rating": 0.55,
+        "rating": 0.5,
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 22
+        "weightPct": 20
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -476,7 +476,7 @@
         "dem": 45,
         "rep": 48,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 10
       },
       {
         "pollster": "NYT/Siena",
@@ -525,11 +525,11 @@
       {
         "pollster": "Rasmussen Reports",
         "date": "2026-09-14",
-        "rating": 0.55,
+        "rating": 0.5,
         "dem": 39,
         "rep": 39,
         "ind": null,
-        "weightPct": 31
+        "weightPct": 29
       },
       {
         "pollster": "Alaska Survey Research",
@@ -547,7 +547,7 @@
         "dem": 51,
         "rep": 49,
         "ind": null,
-        "weightPct": 22
+        "weightPct": 23
       },
       {
         "pollster": "Alaska Survey Research",
@@ -587,11 +587,11 @@
       {
         "pollster": "Rasmussen Reports",
         "date": "2026-09-14",
-        "rating": 0.55,
+        "rating": 0.5,
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "weightPct": 53
+        "weightPct": 51
       },
       {
         "pollster": "InsiderAdvantage",
@@ -600,7 +600,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 29
+        "weightPct": 30
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -609,7 +609,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 12
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -618,16 +618,26 @@
         "dem": 56,
         "rep": 43,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 7
       }
     ]
   },
   "ne_sen": {
-    "margin": null,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "Limited Nebraska polling; centered on fundamentals.",
-    "polls": []
+    "margin": 4,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "SurveyUSA",
+        "date": "2026-09-13",
+        "rating": 0.8,
+        "dem": 46,
+        "rep": 42,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   },
   "mi_sen": {
     "margin": 2,
@@ -731,16 +741,16 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "weightPct": 28
+        "weightPct": 29
       },
       {
         "pollster": "Rasmussen Reports",
         "date": "2026-09-10",
-        "rating": 0.55,
+        "rating": 0.5,
         "dem": 45,
         "rep": 34,
         "ind": null,
-        "weightPct": 27
+        "weightPct": 26
       },
       {
         "pollster": "Fabrizio Lee (R)",
@@ -749,7 +759,7 @@
         "dem": 36,
         "rep": 37,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 18
       },
       {
         "pollster": "UNH Survey Center",
@@ -758,7 +768,7 @@
         "dem": 43,
         "rep": 45,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 25
       },
       {
         "pollster": "UNH Survey Center",
