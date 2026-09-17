@@ -127,6 +127,27 @@
       "date": "2026-08-12",
       "dem": 50,
       "rep": 45
+    },
+    {
+      "pollster": "Elon University",
+      "rating": 0.8,
+      "date": "2026-08-31",
+      "dem": 49,
+      "rep": 36
+    },
+    {
+      "pollster": "East Carolina University",
+      "rating": 0.8,
+      "date": "2026-09-03",
+      "dem": 46,
+      "rep": 39
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-09-10",
+      "dem": 48,
+      "rep": 42
     }
   ],
   "oh_sen": [
@@ -185,6 +206,20 @@
       "date": "2026-08-13",
       "dem": 48,
       "rep": 44
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.75,
+      "date": "2026-09-09",
+      "dem": 47,
+      "rep": 42
+    },
+    {
+      "pollster": "BGSU/YouGov",
+      "rating": 0.8,
+      "date": "2026-09-10",
+      "dem": 48,
+      "rep": 45
     }
   ],
   "tx_sen": [
@@ -322,6 +357,13 @@
       "date": "2026-09-01",
       "dem": 45,
       "rep": 50
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.55,
+      "date": "2026-09-10",
+      "dem": 45,
+      "rep": 40
     }
   ],
   "ak_sen": [
@@ -359,6 +401,13 @@
       "date": "2026-09-02",
       "dem": 51,
       "rep": 49
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.55,
+      "date": "2026-09-14",
+      "dem": 39,
+      "rep": 39
     }
   ],
   "ga_sen": [
@@ -382,6 +431,13 @@
       "date": "2026-08-17",
       "dem": 50,
       "rep": 43
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.55,
+      "date": "2026-09-14",
+      "dem": 51,
+      "rep": 42
     }
   ],
   "ne_sen": [],
@@ -434,6 +490,20 @@
       "date": "2026-09-06",
       "dem": 47,
       "rep": 44
+    },
+    {
+      "pollster": "Glengariff (Detroit News/WDIV)",
+      "rating": 0.8,
+      "date": "2026-09-03",
+      "dem": 44.4,
+      "rep": 45.8
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-09-09",
+      "dem": 46,
+      "rep": 45
     }
   ],
   "nh_sen": [
@@ -464,6 +534,20 @@
       "date": "2026-08-30",
       "dem": 36,
       "rep": 37
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.55,
+      "date": "2026-09-10",
+      "dem": 45,
+      "rep": 34
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-11",
+      "dem": 46,
+      "rep": 46
     }
   ]
 }
