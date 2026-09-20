@@ -60,21 +60,21 @@
   "nc_sen": [
     {
       "pollster": "Carolina Journal/Civitas (R)",
-      "rating": 0.6,
+      "rating": 0.5,
       "date": "2026-03-15",
       "dem": 48.9,
       "rep": 41.1
     },
     {
       "pollster": "Carolina Journal/Civitas (R)",
-      "rating": 0.6,
+      "rating": 0.5,
       "date": "2026-05-15",
       "dem": 49.8,
       "rep": 38.7
     },
     {
       "pollster": "Catawba College/YouGov",
-      "rating": 0.9,
+      "rating": 0.8,
       "date": "2026-06-10",
       "dem": 48,
       "rep": 34
@@ -160,7 +160,7 @@
   "oh_sen": [
     {
       "pollster": "On Message Inc. (R)",
-      "rating": 0.6,
+      "rating": 0.5,
       "date": "2026-03-08",
       "dem": 47,
       "rep": 45
@@ -174,7 +174,7 @@
     },
     {
       "pollster": "BGSU/YouGov",
-      "rating": 0.85,
+      "rating": 0.8,
       "date": "2026-04-14",
       "dem": 47,
       "rep": 50
@@ -216,7 +216,7 @@
     },
     {
       "pollster": "InsiderAdvantage",
-      "rating": 0.75,
+      "rating": 0.6,
       "date": "2026-09-09",
       "dem": 47,
       "rep": 42
@@ -353,7 +353,7 @@
     },
     {
       "pollster": "DSCC Internal (D)",
-      "rating": 0.45,
+      "rating": 0.5,
       "date": "2026-06-10",
       "dem": 47,
       "rep": 45
@@ -374,7 +374,7 @@
     },
     {
       "pollster": "Emerson College/Nexstar",
-      "rating": 0.8,
+      "rating": 0.85,
       "date": "2026-08-04",
       "dem": 45,
       "rep": 48
@@ -395,7 +395,7 @@
     },
     {
       "pollster": "Emerson College/Nexstar",
-      "rating": 0.8,
+      "rating": 0.85,
       "date": "2026-09-01",
       "dem": 45,
       "rep": 50
@@ -411,7 +411,7 @@
   "ak_sen": [
     {
       "pollster": "Alaska Survey Research",
-      "rating": 0.75,
+      "rating": 0.8,
       "date": "2026-04-19",
       "dem": 49,
       "rep": 43
@@ -476,7 +476,7 @@
     },
     {
       "pollster": "InsiderAdvantage",
-      "rating": 0.75,
+      "rating": 0.6,
       "date": "2026-08-17",
       "dem": 50,
       "rep": 43

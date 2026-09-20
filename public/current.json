@@ -205,7 +205,7 @@
       {
         "pollster": "Catawba College/YouGov",
         "date": "2026-06-10",
-        "rating": 0.9,
+        "rating": 0.8,
         "dem": 48,
         "rep": 34,
         "ind": null,
@@ -214,7 +214,7 @@
       {
         "pollster": "Carolina Journal/Civitas (R)",
         "date": "2026-05-15",
-        "rating": 0.6,
+        "rating": 0.5,
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
@@ -223,7 +223,7 @@
       {
         "pollster": "Carolina Journal/Civitas (R)",
         "date": "2026-03-15",
-        "rating": 0.6,
+        "rating": 0.5,
         "dem": 48.9,
         "rep": 41.1,
         "ind": null,
@@ -244,7 +244,7 @@
         "dem": 45,
         "rep": 42,
         "ind": null,
-        "weightPct": 25
+        "weightPct": 26
       },
       {
         "pollster": "BGSU/YouGov",
@@ -253,16 +253,16 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 27
+        "weightPct": 28
       },
       {
         "pollster": "InsiderAdvantage",
         "date": "2026-09-09",
-        "rating": 0.75,
+        "rating": 0.6,
         "dem": 47,
         "rep": 42,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 21
       },
       {
         "pollster": "Wedgewood Polls",
@@ -271,7 +271,7 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 8
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -312,7 +312,7 @@
       {
         "pollster": "BGSU/YouGov",
         "date": "2026-04-14",
-        "rating": 0.85,
+        "rating": 0.8,
         "dem": 47,
         "rep": 50,
         "ind": null,
@@ -330,7 +330,7 @@
       {
         "pollster": "On Message Inc. (R)",
         "date": "2026-03-08",
-        "rating": 0.6,
+        "rating": 0.5,
         "dem": 47,
         "rep": 45,
         "ind": null,
@@ -482,7 +482,7 @@
     ]
   },
   "ia_sen": {
-    "margin": -1,
+    "margin": -2,
     "nPolls": 9,
     "fallback": false,
     "note": "",
@@ -499,11 +499,11 @@
       {
         "pollster": "Emerson College/Nexstar",
         "date": "2026-09-01",
-        "rating": 0.8,
+        "rating": 0.85,
         "dem": 45,
         "rep": 50,
         "ind": null,
-        "weightPct": 25
+        "weightPct": 26
       },
       {
         "pollster": "Wedgewood Polls",
@@ -512,7 +512,7 @@
         "dem": 48,
         "rep": 50,
         "ind": null,
-        "weightPct": 16
+        "weightPct": 15
       },
       {
         "pollster": "Suffolk University",
@@ -521,12 +521,12 @@
         "dem": 41,
         "rep": 45,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 18
       },
       {
         "pollster": "Emerson College/Nexstar",
         "date": "2026-08-04",
-        "rating": 0.8,
+        "rating": 0.85,
         "dem": 45,
         "rep": 48,
         "ind": null,
@@ -553,7 +553,7 @@
       {
         "pollster": "DSCC Internal (D)",
         "date": "2026-06-10",
-        "rating": 0.45,
+        "rating": 0.5,
         "dem": 47,
         "rep": 45,
         "ind": null,
@@ -633,7 +633,7 @@
       {
         "pollster": "Alaska Survey Research",
         "date": "2026-04-19",
-        "rating": 0.75,
+        "rating": 0.8,
         "dem": 49,
         "rep": 43,
         "ind": null,
@@ -654,7 +654,7 @@
         "dem": 48.2,
         "rep": 44.4,
         "ind": null,
-        "weightPct": 40
+        "weightPct": 41
       },
       {
         "pollster": "Rasmussen Reports",
@@ -663,16 +663,16 @@
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "weightPct": 31
+        "weightPct": 32
       },
       {
         "pollster": "InsiderAdvantage",
         "date": "2026-08-17",
-        "rating": 0.75,
+        "rating": 0.6,
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 15
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -681,7 +681,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 8
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
