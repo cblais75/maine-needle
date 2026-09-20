@@ -244,7 +244,7 @@
         "dem": 45,
         "rep": 42,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 25
       },
       {
         "pollster": "BGSU/YouGov",
@@ -253,7 +253,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 26
+        "weightPct": 27
       },
       {
         "pollster": "InsiderAdvantage",
@@ -267,11 +267,11 @@
       {
         "pollster": "Wedgewood Polls",
         "date": "2026-08-13",
-        "rating": 0.75,
+        "rating": 0.55,
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 7
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -482,7 +482,7 @@
     ]
   },
   "ia_sen": {
-    "margin": -2,
+    "margin": -1,
     "nPolls": 9,
     "fallback": false,
     "note": "",
@@ -494,7 +494,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 20
+        "weightPct": 21
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -503,16 +503,16 @@
         "dem": 45,
         "rep": 50,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 25
       },
       {
         "pollster": "Wedgewood Polls",
         "date": "2026-08-29",
-        "rating": 0.75,
+        "rating": 0.55,
         "dem": 48,
         "rep": 50,
         "ind": null,
-        "weightPct": 20
+        "weightPct": 16
       },
       {
         "pollster": "Suffolk University",
@@ -521,7 +521,7 @@
         "dem": 41,
         "rep": 45,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 19
       },
       {
         "pollster": "Emerson College/Nexstar",
