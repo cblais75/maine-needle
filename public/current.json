@@ -695,7 +695,7 @@
     ]
   },
   "ne_sen": {
-    "margin": 0,
+    "margin": 1,
     "nPolls": 2,
     "fallback": false,
     "note": "",
@@ -703,11 +703,11 @@
       {
         "pollster": "Wedgewood Polls",
         "date": "2026-09-16",
-        "rating": 0.75,
+        "rating": 0.55,
         "dem": 48,
         "rep": 52,
         "ind": null,
-        "weightPct": 51
+        "weightPct": 43
       },
       {
         "pollster": "SurveyUSA",
@@ -716,7 +716,7 @@
         "dem": 46,
         "rep": 42,
         "ind": null,
-        "weightPct": 49
+        "weightPct": 57
       }
     ]
   },
@@ -729,11 +729,11 @@
       {
         "pollster": "Washington Post/Schar School",
         "date": "2026-09-17",
-        "rating": 0.8,
+        "rating": 0.9,
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 20
+        "weightPct": 22
       },
       {
         "pollster": "Trafalgar Group",
