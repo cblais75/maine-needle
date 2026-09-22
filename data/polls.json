@@ -35,6 +35,13 @@
       "date": "2026-09-06",
       "dem": 48,
       "rep": 45
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-09-15",
+      "dem": 46.4,
+      "rep": 47.1
     }
   ],
   "governor": [
@@ -406,6 +413,20 @@
       "date": "2026-09-10",
       "dem": 45,
       "rep": 40
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-16",
+      "dem": 42,
+      "rep": 46
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-09-20",
+      "dem": 50,
+      "rep": 42
     }
   ],
   "ak_sen": [
@@ -480,6 +501,13 @@
       "date": "2026-08-17",
       "dem": 50,
       "rep": 43
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-09-12",
+      "dem": 49.4,
+      "rep": 42.8
     },
     {
       "pollster": "Rasmussen Reports",
@@ -575,6 +603,13 @@
       "date": "2026-09-09",
       "dem": 46,
       "rep": 45
+    },
+    {
+      "pollster": "Emerson College/Nexstar",
+      "rating": 0.85,
+      "date": "2026-09-14",
+      "dem": 48,
+      "rep": 46
     },
     {
       "pollster": "Washington Post/Schar School",

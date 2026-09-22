@@ -2,12 +2,12 @@
 === git-push-final.bat === 
 Token prefix: [gho_e] 
 === Git log === 
+09cea52 Polls
 245e6d0 Polls
 383978b Polls
 ec96648 Polls
-16a8309 Briefing
 === Pushing === 
 To https://github.com/cblais75/maine-needle.git
-   383978b..245e6d0  main -> main
+   245e6d0..09cea52  main -> main
 Push exit: 0 
 === Done === 

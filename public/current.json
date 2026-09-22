@@ -1,14 +1,23 @@
 {
-  "updated": "2026-09-20",
+  "updated": "2026-09-22",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 4,
-    "nPolls": 5,
+    "margin": 3,
+    "nPolls": 6,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "Quantus Insights",
+        "date": "2026-09-15",
+        "rating": 0.6,
+        "dem": 46.4,
+        "rep": 47.1,
+        "ind": null,
+        "weightPct": 30
+      },
       {
         "pollster": "CNN/SSRS",
         "date": "2026-09-06",
@@ -16,7 +25,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 47
+        "weightPct": 33
       },
       {
         "pollster": "Abacus Data",
@@ -25,7 +34,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 12
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -34,7 +43,7 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 14
       },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
@@ -43,7 +52,7 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "UNH Survey Center",
@@ -52,7 +61,7 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 6
       }
     ]
   },
@@ -482,11 +491,29 @@
     ]
   },
   "ia_sen": {
-    "margin": -2,
-    "nPolls": 9,
+    "margin": 1,
+    "nPolls": 11,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Marist Poll",
+        "date": "2026-09-20",
+        "rating": 0.9,
+        "dem": 50,
+        "rep": 42,
+        "ind": null,
+        "weightPct": 29
+      },
+      {
+        "pollster": "co/efficient",
+        "date": "2026-09-16",
+        "rating": 0.55,
+        "dem": 42,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 16
+      },
       {
         "pollster": "Rasmussen Reports",
         "date": "2026-09-10",
@@ -494,7 +521,7 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "weightPct": 21
+        "weightPct": 12
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -503,7 +530,7 @@
         "dem": 45,
         "rep": 50,
         "ind": null,
-        "weightPct": 26
+        "weightPct": 15
       },
       {
         "pollster": "Wedgewood Polls",
@@ -512,7 +539,7 @@
         "dem": 48,
         "rep": 50,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 9
       },
       {
         "pollster": "Suffolk University",
@@ -521,7 +548,7 @@
         "dem": 41,
         "rep": 45,
         "ind": null,
-        "weightPct": 18
+        "weightPct": 10
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -530,7 +557,7 @@
         "dem": 45,
         "rep": 48,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 6
       },
       {
         "pollster": "NYT/Siena",
@@ -539,7 +566,7 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -548,7 +575,7 @@
         "dem": 50,
         "rep": 46,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "DSCC Internal (D)",
@@ -643,7 +670,7 @@
   },
   "ga_sen": {
     "margin": 7,
-    "nPolls": 5,
+    "nPolls": 6,
     "fallback": false,
     "note": "",
     "polls": [
@@ -654,7 +681,7 @@
         "dem": 48.2,
         "rep": 44.4,
         "ind": null,
-        "weightPct": 41
+        "weightPct": 30
       },
       {
         "pollster": "Rasmussen Reports",
@@ -663,7 +690,16 @@
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "weightPct": 32
+        "weightPct": 24
+      },
+      {
+        "pollster": "Trafalgar Group",
+        "date": "2026-09-12",
+        "rating": 0.6,
+        "dem": 49.4,
+        "rep": 42.8,
+        "ind": null,
+        "weightPct": 26
       },
       {
         "pollster": "InsiderAdvantage",
@@ -672,7 +708,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 11
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -681,7 +717,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -690,7 +726,7 @@
         "dem": 56,
         "rep": 43,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 3
       }
     ]
   },
@@ -722,7 +758,7 @@
   },
   "mi_sen": {
     "margin": 2,
-    "nPolls": 10,
+    "nPolls": 11,
     "fallback": false,
     "note": "",
     "polls": [
@@ -733,7 +769,16 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 22
+        "weightPct": 18
+      },
+      {
+        "pollster": "Emerson College/Nexstar",
+        "date": "2026-09-14",
+        "rating": 0.85,
+        "dem": 48,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 16
       },
       {
         "pollster": "Trafalgar Group",
@@ -742,7 +787,7 @@
         "dem": 46,
         "rep": 45,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 9
       },
       {
         "pollster": "CNN/SSRS",
@@ -751,7 +796,7 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 13
       },
       {
         "pollster": "Glengariff (Detroit News/WDIV)",
@@ -760,7 +805,7 @@
         "dem": 44.4,
         "rep": 45.8,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 10
       },
       {
         "pollster": "EPIC-MRA",
@@ -769,7 +814,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 8
       },
       {
         "pollster": "MSU/IPPSR",
@@ -778,7 +823,7 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "Susquehanna Polling & Research",
@@ -787,7 +832,7 @@
         "dem": 46,
         "rep": 39,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -796,7 +841,7 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -805,7 +850,7 @@
         "dem": 47,
         "rep": 51,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "EPIC-MRA",
@@ -814,7 +859,7 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 3
       }
     ]
   },
