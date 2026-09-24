@@ -716,7 +716,7 @@ export default function MaineDashboard() {
                     border: `1px solid ${STATES.some((st) => st.code === view) || navOpen ? C.brass : C.line}` }}>
                   {STATES.some((st) => st.code === view) ? STATES.find((st) => st.code === view).label : "States"} {navOpen ? "▴" : "▾"}
                 </button>
-                {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["wire", "Wire"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => (
+                {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["wire", "Wire"], ["polls", "Polls"], ["ratings", "Ratings"], ["method", "Method"]].map(([k, label]) => (
                   <button key={k} onClick={() => { setNavOpen(false); setView(k); setSel(null); }}
                     style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
                       background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
@@ -793,8 +793,9 @@ export default function MaineDashboard() {
             {view === "control" && <SenateControlView races={races} />}
             {view === "wire" && <WireFeed events={wire} />}
             {view === "briefing" && <BriefingView posts={briefing} />}
+            {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} />}
             {view === "method" && <MethodView />}
-            {["dashboard", "briefing", "polls", "method"].includes(view) && <CoffeeButton />}
+            {["dashboard", "briefing", "polls", "ratings", "method"].includes(view) && <CoffeeButton />}
 
             {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
@@ -830,7 +831,7 @@ export default function MaineDashboard() {
             </svg>
             <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: -0.4, lineHeight: 1.12 }}>The Needle<br />Project</div>
           </div>
-          {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["polls", "Polls"], ["method", "Method"]].map(([k, label]) => {
+          {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Ratings"], ["method", "Method"]].map(([k, label]) => {
             const on = view === k && sel === null;
             return (
               <button key={k} onClick={() => { setView(k); setSel(null); }}
@@ -968,6 +969,8 @@ function ThreeBar({ race }) {
   );
 }
 
+// Short race label for the Needles view, so Maine's two Pingree races (Governor vs House 1) are easy to tell apart.
+const raceTag = (r) => ({ sen: "Senate", gov: "Governor", cd1: "House 1", cd2: "House 2" }[r.id] || "Senate");
 function NeedleGrid({ races, onPick }) {
   // Scoreboard rows: state, favored candidate, win %, and a plain-language rating.
   // No bars — just the number and who's ahead, scannable at a glance.
@@ -996,7 +999,7 @@ function NeedleGrid({ races, onPick }) {
             <button onClick={() => onPick(r.id)}
               style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "11px 13px", cursor: "pointer", color: C.text, width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
-                <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.brass }}>{r.state}</span>
+                <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.brass }}>{r.state}<span style={{ color: C.muted, letterSpacing: 0.3, marginLeft: 6 }}>{raceTag(r)}</span></span>
                 {r.liveOn
                   ? <span style={{ fontSize: 8, fontFamily: mono, letterSpacing: 0.5, padding: "1px 4px", borderRadius: 3, color: "#fff", background: RED, fontWeight: 700 }}>LIVE</span>
                   : (d.frac > 0 && <span style={{ fontSize: 9.5, fontFamily: mono, color: C.muted }}>{Math.round(d.frac * 100)}% in</span>)}
@@ -1661,6 +1664,109 @@ function PollRace({ title, lead, demName, repName, indName }) {
   );
 }
 
+// ---- Pollster ratings page: built from the live polling data, so it never goes stale ----
+const TIERS = [
+  { name: "Diamond", min: 0.9, range: "0.90 and up", color: "#7FE0FF", mark: "◆",
+    desc: "The best in the business. Nonpartisan, transparent, strong methods, and long records of accuracy. These move the needle most." },
+  { name: "Gold", min: 0.85, range: "0.85", color: "#F4C95D", mark: "★",
+    desc: "Strong nonpartisan pollsters just below the very top: excellent methods, slightly shorter or noisier records." },
+  { name: "Silver", min: 0.75, range: "0.75 to 0.80", color: "#C4CEDC", mark: "◈",
+    desc: "Solid university and established media pollsters. Reliable, with more variance or thinner records than the tiers above." },
+  { name: "Bronze", min: 0.6, range: "0.60 to 0.70", color: "#CD8B5C", mark: "▲",
+    desc: "Lightly proven pollsters, several with a known partisan lean. Their numbers count, but at a discount." },
+  { name: "Iron", min: 0, range: "below 0.60", color: "#8D9AAE", mark: "■",
+    desc: "Partisan, campaign-paid, or unproven. These barely move the needle, and a campaign or party poll can join a race's average but can never be the only poll in it." },
+];
+// Same pollster, different spellings in the data: fold them into one entry.
+const POLLSTER_ALIASES = {
+  "NYT/PPH/Siena": "NYT/Siena",
+  "Fox News (Beacon/Shaw)": "Fox News",
+  "AARP (Impact/Fabrizio)": "AARP (Fabrizio/Impact)",
+  "UT Politics Project": "UT/Texas Politics Project",
+  "Emerson College/Nexstar": "Emerson College",
+};
+const POLLSTER_NOTES = {
+  "Fox News": "Beacon (D) and Shaw (R) pair",
+  "AARP (Fabrizio/Impact)": "Fabrizio (R) and Impact (D) pair",
+  "Trafalgar Group": "R-leaning",
+  "Quantus Insights": "R-leaning",
+  "InsiderAdvantage": "R-leaning",
+  "co/efficient": "R-leaning",
+  "Rasmussen Reports": "R-leaning",
+  "Abacus Data": "lightly proven",
+  "Wedgewood Polls": "lightly proven",
+};
+const GROUP_STATE = { senate: "ME", governor: "ME", cd1: "ME", cd2: "ME" };
+function buildRatings(current) {
+  const map = new Map();
+  if (!current) return [];
+  for (const [g, v] of Object.entries(current)) {
+    if (!v || !Array.isArray(v.polls)) continue;
+    const st = GROUP_STATE[g] || g.split("_")[0].toUpperCase();
+    for (const p of v.polls) {
+      const name = POLLSTER_ALIASES[p.pollster] || p.pollster;
+      const cur = map.get(name) || { name, rating: 0, n: 0, states: new Set() };
+      cur.rating = Math.max(cur.rating, p.rating || 0);
+      cur.n += 1;
+      cur.states.add(st);
+      map.set(name, cur);
+    }
+  }
+  return [...map.values()].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+}
+function RatingsView({ current, loaded }) {
+  const all = buildRatings(current);
+  return (
+    <div>
+      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW WE RATE POLLSTERS</div>
+      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 12 }}>Pollster Ratings</div>
+      <div style={card}>
+        <div style={body}>
+          Every poll is weighted before it touches a needle. A pollster's rating decides how much its numbers pull the average, and a fresh poll counts for more than a stale one of the same quality. This is the full list of every pollster in the data, built straight from the polls the site is using right now.
+          <div style={{ marginTop: 8 }}>
+            Ratings are separate from the house-effect adjustments on the Method page. A rating measures how much to trust a pollster. A house effect corrects for a state's history of polling misses. The two never mix.
+          </div>
+        </div>
+      </div>
+      {!loaded && <div style={{ fontSize: 12, color: C.muted, fontFamily: mono, margin: "10px 0" }}>Loading ratings…</div>}
+      {TIERS.map((t, i) => {
+        const max = i === 0 ? 2 : TIERS[i - 1].min;
+        const members = all.filter((p) => p.rating >= t.min && p.rating < max);
+        if (!members.length) return null;
+        return (
+          <div key={t.name} style={{ marginTop: 22 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: t.color, color: C.ink, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14, flexShrink: 0 }}>{t.mark}</div>
+              <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: -0.3, color: t.color }}>{t.name}</div>
+              <div style={{ marginLeft: "auto", fontSize: 11.5, fontFamily: mono, color: C.muted }}>{t.range}</div>
+            </div>
+            <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.55, margin: "5px 0 10px" }}>{t.desc}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
+              {members.map((p) => (
+                <div key={p.name} style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${t.color}`, borderRadius: 10, padding: "9px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</div>
+                    <div style={{ fontSize: 11, color: C.muted, marginTop: 1 }}>
+                      {POLLSTER_NOTES[p.name] ? `${POLLSTER_NOTES[p.name]}, ` : ""}{p.n} {p.n === 1 ? "poll" : "polls"} in {[...p.states].sort().join(", ")}
+                    </div>
+                  </div>
+                  <div style={{ fontFamily: mono, fontWeight: 700, fontSize: 14, color: t.color, flexShrink: 0 }}>{p.rating.toFixed(2)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      <div style={{ ...card, marginTop: 22 }}>
+        <div style={h2}>The rules</div>
+        <div style={body}>
+          A pollster carries one rating everywhere it appears, in every race. When a poll publishes both registered-voter and likely-voter numbers, the likely-voter numbers are used. A poll paid for by a campaign or a party is rated at the bottom, and it can join a race's average but can never be the only poll in it. Ratings are revisited as pollsters build or lose their records.
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MethodView() {
   return (
     <div>
@@ -1669,52 +1775,50 @@ function MethodView() {
 
       <div style={card}>
         <div style={h2}>The needle</div>
-        <div style={body}>Each county has an expected result. As real votes report, the model measures how far the counted counties are running from that expectation, then carries that swing into the counties still counting. The needle is the resulting win probability, and it eases as more vote lands.</div>
+        <div style={body}>Each county has an expected result. As real votes report, the model measures how far the counted counties are running from that expectation, then carries that swing into the counties still counting. The needle is the resulting win probability, and it firms up as more of the vote comes in.</div>
       </div>
 
       <div style={card}>
-        <div style={h2}>Where the baselines come from</div>
+        <div style={h2}>Where the county maps come from</div>
         <div style={body}>
-          Built from real past results (OpenElections public data).
+          Every race is built on real past results, county by county. The map only sets the shape of a state, meaning which counties run bluer or redder than the state as a whole. How the state leans overall comes from current polling.
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.brass }}>Maine — Senate</b> — Jackson vs Collins, an RCV race. The county map blends the 2020 Collins-Gideon Senate results (60%) with the 2020 and 2016 presidential maps (40%), re-centered on current polling.<br />
-            <b style={{ color: C.brass }}>Maine — House 1 &amp; 2</b> — the actual 2020 U.S. House results by county. District 2 also has a dial that fades the former incumbent's personal vote toward the district's fundamentals, since the seat is open.<br />
-            <b style={{ color: C.brass }}>Maine — Governor</b> — the blended presidential map for shape, with a polling-set split. A three-way plurality race (Pingree, Charles, independent Bennett), so it shows three win-probability meters.<br />
-            <b style={{ color: C.brass }}>Maine — Ballot question</b> — illustrative only; a brand-new question has no prior election to map.<br />
-            <b style={{ color: C.brass }}>North Carolina — Senate</b> — Cooper vs Whatley, an open seat, on a county map from NC's past results.<br />
-            <b style={{ color: C.brass }}>Ohio — Senate (special)</b> — Brown vs Husted, the special election for JD Vance's old seat, on a county map from Ohio's past results.<br />
-            <b style={{ color: C.brass }}>Texas — Senate</b> — Paxton vs Talarico, on a county map from Texas's past results.<br />
-            <b style={{ color: C.brass }}>Iowa — Senate</b> — Hinson vs Turek, an open seat. County baseline from Iowa's past results is being added; centered on fundamentals until public polls appear.<br />
-            <b style={{ color: C.brass }}>Georgia — Senate</b> — Ossoff vs Collins. County baseline from Georgia's past results is being added. Georgia goes to a December 1 runoff if no candidate tops 50% in November.<br />
-            <b style={{ color: C.brass }}>Nebraska — Senate</b> — Ricketts (R) vs Osborn, an independent. County baseline is being added; the needle is statewide for now. Osborn is shown in teal to mark him as an independent, not a Democrat.<br />
-            <b style={{ color: C.brass }}>Michigan — Senate</b> — El-Sayed vs Rogers, an open seat. County map built from 2024 presidential results across all 83 counties.<br />
-            <b style={{ color: C.brass }}>New Hampshire — Senate</b> — Pappas vs Sununu, an open seat. County map built from 2024 presidential results across all 10 counties.<br />
-            <b style={{ color: C.brass }}>Alaska — Senate</b> — Sullivan vs Peltola, ranked-choice. Shown as an explainer panel, not a needle, because the result is tabulated about two weeks after election night (see the Alaska tab).
+            <b style={{ color: C.brass }}>Maine, Senate</b>: Jackson vs Collins, a ranked-choice race. The county map blends the 2020 Collins-Gideon Senate results (60%) with the 2020 and 2016 presidential maps (40%).<br />
+            <b style={{ color: C.brass }}>Maine, House 1 and 2</b>: the actual 2020 U.S. House results by county. District 2 is an open seat, so the model keeps only a quarter of former Rep. Jared Golden's personal-vote pattern and fades the rest toward the district's usual lean.<br />
+            <b style={{ color: C.brass }}>Maine, Governor</b>: the blended presidential map for shape, with the statewide split set by polling. It's a three-way race (Pingree, Charles, and independent Bennett), so it shows three win-probability meters. Bennett has no past election to map, so his share comes from polling alone.<br />
+            <b style={{ color: C.brass }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan, and New Hampshire</b>: county maps built from 2024 presidential results in every county (100, 88, 254, 99, 159, 93, 83, and 10 counties). Ohio's race is a special election for JD Vance's former seat. Georgia goes to a December 1 runoff if no one tops 50%. Nebraska's Dan Osborn is an independent, shown in teal rather than blue.<br />
+            <b style={{ color: C.brass }}>Alaska, Senate</b>: Sullivan vs Peltola, a ranked-choice race. Shown as an explainer on Alaska's page instead of a needle, because the final result is tabulated about two weeks after election night.
           </div>
         </div>
       </div>
 
       <div style={card}>
-        <div style={h2}>Polling &amp; adjustments</div>
+        <div style={h2}>Polling and adjustments</div>
         <div style={body}>
-          Each race's center is a recency- and quality-weighted polling average (see the Polls tab). Two races then get a documented house-effect adjustment, because a raw poll average has a known directional bias in that state:
+          Each race starts from a polling average weighted two ways: by how much we trust the pollster (see the Ratings page) and by how recent the poll is. Most Senate races then get a house-effect adjustment, a small, documented shift toward the side that polls have historically underestimated in that state. Each shift is sized to that state's own record of polling misses, so it isn't the same everywhere.
           <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.text }}>Maine Senate</b> — shifted toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
-            <b style={{ color: C.text }}>North Carolina Senate</b> — shifted toward Whatley for the state's Republican lean and the way undecideds have tended to break.<br />
-            <b style={{ color: C.text }}>Ohio Senate</b> — shifted toward Husted for Ohio's Republican lean at the federal level.<br />
-            <b style={{ color: C.text }}>Texas Senate</b> — shifted toward Paxton for Texas's strong Republican lean.<br />
-            <b style={{ color: C.text }}>Iowa Senate</b> — shifted toward Hinson for Iowa's strong Republican lean at the federal level.<br />
-            <b style={{ color: C.text }}>Georgia Senate</b> — shifted slightly toward Collins for Georgia's narrow Republican lean at the presidential level.<br />
-            <b style={{ color: C.text }}>Nebraska Senate</b> — shifted toward Ricketts for Nebraska's strong Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven.<br />
-            <b style={{ color: C.text }}>Michigan Senate</b> — shifted 2 pts toward Rogers. Michigan polls have underestimated Republicans in each of the last three cycles, but the state is the narrowest on this board at the presidential level (Trump +1.4 in 2024), so the shift is held to the same size as Georgia's rather than larger.<br />
-            <b style={{ color: C.text }}>New Hampshire Senate</b> — shifted just 1 pt toward Sununu, the smallest shift on the board. New Hampshire leans Democratic at the presidential level (Harris +2.8 in 2024) and has held this seat for Democrats for over a decade, so the fundamentals favor Pappas; the small shift only reflects NH polls' history of underestimating Republicans and Sununu's proven crossover appeal.
+            <b style={{ color: C.text }}>North Carolina</b>: 6 pts toward Whatley. NC polls overstated Democrats in 2016, 2020, and 2022, and undecided voters there tend to break Republican.<br />
+            <b style={{ color: C.text }}>Texas</b>: 5 pts toward Paxton, for Texas's strong Republican lean.<br />
+            <b style={{ color: C.text }}>Iowa</b>: 5 pts toward Hinson, for Iowa's strong Republican lean in federal races.<br />
+            <b style={{ color: C.text }}>Maine</b>: 4 pts toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
+            <b style={{ color: C.text }}>Ohio</b>: 4 pts toward Husted, for Ohio's Republican lean in federal races.<br />
+            <b style={{ color: C.text }}>Nebraska</b>: 4 pts toward Ricketts, for the state's strong Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven.<br />
+            <b style={{ color: C.text }}>Georgia</b>: 2 pts toward Collins, for Georgia's narrow Republican lean at the presidential level.<br />
+            <b style={{ color: C.text }}>Michigan</b>: 2 pts toward Rogers. Michigan polls underestimated Republicans in each of the last three presidential elections, but the state is the closest on this board (Trump +1.4 in 2024), so the shift matches Georgia's rather than going bigger.<br />
+            <b style={{ color: C.text }}>New Hampshire</b>: 1 pt toward Sununu, the smallest shift on the board. New Hampshire leans Democratic (Harris +2.8 in 2024) and Democrats have held this seat for over a decade; the small shift only reflects NH polls' history of underestimating Republicans and Sununu's proven crossover appeal.
           </div>
+          <div style={{ marginTop: 8 }}>Maine's governor and House races get no adjustment.</div>
         </div>
+      </div>
+
+      <div style={card}>
+        <div style={h2}>Calling a race</div>
+        <div style={body}>A race is marked Called only when the leader has at least a 97% chance of winning and at least half of the expected vote has been counted. Before that, the strongest label a race can get is Likely, however lopsided the early count looks. Alaska is never called on election night.</div>
       </div>
 
       <div style={card}>
         <div style={h2}>Election night</div>
-        <div style={body}>On election night the needle runs on real returns parsed from the Maine Secretary of State, rolled up from town to county. Races showing real votes are marked LIVE.</div>
+        <div style={body}>On election night the needles run on real returns pulled from each state's official results feed, refreshed every minute or two. Maine reports by town, so its results are rolled up into counties. Races with real votes are marked LIVE, and the scoreboard under each needle shows the actual vote count. If one state's feed goes down, that state pauses and every other race keeps running.</div>
       </div>
 
       <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.6 }}>
