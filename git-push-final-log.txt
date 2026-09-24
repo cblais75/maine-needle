@@ -1,2 +1,18 @@
  
 === git-push-final.bat === 
+warning: in the working copy of 'data/polls.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'git-push-final.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/current.json', LF will be replaced by CRLF the next time Git touches it
+Add exit: 0 
+[main 4e2c3c3] Polls
+ 5 files changed, 130 insertions(+), 56 deletions(-)
+ create mode 100644 git-push-final-log.txt
+Commit exit: 0 
+4e2c3c3 Polls
+09cea52 Polls
+245e6d0 Polls
+383978b Polls
+To https://github.com/cblais75/maine-needle.git
+   09cea52..4e2c3c3  main -> main
+Push exit: 0 
+=== Done === 

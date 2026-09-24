@@ -42,6 +42,20 @@
       "date": "2026-09-15",
       "dem": 46.4,
       "rep": 47.1
+    },
+    {
+      "pollster": "NYT/PPH/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 46,
+      "rep": 49
+    },
+    {
+      "pollster": "UMass Lowell/YouGov",
+      "rating": 0.8,
+      "date": "2026-09-14",
+      "dem": 48,
+      "rep": 43
     }
   ],
   "governor": [
@@ -162,6 +176,13 @@
       "date": "2026-09-15",
       "dem": 49.2,
       "rep": 34.1
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-09-22",
+      "dem": 48,
+      "rep": 41
     }
   ],
   "oh_sen": [
@@ -348,6 +369,20 @@
       "date": "2026-09-14",
       "dem": 47,
       "rep": 46
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-09-20",
+      "dem": 50,
+      "rep": 44
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-09-19",
+      "dem": 47,
+      "rep": 46
     }
   ],
   "ia_sen": [
@@ -478,6 +513,13 @@
       "date": "2026-09-11",
       "dem": 46,
       "rep": 41
+    },
+    {
+      "pollster": "Alaska Survey Research",
+      "rating": 0.8,
+      "date": "2026-09-12",
+      "dem": 48.4,
+      "rep": 43.8
     }
   ],
   "ga_sen": [
@@ -522,6 +564,13 @@
       "date": "2026-09-16",
       "dem": 48.2,
       "rep": 44.4
+    },
+    {
+      "pollster": "YouGov",
+      "rating": 0.8,
+      "date": "2026-09-18",
+      "dem": 51,
+      "rep": 41
     }
   ],
   "ne_sen": [
@@ -617,6 +666,27 @@
       "date": "2026-09-17",
       "dem": 48,
       "rep": 45
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 49,
+      "rep": 44
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-09-20",
+      "dem": 47,
+      "rep": 40
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-17",
+      "dem": 47,
+      "rep": 45
     }
   ],
   "nh_sen": [
@@ -661,6 +731,13 @@
       "date": "2026-09-11",
       "dem": 46,
       "rep": 46
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 50,
+      "rep": 45
     }
   ]
 }
