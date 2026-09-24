@@ -761,7 +761,7 @@
     ]
   },
   "ga_sen": {
-    "margin": 8,
+    "margin": 7,
     "nPolls": 7,
     "fallback": false,
     "note": "",
@@ -771,7 +771,7 @@
         "date": "2026-09-18",
         "rating": 0.8,
         "dem": 51,
-        "rep": 41,
+        "rep": 43,
         "ind": null,
         "weightPct": 30
       },
