@@ -1,2 +1,14 @@
  
 === git-push-final.bat === 
+Add exit: 0 
+[main 700bdc2] Polls
+ 1 file changed, 16 deletions(-)
+Commit exit: 0 
+700bdc2 Polls
+92dc317 Polls
+4e2c3c3 Polls
+09cea52 Polls
+To https://github.com/cblais75/maine-needle.git
+   4e2c3c3..700bdc2  main -> main
+Push exit: 0 
+=== Done === 

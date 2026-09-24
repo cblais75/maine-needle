@@ -56,6 +56,13 @@
       "date": "2026-09-14",
       "dem": 48,
       "rep": 43
+    },
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-09-21",
+      "dem": 51,
+      "rep": 47
     }
   ],
   "governor": [
@@ -74,10 +81,26 @@
       "dem": 49,
       "rep": 35,
       "ind": 6
+    },
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-09-21",
+      "dem": 48,
+      "rep": 40,
+      "ind": 5
     }
   ],
   "cd1": [],
-  "cd2": [],
+  "cd2": [
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-09-21",
+      "dem": 51,
+      "rep": 45
+    }
+  ],
   "nc_sen": [
     {
       "pollster": "Carolina Journal/Civitas (R)",
@@ -738,6 +761,13 @@
       "date": "2026-09-22",
       "dem": 50,
       "rep": 45
+    },
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-09-21",
+      "dem": 50,
+      "rep": 42
     }
   ]
 }

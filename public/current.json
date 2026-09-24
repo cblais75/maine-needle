@@ -5,8 +5,8 @@
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
   },
   "senate": {
-    "margin": 1,
-    "nPolls": 8,
+    "margin": 2,
+    "nPolls": 9,
     "fallback": false,
     "polls": [
       {
@@ -16,7 +16,16 @@
         "dem": 46,
         "rep": 49,
         "ind": null,
-        "weightPct": 30
+        "weightPct": 24
+      },
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-09-21",
+        "rating": 0.8,
+        "dem": 51,
+        "rep": 47,
+        "ind": null,
+        "weightPct": 20
       },
       {
         "pollster": "Quantus Insights",
@@ -25,7 +34,7 @@
         "dem": 46.4,
         "rep": 47.1,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 12
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -34,7 +43,7 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 19
+        "weightPct": 16
       },
       {
         "pollster": "CNN/SSRS",
@@ -43,7 +52,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 13
       },
       {
         "pollster": "Abacus Data",
@@ -52,7 +61,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -61,7 +70,7 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
@@ -70,7 +79,7 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "UNH Survey Center",
@@ -79,17 +88,26 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       }
     ]
   },
   "governor": {
-    "bennett": 7,
-    "margin": 14,
-    "nPolls": 2,
+    "bennett": 5,
+    "margin": 9,
+    "nPolls": 3,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-09-21",
+        "rating": 0.8,
+        "dem": 48,
+        "rep": 40,
+        "ind": 5,
+        "weightPct": 84
+      },
       {
         "pollster": "UNH Survey Center",
         "date": "2026-07-20",
@@ -97,7 +115,7 @@
         "dem": 49,
         "rep": 35,
         "ind": 6,
-        "weightPct": 65
+        "weightPct": 10
       },
       {
         "pollster": "NYT/PPH/Siena",
@@ -106,7 +124,7 @@
         "dem": 50,
         "rep": 36,
         "ind": 8,
-        "weightPct": 35
+        "weightPct": 6
       }
     ]
   },
@@ -118,11 +136,21 @@
     "polls": []
   },
   "cd2": {
-    "margin": null,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "No public District 2 polls yet; using the personal-vote-adjusted baseline.",
-    "polls": []
+    "margin": 6,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-09-21",
+        "rating": 0.8,
+        "dem": 51,
+        "rep": 45,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   },
   "nc_sen": {
     "margin": 9,
@@ -954,8 +982,8 @@
     ]
   },
   "nh_sen": {
-    "margin": 3,
-    "nPolls": 7,
+    "margin": 5,
+    "nPolls": 8,
     "fallback": false,
     "note": "",
     "polls": [
@@ -966,7 +994,16 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "weightPct": 42
+        "weightPct": 31
+      },
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-09-21",
+        "rating": 0.8,
+        "dem": 50,
+        "rep": 42,
+        "ind": null,
+        "weightPct": 25
       },
       {
         "pollster": "co/efficient",
@@ -975,7 +1012,7 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 13
       },
       {
         "pollster": "Rasmussen Reports",
@@ -984,7 +1021,7 @@
         "dem": 45,
         "rep": 34,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 11
       },
       {
         "pollster": "Fabrizio Lee (R)",
@@ -993,7 +1030,7 @@
         "dem": 36,
         "rep": 37,
         "ind": null,
-        "weightPct": 10
+        "weightPct": 8
       },
       {
         "pollster": "UNH Survey Center",
@@ -1002,7 +1039,7 @@
         "dem": 43,
         "rep": 45,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 11
       },
       {
         "pollster": "UNH Survey Center",
@@ -1011,7 +1048,7 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "Emerson College",
