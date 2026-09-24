@@ -129,11 +129,21 @@
     ]
   },
   "cd1": {
-    "margin": null,
-    "nPolls": 0,
-    "fallback": true,
-    "note": "No public District 1 polls yet; using the 2020 House baseline.",
-    "polls": []
+    "margin": 22,
+    "nPolls": 1,
+    "fallback": false,
+    "note": "",
+    "polls": [
+      {
+        "pollster": "UNH Survey Center",
+        "date": "2026-09-21",
+        "rating": 0.8,
+        "dem": 57,
+        "rep": 35,
+        "ind": null,
+        "weightPct": 100
+      }
+    ]
   },
   "cd2": {
     "margin": 6,

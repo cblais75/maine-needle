@@ -91,7 +91,15 @@
       "ind": 5
     }
   ],
-  "cd1": [],
+  "cd1": [
+    {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-09-21",
+      "dem": 57,
+      "rep": 35
+    }
+  ],
   "cd2": [
     {
       "pollster": "UNH Survey Center",
