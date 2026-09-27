@@ -89,6 +89,14 @@
       "dem": 48,
       "rep": 40,
       "ind": 5
+    },
+    {
+      "pollster": "NYT/PPH/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 47,
+      "rep": 34,
+      "ind": 8
     }
   ],
   "cd1": [
@@ -214,6 +222,13 @@
       "date": "2026-09-22",
       "dem": 48,
       "rep": 41
+    },
+    {
+      "pollster": "Opinion Diagnostics (Common Cause NC)",
+      "rating": 0.55,
+      "date": "2026-09-20",
+      "dem": 51,
+      "rep": 41
     }
   ],
   "oh_sen": [
@@ -293,6 +308,20 @@
       "date": "2026-09-16",
       "dem": 45,
       "rep": 42
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-09-23",
+      "dem": 46,
+      "rep": 43
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-09-23",
+      "dem": 46,
+      "rep": 45
     }
   ],
   "tx_sen": [
@@ -602,6 +631,13 @@
       "date": "2026-09-18",
       "dem": 51,
       "rep": 43
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-23",
+      "dem": 50,
+      "rep": 42
     }
   ],
   "ne_sen": [
@@ -718,6 +754,20 @@
       "date": "2026-09-17",
       "dem": 47,
       "rep": 45
+    },
+    {
+      "pollster": "Big Data Poll",
+      "rating": 0.6,
+      "date": "2026-09-24",
+      "dem": 45.9,
+      "rep": 40.5
+    },
+    {
+      "pollster": "Torchlight Strategies (Common Sense for America PAC)",
+      "rating": 0.5,
+      "date": "2026-09-19",
+      "dem": 43.1,
+      "rep": 44.4
     }
   ],
   "nh_sen": [
