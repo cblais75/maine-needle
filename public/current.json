@@ -6,9 +6,18 @@
   },
   "senate": {
     "margin": 2,
-    "nPolls": 9,
+    "nPolls": 10,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "InsiderAdvantage",
+        "date": "2026-09-23",
+        "rating": 0.6,
+        "dem": 46,
+        "rep": 46,
+        "ind": null,
+        "weightPct": 14
+      },
       {
         "pollster": "NYT/PPH/Siena",
         "date": "2026-09-22",
@@ -16,7 +25,7 @@
         "dem": 46,
         "rep": 49,
         "ind": null,
-        "weightPct": 24
+        "weightPct": 21
       },
       {
         "pollster": "UNH Survey Center",
@@ -25,7 +34,7 @@
         "dem": 51,
         "rep": 47,
         "ind": null,
-        "weightPct": 20
+        "weightPct": 17
       },
       {
         "pollster": "Quantus Insights",
@@ -34,7 +43,7 @@
         "dem": 46.4,
         "rep": 47.1,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 10
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -43,7 +52,7 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 16
+        "weightPct": 13
       },
       {
         "pollster": "CNN/SSRS",
@@ -52,7 +61,7 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "weightPct": 13
+        "weightPct": 12
       },
       {
         "pollster": "Abacus Data",
@@ -61,7 +70,7 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -70,7 +79,7 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
@@ -236,7 +245,7 @@
         "date": "2026-08-12",
         "rating": 0.8,
         "dem": 50,
-        "rep": 45,
+        "rep": 42,
         "ind": null,
         "weightPct": 6
       },
