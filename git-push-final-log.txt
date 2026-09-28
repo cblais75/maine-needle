@@ -1,2 +1,22 @@
  
 === git-push-final.bat === 
+Add exit: 0 
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   git-push-final-log.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Commit exit: 1 
+9e21dcf Polls
+1d82e3c Polls
+ecce5de Cleanup
+4dec777 Update 37
+To https://github.com/cblais75/maine-needle.git
+   1d82e3c..9e21dcf  main -> main
+Push exit: 0 
+=== Done === 
