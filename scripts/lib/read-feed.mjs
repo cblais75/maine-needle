@@ -123,6 +123,7 @@ function rowsFromTable(aoa, state, sheetName = "") {
     if (!row || !isPlace(state, row[placeCol])) continue;
     for (let c = 0; c < width; c++) {
       if (c === placeCol || !labels[c].length) continue;
+      if (/percent|%|\bpct\b/i.test(labels[c].join(" "))) continue; // shares, not votes
       const val = row[c];
       if (val == null || val === "" || isNaN(Number(String(val).replace(/[^0-9.-]/g, "")))) continue;
       const label = labels[c].join(" | ");
@@ -186,10 +187,31 @@ function rowsFromClarityXML(xml) {
 const JKEYS = {
   office: /^(contest|contestname|office|officename|race|racename|ballottitle|title)$/i,
   county: /^(county|countyname|jurisdiction|jurisdictionname|locality|localityname)$/i,
-  candidate: /^(candidate|candidatename|name|ballotname|choice|choicename|fullname)$/i,
+  candidate: /^(candidate|candidatename|name|ballotname|choice|choicename|fullname|calccandidate)$/i,
   party: /^(party|partyname|partycode|partyabbreviation|politicalparty)$/i,
-  votes: /^(votes|votecount|totalvotes|total|count|ballotcount)$/i,
+  votes: /^(votes|votecount|totalvotes|total|count|ballotcount|calccandidatevotes)$/i,
+  pr: /^(precinctsreporting|precinctsreported)$/i,
+  pt: /^(totalprecincts|precinctsparticipating|precinctstotal)$/i,
 };
+// Texas's results site (results.texas-election.com .../County.json):
+// { "48001": { "N": "ANDERSON", "Summary": { "PRR": 23, "PRP": 23 },
+//              "Races": { "1001": { "ON": "PRESIDENT/...", "C": { "9240": { "N": "...", "P": "REP", "V": 15597 } } } } } }
+function isTexasShape(obj) {
+  if (!obj || Array.isArray(obj) || typeof obj !== "object") return false;
+  const first = Object.values(obj)[0];
+  return !!(first && typeof first === "object" && typeof first.N === "string" && first.Races && typeof first.Races === "object");
+}
+function rowsFromTexas(obj) {
+  const rows = [];
+  for (const co of Object.values(obj)) {
+    const pr = Number(co.Summary?.PRR), pt = Number(co.Summary?.PRP);
+    for (const race of Object.values(co.Races || {}))
+      for (const cand of Object.values(race.C || {}))
+        rows.push({ county: co.N, office: race.ON, party: cand.P, candidate: cand.N, votes: cand.V,
+          pr: Number.isFinite(pr) ? pr : undefined, pt: Number.isFinite(pt) ? pt : undefined });
+  }
+  return rows;
+}
 function rowsFromJSON(obj) {
   const rows = [];
   const walk = (node, ctx) => {
@@ -201,7 +223,8 @@ function rowsFromJSON(obj) {
       for (const [field, re] of Object.entries(JKEYS)) if (re.test(k)) c[field] = v;
     }
     const hasVotes = Object.keys(node).some((k) => JKEYS.votes.test(k) && typeof node[k] !== "object");
-    if (hasVotes && c.county != null && c.candidate != null) rows.push({ ...c });
+    if (hasVotes && c.county != null && c.candidate != null)
+      rows.push({ ...c, pr: c.pr != null ? Number(c.pr) : undefined, pt: c.pt != null ? Number(c.pt) : undefined });
     for (const v of Object.values(node)) if (v && typeof v === "object") walk(v, c);
   };
   walk(obj, {});
@@ -226,12 +249,17 @@ export function readFeed(input, state, name = "") {
     if (/<ElectionResult/i.test(xml)) return rowsFromClarityXML(xml);
     return rowsFromWorkbook(buf, state); // Excel 2003 XML spreadsheets (Clarity "detail.xls")
   }
-  if (/^[\[{]/.test(head)) { try { return rowsFromJSON(JSON.parse(strFromU8(buf))); } catch { /* fall through to text */ } }
+  if (/^[\[{]/.test(head)) {
+    let obj = null;
+    try { obj = JSON.parse(strFromU8(buf)); } catch { /* not JSON after all: fall through to text */ }
+    if (obj) return isTexasShape(obj) ? rowsFromTexas(obj) : rowsFromJSON(obj);
+  }
   if (/^<(!doctype|html)/i.test(head)) throw new Error(`got a web page, not a data file${name ? ` (${name})` : ""} — check the URL`);
   return rowsFromText(strFromU8(buf), state);
 }
 function rowsFromWorkbook(buf, state) {
   const wb = XLSX.read(buf, { type: "array" });
   return wb.SheetNames.flatMap((s) =>
-    rowsFromTable(XLSX.utils.sheet_to_json(wb.Sheets[s], { header: 1, blankrows: false, raw: true }), state, s));
+    rowsFromTable(XLSX.utils.sheet_to_json(wb.Sheets[s], { header: 1, blankrows: false, raw: true }), state, s)
+      .map((r) => ({ ...r, sheet: s })));
 }

@@ -19,7 +19,9 @@ const RACES = [
   { id: "tx_sen", state: "TX", office: US_SENATE, kind: "two", names: { dem: /talarico/i, rep: /paxton/i } },
   { id: "ia_sen", state: "IA", office: US_SENATE, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
   { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", names: { dem: /ossoff/i, rep: /collins/i } },
-  { id: "ne_sen", state: "NE", office: US_SENATE, kind: "two", names: { dem: /osborn/i, rep: /ricketts/i } },
+  // Nebraska: names only. Osborn is an independent, and if the Democratic nominee (Burbank) ends
+  // up on the ballot her votes must NOT be counted as Osborn's.
+  { id: "ne_sen", state: "NE", office: US_SENATE, kind: "two", namesOnly: true, names: { dem: /osborn/i, rep: /ricketts/i } },
   { id: "mi_sen", state: "MI", office: US_SENATE, kind: "two", names: { dem: /el-?\s?sayed/i, rep: /rogers/i } },
   { id: "nh_sen", state: "NH", office: US_SENATE, kind: "two", names: { dem: /pappas/i, rep: /sununu/i } },
 ];
@@ -38,18 +40,43 @@ function sideOf(race, party, candidate) {
   const nm = race.names || {};
   // Names first when they match: guards against a stray third candidate sharing a party label.
   for (const s of ["dem", "rep", "ind"]) if (nm[s] && nm[s].test(c)) return s;
+  if (race.namesOnly) return null;
   if (p === "D" || p.startsWith("DEM")) return "dem";
   if (p === "R" || p.startsWith("REP")) return "rep";
   return null;
+}
+
+// Some workbooks repeat the same race on a summary sheet AND its own sheet (Ohio's "Master"),
+// which would count every vote twice. For each race, keep sheets whose counties don't overlap
+// a sheet already kept (bigger sheets first). Sheets covering different counties still add up.
+function dropDuplicateSheets(rows, pool, state) {
+  if (!rows.some((r) => r.sheet != null)) return rows;
+  const drop = new Set();
+  for (const race of pool) {
+    const bySheet = new Map();
+    for (const r of rows) {
+      if (r.sheet == null || !race.office.test(String(r.office ?? ""))) continue;
+      const co = state === "ME" ? lookupMaineCounty(r) : matchCounty(state, r.county);
+      if (!co) continue;
+      if (!bySheet.has(r.sheet)) bySheet.set(r.sheet, new Set());
+      bySheet.get(r.sheet).add(co);
+    }
+    const kept = new Set();
+    for (const [sh, set] of [...bySheet].sort((a, b) => b[1].size - a[1].size)) {
+      if ([...set].some((c) => kept.has(c))) drop.add(sh); else set.forEach((c) => kept.add(c));
+    }
+  }
+  return drop.size ? rows.filter((r) => !(r.sheet != null && drop.has(r.sheet) && pool.some((R) => R.office.test(String(r.office ?? ""))))) : rows;
 }
 
 // options.office / options.names override the race config — used by check-feed.mjs to test the
 // reader on past elections (e.g. the 2024 President race) before our candidates are on a ballot.
 export function aggregate(rows, state = "ME", options = {}) {
   let pool = RACES.filter((R) => R.state === state);
-  if (options.office) pool = [{ id: options.id || pool[0]?.id || "test", state, office: options.office, kind: "two", names: options.names || {} }];
+  if (options.office) pool = [{ id: options.id || pool[0]?.id || "test", state, office: options.office, kind: "two", namesOnly: pool[0]?.namesOnly, names: options.names || {} }];
   const acc = {}, prec = {}, unmatchedPlaces = new Set(), offices = new Set();
   let skippedSide = 0;
+  rows = dropDuplicateSheets(rows, pool, state);
   for (const r of rows) {
     const off = String(r.office ?? "");
     const race = pool.find((R) => R.office.test(off));

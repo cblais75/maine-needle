@@ -108,18 +108,42 @@ function asFile(s, list) {
     }
     return enc(out.join("\n"));
   }
-  if (s.state === "OH") { // Ohio-style wide workbook: counties down the side, candidates across, merged office title
-    const aoa = [["2026 General Election — Official Results"], ["", "U.S. Senator", "", "State Senator 12"], ["County", "Sherrod Brown (D)", "Jon Husted (R)", "Some One (D)"]];
-    for (const c of list) aoa.push([c.county, c.dem, c.rep, 4444]);
-    aoa.push(["Total", 1, 1, 1]);
-    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Statewide");
+  if (s.state === "OH") { // Ohio-style wide workbook: counties down the side, candidates across, merged office title,
+    // a Total and a Percentage column per candidate, and the SAME race repeated on a "Master" summary sheet
+    const aoa = [["2026 General Election — Official Canvass"], ["", "U.S. Senator", "", "", "", "State Senator 12"],
+      ["", "Sherrod Brown (D)", "", "Jon Husted (R)", "", "Some One (D)"], ["County", "Total", "Percentage", "Total", "Percentage", "Total"]];
+    for (const c of list) aoa.push([c.county, c.dem, c.dem / (c.dem + c.rep), c.rep, c.rep / (c.dem + c.rep), 4444]);
+    aoa.push(["Total", 1, 1, 1, 1, 1]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Master");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "U.S. Senator");
     return new Uint8Array(XLSX.write(wb, { type: "array", bookType: "xlsx" }));
   }
-  // everyone else: plain CSV with "Adams County" style names and shouting capitals
+  if (s.state === "TX") { // Texas results site County.json: keyed by county code, then race, then candidate
+    const obj = {};
+    list.forEach((c, i) => {
+      obj[String(48001 + 2 * i)] = { N: c.county.toUpperCase(), TV: 1, C: "#19b90f", Summary: { PRR: Math.round(20 * c.local), PRP: 20 },
+        Races: { 1001: { OID: 1001, ON: "U. S. SENATOR ", T: c.dem + c.rep, C: {
+          9240: { id: 9240, N: "JAMES TALARICO", P: "DEM", V: c.dem }, 9241: { id: 9241, N: "KEN PAXTON", P: "REP", V: c.rep }, 9242: { id: 9242, N: "WRITE-IN", P: "W", V: 3 } } },
+          2001: { OID: 2001, ON: "STATE SENATOR, DISTRICT 1", C: { 1: { id: 1, N: "X", P: "DEM", V: 5555 } } } } };
+    });
+    return enc(JSON.stringify(obj));
+  }
+  if (s.state === "NE") { // Nebraska results web service: { d: [ ...one object per county per candidate... ] }
+    const d = [];
+    for (const c of list) {
+      const base = { __type: "MapData:#NEResultsWebService", CountyName: c.county[0] + c.county.slice(1).toLowerCase(), RaceName: "For United States Senator - 6  Year Term", PrecinctsReporting: Math.round(10 * c.local), TotalPrecincts: 10 };
+      d.push({ ...base, PartyCode: "IND", calcCandidate: "Dan  Osborn ", calcCandidatePercentage: 0.5, calcCandidateVotes: c.dem });
+      d.push({ ...base, PartyCode: "REP", calcCandidate: "Pete  Ricketts ", calcCandidatePercentage: 0.5, calcCandidateVotes: c.rep });
+      d.push({ ...base, PartyCode: "DEM", calcCandidate: "Cindy  Burbank ", calcCandidatePercentage: 0.01, calcCandidateVotes: 50 }); // must NOT count for Osborn
+    }
+    return enc(JSON.stringify({ d }));
+  }
+  // everyone else (New Hampshire in this test): plain CSV with "Adams County" style names and shouting capitals
   const out = ["County,Office,Party,Candidate,Votes"];
   for (const c of list) {
-    const nm = s.state === "NE" ? c.county.toLowerCase() + " county" : c.county.toUpperCase() + " COUNTY";
-    out.push([nm, "U. S. SENATOR", s.state === "NE" ? "Nonpartisan" : "DEM", s.dem, c.dem].map(esc).join(","));
+    const nm = c.county.toUpperCase() + " COUNTY";
+    out.push([nm, "U. S. SENATOR", "DEM", s.dem, c.dem].map(esc).join(","));
     out.push([nm, "U. S. SENATOR", "REP", s.rep, c.rep].map(esc).join(","));
     out.push([nm, "STATE SENATOR, DISTRICT 4", "DEM", "Someone", 3333].map(esc).join(","));
   }
