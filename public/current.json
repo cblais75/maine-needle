@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-27",
+  "updated": "2026-09-29",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower."
@@ -181,8 +181,8 @@
     ]
   },
   "nc_sen": {
-    "margin": 9,
-    "nPolls": 16,
+    "margin": 10,
+    "nPolls": 17,
     "fallback": false,
     "note": "",
     "polls": [
@@ -193,7 +193,7 @@
         "dem": 48,
         "rep": 41,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 12
       },
       {
         "pollster": "Opinion Diagnostics (Common Cause NC)",
@@ -202,7 +202,16 @@
         "dem": 51,
         "rep": 41,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 12
+      },
+      {
+        "pollster": "AARP (Fabrizio/Impact)",
+        "date": "2026-09-20",
+        "rating": 0.85,
+        "dem": 53,
+        "rep": 42,
+        "ind": null,
+        "weightPct": 19
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -211,7 +220,7 @@
         "dem": 49.2,
         "rep": 34.1,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 9
       },
       {
         "pollster": "Trafalgar Group",
@@ -220,7 +229,7 @@
         "dem": 48,
         "rep": 42,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 9
       },
       {
         "pollster": "East Carolina University",
@@ -229,7 +238,7 @@
         "dem": 46,
         "rep": 39,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 10
       },
       {
         "pollster": "Elon University",
@@ -238,7 +247,7 @@
         "dem": 49,
         "rep": 36,
         "ind": null,
-        "weightPct": 11
+        "weightPct": 9
       },
       {
         "pollster": "High Point University Poll",
@@ -247,7 +256,7 @@
         "dem": 50,
         "rep": 42,
         "ind": null,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -265,7 +274,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Elon University",
@@ -274,7 +283,7 @@
         "dem": 53,
         "rep": 42,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Fox News",
@@ -283,7 +292,7 @@
         "dem": 53,
         "rep": 44,
         "ind": null,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Public Policy Polling (D)",
@@ -301,7 +310,7 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -458,11 +467,20 @@
     ]
   },
   "tx_sen": {
-    "margin": 3,
-    "nPolls": 17,
+    "margin": 4,
+    "nPolls": 18,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Texas Public Opinion Research",
+        "date": "2026-09-22",
+        "rating": 0.5,
+        "dem": 49,
+        "rep": 44,
+        "ind": null,
+        "weightPct": 9
+      },
       {
         "pollster": "Marist Poll",
         "date": "2026-09-20",
@@ -470,7 +488,7 @@
         "dem": 50,
         "rep": 44,
         "ind": null,
-        "weightPct": 17
+        "weightPct": 15
       },
       {
         "pollster": "Texas Southern University",
@@ -479,7 +497,7 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "weightPct": 14
+        "weightPct": 12
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -488,7 +506,7 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "weightPct": 13
+        "weightPct": 12
       },
       {
         "pollster": "Recon MR",
@@ -506,7 +524,7 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 8
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -515,7 +533,7 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 8
       },
       {
         "pollster": "UT/Texas Politics Project",
@@ -524,7 +542,7 @@
         "dem": 42,
         "rep": 39,
         "ind": null,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "UT/Texas Politics Project",
@@ -533,7 +551,7 @@
         "dem": 42,
         "rep": 39,
         "ind": null,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Emerson College/Nexstar",
@@ -569,7 +587,7 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Texas Pulse (Texas A&M/ReconMR)",
@@ -578,7 +596,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Texas Public Opinion Research",

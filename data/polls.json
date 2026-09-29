@@ -236,6 +236,13 @@
       "date": "2026-09-20",
       "dem": 51,
       "rep": 41
+    },
+    {
+      "pollster": "AARP (Fabrizio/Impact)",
+      "rating": 0.85,
+      "date": "2026-09-20",
+      "dem": 53,
+      "rep": 42
     }
   ],
   "oh_sen": [
@@ -450,6 +457,13 @@
       "date": "2026-09-19",
       "dem": 47,
       "rep": 46
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-09-22",
+      "dem": 49,
+      "rep": 44
     }
   ],
   "ia_sen": [
