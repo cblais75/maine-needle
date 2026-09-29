@@ -161,7 +161,7 @@
       "rep": 44
     },
     {
-      "pollster": "Fox News",
+      "pollster": "Fox News (Beacon/Shaw)",
       "rating": 0.9,
       "date": "2026-07-27",
       "dem": 53,
@@ -200,7 +200,7 @@
       "rating": 0.8,
       "date": "2026-08-31",
       "dem": 49,
-      "rep": 36
+      "rep": 38
     },
     {
       "pollster": "East Carolina University",
@@ -275,7 +275,7 @@
       "rep": 45
     },
     {
-      "pollster": "AARP (Impact/Fabrizio)",
+      "pollster": "AARP (Fabrizio/Impact)",
       "rating": 0.85,
       "date": "2026-06-16",
       "dem": 48,
@@ -340,14 +340,14 @@
   ],
   "tx_sen": [
     {
-      "pollster": "TX Opinion Research",
-      "rating": 0.6,
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
       "date": "2026-05-28",
       "dem": 47,
       "rep": 44
     },
     {
-      "pollster": "UT Politics Project",
+      "pollster": "UT/Texas Politics Project",
       "rating": 0.85,
       "date": "2026-06-12",
       "dem": 42,
@@ -368,7 +368,7 @@
       "rep": 40
     },
     {
-      "pollster": "Fox News",
+      "pollster": "Fox News (Beacon/Shaw)",
       "rating": 0.9,
       "date": "2026-07-30",
       "dem": 51,
@@ -396,7 +396,7 @@
       "rep": 45
     },
     {
-      "pollster": "Emerson College/Nexstar",
+      "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-08-10",
       "dem": 46,
@@ -410,17 +410,10 @@
       "rep": 39
     },
     {
-      "pollster": "UT/Texas Politics Project",
-      "rating": 0.85,
-      "date": "2026-08-25",
-      "dem": 42,
-      "rep": 39
-    },
-    {
       "pollster": "AARP (Fabrizio/Impact)",
       "rating": 0.85,
       "date": "2026-09-01",
-      "dem": 49,
+      "dem": 48,
       "rep": 44
     },
     {
@@ -438,7 +431,7 @@
       "rep": 43
     },
     {
-      "pollster": "Emerson College/Nexstar",
+      "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-09-14",
       "dem": 47,
@@ -496,7 +489,7 @@
       "rep": 48
     },
     {
-      "pollster": "Emerson College/Nexstar",
+      "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-08-04",
       "dem": 45,
@@ -517,7 +510,7 @@
       "rep": 50
     },
     {
-      "pollster": "Emerson College/Nexstar",
+      "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-09-01",
       "dem": 45,
@@ -742,7 +735,7 @@
       "rep": 45
     },
     {
-      "pollster": "Emerson College/Nexstar",
+      "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-09-14",
       "dem": 48,

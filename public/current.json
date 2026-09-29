@@ -245,7 +245,7 @@
         "date": "2026-08-31",
         "rating": 0.8,
         "dem": 49,
-        "rep": 36,
+        "rep": 38,
         "ind": null,
         "weightPct": 9
       },
@@ -286,7 +286,7 @@
         "weightPct": 3
       },
       {
-        "pollster": "Fox News",
+        "pollster": "Fox News (Beacon/Shaw)",
         "date": "2026-07-27",
         "rating": 0.9,
         "dem": 53,
@@ -420,7 +420,7 @@
         "weightPct": 2
       },
       {
-        "pollster": "AARP (Impact/Fabrizio)",
+        "pollster": "AARP (Fabrizio/Impact)",
         "date": "2026-06-16",
         "rating": 0.85,
         "dem": 48,
@@ -468,7 +468,7 @@
   },
   "tx_sen": {
     "margin": 4,
-    "nPolls": 18,
+    "nPolls": 17,
     "fallback": false,
     "note": "",
     "polls": [
@@ -479,7 +479,7 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "weightPct": 9
+        "weightPct": 10
       },
       {
         "pollster": "Marist Poll",
@@ -488,7 +488,7 @@
         "dem": 50,
         "rep": 44,
         "ind": null,
-        "weightPct": 15
+        "weightPct": 16
       },
       {
         "pollster": "Texas Southern University",
@@ -497,16 +497,16 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 13
       },
       {
-        "pollster": "Emerson College/Nexstar",
+        "pollster": "Emerson College",
         "date": "2026-09-14",
         "rating": 0.85,
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "weightPct": 12
+        "weightPct": 13
       },
       {
         "pollster": "Recon MR",
@@ -524,25 +524,16 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "weightPct": 8
+        "weightPct": 9
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
         "date": "2026-09-01",
         "rating": 0.85,
-        "dem": 49,
+        "dem": 48,
         "rep": 44,
         "ind": null,
         "weightPct": 8
-      },
-      {
-        "pollster": "UT/Texas Politics Project",
-        "date": "2026-08-25",
-        "rating": 0.85,
-        "dem": 42,
-        "rep": 39,
-        "ind": null,
-        "weightPct": 6
       },
       {
         "pollster": "UT/Texas Politics Project",
@@ -554,7 +545,7 @@
         "weightPct": 4
       },
       {
-        "pollster": "Emerson College/Nexstar",
+        "pollster": "Emerson College",
         "date": "2026-08-10",
         "rating": 0.85,
         "dem": 46,
@@ -572,7 +563,7 @@
         "weightPct": 2
       },
       {
-        "pollster": "Fox News",
+        "pollster": "Fox News (Beacon/Shaw)",
         "date": "2026-07-30",
         "rating": 0.9,
         "dem": 51,
@@ -596,7 +587,7 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "weightPct": 2
+        "weightPct": 3
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -617,7 +608,7 @@
         "weightPct": 1
       },
       {
-        "pollster": "UT Politics Project",
+        "pollster": "UT/Texas Politics Project",
         "date": "2026-06-12",
         "rating": 0.85,
         "dem": 42,
@@ -626,9 +617,9 @@
         "weightPct": 1
       },
       {
-        "pollster": "TX Opinion Research",
+        "pollster": "Texas Public Opinion Research",
         "date": "2026-05-28",
-        "rating": 0.6,
+        "rating": 0.5,
         "dem": 47,
         "rep": 44,
         "ind": null,
@@ -670,7 +661,7 @@
         "weightPct": 12
       },
       {
-        "pollster": "Emerson College/Nexstar",
+        "pollster": "Emerson College",
         "date": "2026-09-01",
         "rating": 0.85,
         "dem": 45,
@@ -697,7 +688,7 @@
         "weightPct": 10
       },
       {
-        "pollster": "Emerson College/Nexstar",
+        "pollster": "Emerson College",
         "date": "2026-08-04",
         "rating": 0.85,
         "dem": 45,
@@ -990,7 +981,7 @@
         "weightPct": 7
       },
       {
-        "pollster": "Emerson College/Nexstar",
+        "pollster": "Emerson College",
         "date": "2026-09-14",
         "rating": 0.85,
         "dem": 48,
