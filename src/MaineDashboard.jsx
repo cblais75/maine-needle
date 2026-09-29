@@ -416,13 +416,24 @@ function rateOf(race, m) {
 }
 
 // ---- live results: map real county returns onto race units, replacing the simulation ----
-// ballot questions: dem = Yes, rep = No. reported fraction = counted votes / expected turnout.
-function liveTwoWay(units, counties) {
+// ballot questions: dem = Yes, rep = No.
+// County weights are 2024 PRESIDENTIAL turnout, and midterms draw far fewer voters, so a county
+// that has finished counting would otherwise look only ~75% "in" all night and no race could
+// ever be called. Expected 2026 vote = weight x the state's midterm turnout ratio: the higher of
+// 2018 and 2022 turnout relative to 2024, plus a small cushion so the needle leans cautious.
+// When a feed states precincts reporting outright, the reported fraction is the lower reading.
+const MIDTERM_TURNOUT = { ME: 0.83, NC: 0.68, OH: 0.78, TX: 0.75, IA: 0.81, GA: 0.77, NE: 0.76, MI: 0.8, NH: 0.77 };
+function reportedFrac(counted, u, c, state) {
+  const byVotes = clamp(counted / (u.weight * (MIDTERM_TURNOUT[state] || 0.8)), 0, 1);
+  if (c && c.pt > 0 && Number.isFinite(c.pr)) return Math.min(byVotes, clamp(c.pr / c.pt, 0, 1));
+  return byVotes;
+}
+function liveTwoWay(units, counties, state) {
   return units.map((u) => {
     const c = counties[u.name];
     const counted = c ? (c.dem || 0) + (c.rep || 0) : 0;
     if (counted <= 0) return { ...u, reported: 0, vDem: 0, vRep: 0 };
-    return { ...u, reported: clamp(counted / u.weight, 0, 1), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0 };
+    return { ...u, reported: reportedFrac(counted, u, c, state), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0 };
   });
 }
 // Sum raw votes across a race's units for the live scoreboard.
@@ -433,19 +444,19 @@ function voteTotals(units) {
 }
 const fmtVotes = (n) => n.toLocaleString("en-US");
 const pctOf = (part, whole) => whole > 0 ? (part / whole * 100) : 0;
-function liveThree(units, counties) {
+function liveThree(units, counties, state) {
   return units.map((u) => {
     const c = counties[u.name];
     const counted = c ? (c.dem || 0) + (c.rep || 0) + (c.ind || 0) : 0;
     if (counted <= 0) return { ...u, reported: 0, fP: u.pP, fC: u.pC, fB: u.pB };
-    return { ...u, reported: clamp(counted / u.weight, 0, 1), fP: c.dem / counted, fC: c.rep / counted, fB: (c.ind || 0) / counted };
+    return { ...u, reported: reportedFrac(counted, u, c, state), fP: c.dem / counted, fC: c.rep / counted, fB: (c.ind || 0) / counted };
   });
 }
 function applyLive(race, rdata) {
   if (!rdata || !rdata.counties) return { ...race, liveOn: false };
   const hasData = Object.values(rdata.counties).some((c) => ((c.dem || 0) + (c.rep || 0) + (c.ind || 0)) > 0);
   if (!hasData) return { ...race, liveOn: false };
-  const units = race.type === "three" ? liveThree(race.units, rdata.counties) : liveTwoWay(race.units, rdata.counties);
+  const units = race.type === "three" ? liveThree(race.units, rdata.counties, race.state) : liveTwoWay(race.units, rdata.counties, race.state);
   if (!units.some((u) => u.reported > 0)) return { ...race, liveOn: false };
   return { ...race, units, liveOn: true };
 }

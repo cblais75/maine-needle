@@ -1,60 +1,75 @@
-// Deterministic core: turn per-town vote rows into county results.json.
-// A row is { town, office, party, candidate, votes }. Source-agnostic: the Excel
-// reader and the CSV reader both produce rows, this turns them into the app's schema.
+// Deterministic core: turn vote rows (from read-feed.mjs) into county results for the app.
+// A row is { county, town, precinct, office, party, candidate, votes, pr, pt }.
 import town2county from "./town-county.mjs";
+import { matchCounty } from "./read-feed.mjs";
+
+// U.S. Senate only. Matches "US SENATE", "U.S. Senator", "U. S. SENATOR", "United States Senator",
+// "U.S. Senator 6 Year Term (1) Position" — but NOT "State Senate District 5".
+const US_SENATE = /\bU\.?\s*S\.?\s*SENAT|\bUNITED\s+STATES\s+SENAT/i;
 
 // Which office maps to which race, and how to tell the sides apart.
 // Sides resolve by party first; if the file has no party column, by candidate name.
 const RACES = [
-  { id: "sen", state: "ME", office: /senat/i, kind: "two", names: { dem: /platner/i, rep: /collins/i } },
+  { id: "sen", state: "ME", office: US_SENATE, kind: "two", names: { dem: /jackson/i, rep: /collins/i } },
   { id: "gov", state: "ME", office: /governor/i, kind: "three", names: { dem: /pingree/i, rep: /charles/i, ind: /bennett/i } },
   { id: "cd1", state: "ME", office: /(congress|representative).*(district\s*1|first|\b1\b)/i, kind: "two", names: { dem: /pingree/i, rep: /russell/i } },
   { id: "cd2", state: "ME", office: /(congress|representative).*(district\s*2|second|\b2\b)/i, kind: "two", names: { dem: /dunlap/i, rep: /lepage/i } },
-  { id: "q1", state: "ME", office: /question\s*1/i, kind: "ballot" },
-  { id: "nc_sen", state: "NC", office: /senat/i, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
-  { id: "oh_sen", state: "OH", office: /senat/i, kind: "two", names: { dem: /brown/i, rep: /husted/i } },
-  { id: "tx_sen", state: "TX", office: /senat/i, kind: "two", names: { dem: /talarico/i, rep: /paxton/i } },
-  { id: "ia_sen", state: "IA", office: /senat/i, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
-  { id: "ga_sen", state: "GA", office: /senat/i, kind: "two", names: { dem: /ossoff/i, rep: /collins/i } },
-  { id: "ne_sen", state: "NE", office: /senat/i, kind: "two", names: { dem: /osborn/i, rep: /ricketts/i } },
-  { id: "mi_sen", state: "MI", office: /senat/i, kind: "two", names: { dem: /el-?sayed/i, rep: /rogers/i } },
-  { id: "nh_sen", state: "NH", office: /senat/i, kind: "two", names: { dem: /pappas/i, rep: /sununu/i } },
+  { id: "nc_sen", state: "NC", office: US_SENATE, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
+  { id: "oh_sen", state: "OH", office: US_SENATE, kind: "two", names: { dem: /brown/i, rep: /husted/i } },
+  { id: "tx_sen", state: "TX", office: US_SENATE, kind: "two", names: { dem: /talarico/i, rep: /paxton/i } },
+  { id: "ia_sen", state: "IA", office: US_SENATE, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
+  { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", names: { dem: /ossoff/i, rep: /collins/i } },
+  { id: "ne_sen", state: "NE", office: US_SENATE, kind: "two", names: { dem: /osborn/i, rep: /ricketts/i } },
+  { id: "mi_sen", state: "MI", office: US_SENATE, kind: "two", names: { dem: /el-?\s?sayed/i, rep: /rogers/i } },
+  { id: "nh_sen", state: "NH", office: US_SENATE, kind: "two", names: { dem: /pappas/i, rep: /sununu/i } },
 ];
 
-function lookupCounty(townRaw) {
-  let n = String(townRaw || "").trim();
+function lookupMaineCounty(row) {
+  const byCounty = matchCounty("ME", row.county);
+  if (byCounty) return byCounty;
+  let n = String(row.town ?? row.precinct ?? "").trim();
+  if (!n || /^(total|totals|grand total)$/i.test(n)) return null;
   if (town2county[n]) return town2county[n];
   for (const suf of [" Ward", " CP", " City", " Precinct"]) if (n.includes(suf)) n = n.split(suf)[0].trim();
   return town2county[n] || null;
 }
 function sideOf(race, party, candidate) {
-  const p = String(party || "").toUpperCase(), c = String(candidate || "");
-  if (race.kind === "ballot") { if (/^\s*y/i.test(c)) return "dem"; if (/^\s*n/i.test(c)) return "rep"; return null; }
-  if (p.startsWith("DEM")) return "dem";
-  if (p.startsWith("REP")) return "rep";
+  const p = String(party ?? "").trim().toUpperCase(), c = String(candidate ?? "");
   const nm = race.names || {};
+  // Names first when they match: guards against a stray third candidate sharing a party label.
   for (const s of ["dem", "rep", "ind"]) if (nm[s] && nm[s].test(c)) return s;
-  if (race.kind === "three" && p) return "ind"; // gov: any other party is the independent lane
+  if (p === "D" || p.startsWith("DEM")) return "dem";
+  if (p === "R" || p.startsWith("REP")) return "rep";
   return null;
 }
 
-export function aggregate(rows, state = "ME") {
-  const pool = RACES.filter((R) => R.state === state);
-  const acc = {}, unmatchedTowns = new Set(), unmatchedOffice = new Set();
+// options.office / options.names override the race config — used by check-feed.mjs to test the
+// reader on past elections (e.g. the 2024 President race) before our candidates are on a ballot.
+export function aggregate(rows, state = "ME", options = {}) {
+  let pool = RACES.filter((R) => R.state === state);
+  if (options.office) pool = [{ id: options.id || pool[0]?.id || "test", state, office: options.office, kind: "two", names: options.names || {} }];
+  const acc = {}, prec = {}, unmatchedPlaces = new Set(), offices = new Set();
+  let skippedSide = 0;
   for (const r of rows) {
-    const race = pool.find((R) => R.office.test(r.office || ""));
-    if (!race) { if (r.office) unmatchedOffice.add(r.office); continue; }
+    const off = String(r.office ?? "");
+    const race = pool.find((R) => R.office.test(off));
+    if (!race) { if (off) offices.add(off); continue; }
     const side = sideOf(race, r.party, r.candidate);
-    if (!side) continue;
-    // Maine reports by town and rolls up to county; other states report by county directly.
-    const county = state !== "ME"
-      ? String(r.town || r.county || "").trim().toUpperCase().replace(/\s+COUNTY$/, "")
-      : lookupCounty(r.town);
-    if (!county) { unmatchedTowns.add(r.town); continue; }
-    const votes = Number(String(r.votes).replace(/[^0-9.-]/g, "")) || 0;
+    if (!side) { skippedSide++; continue; }
+    const county = state === "ME" ? lookupMaineCounty(r) : matchCounty(state, r.county);
+    if (!county) {
+      const raw = r.county ?? r.town ?? r.precinct;
+      if (raw != null && !/^(total|totals|grand total|statewide)$/i.test(String(raw).trim())) unmatchedPlaces.add(String(raw));
+      continue;
+    }
+    const votes = Number(String(r.votes ?? "").replace(/[^0-9.-]/g, "")) || 0;
     acc[race.id] = acc[race.id] || {};
     acc[race.id][county] = acc[race.id][county] || { dem: 0, rep: 0, ind: 0 };
     acc[race.id][county][side] += votes;
+    if (Number.isFinite(r.pt) && r.pt > 0) {
+      prec[race.id] = prec[race.id] || {};
+      prec[race.id][county] = { pr: r.pr, pt: r.pt };
+    }
   }
   const races = {};
   for (const id of Object.keys(acc)) {
@@ -62,14 +77,22 @@ export function aggregate(rows, state = "ME") {
     for (const [co, v] of Object.entries(acc[id])) {
       const o = { dem: Math.round(v.dem), rep: Math.round(v.rep) };
       if (v.ind) o.ind = Math.round(v.ind);
+      const p = prec[id]?.[co];
+      if (p && Number.isFinite(p.pr)) { o.pr = p.pr; o.pt = p.pt; }
       counties[co] = o;
     }
     races[id] = { counties };
   }
   return {
     updated: new Date().toISOString(),
-    source: ({ NC: "NC SBE (parsed)", OH: "OH SOS (parsed)", TX: "TX SOS (parsed)", IA: "IA SOS (parsed)", GA: "GA SOS (parsed)", NE: "NE SOS (parsed)", MI: "MI SOS (parsed)", NH: "NH SOS (parsed)" }[state]) || "Maine SoS (parsed)",
+    source: `${state} (parsed)`,
     races,
-    _diag: { unmatchedOffices: [...unmatchedOffice], unmatchedTownsSample: [...unmatchedTowns].slice(0, 15) },
+    _diag: {
+      rows: rows.length,
+      countiesMatched: Object.fromEntries(Object.entries(races).map(([id, r]) => [id, Object.keys(r.counties).length])),
+      unmatchedPlaces: [...unmatchedPlaces].slice(0, 15),
+      rowsWithUnknownSide: skippedSide,
+      otherOfficesSample: [...offices].slice(0, 12),
+    },
   };
 }

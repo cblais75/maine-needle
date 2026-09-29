@@ -1,7 +1,10 @@
 // test-night.mjs — election-night stress-test harness.
-// Fabricates a synthetic night for the eight county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH),
-// runs it through the REAL parser + aggregator (the same code election night uses),
-// and writes public/results.json snapshots the app picks up.
+// Fabricates a synthetic night for the eight county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH).
+// Each state's fake returns are written as a realistic, messy DOWNLOAD FILE in that state's own
+// layout (NC-style tab file with State Senate rows mixed in, Clarity XML, Michigan-style tab file,
+// Ohio-style wide spreadsheet, CSV with "County" suffixes and odd capitalization...) and then run
+// through the REAL reader + aggregator — the exact code election night uses — at midterm turnout.
+// It writes public/results.json snapshots the app picks up.
 //
 //   node scripts/test-night.mjs --frac 0.4          one snapshot at 40% reporting
 //   node scripts/test-night.mjs --auto --minutes 30 full night, 0 -> 100%, rewriting every 20s
@@ -13,7 +16,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
+import * as XLSX from "xlsx";
 import { aggregate } from "./lib/aggregate.mjs";
+import { readFeed } from "./lib/read-feed.mjs";
 
 const ROOT = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "public", "results.json");
@@ -56,37 +61,94 @@ const night = STATES.map((s) => {
   return { ...s, swing: (rng() - 0.5) * 0.08, counties };
 });
 
-function snapshotRows(frac) {
+const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76 }; // 2022 turnout vs 2024
+
+// Per-state fake counts for this moment of the night.
+function snapshotCounts(frac) {
   const perState = {};
   for (const s of night) {
-    const rows = [];
+    const list = [];
     for (const c of s.counties) {
-      // county's own reporting progress at this point in the night
       const local = Math.min(1, Math.max(0, (frac - c.order * 0.7) * (1.6 * c.speed)));
       if (local <= 0) continue;
-      const turnout = Math.round(c.weight * local);
+      const turnout = Math.round(c.weight * TURNOUT[s.state] * local);
       const demShare = Math.min(0.97, Math.max(0.03, c.demShare + s.swing));
-      rows.push({ county: c.name, office: s.office, party: "DEM", candidate: s.dem, votes: Math.round(turnout * demShare) });
-      rows.push({ county: c.name, office: s.office, party: "REP", candidate: s.rep, votes: Math.round(turnout * (1 - demShare)) });
+      list.push({ county: c.name, dem: Math.round(turnout * demShare), rep: Math.round(turnout * (1 - demShare)), local });
     }
-    perState[s.state] = rows;
+    perState[s.state] = list;
   }
   return perState;
 }
 
+// Write each state's counts in a different real-world layout, as bytes, like a download.
+const esc = (v) => (/[",]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v));
+function asFile(s, list) {
+  const enc = (t) => new TextEncoder().encode(t);
+  if (s.state === "NC") { // NC SBE results_pct: tab-delimited, precinct rows, every contest on the ballot
+    const out = ["County\tElection Date\tPrecinct\tContest Group ID\tContest Type\tContest Name\tChoice\tChoice Party\tVote For\tElection Day\tEarly Voting\tAbsentee by Mail\tProvisional\tTotal Votes\tReal Precinct"];
+    for (const c of list) for (const half of [0.4, 0.6]) {
+      out.push([c.county, "11/03/2026", "P1" + half, "1", "S", "US SENATE", "Roy Cooper", "DEM", "1", "0", "0", "0", "0", Math.round(c.dem * half), "Y"].join("\t"));
+      out.push([c.county, "11/03/2026", "P1" + half, "1", "S", "US SENATE", "Michael Whatley", "REP", "1", "0", "0", "0", "0", Math.round(c.rep * half), "Y"].join("\t"));
+      out.push([c.county, "11/03/2026", "P1" + half, "9", "S", "NC STATE SENATE DISTRICT 05", "Somebody", "DEM", "1", "0", "0", "0", "0", 5000, "Y"].join("\t"));
+    }
+    return enc(out.join("\n"));
+  }
+  if (s.state === "IA" || s.state === "GA") { // Clarity detail XML, split by vote type, with precincts reporting
+    const cty = (f) => list.map((c) => `<County name="${c.county}" votes="${f(c)}" />`).join("");
+    const part = list.map((c) => `<County name="${c.county}" precinctsParticipating="20" precinctsReported="${Math.round(20 * c.local)}" />`).join("");
+    const ch = (name, party, key) => `<Choice key="1" text="${name}" party="${party}"><VoteType name="Election Day">${cty((c) => Math.round(c[key] * 0.7))}</VoteType><VoteType name="Absentee">${cty((c) => c[key] - Math.round(c[key] * 0.7))}</VoteType></Choice>`;
+    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}</Contest><Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
+  }
+  if (s.state === "MI") { // Michigan county file: tab-delimited, split first/last names, "ST. CLAIR"
+    const out = ["ElectionDate\tOfficeCode\tDistrictCode\tStatusCode\tCountyCode\tCountyName\tOfficeDescription\tPartyOrder\tPartyName\tPartyDescription\tCandidateID\tCandidateLastName\tCandidateFirstName\tCandidateMiddleName\tCandidateFormerName\tCandidateVotes\tWriteIn(W)/Uncommitted(Z)\tRecount(*)"];
+    for (const c of list) {
+      out.push(["11/3/2026", "5", "0", "0", "1", c.county.toUpperCase(), "U.S. Senator 6 Year Term (1) Position", "1", "DEM", "Democratic", "1", "El-Sayed", "Abdul", "", "", c.dem, "", ""].join("\t"));
+      out.push(["11/3/2026", "5", "0", "0", "1", c.county.toUpperCase(), "U.S. Senator 6 Year Term (1) Position", "2", "REP", "Republican", "2", "Rogers", "Mike", "", "", c.rep, "", ""].join("\t"));
+      out.push(["11/3/2026", "7", "0", "0", "1", c.county.toUpperCase(), "State Senator 4 Year Term (1) Position", "1", "DEM", "Democratic", "3", "Else", "Some", "", "", 7777, "", ""].join("\t"));
+    }
+    return enc(out.join("\n"));
+  }
+  if (s.state === "OH") { // Ohio-style wide workbook: counties down the side, candidates across, merged office title
+    const aoa = [["2026 General Election — Official Results"], ["", "U.S. Senator", "", "State Senator 12"], ["County", "Sherrod Brown (D)", "Jon Husted (R)", "Some One (D)"]];
+    for (const c of list) aoa.push([c.county, c.dem, c.rep, 4444]);
+    aoa.push(["Total", 1, 1, 1]);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Statewide");
+    return new Uint8Array(XLSX.write(wb, { type: "array", bookType: "xlsx" }));
+  }
+  // everyone else: plain CSV with "Adams County" style names and shouting capitals
+  const out = ["County,Office,Party,Candidate,Votes"];
+  for (const c of list) {
+    const nm = s.state === "NE" ? c.county.toLowerCase() + " county" : c.county.toUpperCase() + " COUNTY";
+    out.push([nm, "U. S. SENATOR", s.state === "NE" ? "Nonpartisan" : "DEM", s.dem, c.dem].map(esc).join(","));
+    out.push([nm, "U. S. SENATOR", "REP", s.rep, c.rep].map(esc).join(","));
+    out.push([nm, "STATE SENATOR, DISTRICT 4", "DEM", "Someone", 3333].map(esc).join(","));
+  }
+  out.push(["TOTAL", "U. S. SENATOR", "DEM", s.dem, 99999999].map(esc).join(","));
+  return enc(out.join("\r\n"));
+}
+
 function writeSnapshot(frac) {
   const races = {};
-  const perState = snapshotRows(frac);
+  const counts = snapshotCounts(frac);
+  const problems = [];
   for (const s of night) {
-    const out = aggregate(perState[s.state], s.state);   // <-- the real aggregator
+    const rows = readFeed(asFile(s, counts[s.state]), s.state);     // <-- the real reader
+    const out = aggregate(rows, s.state);                            // <-- the real aggregator
     Object.assign(races, out.races || {});
+    // check nothing was lost or added on the way through
+    const id = Object.keys(out.races)[0];
+    const got = id ? Object.values(out.races[id].counties) : [];
+    const sum = (a, k) => a.reduce((t, x) => t + (x[k] || 0), 0);
+    const want = counts[s.state];
+    if (want.length && (got.length !== want.length || Math.abs(sum(got, "dem") - sum(want, "dem")) > want.length || Math.abs(sum(got, "rep") - sum(want, "rep")) > want.length))
+      problems.push(`${s.state}: expected ${want.length} counties / D ${sum(want, "dem")} R ${sum(want, "rep")}, got ${got.length} / D ${sum(got, "dem")} R ${sum(got, "rep")}`);
   }
   fs.writeFileSync(OUT, JSON.stringify({
     updated: new Date().toISOString(),
     source: `stress-test (seed ${seed}, ${(frac * 100).toFixed(0)}% in)`,
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})`);
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 8 states read correctly"));
 }
 
 if (has("--auto")) {
