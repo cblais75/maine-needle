@@ -3,6 +3,8 @@
 //   node scripts/check-feed.mjs --state NC --url "https://.../results_pct_20241105.zip" --office "PRESIDENT" --dem harris --rep trump
 //   node scripts/check-feed.mjs --state MI --file downloads/2024GEN_MI_CENR_BY_COUNTY.xls --office "PRESIDENT" --dem harris --rep trump
 //   node scripts/check-feed.mjs --state IA --url "https://.../{ver}/reports/detailxml.zip"      (U.S. Senate, 2026 names)
+//   node scripts/check-feed.mjs --state NH --url "https://www.sos.nh.gov/2024-general-election-results" --office governor --dem craig --rep ayotte
+//       (a results WEB PAGE: the spreadsheets for our offices are found and read automatically)
 //
 // --office/--dem/--rep let you test on a PAST election (like the 2024 President race), since our
 // 2026 candidates aren't on any ballot yet. Leave them off to test the real 2026 U.S. Senate setup.
@@ -10,7 +12,7 @@
 import fs from "node:fs";
 import { readFeed } from "./lib/read-feed.mjs";
 import { aggregate } from "./lib/aggregate.mjs";
-import { resolveUrl } from "../api/results.js";
+import { fetchRows } from "./lib/fetch-rows.mjs";
 import COUNTIES from "./lib/counties.mjs";
 
 const args = process.argv.slice(2);
@@ -21,18 +23,17 @@ if (!COUNTIES[state] || (!opt("--url") && !opt("--file"))) {
   process.exit(1);
 }
 const t0 = Date.now();
-let buf, where;
-if (opt("--file")) { buf = new Uint8Array(fs.readFileSync(opt("--file"))); where = opt("--file"); }
-else {
-  where = await resolveUrl(opt("--url"));
-  const r = await fetch(where, { headers: { "User-Agent": "Mozilla/5.0 (compatible; TheNeedleProject/1.0)" } });
-  if (!r.ok) { console.log(`FAIL: download returned HTTP ${r.status} for ${where}`); process.exit(2); }
-  buf = new Uint8Array(await r.arrayBuffer());
-}
+let rows, where, size = 0, files = [];
+try {
+  if (opt("--file")) {
+    const buf = new Uint8Array(fs.readFileSync(opt("--file"))); size = buf.length; where = opt("--file");
+    rows = readFeed(buf, state, where); files = [where];
+  } else {
+    where = opt("--url");
+    ({ rows, files } = await fetchRows(where, state));
+  }
+} catch (e) { console.log(`FAIL: could not download or read: ${e.message}`); process.exit(2); }
 const t1 = Date.now();
-let rows;
-try { rows = readFeed(buf, state, where); }
-catch (e) { console.log(`FAIL: could not read the file: ${e.message}`); process.exit(2); }
 const t2 = Date.now();
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const options = opt("--office") ? {
@@ -48,7 +49,7 @@ const missing = all.filter((c) => !got.includes(c));
 
 console.log(`\n=== ${state} feed check ===`);
 console.log(`file: ${where}`);
-console.log(`size: ${(buf.length / 1e6).toFixed(1)} MB   download ${((t1 - t0) / 1000).toFixed(1)}s   read ${((t2 - t1) / 1000).toFixed(1)}s   rows ${rows.length}`);
+console.log(`files read: ${files.length}${files.length > 1 || !opt("--file") ? "\n  " + files.join("\n  ") : ""}${size ? `\nsize: ${(size / 1e6).toFixed(1)} MB` : ""}\ntime ${((t2 - t0) / 1000).toFixed(1)}s   rows ${rows.length}`);
 console.log(`sample row: ${JSON.stringify(rows.find((r) => r.county || r.town) || rows[0] || null)}`);
 console.log(`race matched: ${race ? "yes" : "NO"}   counties matched: ${got.length} of ${all.length}`);
 if (race) console.log(`statewide totals: Dem side ${sum("dem").toLocaleString()}   Rep side ${sum("rep").toLocaleString()}   (compare to the official totals)`);

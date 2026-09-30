@@ -4,7 +4,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { aggregate } from "./lib/aggregate.mjs";
 import { readFeed } from "./lib/read-feed.mjs";
-import { resolveUrl } from "../api/results.js";
+import { fetchRows } from "./lib/fetch-rows.mjs";
 
 const LIVE_URL = process.env.MAINE_RESULTS_URL || ""; // set on election night
 const args = process.argv.slice(2);
@@ -28,9 +28,8 @@ async function main() {
   if (args.includes("--demo")) result = demoResults();
   else if (opt("--csv") || opt("--file")) result = aggregate(readFeed(readFileSync(opt("--csv") || opt("--file")), STATE), STATE);
   else if (opt("--url") || LIVE_URL) {
-    const url = await resolveUrl(opt("--url") || LIVE_URL);
-    const buf = new Uint8Array(await (await fetch(url)).arrayBuffer());
-    result = aggregate(readFeed(buf, STATE, url), STATE);
+    const { rows } = await fetchRows(opt("--url") || LIVE_URL, STATE);
+    result = aggregate(rows, STATE);
   } else { console.log("No source. Use --demo, --file x.xlsx, --url ..., or --csv x.csv"); return; }
   writeFileSync(out, JSON.stringify(result, null, 2));
   console.log(`Wrote results.json — races: ${Object.keys(result.races || {}).join(", ") || "none"}`);

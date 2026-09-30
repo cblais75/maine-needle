@@ -199,14 +199,23 @@ const makeNebraskaSenate = (pollMargin) => ({
   units: neUnits(pollMargin),
 });
 
-// ---- ALASKA ---- (ranked-choice; deliberately not a needle)
-// Sullivan (R, incumbent) vs Peltola (D) headline a top-four ranked-choice race. The four-candidate
-// field is set at the Aug 18 primary, and Alaska does not tabulate the ranked rounds until about two
-// weeks after election day, so this race is shown as an explainer panel rather than a win-prob needle.
-const makeAlaskaSenate = () => ({
+// ---- ALASKA ---- (ranked-choice; a polling needle that never goes live on election night)
+// Sullivan (R, incumbent) vs Peltola (D) in a top-four ranked-choice race.
+// Update 44: Alaska gets a polling needle (forecast only). One statewide unit: Alaska reports
+// by state house district, not county, and its ranked-choice rounds are counted about two weeks
+// after election night, so this needle never goes live. It still counts in Senate control.
+// AK_HOUSE shifts the center toward Sullivan: Alaska polls have underestimated Republicans
+// (Sullivan won by about 13 in 2020 after polling far closer; Peltola lost her 2024 House race
+// by about 2 after polling close).
+const AK_HOUSE = 4;
+const makeAlaskaSenate = (pollMargin = 3) => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
   sub: "Sullivan (R) vs Peltola (D)",
-  system: "Ranked-Choice", real: true, type: "rcv", units: [],
+  system: "Ranked-Choice Voting", real: true, noNight: true,
+  note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
+  left: { full: "Sullivan", short: "Sullivan", color: RED },
+  right: { full: "Peltola", short: "Peltola", color: BLUE },
+  units: [unit("Alaska", clamp(0.5 + (pollMargin - AK_HOUSE) / 200, 0.02, 0.98), 320000)],
 });
 
 // ---- MICHIGAN ---- (placeholder until the Aug. 4 primary sets the nominees)
@@ -508,10 +517,12 @@ export default function MaineDashboard() {
   const [neMargin, setNeMargin] = useState(DEFAULT_NE_MARGIN);
   const [miMargin, setMiMargin] = useState(DEFAULT_MI_MARGIN);
   const [nhMargin, setNhMargin] = useState(DEFAULT_NH_MARGIN);
+  const DEFAULT_AK_MARGIN = 3; // Peltola +3, polling average
+  const [akMargin, setAkMargin] = useState(DEFAULT_AK_MARGIN);
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN, mim = DEFAULT_MI_MARGIN, nhm = DEFAULT_NH_MARGIN) => [
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN, mim = DEFAULT_MI_MARGIN, nhm = DEFAULT_NH_MARGIN, akm = DEFAULT_AK_MARGIN) => [
     rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
@@ -522,7 +533,7 @@ export default function MaineDashboard() {
     rollRace(makeIowaSenate(iam)),
     rollRace(makeGeorgiaSenate(gam)),
     rollRace(makeNebraskaSenate(nem)),
-    makeAlaskaSenate(),
+    rollRace(makeAlaskaSenate(akm)),
     rollRace(makeMichiganSenate(mim)),
     rollRace(makeNHSenate(nhm)),
     ...OTHER_RACES.map((r) => rollRace(r)),
@@ -553,7 +564,7 @@ export default function MaineDashboard() {
       setRaces((prev) => {
         let done = true;
         const next = prev.map((r) => {
-          if (r.liveOn) return r; // live races are driven by real returns, not the sim
+          if (r.liveOn || r.noNight) return r; // live races run on real returns; Alaska never counts on the night
           return {
             ...r,
             units: r.units.map((u) => {
@@ -586,8 +597,9 @@ export default function MaineDashboard() {
         if (c?.ne_sen) setNeMargin(c.ne_sen.margin ?? DEFAULT_NE_MARGIN);
         if (c?.mi_sen) setMiMargin(c.mi_sen.margin ?? DEFAULT_MI_MARGIN);
         if (c?.nh_sen) setNhMargin(c.nh_sen.margin ?? DEFAULT_NH_MARGIN);
+        if (c?.ak_sen) setAkMargin(c.ak_sen.margin ?? DEFAULT_AK_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN, c?.ne_sen?.margin ?? DEFAULT_NE_MARGIN, c?.mi_sen?.margin ?? DEFAULT_MI_MARGIN, c?.nh_sen?.margin ?? DEFAULT_NH_MARGIN), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN, c?.ne_sen?.margin ?? DEFAULT_NE_MARGIN, c?.mi_sen?.margin ?? DEFAULT_MI_MARGIN, c?.nh_sen?.margin ?? DEFAULT_NH_MARGIN, c?.ak_sen?.margin ?? DEFAULT_AK_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -613,7 +625,7 @@ export default function MaineDashboard() {
   }, []);
 
   useEffect(() => {
-    const tagOf = (pct) => pct >= 97 ? "Called" : pct >= 85 ? "Likely" : pct >= 65 ? "Leans" : "Toss-up";
+    // The tag comes from rateOf, so the wire never calls a race before half the vote is in.
     const label = (r) => { const st = STATES.find((s) => s.code === r.state); return `${st ? st.label : ""} ${r.title.replace("U.S. ", "").replace(" (special)", "")}`.trim(); };
     const abbr = (r) => r.state; // 2-letter state code, e.g. "NC"
     const snap = {}; const events = [];
@@ -621,7 +633,7 @@ export default function MaineDashboard() {
     for (const r of races) {
       if (r.type === "rcv" || r.type === "tbd" || r.type === "three" || !r.right || !r.left || !r.units || !r.units.length) continue;
       const m = compute(r.units); const rt = rateOf(r, m);
-      const cur = { pct: rt.pct, tag: tagOf(rt.pct), leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
+      const cur = { pct: rt.pct, tag: rt.text.split(" ")[0], leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
       snap[r.id] = cur;
       const prev = wirePrev.current ? wirePrev.current[r.id] : null;
       if (!prev || cur.frac === 0) continue;
@@ -684,27 +696,30 @@ export default function MaineDashboard() {
     setSel(null);
     if (r && r.state !== "ME" && races.filter((x) => x.state === r.state).length === 1) setView("dashboard");
   };
-  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin, neMargin, miMargin, nhMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin, neMargin, miMargin, nhMargin, akMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
-  const step = () => setRaces((prev) => prev.map((r) => r.liveOn ? r : ({
+  const step = () => setRaces((prev) => prev.map((r) => r.liveOn || r.noNight ? r : ({
     ...r,
     units: r.units.map((u) => u.reported >= 1 ? u : (Math.random() < u.speed ? { ...u, reported: clamp(u.reported + 0.1 + Math.random() * 0.18, 0, 1) } : u)),
   })));
 
   const anyLive = races.some((r) => r.liveOn);
+  const night = nightStarted();
+  const anyPaused = night && races.some((r) => isPaused(r, night));
   const NAV_ITEMS = [["dashboard", "Races"], ["control", "Senate control"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"]];
   const go = (k) => { setNavOpen(false); setMoreOpen(false); setView(k); setSel(null); };
   const today = new Date();
-  const edition = anyLive ? "Election night edition" : "Forecast edition";
+  const edition = anyLive || night ? "Election night edition" : "Forecast edition";
   const longDate = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
   const shortDate = today.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   const onState = STATES.some((st) => st.code === view);
   const sortedStates = STATES.slice().sort((a, b) => a.label.localeCompare(b.label));
   const statusLine = (
-    <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive ? RED : C.muted, fontWeight: anyLive ? 600 : 400 }}>
-      {anyLive ? "Live · The needles are running on official results as they come in." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
+    <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
+      {anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
+      {anyPaused ? " Maine and New Hampshire are paused until official results are posted." : ""}
     </p>
   );
   const titleBtn = (size) => (
@@ -718,7 +733,7 @@ export default function MaineDashboard() {
     <header style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, paddingBottom: 12, borderBottom: `3px double ${C.text}` }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", fontSize: 13, color: C.muted }}>
         <span>{edition} · {longDate}</span>
-        <span style={{ display: "flex", alignItems: "center", gap: 18 }}><span>Election night: Tuesday, Nov. 3</span><SupportSmall /></span>
+        <span style={{ display: "flex", alignItems: "center", gap: 18 }}><span>{night ? "Results refresh automatically" : "Election night: Tuesday, Nov. 3"}</span><SupportSmall /></span>
       </div>
       {titleBtn(64)}
       <nav aria-label="Sections" style={{ position: "relative", display: "flex", alignItems: "center", gap: 26 }}>
@@ -745,7 +760,7 @@ export default function MaineDashboard() {
   const mobileMasthead = (
     <header style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7, paddingBottom: 10, borderBottom: `3px double ${C.text}` }}>
       {titleBtn(34)}
-      <span style={{ fontSize: 12, color: C.muted, textAlign: "center" }}>{edition} · {shortDate} · Election night Nov. 3</span>
+      <span style={{ fontSize: 12, color: C.muted, textAlign: "center" }}>{edition} · {shortDate}{night ? "" : " · Election night Nov. 3"}</span>
       <SupportSmall />
     </header>
   );
@@ -789,30 +804,31 @@ export default function MaineDashboard() {
       <ErrorBoundary label="This race view hit an error">
             <Detail race={races.find((r) => r.id === sel)} onBack={backFromDetail}
               govB={govB} govMargin={govMargin} onGov={setGov} current={current}
-              briefing={briefing} wide={wide} onNav={go} />
+              briefing={briefing} wide={wide} onNav={go} night={night} />
           </ErrorBoundary>
   );
   const tabBody = (
             <ErrorBoundary key={view} label="This section hit an error">
             {view === "dashboard" && (
-              <FrontPage races={races} current={current} briefing={briefing} wide={wide} onPick={setSel} go={go} />
+              <FrontPage races={races} current={current} briefing={briefing} wide={wide} onPick={setSel} go={go} night={night} />
             )}
             {STATES.some((s) => s.code === view) && (
               <div>
                 <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>November 2026</div>
                 <h1 style={{ margin: "0 0 14px", fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>{STATES.find((s) => s.code === view).label}</h1>
                 <SectionHead title={races.filter((r) => r.state === view).length > 1 ? "Races on the ballot" : "The race"} size={22} />
-                <RaceTable races={races.filter((r) => r.state === view)} onPick={setSel} wide={wide} />
+                <RaceTable races={races.filter((r) => r.state === view)} onPick={setSel} wide={wide} night={night} />
+                {night && PAUSE_STATES.includes(view) && <div style={{ marginTop: 18 }}><PauseNote state={view} /></div>}
               </div>
             )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} wide={wide} />}
-            {view === "control" && <SenateControlView races={races} wide={wide} onPick={setSel} />}
+            {view === "control" && <SenateControlView races={races} wide={wide} onPick={setSel} night={night} />}
             {view === "wire" && <WireFeed events={wire} />}
             {view === "briefing" && <BriefingView posts={briefing} wide={wide} />}
             {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} wide={wide} />}
             {view === "method" && <MethodView wide={wide} />}
 
-            {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
+            {!night && (view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
@@ -853,7 +869,7 @@ export default function MaineDashboard() {
   }
 
   // ── DESKTOP (>= 1000px): newspaper front page; the Wire rail appears once there is news ──
-  const showRail = anyLive || wire.length > 0;
+  const showRail = anyLive || night || wire.length > 0;
   return (
     <div style={{ minHeight: "100vh", background: C.ink, color: C.text, fontFamily: sans }}>
       <style>{GLOBAL_CSS}</style>
@@ -868,6 +884,7 @@ export default function MaineDashboard() {
                 <span style={{ width: 9, height: 9, borderRadius: 5, background: anyLive ? RED : C.muted }} />
                 <span style={{ fontFamily: serif, fontSize: 22, fontWeight: 600 }}>The Wire</span>
               </div>
+              {anyPaused && <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: 14, lineHeight: 1.45, color: C.body }}>Maine and New Hampshire are paused until official results are posted. <a href={AP_URL} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 700, color: C.text }}>Live count at AP</a></p>}
               <ErrorBoundary mini label="Wire unavailable"><WireFeed events={wire} embedded /></ErrorBoundary>
             </aside>
           )}
@@ -1027,8 +1044,9 @@ function Overview({ races, onPick }) {
   );
 }
 
-function GovDetail({ race, onBack, govB, govMargin, current }) {
+function GovDetail({ race, onBack, govB, govMargin, current, night }) {
   const d = readRace(race);
+  const paused = isPaused(race, night);
   const m = compute3(race.units);
   const parts = race.cands.map((c) => ({ ...c, sh: m.proj[c.key], win: m.win[c.key] }));
   const byShare = [...parts].sort((a, b) => b.sh - a.sh);
@@ -1047,9 +1065,10 @@ function GovDetail({ race, onBack, govB, govMargin, current }) {
             ? `${d.fav} leads with ${(parts.find((p) => p.short === d.fav).sh * 100).toFixed(1)}% projected. In a three-way race the winner needs only the most votes, so the gap between the top two matters more than the 50% line.`
             : `Polling has Bennett at ${govB}% and ${govMargin >= 0 ? "Pingree" : "Charles"} ahead by ${Math.abs(govMargin)} between the two major-party candidates. The winner needs only the most votes, not a majority.`}</p>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>Bennett (I) has no past election to map, so this race leans on polling for its starting point.</p>
+          {paused && <PauseNote state="ME" />}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center" }}>
-          <div style={{ fontSize: 14, color: C.muted }}>Chance of winning · <b style={{ color: C.text }}>{d.tag}</b></div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center", opacity: paused ? 0.45 : 1 }}>
+          <div style={{ fontSize: 14, color: C.muted }}>{paused ? "Pre-election forecast" : "Chance of winning"} · <b style={{ color: C.text }}>{d.tag}</b></div>
           {byShare.map((p) => (
             <div key={p.key} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -1253,25 +1272,48 @@ function RcvMini({ race }) {
   );
 }
 
-function AlaskaDetail({ race, onBack }) {
+function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
+  const d = readRace(race);
   const sec = (title, text, boxed) => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: boxed ? 18 : "20px 0", background: boxed ? C.panel2 : "none", border: boxed ? `1px solid ${C.line}` : "none", borderBottom: boxed ? `1px solid ${C.line}` : `1px solid ${C.line}` }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: boxed ? 18 : "20px 0", background: boxed ? C.panel2 : "none", border: boxed ? `1px solid ${C.line}` : "none", borderBottom: `1px solid ${C.line}` }}>
       <h2 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>{title}</h2>
       <p style={{ margin: 0, fontFamily: serif, fontSize: 18, lineHeight: 1.6, color: C.body }}>{text}</p>
     </div>
   );
+  const hasNeedle = d.kind === "two";
+  const leftPct = hasNeedle ? (d.favSide === "left" ? d.pct : 100 - d.pct) : null;
   return (
-    <div style={{ maxWidth: 860 }}>
+    <div>
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 14, cursor: "pointer", padding: 0, marginBottom: 14 }}>
         <ChevronLeft size={16} /> All races
       </button>
-      <div style={kicker(RED)}>Alaska · {race.title} · Ranked-choice voting</div>
-      <h1 style={{ margin: "8px 0 10px", fontFamily: serif, fontWeight: 600, fontSize: 44, lineHeight: 1.05, letterSpacing: -0.8 }}>Sullivan vs. Peltola</h1>
-      <p style={{ ...deckStyle(true), marginBottom: 18 }}>Rated Lean Republican. This race won't be called on election night, so it gets an explainer instead of a needle.</p>
-      {sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
-      {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
-      {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent, so he starts ahead; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
-      {sec("Why there's no needle here", "Everywhere else on this site the needle is a win probability. For a race decided by rounds tabulated weeks after the night, a live probability would imply a precision that doesn't exist. Head-to-head polling for this race is tracked on the Polls page.")}
+      <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 26, borderBottom: `1px solid ${C.line}` }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={kicker(hasNeedle ? d.favColor : RED)}>Alaska · {race.title} · Ranked-choice voting · Forecast only</div>
+          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>Sullivan vs. Peltola</h1>
+          <p style={deckStyle(wide)}>{hasNeedle ? dekFor(race, d, current) : "Rated Lean Republican."}</p>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>This needle is a polling forecast. It won't move on election night, because Alaska's ranked-choice rounds are counted about two weeks later.</p>
+        </div>
+        {hasNeedle && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+            <div style={{ width: "100%", maxWidth: 400 }}><Dial pRight={d.pRight} width={400} left={race.left.color} right={race.right.color} /></div>
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: 400 }}>
+              <span style={{ display: "flex", flexDirection: "column" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.left.color }}>{leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Sullivan (R)</span></span>
+              <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.right.color }}>{100 - leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Peltola (D)</span></span>
+            </div>
+            <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>Chance of winning, from the polling average · <b style={{ color: C.text }}>{d.tag}</b></div>
+          </div>
+        )}
+      </section>
+      <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 26, paddingTop: 22 }}>
+        <div>
+          {sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
+          {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
+          {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
+          {sec("How this needle is built", `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan, because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
+        </div>
+        {hasNeedle && onNav && <RacePolls r={race} current={current} onNav={onNav} />}
+      </section>
     </div>
   );
 }
@@ -1280,9 +1322,33 @@ function AlaskaDetail({ race, onBack }) {
 // NEWSPAPER PAGES (Update 43, redesign step 2)
 // Shared pieces first (dial needle, race reader, headlines), then each page.
 // ════════════════════════════════════════════════════════════════════════════
+// Election night (Update 44). The board switches to election-night mode at 7 p.m. ET on Nov. 3
+// (00:00 UTC Nov. 4, after daylight saving ends). Add ?night to the address to preview it any time.
+const ELECTION_NIGHT_START = Date.UTC(2026, 10, 4, 0, 0);
+const PAUSE_STATES = ["ME", "NH"]; // no official results on election night; finish from official files
+const AP_URL = "https://apnews.com/projects/elections-2026/";
+function nightStarted() {
+  try { if (new URLSearchParams(window.location.search).has("night")) return true; } catch { /* no window */ }
+  return Date.now() >= ELECTION_NIGHT_START;
+}
+const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn);
+const PAUSE_TEXT = {
+  ME: "Maine doesn't publish results on election night. Towns report to the press and the AP, and the state posts official town-by-town results only after they're certified, usually a few weeks later. If a ranked-choice count is needed, first-choice results come about a week after the election. This needle will finish on its own when those files are posted.",
+  NH: "New Hampshire doesn't publish results on election night. Its towns report to the press and the AP overnight, and the state posts official town results a few days later. This needle will finish on its own when those files are posted.",
+};
+function PauseNote({ state, compact }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: compact ? 14 : 18, background: C.panel2, border: `1px solid ${C.line}` }}>
+      <span style={{ fontFamily: serif, fontSize: compact ? 19 : 22, fontWeight: 600 }}>Paused until official results</span>
+      <span style={{ fontSize: 15, lineHeight: 1.55, color: C.body }}>{PAUSE_TEXT[state] || PAUSE_TEXT.ME}</span>
+      <a href={AP_URL} target="_blank" rel="noopener noreferrer" style={{ alignSelf: "flex-start", fontSize: 15, fontWeight: 700, color: C.text }}>Follow the live count at AP</a>
+    </div>
+  );
+}
+
 const POLL_KEY = { sen: "senate", gov: "governor" };
 const pollKey = (id) => POLL_KEY[id] || id;
-const HOUSE_BY_RACE = { sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE };
+const HOUSE_BY_RACE = { ak_sen: AK_HOUSE, sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE };
 const stateLabel = (code) => (STATES.find((s) => s.code === code) || {}).label || code;
 const raceName = (r) => String(r.title || "").replace("U.S. House · District", "House District").replace("U.S. ", "");
 const PAPER = "#F4EFE4";
@@ -1399,8 +1465,8 @@ function controlTally(races) {
 const sideColor = (s) => (s === "D" ? BLUE : s === "I" ? TEAL : RED);
 
 // ── FRONT PAGE ──────────────────────────────────────────────────────────────
-function RaceTable({ races, onPick, wide }) {
-  const reads = races.map((r) => ({ r, d: readRace(r) }));
+function RaceTable({ races, onPick, wide, night }) {
+  const reads = races.map((r) => ({ r, d: isPaused(r, night) ? { ...readRace(r), paused: true, frac: 0 } : readRace(r) }));
   const anyIn = reads.some((x) => x.d.frac > 0);
   const cols = wide ? `150px minmax(0,1fr) 190px 150px ${anyIn ? "80px " : ""}72px` : "56px minmax(0,1fr) auto";
   return (
@@ -1415,7 +1481,9 @@ function RaceTable({ races, onPick, wide }) {
           ? <Dial mini pRight={d.pRight} width={wide ? 64 : 52} left={r.left.color} right={r.right.color} />
           : d.kind === "three" ? <div style={{ width: wide ? 64 : 52 }}><ThreeStrip parts={d.parts} height={8} /></div>
           : <span style={{ fontSize: 11, color: C.muted }}>No needle</span>;
-        const fav = d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
+        const fav = d.paused ? "Paused" : d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
+        const favCol = d.paused ? C.muted : d.favColor;
+        const ratingTxt = d.paused ? "Waiting for official results" : d.kind === "rcv" ? "No night-of call" : r.noNight ? `${d.tag} · forecast only` : d.tag;
         return (
           <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
             <button role="listitem" onClick={() => onPick(r.id)}
@@ -1427,19 +1495,19 @@ function RaceTable({ races, onPick, wide }) {
                     <span style={{ fontFamily: serif, fontSize: 18 }}>{raceName(r)}{r.liveOn && <span style={{ marginLeft: 8, fontFamily: sans, fontSize: 11, fontWeight: 700, color: "#fff", background: RED, padding: "1px 6px", verticalAlign: 3 }}>LIVE</span>}</span>
                     <span style={{ fontSize: 13, color: C.muted }}>{r.sub}</span>
                   </span>
-                  <span style={{ fontSize: 17, fontWeight: 600, color: d.favColor }}>{fav}</span>
-                  <span style={{ fontSize: 15 }}>{d.kind === "rcv" ? "No night-of call" : d.tag}</span>
+                  <span style={{ fontSize: 17, fontWeight: 600, color: favCol }}>{fav}</span>
+                  <span style={{ fontSize: 15 }}>{ratingTxt}</span>
                   {anyIn && <span style={{ fontSize: 14, color: C.muted }}>{d.frac > 0 ? `${Math.round(d.frac * 100)}%` : "—"}</span>}
-                  <span style={{ justifySelf: "end" }}>{gauge}</span>
+                  <span style={{ justifySelf: "end", opacity: d.paused ? 0.35 : 1 }}>{gauge}</span>
                 </>
               ) : (
                 <>
-                  <span>{gauge}</span>
+                  <span style={{ opacity: d.paused ? 0.35 : 1 }}>{gauge}</span>
                   <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{stateLabel(r.state)} <span style={{ fontWeight: 400, color: C.muted }}>{raceName(r)}</span>{r.liveOn && <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 700, color: "#fff", background: RED, padding: "1px 5px" }}>LIVE</span>}</span>
-                    <span style={{ fontSize: 13, color: C.muted }}>{d.kind === "rcv" ? "No night-of call" : d.tag}{d.frac > 0 ? ` · ${Math.round(d.frac * 100)}% in` : ""}</span>
+                    <span style={{ fontSize: 13, color: C.muted }}>{ratingTxt}{d.frac > 0 ? ` · ${Math.round(d.frac * 100)}% in` : ""}</span>
                   </span>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: d.favColor, textAlign: "right" }}>{fav}</span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: favCol, textAlign: "right" }}>{fav}</span>
                 </>
               )}
             </button>
@@ -1491,8 +1559,40 @@ function LeadStory({ r, current, wide, onPick }) {
   );
 }
 
-function FrontPage({ races, current, briefing, wide, onPick, go }) {
-  const leadRace = races.find((r) => r.id === "sen" && readRace(r).kind === "two") || races.find((r) => readRace(r).kind === "two");
+function pickLead(races, night) {
+  const two = races.filter((r) => readRace(r).kind === "two" && !isPaused(r, night) && !(night && r.noNight));
+  if (!night) return races.find((r) => r.id === "sen" && readRace(r).kind === "two") || two[0];
+  // Election night: the closest race that is counting and not yet called; then any counting race;
+  // before the first results, the closest race by forecast.
+  const byClose = (a, b) => Math.abs(readRace(a).pct - 50) - Math.abs(readRace(b).pct - 50);
+  const counting = two.filter((r) => readRace(r).frac > 0);
+  const open = counting.filter((r) => !readRace(r).tag.startsWith("Called")).sort(byClose);
+  return open[0] || counting.sort((a, b) => readRace(b).frac - readRace(a).frac)[0] || two.slice().sort(byClose)[0];
+}
+function PausedList({ races, onPick, wide }) {
+  if (!races.length) return null;
+  return (
+    <section style={{ paddingTop: 30 }}>
+      <SectionHead title="Paused until official results" note={wide ? "Maine and New Hampshire don't publish results on election night" : null} size={wide ? 28 : 22} />
+      {races.map((r) => (
+        <div key={r.id} style={{ display: "grid", gridTemplateColumns: wide ? "150px minmax(0,1fr) 260px 150px" : "minmax(0,1fr) auto", columnGap: 20, rowGap: 4, alignItems: "center", padding: "10px 0", borderBottom: `1px solid ${C.line}` }}>
+          {wide && <span style={{ fontSize: 16, fontWeight: 600 }}>{stateLabel(r.state)}</span>}
+          <button onClick={() => onPick(r.id)} style={{ background: "none", border: "none", padding: 0, textAlign: "left", cursor: "pointer", color: C.text, display: "flex", flexDirection: "column", gap: 1 }}>
+            <span style={{ fontFamily: serif, fontSize: 18 }}>{wide ? raceName(r) : `${stateLabel(r.state)} ${raceName(r)}`}</span>
+            <span style={{ fontSize: 13, color: C.muted }}>{r.sub}</span>
+          </button>
+          {wide && <span style={{ fontSize: 14, color: C.muted }}>Finishes when the state posts official results</span>}
+          <a href={AP_URL} target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, fontWeight: 700, color: C.text, textAlign: "right" }}>Live count at AP</a>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
+  const leadRace = pickLead(races, night);
+  const counting = races.filter((r) => !isPaused(r, night));
+  const paused = races.filter((r) => isPaused(r, night));
   const tally = controlTally(races);
   const latest = (briefing || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
   const firstPara = latest ? String(latest.body || "").split(/\n\s*\n/)[0] : "";
@@ -1502,7 +1602,7 @@ function FrontPage({ races, current, briefing, wide, onPick, go }) {
     <aside style={{ display: "flex", flexDirection: "column", gap: 26 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <h3 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>Senate control</h3>
-        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: C.body }}>{anyIn ? "If every race goes to its current leader:" : "If every race goes to today's polling leader:"}</p>
+        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: C.body }}>{anyIn ? "If every race goes to its current leader:" : "If every race goes to today's polling leader:"}{paused.length ? " Paused races count by their pre-election forecast." : ""}</p>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", fontSize: 30, fontWeight: 600 }}>
           <span style={{ color: BLUE }}>{tally.D} D</span>{tally.I > 0 && <span style={{ color: TEAL, fontSize: 22 }}>{tally.I} I</span>}<span style={{ color: RED }}>{tally.R} R</span>
         </div>
@@ -1534,10 +1634,11 @@ function FrontPage({ races, current, briefing, wide, onPick, go }) {
         {sidebar}
       </section>
       <section style={{ paddingTop: 28 }}>
-        <SectionHead title="Every race we're tracking" note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
-        <RaceTable races={races} onPick={onPick} wide={wide} />
-        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Alaska uses ranked-choice rounds counted about two weeks after election night, so it has no election-night needle.</p>
+        <SectionHead title={night ? "Counting now" : "Every race we're tracking"} note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
+        <RaceTable races={counting} onPick={onPick} wide={wide} night={night} />
+        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Alaska's needle is a polling forecast only. Its ranked-choice rounds are counted about two weeks after election night, so it doesn't move on election night.</p>
       </section>
+      {night && <PausedList races={paused} onPick={onPick} wide={wide} />}
     </div>
   );
 }
@@ -1615,8 +1716,9 @@ function CountyTable({ race }) {
     </div>
   );
 }
-function RacePage({ race, onBack, current, briefing, wide, onNav }) {
+function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
   const d = readRace(race);
+  const paused = isPaused(race, night);
   const L = race.left, R = race.right;
   const leftPct = d.favSide === "left" ? d.pct : 100 - d.pct;
   const t = voteTotals(race.units);
@@ -1641,12 +1743,14 @@ function RacePage({ race, onBack, current, briefing, wide, onNav }) {
       </button>
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={kicker(d.favColor)}>{stateLabel(race.state)} · {race.title} · {race.system}{race.liveOn ? " · Live" : ""}</div>
+          <div style={kicker(paused ? C.muted : d.favColor)}>{stateLabel(race.state)} · {race.title} · {race.system}{race.liveOn ? " · Live" : paused ? " · Paused" : ""}</div>
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>{L.short} vs. {R.short}</h1>
           <p style={deckStyle(wide)}>{dekFor(race, d, current)}</p>
           {race.note && <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{race.note}</p>}
+          {paused && <PauseNote state={race.state} />}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: paused ? 0.45 : 1 }}>
+          {paused && <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>Pre-election forecast</div>}
           <div style={{ width: "100%", maxWidth: 400 }}><Dial pRight={d.pRight} width={400} left={L.color} right={R.color} /></div>
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: 400 }}>
             {side(L, leftPct, t.rep, "flex-start")}{side(R, 100 - leftPct, t.dem, "flex-end")}
@@ -1656,7 +1760,7 @@ function RacePage({ race, onBack, current, briefing, wide, onNav }) {
           </div>
         </div>
       </section>
-      <p style={{ margin: "18px 0 0", padding: "2px 0 2px 14px", borderLeft: `3px solid ${C.text}`, fontFamily: serif, fontSize: 17, lineHeight: 1.5, color: C.body }}>{swingCaption(race, d.m)}</p>
+      {!paused && <p style={{ margin: "18px 0 0", padding: "2px 0 2px 14px", borderLeft: `3px solid ${C.text}`, fontFamily: serif, fontSize: 17, lineHeight: 1.5, color: C.body }}>{swingCaption(race, d.m)}</p>}
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 30, paddingTop: 26 }}>
         <CountyTable race={race} />
         {right}
@@ -1666,7 +1770,7 @@ function RacePage({ race, onBack, current, briefing, wide, onNav }) {
 }
 
 // ── SENATE CONTROL ──────────────────────────────────────────────────────────
-function SenateControlView({ races, wide, onPick }) {
+function SenateControlView({ races, wide, onPick, night }) {
   const [ovr, setOvr] = useState({});
   const tally = controlTally(races);
   const rows = tally.rows.map((x) => ({ ...x, pick: ovr[x.id] }));
@@ -1724,7 +1828,7 @@ function SenateControlView({ races, wide, onPick }) {
                 <>
                   <button onClick={() => x.race && onPick(x.id)} style={{ ...linkBtn, textDecoration: "none", fontSize: 16 }}>{x.label}</button>
                   <span style={{ fontSize: 14, color: C.muted }}>Held by {x.holder === "D" ? "Dem." : "GOP"}</span>
-                  <span style={{ fontFamily: serif, fontSize: 18, color: sideColor(x.side) }}>{x.name}{x.id === "ak_sen" ? " · Lean R" : ""}</span>
+                  <span style={{ fontFamily: serif, fontSize: 18, color: sideColor(x.side) }}>{x.name}{isPaused(x.race, night) ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · paused, forecast shown</span> : x.race && x.race.noNight ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · forecast only</span> : null}</span>
                   <span style={{ fontSize: 16, fontWeight: 600, color: sideColor(x.side) }}>{x.pct != null ? `${x.pct}%` : "—"}{x.called ? " · Called" : ""}</span>
                   <span>{flip && <span style={{ fontSize: 12, fontWeight: 700, color: PAPER, background: col, padding: "2px 8px" }}>Would flip</span>}</span>
                   <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 13, fontWeight: 600, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
@@ -1733,7 +1837,7 @@ function SenateControlView({ races, wide, onPick }) {
                 <>
                   <span style={{ display: "flex", flexDirection: "column" }}>
                     <span style={{ fontSize: 16, fontWeight: 600 }}>{x.label} <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}>held by {x.holder === "D" ? "Dem." : "GOP"}</span></span>
-                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.pct != null ? `${x.pct}%` : "· Lean R"}{flip ? " · would flip" : ""}</span>
+                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.pct != null ? `${x.pct}%` : ""}{flip ? " · would flip" : ""}{isPaused(x.race, night) ? " · paused" : x.race && x.race.noNight ? " · forecast only" : ""}</span>
                   </span>
                   <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 12, fontWeight: 600, minHeight: 36, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
                 </>
@@ -1822,7 +1926,7 @@ const POLL_TABS = [
   ["ia_sen", "Iowa", "Turek", "Hinson"], ["ga_sen", "Georgia", "Ossoff", "Collins"], ["ne_sen", "Nebraska", "Osborn", "Ricketts"],
   ["mi_sen", "Michigan", "El-Sayed", "Rogers"], ["nh_sen", "New Hampshire", "Pappas", "Sununu"], ["ak_sen", "Alaska", "Peltola", "Sullivan"],
 ];
-const HOUSE_BY_POLL = { senate: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE };
+const HOUSE_BY_POLL = { ak_sen: AK_HOUSE, senate: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE };
 const tierOf = (rating) => TIERS.find((t) => (rating || 0) >= t.min) || TIERS[TIERS.length - 1];
 function PollsView({ current, loaded, wide }) {
   const [tab, setTab] = useState("senate");
@@ -1889,7 +1993,7 @@ function PollsView({ current, loaded, wide }) {
             </div>
           )}
           <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>
-            {tab === "ak_sen" ? "Alaska polls are head-to-head surveys. The election itself is ranked-choice, so these track sentiment, not a projected final result. " : ""}
+            {tab === "ak_sen" ? "Alaska polls are head-to-head surveys. Alaska's needle is built from them as a forecast only; the election itself is ranked-choice. " : ""}
             {tab === "senate" ? "Maine Senate polls count from July 25, when Jackson became the nominee. " : ""}
             Likely-voter numbers are used when a poll reports both. Weight is each poll's share of the average. Updated {current?.updated || "—"}.
           </p>
@@ -1961,7 +2065,8 @@ function MethodView({ wide }) {
           ["Nebraska", `${NE_HOUSE} pts toward Ricketts`, "for the state's Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven."],
           ["Georgia", `${GA_HOUSE} pts toward Collins`, "for Georgia's narrow Republican lean."],
           ["Michigan", `${MI_HOUSE} pts toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it is the closest state on this board."],
-          ["New Hampshire", `${NH_HOUSE} pt toward Sununu`, "the smallest shift, for NH polls' history and Sununu's crossover appeal."]].map(([s, a, why]) => (
+          ["New Hampshire", `${NH_HOUSE} pt toward Sununu`, "the smallest shift, for NH polls' history and Sununu's crossover appeal."],
+          ["Alaska", `${AK_HOUSE} pts toward Sullivan`, "Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close."]].map(([s, a, why]) => (
           <p key={s} style={item}><b style={{ color: C.text }}>{s}:</b> {a}. {why.charAt(0).toUpperCase() + why.slice(1)}</p>
         ))}
         <p style={item}>Maine's governor and House races get no adjustment.</p>
@@ -1973,6 +2078,7 @@ function MethodView({ wide }) {
         <p style={item}><b style={{ color: C.text }}>Maine Senate:</b> the 2020 Collins–Gideon results (60%) blended with the 2020 and 2016 presidential maps (40%).</p>
         <p style={item}><b style={{ color: C.text }}>Maine House 1 and 2:</b> the 2020 House results by county. District 2 is an open seat, so only a quarter of Jared Golden's personal-vote pattern is kept.</p>
         <p style={item}><b style={{ color: C.text }}>Maine Governor:</b> the blended presidential map for shape, with the three-way split (Pingree, Charles, Bennett) set by polling.</p>
+        <p style={item}><b style={{ color: C.text }}>Alaska:</b> a single statewide forecast from polling. Alaska reports by state house district, not county, and counts its ranked-choice rounds about two weeks after election night, so its needle never goes live; it still counts toward Senate control.</p>
         <p style={item}><b style={{ color: C.text }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan and New Hampshire:</b> 2024 presidential results in every county. Ohio's race is a special election; Georgia goes to a Dec. 1 runoff if no one tops 50%; Nebraska's Dan Osborn is an independent, shown in green.</p>
       </div>
     </>],
@@ -2005,7 +2111,7 @@ function MethodView({ wide }) {
         <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}` }}>
           {note("Maine and New Hampshire", "These states don't publish results on election night. Their needles will pause and finish on their own when the states post official results; in the meantime each paused race links to the AP's live count.")}
         </div>
-        {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so it gets an explainer instead of a needle.")}
+        {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so its needle is a polling forecast that doesn't move on election night.")}
         {note("Where the data comes from", "Polls from public releases, and results from the official files each state's election office publishes. No paid data and no copying from news sites.")}
       </aside>
     </section>
@@ -2013,11 +2119,11 @@ function MethodView({ wide }) {
 }
 
 
-function Detail({ race, onBack, govB, govMargin, onGov, current, briefing, wide, onNav }) {
-  if (race.type === "three") return <GovDetail race={race} onBack={onBack} govB={govB} govMargin={govMargin} onGov={onGov} current={current} />;
-  if (race.type === "rcv") return <AlaskaDetail race={race} onBack={onBack} />;
+function Detail({ race, onBack, govB, govMargin, onGov, current, briefing, wide, onNav, night }) {
+  if (race.type === "three") return <GovDetail race={race} onBack={onBack} govB={govB} govMargin={govMargin} onGov={onGov} current={current} night={night} />;
+  if (race.type === "rcv" || race.id === "ak_sen") return <AlaskaDetail race={race} onBack={onBack} current={current} wide={wide} onNav={onNav} />;
   if (race.type === "tbd") return race.id === "sen" ? <MaineSenateTbdDetail race={race} onBack={onBack} /> : <MichiganDetail race={race} onBack={onBack} />;
-  return <RacePage race={race} onBack={onBack} current={current} briefing={briefing} wide={wide} onNav={onNav} />;
+  return <RacePage race={race} onBack={onBack} current={current} briefing={briefing} wide={wide} onNav={onNav} night={night} />;
 }
 
 function Stat({ label, value, color }) {
