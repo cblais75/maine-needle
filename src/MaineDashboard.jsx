@@ -788,67 +788,29 @@ export default function MaineDashboard() {
   const detailBlock = (
       <ErrorBoundary label="This race view hit an error">
             <Detail race={races.find((r) => r.id === sel)} onBack={backFromDetail}
-              pollMargin={pollMargin} onPoll={setPoll}
-              cd2Decay={cd2Decay} onDecay={setDecay}
-              govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
+              govB={govB} govMargin={govMargin} onGov={setGov} current={current}
+              briefing={briefing} wide={wide} onNav={go} />
           </ErrorBoundary>
   );
   const tabBody = (
             <ErrorBoundary key={view} label="This section hit an error">
             {view === "dashboard" && (
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>All races · November 2026</div>
-                    <div style={{ fontSize: 30, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>Every race we're tracking</div>
-                  </div>
-                  <div style={{ display: "inline-flex", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9, padding: 2 }}>
-                    {[["cards", "Cards"], ["needles", "Needles"]].map(([k, lbl]) => (
-                      <button key={k} onClick={() => setBoardView(k)}
-                        style={{ padding: "5px 12px", fontSize: 11.5, fontWeight: 700, fontFamily: mono, borderRadius: 7, cursor: "pointer", border: "none",
-                          background: boardView === k ? C.panel2 : "transparent", color: boardView === k ? C.text : C.muted }}>
-                        {lbl}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                {wide && boardView === "needles" ? (
-                  // Desktop needles: one flat grid of all races (each tile shows its own
-                  // state code), so single-race states don't each get a lonely row.
-                  <div style={{ marginBottom: 14 }}>
-                    <NeedleGrid races={races} onPick={setSel} />
-                  </div>
-                ) : (
-                  STATES.map((st) => {
-                    const sr = races.filter((r) => r.state === st.code);
-                    if (!sr.length) return null;
-                    return (
-                      <div key={st.code} style={{ marginBottom: boardView === "needles" ? 14 : 18 }}>
-                        <div style={{ fontSize: 20, fontFamily: serif, fontWeight: 600, color: C.text, borderBottom: `2px solid ${C.text}`, paddingBottom: 4, marginBottom: 10 }}>{st.label}</div>
-                        {boardView === "needles"
-                          ? <NeedleGrid races={sr} onPick={setSel} />
-                          : <Overview races={sr} onPick={setSel} />}
-                      </div>
-                    );
-                  })
-                )}
-                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, fontFamily: mono }}>Tap any race to open its needle{boardView === "cards" ? "" : " and county board"}.</div>
-              </div>
+              <FrontPage races={races} current={current} briefing={briefing} wide={wide} onPick={setSel} go={go} />
             )}
             {STATES.some((s) => s.code === view) && (
               <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>{STATES.find((s) => s.code === view).label} · November 2026</div>
-                <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 14 }}>{STATES.find((s) => s.code === view).label}</div>
-                <Overview races={races.filter((r) => r.state === view)} onPick={setSel} />
-                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 12, fontFamily: mono }}>Tap any race to open its needle and county board.</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>November 2026</div>
+                <h1 style={{ margin: "0 0 14px", fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>{STATES.find((s) => s.code === view).label}</h1>
+                <SectionHead title={races.filter((r) => r.state === view).length > 1 ? "Races on the ballot" : "The race"} size={22} />
+                <RaceTable races={races.filter((r) => r.state === view)} onPick={setSel} wide={wide} />
               </div>
             )}
-            {view === "polls" && <PollsView current={current} loaded={currentLoaded} />}
-            {view === "control" && <SenateControlView races={races} />}
+            {view === "polls" && <PollsView current={current} loaded={currentLoaded} wide={wide} />}
+            {view === "control" && <SenateControlView races={races} wide={wide} onPick={setSel} />}
             {view === "wire" && <WireFeed events={wire} />}
-            {view === "briefing" && <BriefingView posts={briefing} />}
-            {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} />}
-            {view === "method" && <MethodView />}
+            {view === "briefing" && <BriefingView posts={briefing} wide={wide} />}
+            {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} wide={wide} />}
+            {view === "method" && <MethodView wide={wide} />}
 
             {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
@@ -1065,130 +1027,58 @@ function Overview({ races, onPick }) {
   );
 }
 
-function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
+function GovDetail({ race, onBack, govB, govMargin, current }) {
+  const d = readRace(race);
   const m = compute3(race.units);
   const parts = race.cands.map((c) => ({ ...c, sh: m.proj[c.key], win: m.win[c.key] }));
   const byShare = [...parts].sort((a, b) => b.sh - a.sh);
-  const leader = [...parts].sort((a, b) => b.win - a.win)[0];
-  const lpct = Math.round(leader.win * 100);
-  const tag = lpct >= 90 ? "Likely" : lpct >= 60 ? "Leans" : "Toss-up";
   const sorted = [...race.units].sort((a, b) => b.weight - a.weight);
+  const anyIn = sorted.some((u) => u.reported > 0);
   return (
     <div>
-      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", padding: 0, marginBottom: 10, fontFamily: mono }}>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 14, cursor: "pointer", padding: 0, marginBottom: 14 }}>
         <ChevronLeft size={16} /> All races
       </button>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MAINE · PLURALITY (3-WAY)</div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
-        {race.liveOn && <span style={{ fontSize: 10, fontFamily: mono, letterSpacing: 0.5, padding: "2px 6px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>}
-      </div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: 12 }}>{race.sub}</div>
-
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "10px 14px", marginBottom: 12 }}>
-        <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.6, fontFamily: mono }}>
-          Bennett (I) has no past election to map, so this three-way leans on polling for its starting point: Bennett {govB}%, {govMargin >= 0 ? "Pingree" : "Charles"} +{Math.abs(govMargin)} between the majors.
+      <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", columnGap: 40, rowGap: 22, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={kicker(d.favColor)}>Maine · Governor · Plurality, three-way{race.liveOn ? " · Live" : ""}</div>
+          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: 44, lineHeight: 1.05, letterSpacing: -0.8 }}>{race.cands.map((c) => c.short).join(" vs. ")}</h1>
+          <p style={deckStyle(true)}>{d.frac > 0
+            ? `${d.fav} leads with ${(parts.find((p) => p.short === d.fav).sh * 100).toFixed(1)}% projected. In a three-way race the winner needs only the most votes, so the gap between the top two matters more than the 50% line.`
+            : `Polling has Bennett at ${govB}% and ${govMargin >= 0 ? "Pingree" : "Charles"} ahead by ${Math.abs(govMargin)} between the two major-party candidates. The winner needs only the most votes, not a majority.`}</p>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>Bennett (I) has no past election to map, so this race leans on polling for its starting point.</p>
         </div>
-      </div>
-
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, padding: "16px 14px" }}>
-        <div style={{ fontSize: 12, letterSpacing: 1.5, color: C.muted, fontFamily: mono, textTransform: "uppercase", textAlign: "center" }}>
-          {tag === "Toss-up" ? "Toss-up" : `${tag} ${leader.short}`}
-        </div>
-        <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: -1, color: leader.color, textAlign: "center", lineHeight: 1.2, marginBottom: 14 }}>
-          {leader.short} {lpct}%
-          <span style={{ fontSize: 13, color: C.muted, fontWeight: 500 }}> to win</span>
-        </div>
-        {byShare.map((p) => (
-          <div key={p.key} style={{ marginBottom: 12 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4, fontFamily: mono }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: p.color }}>
-                <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: 8, background: p.color, marginRight: 6 }} />{p.full}
-              </span>
-              <span style={{ fontSize: 12, color: C.muted }}>
-                <span style={{ color: C.text, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{(p.sh * 100).toFixed(1)}%</span> · win {Math.round(p.win * 100)}%
-              </span>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center" }}>
+          <div style={{ fontSize: 14, color: C.muted }}>Chance of winning · <b style={{ color: C.text }}>{d.tag}</b></div>
+          {byShare.map((p) => (
+            <div key={p.key} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <span style={{ fontSize: 17, fontWeight: 600, color: p.color }}>{p.full}</span>
+                <span style={{ fontSize: 15, color: C.muted }}><b style={{ fontSize: 24, color: p.color }}>{Math.round(p.win * 100)}%</b> to win · {(p.sh * 100).toFixed(1)}% of the vote</span>
+              </div>
+              <div style={{ height: 10, background: C.panel2 }}><div style={{ width: `${p.sh * 100}%`, height: "100%", background: p.color, transition: "width .6s ease-out" }} /></div>
             </div>
-            <div style={{ height: 8, background: C.panel2, borderRadius: 5, overflow: "hidden" }}>
-              <div style={{ width: `${p.sh * 100}%`, height: "100%", background: p.color, transition: "width .6s ease-out" }} />
-            </div>
-          </div>
-        ))}
-        <div style={{ textAlign: "center", fontFamily: mono, fontSize: 11, color: C.muted, marginTop: 4 }}>{Math.round(m.fracIn * 100)}% of expected vote in</div>
-      </div>
-
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: C.body }}>
-        {m.fracIn === 0
-          ? "No votes counted. A plurality race with a strong independent: whoever leads can win with well under half the vote, so watch the gap between the top two, not the 50% line."
-          : `${leader.short} leads with ${(leader.sh * 100).toFixed(1)}% projected. In a three-way, the winner needs only a plurality, so margins between the top two matter more than any majority.`}
-      </div>
-
-      <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 1.5, color: C.muted, margin: "16px 4px 8px", textTransform: "uppercase" }}>County board</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          ))}
+          <div style={{ fontSize: 13, color: C.muted }}>{Math.round(m.fracIn * 100)}% of expected vote in</div>
+        </div>
+      </section>
+      <section style={{ paddingTop: 26, maxWidth: 820 }}>
+        <SectionHead title="County by county" note={anyIn ? "Leader in counted votes" : "Counties fill in as votes are counted"} size={22} />
         {sorted.map((u) => {
-          const reported = u.reported > 0;
-          let topShort = "—", topColor = C.muted, topSh = 0;
-          if (reported) {
-            const arr = [["fP", "P"], ["fC", "C"], ["fB", "B"]].map(([fk, key]) => ({ key, v: u[fk] }));
-            const t = arr.sort((a, b) => b.v - a.v)[0];
-            const cand = race.cands.find((c) => c.key === t.key);
-            topShort = cand.short; topColor = cand.color; topSh = t.v;
+          let top = null;
+          if (u.reported > 0) {
+            const arr = [["fP", "P"], ["fC", "C"], ["fB", "B"]].map(([fk, key]) => ({ key, v: u[fk] })).sort((a, b) => b.v - a.v)[0];
+            top = { cand: race.cands.find((c) => c.key === arr.key), v: arr.v };
           }
           return (
-            <div key={u.name} style={{ display: "grid", gridTemplateColumns: "92px 1fr 70px", alignItems: "center", gap: 8, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 10px" }}>
-              <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.name}</div>
-              <div>
-                <div style={{ height: 5, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
-                  <div style={{ width: `${u.reported * 100}%`, height: "100%", background: u.reported >= 1 ? C.brass : "#9DB9DC", transition: "width .6s ease-out" }} />
-                </div>
-                <div style={{ fontSize: 10, color: C.muted, fontFamily: mono, marginTop: 3 }}>{Math.round(u.reported * 100)}% in</div>
-              </div>
-              <div style={{ textAlign: "right", fontFamily: mono, fontWeight: 700, fontSize: 12.5, color: topColor }}>
-                {reported ? `${topShort} ${Math.round(topSh * 100)}` : "—"}
-              </div>
+            <div key={u.name} style={{ display: "grid", gridTemplateColumns: "minmax(90px,150px) minmax(0,1fr) 120px", alignItems: "center", columnGap: 14, padding: "7px 0", borderBottom: `1px solid ${C.line}` }}>
+              <span style={{ fontSize: 15, fontWeight: 600 }}>{u.name}</span>
+              <span style={{ fontSize: 13, color: C.muted }}>{Math.round(u.reported * 100)}% counted</span>
+              <span style={{ fontSize: 14, fontWeight: 600, textAlign: "right", color: top ? top.cand.color : C.muted }}>{top ? `${top.cand.short} ${Math.round(top.v * 100)}%` : "—"}</span>
             </div>
           );
         })}
-      </div>
-    </div>
-  );
-}
-
-function BriefingView({ posts }) {
-  const sorted = (posts || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
-  return (
-    <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BRIEFING</div>
-      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 4 }}>State of the Races</div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: 16, lineHeight: 1.5 }}>
-        Written analysis and notes from the editor. The needles are math; this is the story around them.
-      </div>
-      {posts === null ? (
-        <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "16px 0" }}>Loading…</div>
-      ) : sorted.length === 0 ? (
-        <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "16px 0" }}>No briefings posted yet.</div>
-      ) : (
-        sorted.map((p, i) => (
-          <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 }}>
-            <div style={{ fontSize: 10.5, fontFamily: mono, color: C.brass, letterSpacing: 0.8, marginBottom: 4 }}>{p.date}</div>
-            <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.2, marginBottom: 8 }}>{p.title}</div>
-            {String(p.body || "").split(/\n\s*\n/).map((para, j) => (
-              <div key={j} style={{ fontSize: 13.5, color: C.body, lineHeight: 1.65, marginBottom: 8 }}>{para}</div>
-            ))}
-            {Array.isArray(p.links) && p.links.length > 0 && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
-                {p.links.map((l, k) => (
-                  <a key={k} href={l.url} target="_blank" rel="noopener noreferrer"
-                    style={{ fontSize: 12, fontWeight: 700, fontFamily: mono, color: C.brass, textDecoration: "none",
-                      border: `1px solid ${C.brass}66`, borderRadius: 7, padding: "6px 11px" }}>
-                    {l.label} ↗
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        ))
-      )}
+      </section>
     </div>
   );
 }
@@ -1212,99 +1102,6 @@ const CONTROL_SET = [
   { id: "mi_sen", label: "Michigan",       holder: "D" },
   { id: "nh_sen", label: "New Hampshire",   holder: "D" },
 ];
-
-function SenateControlView({ races }) {
-  const [ovr, setOvr] = useState({});
-  const statuses = CONTROL_SET.map((c) => {
-    const r = races.find((x) => x.id === c.id);
-    let v = "U", sub = "";
-    if (r && r.type !== "rcv" && r.type !== "tbd" && r.units && r.units.length && r.left && r.right) {
-      const m = compute(r.units); const rt = rateOf(r, m);
-      sub = `${r.left.short} vs ${r.right.short}`;
-      if (rt.pct >= 97 && m.fracIn > 0) v = rt.leader === r.right ? (c.indRight ? "I" : "D") : "R";
-    } else if (r) { sub = r.sub; }
-    return { ...c, live: v, v: ovr[c.id] ?? v, sub };
-  });
-  const scenario = Object.keys(ovr).length > 0;
-  const cycleTile = (c) => {
-    const opts = c.indRight ? ["U", "I", "R"] : ["U", "D", "R"];
-    setOvr((o) => {
-      const cur = o[c.id] ?? c.live;
-      const next = opts[(opts.indexOf(cur) + 1) % opts.length];
-      const n = { ...o, [c.id]: next };
-      if (next === c.live) delete n[c.id];
-      return n;
-    });
-  };
-  const dWins = statuses.filter((x) => x.v === "D").length;
-  const rWins = statuses.filter((x) => x.v === "R").length;
-  const iWins = statuses.filter((x) => x.v === "I").length;
-  const un = statuses.length - dWins - rWins - iWins;
-  const D = D_SAFE_SEATS + dWins, R = R_SAFE_SEATS + rWins, I = iWins;
-
-  let banner, color;
-  if (D >= 51) { banner = "DEMOCRATS TAKE THE SENATE"; color = BLUE; }
-  else if (R >= 51) { banner = "REPUBLICANS RETAIN CONTROL"; color = RED; }
-  else if (R === 50 && un === 0) { banner = "REPUBLICANS RETAIN — 50-50, VP BREAKS TIES"; color = RED; }
-  else if (un === 0 && I > 0) { banner = "OSBORN DECIDES THE SENATE"; color = TEAL; }
-  else { banner = `CONTROL UNDECIDED — ${un} TRACKED SEAT${un === 1 ? "" : "S"} OUTSTANDING`; color = C.brass; }
-
-  const chip = (v) => v === "D" ? { t: "DEM", c: BLUE } : v === "R" ? { t: "GOP", c: RED } : v === "I" ? { t: "IND", c: TEAL } : { t: "—", c: C.muted };
-  const seg = (w, bg) => ({ width: `${w}%`, background: bg, height: "100%" });
-
-  return (
-    <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BIG PICTURE</div>
-      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 4 }}>Control of the Senate</div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
-        Every untracked seat is assumed to hold its party. The nine tracked races below flip automatically when their needle crosses the calling threshold — in the simulation now, and on real returns on election night. Tap any tile to explore what-if scenarios; a scenario never changes the needles, and one tap brings you back to live.
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
-        <div style={{ fontSize: 15, fontWeight: 800, fontFamily: mono, letterSpacing: 0.6, color }}>{banner}</div>
-        {scenario && (
-          <button onClick={() => setOvr({})}
-            style={{ fontSize: 10.5, fontWeight: 700, fontFamily: mono, letterSpacing: 0.5, color: C.ink, background: C.brass, border: "none", borderRadius: 6, padding: "4px 9px", cursor: "pointer" }}>
-            SCENARIO — TAP TO RETURN TO LIVE
-          </button>
-        )}
-      </div>
-
-      <div style={{ display: "flex", height: 34, borderRadius: 9, overflow: "hidden", border: `1px solid ${C.line}`, marginBottom: 4 }}>
-        <div style={seg(D, BLUE)} />
-        {I > 0 && <div style={seg(I, TEAL)} />}
-        <div style={seg(un, "#B8AE9C")} />
-        <div style={seg(R, RED)} />
-      </div>
-      <div style={{ position: "relative", height: 15, marginBottom: 6 }}>
-        <div style={{ position: "absolute", left: "50%", top: -42, height: 42, width: 2, background: C.brass, opacity: 0.85 }} />
-        <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", fontSize: 10, fontFamily: mono, color: C.brass }}>50</div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontFamily: mono, fontSize: 13, marginBottom: 6 }}>
-        <span style={{ color: BLUE, fontWeight: 700 }}>DEM {D}</span>
-        {I > 0 && <span style={{ color: TEAL, fontWeight: 700 }}>IND {I}</span>}
-        <span style={{ color: C.muted }}>{un} uncalled</span>
-        <span style={{ color: RED, fontWeight: 700 }}>GOP {R}</span>
-      </div>
-      <div style={{ fontSize: 11, color: C.muted, marginBottom: 16, lineHeight: 1.5 }}>
-        Democrats need <b style={{ color: BLUE }}>51</b> to take control; a 50-50 Senate stays Republican on the Vice President's tie-breaking vote. Osborn counts for neither party unless he declares a caucus.
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
-        {statuses.map((x) => { const k = chip(x.v); return (
-          <button key={x.id} onClick={() => cycleTile(x)}
-            style={{ textAlign: "left", color: C.text, cursor: "pointer", background: ovr[x.id] != null ? C.panel2 : C.panel, border: `1px solid ${x.v === "U" ? C.line : k.c}`, borderRadius: 3, padding: "10px 12px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 13, fontWeight: 700 }}>{x.label}</span>
-              <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, color: k.c, border: `1px solid ${k.c}66`, borderRadius: 5, padding: "2px 6px" }}>{k.t}</span>
-            </div>
-            <div style={{ fontSize: 11, color: C.muted, marginTop: 3 }}>{x.sub || ""}{x.note ? ` · ${x.note}` : ""} · {x.holder}-held</div>
-          </button>
-        ); })}
-      </div>
-    </div>
-  );
-}
 
 function CupIcon({ size = 18 }) {
   return (
@@ -1457,140 +1254,770 @@ function RcvMini({ race }) {
 }
 
 function AlaskaDetail({ race, onBack }) {
-  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 };
-  const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
-  const body = { fontSize: 13, color: C.body, lineHeight: 1.6 };
+  const sec = (title, text, boxed) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: boxed ? 18 : "20px 0", background: boxed ? C.panel2 : "none", border: boxed ? `1px solid ${C.line}` : "none", borderBottom: boxed ? `1px solid ${C.line}` : `1px solid ${C.line}` }}>
+      <h2 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>{title}</h2>
+      <p style={{ margin: 0, fontFamily: serif, fontSize: 18, lineHeight: 1.6, color: C.body }}>{text}</p>
+    </div>
+  );
   return (
-    <div>
-      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
+    <div style={{ maxWidth: 860 }}>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 14, cursor: "pointer", padding: 0, marginBottom: 14 }}>
         <ChevronLeft size={16} /> All races
       </button>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALASKA · RANKED-CHOICE</div>
-      <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
+      <div style={kicker(RED)}>Alaska · {race.title} · Ranked-choice voting</div>
+      <h1 style={{ margin: "8px 0 10px", fontFamily: serif, fontWeight: 600, fontSize: 44, lineHeight: 1.05, letterSpacing: -0.8 }}>Sullivan vs. Peltola</h1>
+      <p style={{ ...deckStyle(true), marginBottom: 18 }}>Rated Lean Republican. This race won't be called on election night, so it gets an explainer instead of a needle.</p>
+      {sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
+      {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
+      {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent, so he starts ahead; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
+      {sec("Why there's no needle here", "Everywhere else on this site the needle is a win probability. For a race decided by rounds tabulated weeks after the night, a live probability would imply a precision that doesn't exist. Head-to-head polling for this race is tracked on the Polls page.")}
+    </div>
+  );
+}
 
-      <div style={{ ...card, borderColor: C.brass, background: "#F3E9D2" }}>
-        <div style={h2}>WON'T BE CALLED ON ELECTION NIGHT</div>
-        <div style={body}>Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.</div>
+// ════════════════════════════════════════════════════════════════════════════
+// NEWSPAPER PAGES (Update 43, redesign step 2)
+// Shared pieces first (dial needle, race reader, headlines), then each page.
+// ════════════════════════════════════════════════════════════════════════════
+const POLL_KEY = { sen: "senate", gov: "governor" };
+const pollKey = (id) => POLL_KEY[id] || id;
+const HOUSE_BY_RACE = { sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE };
+const stateLabel = (code) => (STATES.find((s) => s.code === code) || {}).label || code;
+const raceName = (r) => String(r.title || "").replace("U.S. House · District", "House District").replace("U.S. ", "");
+const PAPER = "#F4EFE4";
+function tintOf(hex, t = 0.68) {
+  const h = (x) => [parseInt(x.slice(1, 3), 16), parseInt(x.slice(3, 5), 16), parseInt(x.slice(5, 7), 16)];
+  const a = h(hex), b = h(PAPER);
+  return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(",")})`;
+}
+
+// One plain reading of any race: who is favored, how likely, how much is counted.
+function readRace(r) {
+  if (!r) return { kind: "none" };
+  if (r.type === "tbd") return { kind: "tbd", fav: "To be decided", favColor: C.brass, pct: null, tag: r.tbdChip || "Nominee TBD", frac: 0 };
+  if (r.type === "rcv") return { kind: "rcv", fav: "Sullivan", favColor: RED, pct: null, tag: "Lean R", frac: 0, note: "Ranked-choice rounds counted about two weeks later" };
+  if (r.type === "three") {
+    const m = compute3(r.units);
+    const parts = r.cands.map((c) => ({ ...c, sh: m.proj[c.key], win: m.win[c.key] }));
+    const lead = [...parts].sort((a, b) => b.win - a.win)[0];
+    const pct = Math.round(lead.win * 100);
+    const t = pct >= 90 ? "Likely" : pct >= 60 ? "Leans" : "Toss-up";
+    return { kind: "three", fav: lead.short, favColor: lead.color, pct, tag: t === "Toss-up" ? "Toss-up" : `${t} ${lead.short}`, frac: m.fracIn, parts };
+  }
+  if (!r.left || !r.right || !r.units || !r.units.length) return { kind: "none", fav: r.title, favColor: C.muted, pct: null, tag: r.system || "", frac: 0 };
+  const m = compute(r.units); const rt = rateOf(r, m);
+  return { kind: "two", fav: rt.leader.short, favColor: rt.leader.color, pct: rt.pct, tag: rt.text, frac: m.fracIn, pRight: m.winRight, m,
+    marginTxt: `${(m.margin >= 0 ? r.right : r.left).short} +${Math.abs(m.margin * 100).toFixed(1)}`, favSide: m.margin >= 0 ? "right" : "left" };
+}
+function swingCaption(r, m) {
+  if (m.fracIn === 0) return "No votes counted yet. The needle sits at its starting point, built from polling and each county's usual lean.";
+  const s = m.swing * 100;
+  if (Math.abs(s) < 0.6) return "Counted areas are tracking close to their expected results, so the projection is holding steady.";
+  return `Counted areas are running about ${Math.abs(s).toFixed(1)} points toward ${s > 0 ? r.right.short : r.left.short} compared with their expected results. The needle carries that swing into the areas still counting.`;
+}
+function headlineFor(r, d) {
+  if (d.kind !== "two" && d.kind !== "three") return raceName(r);
+  const names = d.kind === "two" ? [r.left.short, r.right.short] : r.cands.map((c) => c.short);
+  const other = names.find((n) => n !== d.fav) || "";
+  if (d.tag.startsWith("Called")) return `${d.fav} wins`;
+  if (d.frac > 0) return d.tag === "Toss-up" ? `${d.fav} and ${other} are neck and neck as votes come in` : `${d.fav} leads as votes are counted`;
+  if (d.tag === "Toss-up") return `${d.fav} and ${other} are nearly even`;
+  if (d.tag.startsWith("Leans")) return `${d.fav} holds a narrow edge`;
+  return `${d.fav} is a clear favorite`;
+}
+function dekFor(r, d, current) {
+  if (d.frac > 0 && d.m) return swingCaption(r, d.m);
+  const pc = current && current[pollKey(r.id)];
+  if (!pc || pc.margin == null || d.kind !== "two") return r.note || "";
+  const mg = pc.margin;
+  const lead = mg > 0 ? r.right.short : r.left.short;
+  let t = mg === 0 ? "The polling average is tied." : `The polling average has ${lead} up ${Math.abs(mg)}.`;
+  const house = HOUSE_BY_RACE[r.id] || 0;
+  if (house > 0) t += r.id === "sen"
+    ? ` Collins has beaten her polls in every recent race, so the needle starts ${house} points her way.`
+    : ` Polls here have tended to underestimate Republicans, so the needle starts ${house} point${house === 1 ? "" : "s"} toward ${r.left.short}.`;
+  if (/ranked/i.test(r.system || "")) t += " Ranked-choice voting decides it if no one tops 50 percent.";
+  return t;
+}
+
+// The signature dial: red half on the left, blue half on the right, needle = chance of winning.
+function Dial({ pRight = 0.5, width = 420, left = RED, right = BLUE, mini = false }) {
+  const deg = (clamp(pRight, 0.01, 0.99) - 0.5) * 180;
+  const sw = mini ? 26 : 20;
+  return (
+    <svg viewBox="0 0 220 125" width={width} height={Math.round((width * 125) / 220)} aria-hidden="true" style={{ display: "block", maxWidth: "100%", height: "auto" }}>
+      <path d="M 20 110 A 90 90 0 0 1 110 20" fill="none" stroke={tintOf(left)} strokeWidth={sw} />
+      <path d="M 110 20 A 90 90 0 0 1 200 110" fill="none" stroke={tintOf(right)} strokeWidth={sw} />
+      {!mini && <line x1="110" y1="6" x2="110" y2="34" stroke={C.text} strokeWidth="1" />}
+      <g style={{ transform: `rotate(${deg}deg)`, transformBox: "view-box", transformOrigin: "110px 110px", transition: "transform .7s cubic-bezier(0.22, 1, 0.36, 1)" }}>
+        <line x1="110" y1="110" x2="110" y2={mini ? 24 : 26} stroke={C.text} strokeWidth={mini ? 10 : 3} strokeLinecap="round" />
+      </g>
+      {!mini && <circle cx="110" cy="110" r="7" fill={C.text} />}
+    </svg>
+  );
+}
+function ThreeStrip({ parts, height = 10 }) {
+  return (
+    <div style={{ display: "flex", height, width: "100%" }}>
+      {parts.map((p) => <div key={p.key} style={{ width: `${p.sh * 100}%`, background: p.color, transition: "width .6s ease-out" }} />)}
+    </div>
+  );
+}
+function SectionHead({ title, note, size = 26 }) {
+  return (
+    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, flexWrap: "wrap", paddingBottom: 10, borderBottom: `2px solid ${C.text}` }}>
+      <h2 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: size, letterSpacing: -0.3 }}>{title}</h2>
+      {note && <span style={{ fontSize: 13, color: C.muted }}>{note}</span>}
+    </div>
+  );
+}
+const kicker = (color = C.muted) => ({ fontSize: 14, fontWeight: 600, color });
+const deckStyle = (wide) => ({ margin: 0, fontFamily: serif, fontSize: wide ? 20 : 17, lineHeight: 1.45, color: C.body });
+const linkBtn = { background: "none", border: "none", padding: 0, cursor: "pointer", color: C.text, fontWeight: 600, fontSize: 14, textDecoration: "underline", textUnderlineOffset: 3, textAlign: "left" };
+
+// Senate control from today's leaders (or calls, once votes are in).
+function controlTally(races) {
+  let dL = 0, rL = 0, iL = 0, dC = 0, rC = 0, iC = 0;
+  const rows = CONTROL_SET.map((c) => {
+    const r = races.find((x) => x.id === c.id);
+    const d = readRace(r);
+    let side = "R", name = "Sullivan (R)", pct = null, called = false;
+    if (d.kind === "two") {
+      const right = d.favSide === "right";
+      side = right ? (c.indRight ? "I" : "D") : "R";
+      const cand = right ? r.right : r.left;
+      name = `${cand.short} (${right ? (c.indRight ? "I" : "D") : "R"})`;
+      pct = d.pct; called = d.tag.startsWith("Called") && d.frac > 0;
+    }
+    if (side === "D") dL++; else if (side === "R") rL++; else iL++;
+    if (called) { if (side === "D") dC++; else if (side === "R") rC++; else iC++; }
+    return { ...c, race: r, d, side, name, pct, called, flip: side !== c.holder };
+  });
+  return { rows, D: D_SAFE_SEATS + dL, R: R_SAFE_SEATS + rL, I: iL, calledD: D_SAFE_SEATS + dC, calledR: R_SAFE_SEATS + rC, calledI: iC };
+}
+const sideColor = (s) => (s === "D" ? BLUE : s === "I" ? TEAL : RED);
+
+// ── FRONT PAGE ──────────────────────────────────────────────────────────────
+function RaceTable({ races, onPick, wide }) {
+  const reads = races.map((r) => ({ r, d: readRace(r) }));
+  const anyIn = reads.some((x) => x.d.frac > 0);
+  const cols = wide ? `150px minmax(0,1fr) 190px 150px ${anyIn ? "80px " : ""}72px` : "56px minmax(0,1fr) auto";
+  return (
+    <div role="list">
+      {wide && (
+        <div style={{ display: "grid", gridTemplateColumns: cols, columnGap: 20, padding: "9px 0", fontSize: 12, fontWeight: 600, color: C.muted, borderBottom: `1px solid ${C.line}` }}>
+          <span>State</span><span>Race</span><span>Favored</span><span>Rating</span>{anyIn && <span>Counted</span>}<span style={{ textAlign: "right" }}>Needle</span>
+        </div>
+      )}
+      {reads.map(({ r, d }) => {
+        const gauge = d.kind === "two"
+          ? <Dial mini pRight={d.pRight} width={wide ? 64 : 52} left={r.left.color} right={r.right.color} />
+          : d.kind === "three" ? <div style={{ width: wide ? 64 : 52 }}><ThreeStrip parts={d.parts} height={8} /></div>
+          : <span style={{ fontSize: 11, color: C.muted }}>No needle</span>;
+        const fav = d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
+        return (
+          <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
+            <button role="listitem" onClick={() => onPick(r.id)}
+              style={{ display: "grid", gridTemplateColumns: cols, columnGap: wide ? 20 : 12, alignItems: "center", width: "100%", textAlign: "left", padding: wide ? "10px 0" : "11px 0", background: "none", border: "none", borderBottom: `1px solid ${C.line}`, cursor: "pointer", color: C.text }}>
+              {wide ? (
+                <>
+                  <span style={{ fontSize: 16, fontWeight: 600 }}>{stateLabel(r.state)}</span>
+                  <span style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
+                    <span style={{ fontFamily: serif, fontSize: 18 }}>{raceName(r)}{r.liveOn && <span style={{ marginLeft: 8, fontFamily: sans, fontSize: 11, fontWeight: 700, color: "#fff", background: RED, padding: "1px 6px", verticalAlign: 3 }}>LIVE</span>}</span>
+                    <span style={{ fontSize: 13, color: C.muted }}>{r.sub}</span>
+                  </span>
+                  <span style={{ fontSize: 17, fontWeight: 600, color: d.favColor }}>{fav}</span>
+                  <span style={{ fontSize: 15 }}>{d.kind === "rcv" ? "No night-of call" : d.tag}</span>
+                  {anyIn && <span style={{ fontSize: 14, color: C.muted }}>{d.frac > 0 ? `${Math.round(d.frac * 100)}%` : "—"}</span>}
+                  <span style={{ justifySelf: "end" }}>{gauge}</span>
+                </>
+              ) : (
+                <>
+                  <span>{gauge}</span>
+                  <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                    <span style={{ fontSize: 15, fontWeight: 600 }}>{stateLabel(r.state)} <span style={{ fontWeight: 400, color: C.muted }}>{raceName(r)}</span>{r.liveOn && <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 700, color: "#fff", background: RED, padding: "1px 5px" }}>LIVE</span>}</span>
+                    <span style={{ fontSize: 13, color: C.muted }}>{d.kind === "rcv" ? "No night-of call" : d.tag}{d.frac > 0 ? ` · ${Math.round(d.frac * 100)}% in` : ""}</span>
+                  </span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: d.favColor, textAlign: "right" }}>{fav}</span>
+                </>
+              )}
+            </button>
+          </ErrorBoundary>
+        );
+      })}
+    </div>
+  );
+}
+
+function LeadStory({ r, current, wide, onPick }) {
+  const d = readRace(r);
+  if (d.kind !== "two") return null;
+  const L = r.left, R = r.right;
+  const leftPct = d.favSide === "left" ? d.pct : 100 - d.pct;
+  const rightPct = 100 - leftPct;
+  const t = voteTotals(r.units);
+  const side = (cand, pct, align) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: align, gap: 2, minWidth: wide ? 140 : 0 }}>
+      <span style={{ fontSize: wide ? 40 : 28, fontWeight: 600, color: cand.color, lineHeight: 1 }}>{pct}%</span>
+      <span style={{ fontSize: 15, fontWeight: 600 }}>{cand.short} ({cand.color === RED ? "R" : cand.color === TEAL ? "I" : "D"})</span>
+      {t.total > 0 && <span style={{ fontSize: 13, color: C.muted }}>{fmtVotes(cand === R ? t.dem : t.rep)} votes</span>}
+    </div>
+  );
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div style={kicker(d.favColor)}>{stateLabel(r.state)} · {r.title}{d.frac > 0 ? ` · ${Math.round(d.frac * 100)}% of expected vote in` : ""}</div>
+      <button onClick={() => onPick(r.id)} style={{ background: "none", border: "none", padding: 0, textAlign: "left", cursor: "pointer", color: C.text }}>
+        <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 30, lineHeight: 1.08, letterSpacing: wide ? -0.8 : -0.4 }}>{headlineFor(r, d)}</h1>
+      </button>
+      <p style={deckStyle(wide)}>{dekFor(r, d, current)}</p>
+      {wide ? (
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 28, paddingTop: 14 }}>
+          <div style={{ paddingBottom: 14 }}>{side(L, leftPct, "flex-end")}</div>
+          <Dial pRight={d.pRight} width={420} left={L.color} right={R.color} />
+          <div style={{ paddingBottom: 14 }}>{side(R, rightPct, "flex-start")}</div>
+        </div>
+      ) : (
+        <>
+          <div style={{ alignSelf: "center", width: "100%", maxWidth: 320 }}><Dial pRight={d.pRight} width={320} left={L.color} right={R.color} /></div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>{side(L, leftPct, "flex-start")}{side(R, rightPct, "flex-end")}</div>
+        </>
+      )}
+      <p style={{ margin: 0, textAlign: "center", fontSize: 13, color: C.muted }}>
+        Chance of winning, {d.frac > 0 ? "updated from the official count" : "from the polling average"}. {d.tag}.{" "}
+        <button onClick={() => onPick(r.id)} style={{ ...linkBtn, fontSize: 13 }}>Open the race page</button>
+      </p>
+    </div>
+  );
+}
+
+function FrontPage({ races, current, briefing, wide, onPick, go }) {
+  const leadRace = races.find((r) => r.id === "sen" && readRace(r).kind === "two") || races.find((r) => readRace(r).kind === "two");
+  const tally = controlTally(races);
+  const latest = (briefing || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
+  const firstPara = latest ? String(latest.body || "").split(/\n\s*\n/)[0] : "";
+  const excerpt = firstPara.length > 220 ? firstPara.slice(0, 217).replace(/\s+\S*$/, "") + "…" : firstPara;
+  const anyIn = races.some((r) => readRace(r).frac > 0);
+  const sidebar = (
+    <aside style={{ display: "flex", flexDirection: "column", gap: 26 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <h3 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>Senate control</h3>
+        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: C.body }}>{anyIn ? "If every race goes to its current leader:" : "If every race goes to today's polling leader:"}</p>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", fontSize: 30, fontWeight: 600 }}>
+          <span style={{ color: BLUE }}>{tally.D} D</span>{tally.I > 0 && <span style={{ color: TEAL, fontSize: 22 }}>{tally.I} I</span>}<span style={{ color: RED }}>{tally.R} R</span>
+        </div>
+        <div style={{ position: "relative", display: "flex", height: 14 }}>
+          <div style={{ width: `${tally.D}%`, background: BLUE }} />{tally.I > 0 && <div style={{ width: `${tally.I}%`, background: TEAL }} />}<div style={{ width: `${tally.R}%`, background: RED }} />
+          <div style={{ position: "absolute", left: "50%", top: -5, width: 2, height: 24, background: C.text }} />
+        </div>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>51 seats for control. The vice president breaks a 50–50 tie.</p>
+        <button onClick={() => go("control")} style={linkBtn}>See every seat</button>
       </div>
+      {latest && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: 20, borderTop: `1px solid ${C.line}` }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>The Briefing · {fmtDate(latest.date)}</div>
+          <button onClick={() => go("briefing")} style={{ background: "none", border: "none", padding: 0, textAlign: "left", cursor: "pointer", color: C.text }}>
+            <h3 style={{ margin: 0, fontFamily: serif, fontSize: 26, fontWeight: 600, lineHeight: 1.15 }}>{latest.title}</h3>
+          </button>
+          <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.5, color: C.body }}>{excerpt}</p>
+          <button onClick={() => go("briefing")} style={linkBtn}>Read the briefing</button>
+        </div>
+      )}
+    </aside>
+  );
+  return (
+    <div>
+      <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,2fr) minmax(0,1fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 28, paddingBottom: 30, borderBottom: `1px solid ${C.line}` }}>
+        <div style={{ paddingRight: wide ? 40 : 0, borderRight: wide ? `1px solid ${C.line}` : "none" }}>
+          {leadRace && <ErrorBoundary label="The lead race hit an error"><LeadStory r={leadRace} current={current} wide={wide} onPick={onPick} /></ErrorBoundary>}
+        </div>
+        {sidebar}
+      </section>
+      <section style={{ paddingTop: 28 }}>
+        <SectionHead title="Every race we're tracking" note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
+        <RaceTable races={races} onPick={onPick} wide={wide} />
+        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Alaska uses ranked-choice rounds counted about two weeks after election night, so it has no election-night needle.</p>
+      </section>
+    </div>
+  );
+}
+const fmtDate = (iso) => {
+  const d = new Date(`${iso}T12:00:00`);
+  return isNaN(d) ? String(iso || "") : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
 
-      <div style={card}>
-        <div style={h2}>HOW THIS RACE WORKS</div>
-        <div style={body}>Alaska uses a top-four open primary on August 18: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.</div>
+// ── RACE PAGE (two-candidate races) ─────────────────────────────────────────
+function RacePolls({ r, current, onNav }) {
+  const pc = current && current[pollKey(r.id)];
+  const polls = pc && Array.isArray(pc.polls) ? pc.polls.slice(0, 6) : [];
+  if (!pc) return null;
+  const dem = r.right.short, rep = r.left.short;
+  const mTxt = (dm, rp) => { const x = Math.round((dm - rp) * 10) / 10; return x === 0 ? ["Tied", C.text] : x > 0 ? [`${dem} +${x}`, r.right.color] : [`${rep} +${-x}`, r.left.color]; };
+  return (
+    <div>
+      <SectionHead title="Recent polls" note={pc.nPolls ? `${pc.nPolls} in the average` : null} size={22} />
+      {polls.length === 0 ? <p style={{ fontSize: 14, color: C.muted }}>{pc.note || "No public polls yet."}</p> : polls.map((p, i) => {
+        const [t, col] = mTxt(p.dem, p.rep);
+        return (
+          <div key={i} style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto auto", columnGap: 12, padding: "8px 0", borderBottom: `1px solid ${C.line}`, fontSize: 14 }}>
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.pollster}</span>
+            <span style={{ color: C.muted }}>{fmtDate(p.date).replace(/, \d{4}$/, "")}</span>
+            <span style={{ color: col, fontWeight: 600, minWidth: 92, textAlign: "right" }}>{t}</span>
+          </div>
+        );
+      })}
+      <button onClick={() => onNav("polls")} style={{ ...linkBtn, marginTop: 12 }}>All polls</button>
+    </div>
+  );
+}
+function RelatedBriefing({ r, briefing, onNav }) {
+  const names = [r.left?.short, r.right?.short, stateLabel(r.state)].filter(Boolean);
+  const hit = (briefing || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)))
+    .find((p) => names.some((n) => `${p.title} ${p.body}`.includes(n)));
+  if (!hit) return null;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingTop: 26 }}>
+      <h3 style={{ margin: 0, fontFamily: serif, fontSize: 22, fontWeight: 600 }}>From the Briefing</h3>
+      <button onClick={() => onNav("briefing")} style={{ background: "none", border: "none", padding: 0, textAlign: "left", cursor: "pointer", color: C.text, fontFamily: serif, fontSize: 19, lineHeight: 1.3 }}>{hit.title}</button>
+      <span style={{ fontSize: 13, color: C.muted }}>{fmtDate(hit.date)}</span>
+    </div>
+  );
+}
+function CountyTable({ race }) {
+  const sorted = [...race.units].sort((a, b) => b.weight - a.weight);
+  const anyIn = sorted.some((u) => u.reported > 0);
+  return (
+    <div>
+      <SectionHead title="County by county" note={anyIn ? "Share of expected vote counted" : "Starting estimate for each county"} size={22} />
+      {sorted.map((u) => {
+        const share = u.reported > 0 && u.finalShare != null ? u.finalShare : u.prior;
+        const lean = Math.round((share - 0.5) * 200);
+        const col = lean >= 0 ? race.right.color : race.left.color;
+        const who = lean >= 0 ? race.right.short : race.left.short;
+        const base = Math.round((u.prior - 0.5) * 200);
+        return (
+          <div key={u.name} style={{ display: "grid", gridTemplateColumns: "minmax(90px,150px) minmax(0,1fr) 118px", alignItems: "center", columnGap: 14, padding: "7px 0", borderBottom: `1px solid ${C.line}` }}>
+            <span style={{ fontSize: 15, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.name}</span>
+            <span style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <span style={{ display: "flex", height: 10 }}>
+                <span style={{ width: `${(1 - share) * 100}%`, background: tintOf(race.left.color, 0.45) }} />
+                <span style={{ width: `${share * 100}%`, background: tintOf(race.right.color, 0.45) }} />
+              </span>
+              {anyIn && <span style={{ fontSize: 12, color: C.muted }}>{Math.round(u.reported * 100)}% counted · expected {base >= 0 ? race.right.short : race.left.short} +{Math.abs(base)}</span>}
+            </span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: col, textAlign: "right" }}>{lean === 0 ? "Even" : `${who} +${Math.abs(lean)}`}</span>
+          </div>
+        );
+      })}
+      <p style={{ margin: 0, paddingTop: 10, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>
+        {anyIn ? "Counties show the counted vote once results arrive, and the starting estimate before that." : "Each county starts from its usual lean relative to the state. When votes arrive, the gap between the starting estimate and the real count drives the needle."}
+      </p>
+    </div>
+  );
+}
+function RacePage({ race, onBack, current, briefing, wide, onNav }) {
+  const d = readRace(race);
+  const L = race.left, R = race.right;
+  const leftPct = d.favSide === "left" ? d.pct : 100 - d.pct;
+  const t = voteTotals(race.units);
+  const party = (c) => (c.color === RED ? "R" : c.color === TEAL ? "I" : "D");
+  const side = (cand, pct, votes, align) => (
+    <span style={{ display: "flex", flexDirection: "column", alignItems: align }}>
+      <span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: cand.color, lineHeight: 1.05 }}>{pct}%</span>
+      <span style={{ fontSize: 15, fontWeight: 600 }}>{cand.short} ({party(cand)})</span>
+      {t.total > 0 && <span style={{ fontSize: 13, color: C.muted }}>{fmtVotes(votes)} votes</span>}
+    </span>
+  );
+  const right = (
+    <div>
+      <RacePolls r={race} current={current} onNav={onNav} />
+      <RelatedBriefing r={race} briefing={briefing} onNav={onNav} />
+    </div>
+  );
+  return (
+    <div>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 14, cursor: "pointer", padding: 0, marginBottom: 14 }}>
+        <ChevronLeft size={16} /> All races
+      </button>
+      <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={kicker(d.favColor)}>{stateLabel(race.state)} · {race.title} · {race.system}{race.liveOn ? " · Live" : ""}</div>
+          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>{L.short} vs. {R.short}</h1>
+          <p style={deckStyle(wide)}>{dekFor(race, d, current)}</p>
+          {race.note && <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{race.note}</p>}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <div style={{ width: "100%", maxWidth: 400 }}><Dial pRight={d.pRight} width={400} left={L.color} right={R.color} /></div>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: 400 }}>
+            {side(L, leftPct, t.rep, "flex-start")}{side(R, 100 - leftPct, t.dem, "flex-end")}
+          </div>
+          <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>
+            Chance of winning · <b style={{ color: C.text }}>{d.tag}</b> · Projected {d.marginTxt} · {Math.round(d.frac * 100)}% of expected vote in
+          </div>
+        </div>
+      </section>
+      <p style={{ margin: "18px 0 0", padding: "2px 0 2px 14px", borderLeft: `3px solid ${C.text}`, fontFamily: serif, fontSize: 17, lineHeight: 1.5, color: C.body }}>{swingCaption(race, d.m)}</p>
+      <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 30, paddingTop: 26 }}>
+        <CountyTable race={race} />
+        {right}
+      </section>
+    </div>
+  );
+}
+
+// ── SENATE CONTROL ──────────────────────────────────────────────────────────
+function SenateControlView({ races, wide, onPick }) {
+  const [ovr, setOvr] = useState({});
+  const tally = controlTally(races);
+  const rows = tally.rows.map((x) => ({ ...x, pick: ovr[x.id] }));
+  const scenario = rows.some((x) => x.pick);
+  const count = (s) => rows.filter((x) => (x.pick || x.side) === s).length;
+  const D = D_SAFE_SEATS + count("D"), R = R_SAFE_SEATS + count("R"), I = count("I");
+  const cycle = (x) => {
+    const opts = [x.indRight ? "I" : "D", "R"];
+    setOvr((o) => {
+      const cur = o[x.id];
+      const next = cur == null ? opts.find((v) => v !== x.side) : undefined;
+      const n = { ...o };
+      if (next) n[x.id] = next; else delete n[x.id];
+      return n;
+    });
+  };
+  const flips = rows.filter((x) => (x.pick || x.side) !== x.holder);
+  const verdict = D >= 51 ? "Democrats would take control" : R >= 50 ? "Republicans would keep control" : "control would come down to Nebraska's Dan Osborn";
+  const blocks = [];
+  for (let i = 0; i < D_SAFE_SEATS; i++) blocks.push(BLUE);
+  rows.filter((x) => (x.pick || x.side) === "D").forEach(() => blocks.push(tintOf(BLUE, 0.4)));
+  rows.filter((x) => (x.pick || x.side) === "I").forEach(() => blocks.push(tintOf(TEAL, 0.3)));
+  rows.filter((x) => (x.pick || x.side) === "R").forEach(() => blocks.push(tintOf(RED, 0.4)));
+  for (let i = 0; i < R_SAFE_SEATS; i++) blocks.push(RED);
+  return (
+    <div>
+      <section style={{ display: "flex", flexDirection: "column", gap: 14, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
+        <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Who controls the Senate?</h1>
+        <p style={{ ...deckStyle(wide), maxWidth: 880 }}>
+          {scenario ? "In your scenario, " : "If every race we track goes to today's leader, "}{verdict}, {D} to {R}{I ? `, with Osborn holding ${I}` : ""}.
+          {flips.length ? ` Seats changing hands: ${flips.map((x) => x.label).join(", ")}.` : " No seats would change hands."}
+        </p>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", fontSize: wide ? 34 : 24, fontWeight: 600 }}>
+          <span style={{ color: BLUE }}>{D} Democrats</span>{I > 0 && <span style={{ color: TEAL, fontSize: wide ? 24 : 18 }}>{I} Ind.</span>}<span style={{ color: RED }}>{R} Republicans</span>
+        </div>
+        <div style={{ position: "relative", display: "flex", gap: wide ? 3 : 1 }}>
+          {blocks.map((c, i) => <div key={i} style={{ flex: 1, height: wide ? 26 : 20, background: c }} />)}
+          <div style={{ position: "absolute", left: "calc(50% - 1px)", top: -8, width: 2, height: wide ? 42 : 36, background: C.text }} />
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 24px", fontSize: 13, color: C.muted }}>
+          <span>Dark: seats not up this year or safe ({D_SAFE_SEATS} D, {R_SAFE_SEATS} R)</span><span>Light: the 10 races we track, by current leader</span><span>Line: 51 for control; the vice president breaks a 50–50 tie</span>
+        </div>
+        {scenario && <button onClick={() => setOvr({})} style={{ ...linkBtn, color: RED }}>Clear my scenario and go back to the forecast</button>}
+      </section>
+      <section style={{ paddingTop: 26 }}>
+        <SectionHead title="The 10 seats that decide it" note={wide ? "Tap “Your call” to try a scenario" : null} size={wide ? 28 : 22} />
+        {rows.map((x) => {
+          const s = x.pick || x.side;
+          const col = sideColor(s);
+          const flip = s !== x.holder;
+          const callTxt = x.pick ? (x.pick === "D" ? "Dem" : x.pick === "I" ? "Ind" : "GOP") : "—";
+          return (
+            <div key={x.id} style={{ display: "grid", gridTemplateColumns: wide ? "170px 130px minmax(0,1fr) 110px 110px 130px" : "minmax(0,1fr) auto", columnGap: 16, rowGap: 4, alignItems: "center", padding: "10px 0", borderBottom: `1px solid ${C.line}` }}>
+              {wide ? (
+                <>
+                  <button onClick={() => x.race && onPick(x.id)} style={{ ...linkBtn, textDecoration: "none", fontSize: 16 }}>{x.label}</button>
+                  <span style={{ fontSize: 14, color: C.muted }}>Held by {x.holder === "D" ? "Dem." : "GOP"}</span>
+                  <span style={{ fontFamily: serif, fontSize: 18, color: sideColor(x.side) }}>{x.name}{x.id === "ak_sen" ? " · Lean R" : ""}</span>
+                  <span style={{ fontSize: 16, fontWeight: 600, color: sideColor(x.side) }}>{x.pct != null ? `${x.pct}%` : "—"}{x.called ? " · Called" : ""}</span>
+                  <span>{flip && <span style={{ fontSize: 12, fontWeight: 700, color: PAPER, background: col, padding: "2px 8px" }}>Would flip</span>}</span>
+                  <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 13, fontWeight: 600, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
+                </>
+              ) : (
+                <>
+                  <span style={{ display: "flex", flexDirection: "column" }}>
+                    <span style={{ fontSize: 16, fontWeight: 600 }}>{x.label} <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}>held by {x.holder === "D" ? "Dem." : "GOP"}</span></span>
+                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.pct != null ? `${x.pct}%` : "· Lean R"}{flip ? " · would flip" : ""}</span>
+                  </span>
+                  <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 12, fontWeight: 600, minHeight: 36, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
+                </>
+              )}
+            </div>
+          );
+        })}
+        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Seats not listed are assumed to stay with their party. Osborn counts for neither party. A scenario never changes the needles.</p>
+      </section>
+    </div>
+  );
+}
+
+// ── THE BRIEFING ────────────────────────────────────────────────────────────
+function BriefingView({ posts, wide }) {
+  const [open, setOpen] = useState(null);
+  const [filter, setFilter] = useState(null);
+  const sorted = (posts || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const shown = filter ? sorted.filter((p) => `${p.title} ${p.body}`.toLowerCase().includes(filter.toLowerCase())) : sorted;
+  const paras = (p) => String(p.body || "").split(/\n\s*\n/);
+  const links = (p) => Array.isArray(p.links) && p.links.length > 0 && (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 6 }}>
+      {p.links.map((l, k) => <a key={k} href={l.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, fontWeight: 600, color: C.text }}>{l.label}</a>)}
+    </div>
+  );
+  const lead = shown[0];
+  const rest = shown.slice(1);
+  const states = ["Maine", "North Carolina", "Texas", "Michigan", "Nebraska", "Iowa", "Georgia", "Ohio", "New Hampshire", "Alaska"];
+  const aside = (
+    <aside style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <h2 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>About the Briefing</h2>
+      <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>Written analysis from Colin Blais. The needles are math; this is the story around them. Longer pieces run on Food &amp; Politics.</p>
+      <a href="https://foodandpolitics.substack.com" target="_blank" rel="noopener noreferrer" style={{ alignSelf: "flex-start", fontSize: 15, fontWeight: 700, textDecoration: "none", color: C.text, border: `1.5px solid ${C.text}`, padding: "10px 16px" }}>Subscribe to Food &amp; Politics</a>
+      <div style={{ height: 1, background: C.line, margin: "8px 0" }} />
+      <h2 style={{ margin: 0, fontFamily: serif, fontSize: 20, fontWeight: 600 }}>Filter by state</h2>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {states.map((s) => (
+          <button key={s} onClick={() => { setFilter(filter === s ? null : s); setOpen(null); }}
+            style={{ fontSize: 14, padding: "7px 12px", minHeight: 36, cursor: "pointer", border: `1px solid ${filter === s ? C.text : C.line}`, background: filter === s ? C.text : "transparent", color: filter === s ? PAPER : C.text }}>{s}</button>
+        ))}
       </div>
-
-      <div style={card}>
-        <div style={h2}>THE MATCHUP</div>
-        <div style={body}>Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent, so he starts ahead; Peltola's crossover appeal and the ranked-choice format keep it competitive. Rated lean Republican.</div>
+      {filter && <button onClick={() => setFilter(null)} style={linkBtn}>Show all posts</button>}
+    </aside>
+  );
+  if (posts === null) return <p style={{ fontSize: 15, color: C.muted }}>Loading the Briefing…</p>;
+  if (!sorted.length) return <p style={{ fontSize: 15, color: C.muted }}>No briefings posted yet.</p>;
+  return (
+    <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,2fr) minmax(0,1fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 30 }}>
+      <div>
+        {!lead ? <p style={{ fontSize: 15, color: C.muted }}>No posts mention {filter} yet.</p> : (
+          <article style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 26, borderBottom: `2px solid ${C.text}` }}>
+            <div style={kicker()}>The Briefing · {fmtDate(lead.date)}</div>
+            <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 30, lineHeight: 1.06, letterSpacing: -0.8 }}>{lead.title}</h1>
+            {paras(lead).map((t, j) => <p key={j} style={{ margin: 0, fontFamily: serif, fontSize: wide ? 19 : 17, lineHeight: 1.6, color: C.body }}>{t}</p>)}
+            {links(lead)}
+          </article>
+        )}
+        {rest.map((p, i) => {
+          const isOpen = open === i;
+          return (
+            <article key={`${p.date}-${p.title}`} style={{ display: "grid", gridTemplateColumns: wide ? "110px minmax(0,1fr)" : "minmax(0,1fr)", columnGap: 24, rowGap: 4, padding: "16px 0", borderBottom: `1px solid ${C.line}` }}>
+              <span style={{ fontSize: 14, color: C.muted, paddingTop: wide ? 5 : 0 }}>{fmtDate(p.date)}</span>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <button onClick={() => setOpen(isOpen ? null : i)} aria-expanded={isOpen}
+                  style={{ background: "none", border: "none", padding: 0, textAlign: "left", cursor: "pointer", color: C.text, fontFamily: serif, fontSize: wide ? 24 : 21, fontWeight: 600, lineHeight: 1.2 }}>{p.title}</button>
+                {(isOpen ? paras(p) : [paras(p)[0]]).map((t, j) => (
+                  <p key={j} style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body, ...(isOpen ? {} : { display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }) }}>{t}</p>
+                ))}
+                {isOpen && links(p)}
+                <button onClick={() => setOpen(isOpen ? null : i)} style={linkBtn}>{isOpen ? "Show less" : "Keep reading"}</button>
+              </div>
+            </article>
+          );
+        })}
       </div>
+      {aside}
+    </section>
+  );
+}
 
-      <div style={card}>
-        <div style={h2}>WHY THERE'S NO NEEDLE HERE</div>
-        <div style={body}>Everywhere else on this site the needle is a win probability. For a race decided by rounds tabulated weeks after the night, a live probability would imply a precision that doesn't exist. Head-to-head polling for this race is tracked on the Polls tab. Once the August 18 primary sets the four-candidate field, election night will show a live first-choice count with a clear flag for whether it's heading to an instant runoff.</div>
+// ── POLLS ───────────────────────────────────────────────────────────────────
+const POLL_TABS = [
+  ["senate", "Maine Senate", "Jackson", "Collins"], ["governor", "Maine Governor", "Pingree", "Charles", "Bennett"],
+  ["cd1", "Maine House 1", "Pingree", "Russell"], ["cd2", "Maine House 2", "Dunlap", "LePage"],
+  ["nc_sen", "North Carolina", "Cooper", "Whatley"], ["oh_sen", "Ohio", "Brown", "Husted"], ["tx_sen", "Texas", "Talarico", "Paxton"],
+  ["ia_sen", "Iowa", "Turek", "Hinson"], ["ga_sen", "Georgia", "Ossoff", "Collins"], ["ne_sen", "Nebraska", "Osborn", "Ricketts"],
+  ["mi_sen", "Michigan", "El-Sayed", "Rogers"], ["nh_sen", "New Hampshire", "Pappas", "Sununu"], ["ak_sen", "Alaska", "Peltola", "Sullivan"],
+];
+const HOUSE_BY_POLL = { senate: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE };
+const tierOf = (rating) => TIERS.find((t) => (rating || 0) >= t.min) || TIERS[TIERS.length - 1];
+function PollsView({ current, loaded, wide }) {
+  const [tab, setTab] = useState("senate");
+  const def = POLL_TABS.find((t) => t[0] === tab) || POLL_TABS[0];
+  const [, label, demN, repN, indN] = def;
+  const pc = current && current[tab];
+  const polls = pc && Array.isArray(pc.polls) ? pc.polls : [];
+  const mg = pc ? pc.margin : null;
+  const demCol = tab === "ne_sen" ? TEAL : BLUE;
+  const avgTxt = mg == null ? "—" : mg === 0 ? "Tied" : mg > 0 ? `${demN} +${Math.abs(mg)}` : `${repN} +${Math.abs(mg)}`;
+  const house = HOUSE_BY_POLL[tab] || 0;
+  const cols = wide ? `minmax(0,1fr) 110px 80px 80px ${indN ? "80px " : ""}130px 100px 70px` : "minmax(0,1fr) auto";
+  const stateName = label.startsWith("Maine") ? "Maine" : label;
+  return (
+    <div>
+      <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 18 }}>
+        <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>The polls</h1>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Every poll in the averages, newest first. Better pollsters count more, newer polls count more, and a campaign's own poll never stands alone.</p>
+      </section>
+      <nav aria-label="Races" style={{ display: "flex", flexWrap: wide ? "wrap" : "nowrap", overflowX: wide ? "visible" : "auto", gap: 4, borderBottom: `1px solid ${C.line}` }}>
+        {POLL_TABS.map(([k, l]) => (
+          <button key={k} onClick={() => setTab(k)} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", color: C.text, padding: "9px 12px", minHeight: 40, fontSize: 15, fontWeight: tab === k ? 700 : 500, borderBottom: `2px solid ${tab === k ? C.text : "transparent"}`, whiteSpace: "nowrap" }}>{l}</button>
+        ))}
+      </nav>
+      {!loaded ? <p style={{ fontSize: 15, color: C.muted }}>Loading the latest polls…</p> : !pc ? <p style={{ fontSize: 15, color: C.muted }}>No polling data for this race yet.</p> : (
+        <>
+          <section style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 14, padding: "24px 0 16px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <span style={kicker()}>{label} · polling average{pc.nPolls ? ` of ${pc.nPolls} polls` : ""}</span>
+              <span style={{ fontSize: wide ? 40 : 30, fontWeight: 600, color: mg == null || mg === 0 ? C.text : mg > 0 ? demCol : RED }}>{avgTxt}{indN && pc.bennett != null ? <span style={{ fontSize: 20, color: IND }}> · {indN} {pc.bennett}%</span> : null}</span>
+            </div>
+            {house > 0 && <span style={{ fontSize: 14, color: C.muted, maxWidth: 440 }}>The needle then shifts its starting point {house} point{house === 1 ? "" : "s"} toward {repN} for {stateName}'s history of polls underestimating Republicans. The How it works page explains each shift.</span>}
+          </section>
+          {polls.length === 0 ? <p style={{ fontSize: 15, color: C.muted }}>{pc.note || "No public polls yet."}</p> : (
+            <div>
+              {wide && (
+                <div style={{ display: "grid", gridTemplateColumns: cols, columnGap: 18, padding: "10px 0", fontSize: 12, fontWeight: 600, color: C.muted, borderTop: `2px solid ${C.text}`, borderBottom: `1px solid ${C.line}` }}>
+                  <span>Pollster</span><span>Field end</span><span>{demN}</span><span>{repN}</span>{indN && <span>{indN}</span>}<span>Margin</span><span>Rating</span><span style={{ textAlign: "right" }}>Weight</span>
+                </div>
+              )}
+              {polls.map((p, i) => {
+                const x = Math.round((p.dem - p.rep) * 10) / 10;
+                const [mt, mc] = x === 0 ? ["Tied", C.text] : x > 0 ? [`${demN} +${x}`, demCol] : [`${repN} +${-x}`, RED];
+                const tier = tierOf(p.rating);
+                return wide ? (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: cols, columnGap: 18, alignItems: "center", padding: "9px 0", borderBottom: `1px solid ${C.line}`, fontSize: 15 }}>
+                    <span style={{ fontFamily: serif, fontSize: 18, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.pollster}</span>
+                    <span style={{ color: C.muted }}>{fmtDate(p.date).replace(/, \d{4}$/, "")}</span>
+                    <span>{p.dem}</span><span>{p.rep}</span>{indN && <span>{p.ind ?? "—"}</span>}
+                    <span style={{ color: mc, fontWeight: 600 }}>{mt}</span>
+                    <span style={{ color: tier.color, fontWeight: 600 }}>{tier.name}</span>
+                    <span style={{ textAlign: "right", color: C.muted }}>{p.weightPct}%</span>
+                  </div>
+                ) : (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: cols, columnGap: 12, alignItems: "center", padding: "10px 0", borderBottom: `1px solid ${C.line}` }}>
+                    <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                      <span style={{ fontFamily: serif, fontSize: 17, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.pollster}</span>
+                      <span style={{ fontSize: 13, color: C.muted }}>{fmtDate(p.date).replace(/, \d{4}$/, "")} · <span style={{ color: tier.color, fontWeight: 600 }}>{tier.name}</span> · {p.dem}–{p.rep}{p.ind != null ? `–${p.ind}` : ""} · weight {p.weightPct}%</span>
+                    </span>
+                    <span style={{ color: mc, fontWeight: 600, fontSize: 15, textAlign: "right" }}>{mt}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>
+            {tab === "ak_sen" ? "Alaska polls are head-to-head surveys. The election itself is ranked-choice, so these track sentiment, not a projected final result. " : ""}
+            {tab === "senate" ? "Maine Senate polls count from July 25, when Jackson became the nominee. " : ""}
+            Likely-voter numbers are used when a poll reports both. Weight is each poll's share of the average. Updated {current?.updated || "—"}.
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ── POLLSTER RATINGS ────────────────────────────────────────────────────────
+function RatingsView({ current, loaded, wide }) {
+  const all = buildRatings(current);
+  return (
+    <div>
+      <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
+        <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Pollster ratings</h1>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Not every poll deserves the same trust. Each pollster gets one rating, used everywhere it polls, and that rating decides how much its numbers pull the average. This list is built from the polls the site is using right now.</p>
+      </section>
+      {!loaded && <p style={{ fontSize: 14, color: C.muted }}>Loading ratings…</p>}
+      {TIERS.map((t, i) => {
+        const max = i === 0 ? 2 : TIERS[i - 1].min;
+        const members = all.filter((p) => p.rating >= t.min && p.rating < max);
+        if (!members.length) return null;
+        return (
+          <div key={t.name} style={{ display: "grid", gridTemplateColumns: wide ? "260px minmax(0,1fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 12, padding: "24px 0", borderBottom: `1px solid ${C.line}` }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <span style={{ fontFamily: serif, fontSize: 30, fontWeight: 600, color: t.color }}>{t.name}</span>
+              <span style={{ fontSize: 14, lineHeight: 1.5, color: C.body }}>{t.desc}</span>
+              <span style={{ fontSize: 13, color: C.muted }}>Rating {t.range}</span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: wide ? "repeat(auto-fill, minmax(230px, 1fr))" : "minmax(0,1fr)", gap: 8, alignContent: "start" }}>
+              {members.map((p) => (
+                <div key={p.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "9px 12px", background: C.panel, border: `1px solid ${C.line}` }}>
+                  <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                    <span style={{ fontSize: 15, fontWeight: 600 }}>{p.name}</span>
+                    <span style={{ fontSize: 12, color: C.muted }}>{POLLSTER_NOTES[p.name] ? `${POLLSTER_NOTES[p.name]} · ` : ""}{p.n} {p.n === 1 ? "poll" : "polls"} · {[...p.states].sort().join(", ")}</span>
+                  </span>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: t.color }}>{p.rating.toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      <div style={{ paddingTop: 22 }}>
+        <SectionHead title="The rules" size={22} />
+        <p style={{ margin: "12px 0 0", fontFamily: serif, fontSize: 17, lineHeight: 1.6, color: C.body, maxWidth: 900 }}>
+          A pollster carries one rating everywhere it appears. When a poll publishes both registered-voter and likely-voter numbers, the likely-voter numbers are used. A poll paid for by a campaign or a party is rated at the bottom, and it can join a race's average but can never be the only poll in it. Ratings are separate from the adjustments on the How it works page: a rating measures how much to trust a pollster, while an adjustment corrects for a state's history of polling misses.
+        </p>
       </div>
     </div>
   );
 }
 
-function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, govMargin, onGov, current }) {
+// ── HOW IT WORKS ────────────────────────────────────────────────────────────
+function MethodView({ wide }) {
+  const sub = { fontFamily: serif, fontSize: wide ? 18 : 17, lineHeight: 1.6, color: C.body, margin: 0 };
+  const item = { fontSize: 15, lineHeight: 1.55, color: C.body, margin: 0 };
+  const steps = [
+    ["Start from the polls", <p key="p" style={sub}>Each race begins at its polling average. Every poll is weighted two ways: by how much we trust the pollster (see Pollster ratings) and by how recent it is, with a poll's weight halving every three weeks.</p>],
+    ["Adjust for history", <>
+      <p style={sub}>Polls in some states have missed in the same direction election after election. For those races the starting point shifts a documented amount toward the side polls have underestimated, sized to that state's own record:</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
+        {[["North Carolina", `${NC_HOUSE} pts toward Whatley`, "NC polls overstated Democrats in 2016, 2020 and 2022, and undecided voters there tend to break Republican."],
+          ["Texas", `${TX_HOUSE} pts toward Paxton`, "for Texas's strong Republican lean."],
+          ["Iowa", `${IA_HOUSE} pts toward Hinson`, "for Iowa's strong Republican lean in federal races."],
+          ["Maine", `${SEN_HOUSE} pts toward Collins`, "who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9)."],
+          ["Ohio", `${OH_HOUSE} pts toward Husted`, "for Ohio's Republican lean in federal races."],
+          ["Nebraska", `${NE_HOUSE} pts toward Ricketts`, "for the state's Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven."],
+          ["Georgia", `${GA_HOUSE} pts toward Collins`, "for Georgia's narrow Republican lean."],
+          ["Michigan", `${MI_HOUSE} pts toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it is the closest state on this board."],
+          ["New Hampshire", `${NH_HOUSE} pt toward Sununu`, "the smallest shift, for NH polls' history and Sununu's crossover appeal."]].map(([s, a, why]) => (
+          <p key={s} style={item}><b style={{ color: C.text }}>{s}:</b> {a}. {why.charAt(0).toUpperCase() + why.slice(1)}</p>
+        ))}
+        <p style={item}>Maine's governor and House races get no adjustment.</p>
+      </div>
+    </>],
+    ["Map it county by county", <>
+      <p style={sub}>Every race is built on real past results, county by county. The map sets which counties run bluer or redder than the state; how the state leans overall comes from the polls.</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
+        <p style={item}><b style={{ color: C.text }}>Maine Senate:</b> the 2020 Collins–Gideon results (60%) blended with the 2020 and 2016 presidential maps (40%).</p>
+        <p style={item}><b style={{ color: C.text }}>Maine House 1 and 2:</b> the 2020 House results by county. District 2 is an open seat, so only a quarter of Jared Golden's personal-vote pattern is kept.</p>
+        <p style={item}><b style={{ color: C.text }}>Maine Governor:</b> the blended presidential map for shape, with the three-way split (Pingree, Charles, Bennett) set by polling.</p>
+        <p style={item}><b style={{ color: C.text }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan and New Hampshire:</b> 2024 presidential results in every county. Ohio's race is a special election; Georgia goes to a Dec. 1 runoff if no one tops 50%; Nebraska's Dan Osborn is an independent, shown in green.</p>
+      </div>
+    </>],
+    ["Watch the real count", <p key="w" style={sub}>On election night, official results files from each state arrive every minute or two. The needle compares each county's count with its expected result and carries the difference into the counties still counting. Expected turnout is scaled for a midterm, and if one state's feed goes down, only that state pauses.</p>],
+    ["Call it carefully", <p key="c" style={sub}>A race is called only when the leader passes a 97 percent chance and at least half the expected vote is counted. Before that, the strongest label is Likely, however lopsided the early count looks.</p>],
+  ];
+  const note = (title, text) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <h2 style={{ margin: 0, fontFamily: serif, fontSize: 22, fontWeight: 600 }}>{title}</h2>
+      <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: C.body }}>{text}</p>
+    </div>
+  );
+  return (
+    <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,2fr) minmax(0,1fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 30 }}>
+      <div>
+        <h1 style={{ margin: "0 0 12px", fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>How the needle works</h1>
+        <p style={{ ...deckStyle(wide), paddingBottom: 18, borderBottom: `2px solid ${C.text}` }}>Before election night, the needle is a polling forecast. Once votes are counted, it runs on the official results each state publishes.</p>
+        {steps.map(([title, content], i) => (
+          <div key={title} style={{ display: "grid", gridTemplateColumns: wide ? "70px minmax(0,1fr)" : "44px minmax(0,1fr)", columnGap: wide ? 24 : 14, padding: "20px 0", borderBottom: `1px solid ${C.line}` }}>
+            <span style={{ fontFamily: serif, fontSize: wide ? 44 : 32, fontWeight: 600, lineHeight: 1, color: C.muted }}>{i + 1}</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <h2 style={{ margin: 0, fontFamily: serif, fontSize: wide ? 26 : 22, fontWeight: 600 }}>{title}</h2>
+              {content}
+            </div>
+          </div>
+        ))}
+        <p style={{ margin: 0, paddingTop: 16, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>This is an independent project, not a forecast from a news outlet. Probabilities express uncertainty; they are not guarantees.</p>
+      </div>
+      <aside style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}` }}>
+          {note("Maine and New Hampshire", "These states don't publish results on election night. Their needles will pause and finish on their own when the states post official results; in the meantime each paused race links to the AP's live count.")}
+        </div>
+        {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so it gets an explainer instead of a needle.")}
+        {note("Where the data comes from", "Polls from public releases, and results from the official files each state's election office publishes. No paid data and no copying from news sites.")}
+      </aside>
+    </section>
+  );
+}
+
+
+function Detail({ race, onBack, govB, govMargin, onGov, current, briefing, wide, onNav }) {
   if (race.type === "three") return <GovDetail race={race} onBack={onBack} govB={govB} govMargin={govMargin} onGov={onGov} current={current} />;
   if (race.type === "rcv") return <AlaskaDetail race={race} onBack={onBack} />;
   if (race.type === "tbd") return race.id === "sen" ? <MaineSenateTbdDetail race={race} onBack={onBack} /> : <MichiganDetail race={race} onBack={onBack} />;
-  const m = compute(race.units);
-  const rt = rateOf(race, m);
-  const lead = m.margin >= 0 ? race.right : race.left;
-
-  // gauge geometry
-  const cx = 160, cy = 162, rOut = 132, rIn = 112, N = 50;
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const hx = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
-  const mix = (c1, c2, t) => { const a = hx(c1), b = hx(c2); return `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`; };
-  const tcol = (f) => f < 0.5 ? mix(race.left.color, "#B8AE9C", f / 0.5) : mix("#B8AE9C", race.right.color, (f - 0.5) / 0.5);
-  const pt = (r, deg) => { const a = (deg * Math.PI) / 180; return [cx + r * Math.cos(a), cy - r * Math.sin(a)]; };
-  const ticks = [];
-  for (let i = 0; i <= N; i++) {
-    const f = i / N, ang = 180 * (1 - f), major = Math.abs((f * 4) % 1) < 0.001;
-    const [x1, y1] = pt(major ? rIn - 8 : rIn, ang), [x2, y2] = pt(rOut, ang);
-    ticks.push(<line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={tcol(f)} strokeWidth={major ? 3 : 2.2} strokeLinecap="round" opacity={major ? 1 : 0.85} />);
-  }
-  const needleDeg = (m.winRight - 0.5) * 180; // -90 (R) .. +90 (D), 0 = straight up
-
-  const swingPts = m.swing * 100;
-  const caption = m.fracIn === 0
-    ? "No votes counted yet. The needle sits at the historical baseline."
-    : Math.abs(swingPts) < 0.6
-      ? "Reporting areas are tracking close to baseline; the projection is holding."
-      : `Reporting areas are running about ${Math.abs(swingPts).toFixed(1)} pts toward ${swingPts > 0 ? race.right.short : race.left.short} vs baseline. That swing is carried into areas still counting.`;
-
-  const sorted = [...race.units].sort((a, b) => b.weight - a.weight);
-
-  return (
-    <div>
-      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", padding: 0, marginBottom: 10, fontFamily: mono }}>
-        <ChevronLeft size={16} /> All races
-      </button>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>{(STATES.find((s) => s.code === race.state)?.label || "").toUpperCase()} · {race.system}</div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
-        {race.liveOn && <span style={{ fontSize: 10, fontFamily: mono, letterSpacing: 0.5, padding: "2px 6px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>}
-      </div>
-      <div style={{ fontSize: 12, color: C.muted, marginBottom: race.note ? 6 : 12 }}>{race.sub}</div>
-      {race.note && <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginBottom: 12, padding: "8px 10px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8 }}>{race.note}</div>}
-
-      
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, padding: "18px 14px 14px" }}>
-        <svg viewBox="0 0 320 188" style={{ width: "100%", display: "block" }}>
-          {ticks}
-          <text x="14" y="180" fill={race.left.color} fontFamily={mono} fontSize="12" fontWeight="700">{race.left.short}</text>
-          <text x="306" y="180" fill={race.right.color} fontFamily={mono} fontSize="12" fontWeight="700" textAnchor="end">{race.right.short}</text>
-          <g style={{ transform: `rotate(${needleDeg}deg)`, transformBox: "view-box", transformOrigin: `${cx}px ${cy}px`, transition: "transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)" }}>
-            <line x1={cx} y1={cy} x2={cx} y2={cy - (rIn - 14)} stroke={C.text} strokeWidth="3.5" strokeLinecap="round" />
-            <line x1={cx} y1={cy} x2={cx} y2={cy + 22} stroke={C.text} strokeWidth="3.5" strokeLinecap="round" />
-          </g>
-          <circle cx={cx} cy={cy} r="11" fill={C.panel2} stroke={C.brass} strokeWidth="2.5" />
-          <circle cx={cx} cy={cy} r="3.5" fill={C.brass} />
-        </svg>
-        <div style={{ textAlign: "center", marginTop: 4 }}>
-          <div style={{ fontSize: 12, letterSpacing: 1.5, color: C.muted, fontFamily: mono, textTransform: "uppercase" }}>{rt.text}</div>
-          <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: -1, color: lead.color, fontVariantNumeric: "tabular-nums", lineHeight: 1.1, marginTop: 2 }}>{rt.pct}%</div>
-          <div style={{ fontSize: 13, color: C.muted }}>chance {lead.full} {race.id === "q1" ? "passes" : "wins"}</div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 18, marginTop: 12, fontFamily: mono }}>
-            <Stat label="PROJECTED" value={`${lead.short} +${Math.abs(m.margin * 100).toFixed(1)}`} color={lead.color} />
-            <div style={{ width: 1, background: C.line }} />
-            <Stat label="EST. VOTE IN" value={`${Math.round(m.fracIn * 100)}%`} />
-          </div>
-        </div>
-        {race.left && race.right && <Scoreboard race={race} />}
-      </div>
-
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: C.body }}>{caption}</div>
-
-      <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 1.5, color: C.muted, margin: "16px 4px 8px", textTransform: "uppercase" }}>County board</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        {sorted.map((u) => {
-          const lean = Math.round((u.prior - 0.5) * 200);
-          const cur = u.reported > 0 ? Math.round((u.finalShare - 0.5) * 200) : null;
-          const curC = cur == null ? C.muted : cur >= 0 ? race.right.color : race.left.color;
-          const sideR = cur >= 0 ? race.right.short : race.left.short;
-          const baseSide = lean >= 0 ? race.right.short : race.left.short;
-          return (
-            <div key={u.name} style={{ display: "grid", gridTemplateColumns: "92px 1fr 64px", alignItems: "center", gap: 8, background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 10px" }}>
-              <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.name}</div>
-              <div>
-                <div style={{ height: 5, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
-                  <div style={{ width: `${u.reported * 100}%`, height: "100%", background: u.reported >= 1 ? C.brass : "#9DB9DC", transition: "width .6s ease-out" }} />
-                </div>
-                <div style={{ fontSize: 10, color: C.muted, fontFamily: mono, marginTop: 3 }}>base {baseSide}+{Math.abs(lean)} · {Math.round(u.reported * 100)}% in</div>
-              </div>
-              <div style={{ textAlign: "right", fontFamily: mono, fontWeight: 700, fontSize: 13, color: curC, fontVariantNumeric: "tabular-nums" }}>
-                {cur == null ? "—" : `${sideR}+${Math.abs(cur)}`}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return <RacePage race={race} onBack={onBack} current={current} briefing={briefing} wide={wide} onNav={onNav} />;
 }
 
 function Stat({ label, value, color }) {
@@ -1605,95 +2032,6 @@ function Stat({ label, value, color }) {
 const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 };
 const h2 = { fontSize: 13, fontFamily: mono, letterSpacing: 1.2, color: C.brass, textTransform: "uppercase", marginBottom: 8 };
 const body = { fontSize: 13, lineHeight: 1.6, color: C.body };
-
-function PollsView({ current, loaded }) {
-  const hasData = current && current.senate;
-  return (
-    <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW WE READ THE POLLS</div>
-      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 6 }}>Polling</div>
-      <div style={{ ...body, marginBottom: 14 }}>
-        The needle's starting point isn't any single poll. It's a weighted average: each poll counts more if it's recent and from a higher-quality pollster, and less if it's old or from a campaign's own (partisan) firm.
-        {current?.method?.note ? ` ${current.method.note}` : ""}
-      </div>
-
-      {!loaded ? (
-        <div style={{ ...card, ...body }}>Loading the latest polls…</div>
-      ) : !hasData ? (
-        <div style={{ ...card, ...body }}>
-          Couldn't load the poll data. Make sure <span style={{ fontFamily: mono, color: C.brass }}>public/current.json</span> exists, then run <span style={{ fontFamily: mono, color: C.brass }}>npm run polls</span> and refresh.
-        </div>
-      ) : (
-        <>
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "2px 0 8px" }}>Maine</div>
-          <PollRace title="U.S. Senate" lead={current.senate} demName="Jackson" repName="Collins" />
-          <PollRace title="Governor" lead={current.governor} demName="Pingree" repName="Charles" indName="Bennett" />
-          <PollRace title="U.S. House · District 1" lead={current.cd1} demName="Pingree" repName="Russell" />
-          <PollRace title="U.S. House · District 2" lead={current.cd2} demName="Dunlap" repName="LePage" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>North Carolina</div>
-          <PollRace title="U.S. Senate" lead={current.nc_sen} demName="Cooper" repName="Whatley" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Ohio</div>
-          <PollRace title="U.S. Senate (special)" lead={current.oh_sen} demName="Brown" repName="Husted" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Texas</div>
-          <PollRace title="U.S. Senate" lead={current.tx_sen} demName="Talarico" repName="Paxton" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Iowa</div>
-          <PollRace title="U.S. Senate" lead={current.ia_sen} demName="Turek" repName="Hinson" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Georgia</div>
-          <PollRace title="U.S. Senate" lead={current.ga_sen} demName="Ossoff" repName="Collins" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Nebraska</div>
-          <PollRace title="U.S. Senate" lead={current.ne_sen} demName="Osborn" repName="Ricketts" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Michigan</div>
-          <PollRace title="U.S. Senate" lead={current.mi_sen} demName="El-Sayed" repName="Rogers" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>New Hampshire</div>
-          <PollRace title="U.S. Senate" lead={current.nh_sen} demName="Pappas" repName="Sununu" />
-          <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", margin: "14px 0 8px" }}>Alaska</div>
-          <PollRace title="U.S. Senate" lead={current.ak_sen} demName="Peltola" repName="Sullivan" />
-          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 6 }}>
-            Alaska polls are head-to-head surveys. The election itself is ranked-choice with a top-four field set at the August 18 primary, so these track sentiment, not a projected final result.
-          </div>
-        </>
-      )}
-      <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.5, marginTop: 4 }}>
-        Updated {current?.updated || "—"}. New polls are added to the feed and re-averaged automatically.
-      </div>
-    </div>
-  );
-}
-
-function PollRace({ title, lead, demName, repName, indName }) {
-  if (!lead) return null;
-  const polls = Array.isArray(lead.polls) ? lead.polls : [];
-  const margin = lead.margin ?? 0;
-  const marginTxt = margin >= 0 ? `${demName} +${Math.abs(margin)}` : `${repName} +${Math.abs(margin)}`;
-  return (
-    <div style={card}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-        <span style={{ fontSize: 15, fontWeight: 700 }}>{title}</span>
-        {polls.length > 0 && (
-          <span style={{ fontFamily: mono, fontSize: 13, fontWeight: 700, color: margin >= 0 ? BLUE : RED }}>
-            avg: {marginTxt}{indName && lead.bennett != null ? `, ${indName} ${lead.bennett}%` : ""}
-          </span>
-        )}
-      </div>
-      {polls.length === 0 ? (
-        <div style={{ ...body, fontSize: 12 }}>{lead.note || "No public polls yet."}</div>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {polls.map((p, i) => (
-            <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center", fontFamily: mono, fontSize: 11.5 }}>
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.pollster}</span>
-              <span style={{ color: C.muted }}>
-                <span style={{ color: BLUE }}>{p.dem}</span>/<span style={{ color: RED }}>{p.rep}</span>{p.ind ? <span style={{ color: IND }}>/{p.ind}</span> : null} · {String(p.date).slice(5)}
-              </span>
-              <span style={{ color: C.brass, fontWeight: 700, minWidth: 34, textAlign: "right" }}>{p.weightPct}%</span>
-            </div>
-          ))}
-          <div style={{ fontSize: 10, color: C.muted, marginTop: 2, fontFamily: mono }}>pollster · D/R{indName ? "/I" : ""} · date · weight in average</div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ---- Pollster ratings page: built from the live polling data, so it never goes stale ----
 const TIERS = [
@@ -1744,117 +2082,4 @@ function buildRatings(current) {
     }
   }
   return [...map.values()].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
-}
-function RatingsView({ current, loaded }) {
-  const all = buildRatings(current);
-  return (
-    <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW WE RATE POLLSTERS</div>
-      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 12 }}>Pollster Ratings</div>
-      <div style={card}>
-        <div style={body}>
-          Every poll is weighted before it touches a needle. A pollster's rating decides how much its numbers pull the average, and a fresh poll counts for more than a stale one of the same quality. This is the full list of every pollster in the data, built straight from the polls the site is using right now.
-          <div style={{ marginTop: 8 }}>
-            Ratings are separate from the house-effect adjustments on the Method page. A rating measures how much to trust a pollster. A house effect corrects for a state's history of polling misses. The two never mix.
-          </div>
-        </div>
-      </div>
-      {!loaded && <div style={{ fontSize: 12, color: C.muted, fontFamily: mono, margin: "10px 0" }}>Loading ratings…</div>}
-      {TIERS.map((t, i) => {
-        const max = i === 0 ? 2 : TIERS[i - 1].min;
-        const members = all.filter((p) => p.rating >= t.min && p.rating < max);
-        if (!members.length) return null;
-        return (
-          <div key={t.name} style={{ marginTop: 22 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 30, height: 30, borderRadius: 8, background: t.color, color: C.ink, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14, flexShrink: 0 }}>{t.mark}</div>
-              <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: -0.3, color: t.color }}>{t.name}</div>
-              <div style={{ marginLeft: "auto", fontSize: 11.5, fontFamily: mono, color: C.muted }}>{t.range}</div>
-            </div>
-            <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.55, margin: "5px 0 10px" }}>{t.desc}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
-              {members.map((p) => (
-                <div key={p.name} style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${t.color}`, borderRadius: 3, padding: "9px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</div>
-                    <div style={{ fontSize: 11, color: C.muted, marginTop: 1 }}>
-                      {POLLSTER_NOTES[p.name] ? `${POLLSTER_NOTES[p.name]}, ` : ""}{p.n} {p.n === 1 ? "poll" : "polls"} in {[...p.states].sort().join(", ")}
-                    </div>
-                  </div>
-                  <div style={{ fontFamily: mono, fontWeight: 700, fontSize: 14, color: t.color, flexShrink: 0 }}>{p.rating.toFixed(2)}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-      <div style={{ ...card, marginTop: 22 }}>
-        <div style={h2}>The rules</div>
-        <div style={body}>
-          A pollster carries one rating everywhere it appears, in every race. When a poll publishes both registered-voter and likely-voter numbers, the likely-voter numbers are used. A poll paid for by a campaign or a party is rated at the bottom, and it can join a race's average but can never be the only poll in it. Ratings are revisited as pollsters build or lose their records.
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MethodView() {
-  return (
-    <div>
-      <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW THE NEEDLE WORKS</div>
-      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 12 }}>Methodology</div>
-
-      <div style={card}>
-        <div style={h2}>The needle</div>
-        <div style={body}>Each county has an expected result. As real votes report, the model measures how far the counted counties are running from that expectation, then carries that swing into the counties still counting. The needle is the resulting win probability, and it firms up as more of the vote comes in.</div>
-      </div>
-
-      <div style={card}>
-        <div style={h2}>Where the county maps come from</div>
-        <div style={body}>
-          Every race is built on real past results, county by county. The map only sets the shape of a state, meaning which counties run bluer or redder than the state as a whole. How the state leans overall comes from current polling.
-          <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.brass }}>Maine, Senate</b>: Jackson vs Collins, a ranked-choice race. The county map blends the 2020 Collins-Gideon Senate results (60%) with the 2020 and 2016 presidential maps (40%).<br />
-            <b style={{ color: C.brass }}>Maine, House 1 and 2</b>: the actual 2020 U.S. House results by county. District 2 is an open seat, so the model keeps only a quarter of former Rep. Jared Golden's personal-vote pattern and fades the rest toward the district's usual lean.<br />
-            <b style={{ color: C.brass }}>Maine, Governor</b>: the blended presidential map for shape, with the statewide split set by polling. It's a three-way race (Pingree, Charles, and independent Bennett), so it shows three win-probability meters. Bennett has no past election to map, so his share comes from polling alone.<br />
-            <b style={{ color: C.brass }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan, and New Hampshire</b>: county maps built from 2024 presidential results in every county (100, 88, 254, 99, 159, 93, 83, and 10 counties). Ohio's race is a special election for JD Vance's former seat. Georgia goes to a December 1 runoff if no one tops 50%. Nebraska's Dan Osborn is an independent, shown in teal rather than blue.<br />
-            <b style={{ color: C.brass }}>Alaska, Senate</b>: Sullivan vs Peltola, a ranked-choice race. Shown as an explainer on Alaska's page instead of a needle, because the final result is tabulated about two weeks after election night.
-          </div>
-        </div>
-      </div>
-
-      <div style={card}>
-        <div style={h2}>Polling and adjustments</div>
-        <div style={body}>
-          Each race starts from a polling average weighted two ways: by how much we trust the pollster (see the Ratings page) and by how recent the poll is. Most Senate races then get a house-effect adjustment, a small, documented shift toward the side that polls have historically underestimated in that state. Each shift is sized to that state's own record of polling misses, so it isn't the same everywhere.
-          <div style={{ marginTop: 8 }}>
-            <b style={{ color: C.text }}>North Carolina</b>: 6 pts toward Whatley. NC polls overstated Democrats in 2016, 2020, and 2022, and undecided voters there tend to break Republican.<br />
-            <b style={{ color: C.text }}>Texas</b>: 5 pts toward Paxton, for Texas's strong Republican lean.<br />
-            <b style={{ color: C.text }}>Iowa</b>: 5 pts toward Hinson, for Iowa's strong Republican lean in federal races.<br />
-            <b style={{ color: C.text }}>Maine</b>: 4 pts toward Collins, who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9).<br />
-            <b style={{ color: C.text }}>Ohio</b>: 4 pts toward Husted, for Ohio's Republican lean in federal races.<br />
-            <b style={{ color: C.text }}>Nebraska</b>: 4 pts toward Ricketts, for the state's strong Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven.<br />
-            <b style={{ color: C.text }}>Georgia</b>: 2 pts toward Collins, for Georgia's narrow Republican lean at the presidential level.<br />
-            <b style={{ color: C.text }}>Michigan</b>: 2 pts toward Rogers. Michigan polls underestimated Republicans in each of the last three presidential elections, but the state is the closest on this board (Trump +1.4 in 2024), so the shift matches Georgia's rather than going bigger.<br />
-            <b style={{ color: C.text }}>New Hampshire</b>: 1 pt toward Sununu, the smallest shift on the board. New Hampshire leans Democratic (Harris +2.8 in 2024) and Democrats have held this seat for over a decade; the small shift only reflects NH polls' history of underestimating Republicans and Sununu's proven crossover appeal.
-          </div>
-          <div style={{ marginTop: 8 }}>Maine's governor and House races get no adjustment.</div>
-        </div>
-      </div>
-
-      <div style={card}>
-        <div style={h2}>Calling a race</div>
-        <div style={body}>A race is marked Called only when the leader has at least a 97% chance of winning and at least half of the expected vote has been counted. Before that, the strongest label a race can get is Likely, however lopsided the early count looks. Alaska is never called on election night.</div>
-      </div>
-
-      <div style={card}>
-        <div style={h2}>Election night</div>
-        <div style={body}>On election night the needles run on real returns pulled from each state's official results feed, refreshed every minute or two. Maine reports by town, so its results are rolled up into counties. Races with real votes are marked LIVE, and the scoreboard under each needle shows the actual vote count. If one state's feed goes down, that state pauses and every other race keeps running.</div>
-      </div>
-
-      <div style={{ fontSize: 11, color: C.muted, fontFamily: mono, lineHeight: 1.6 }}>
-        This is an independent project, not a forecast from a news outlet. Probabilities express uncertainty; they are not guarantees.
-      </div>
-    </div>
-  );
 }
