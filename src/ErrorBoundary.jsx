@@ -1,7 +1,7 @@
 import React from "react";
 
 // Theme colors mirrored from MaineDashboard so the fallback matches the site.
-const C = { panel: "#161E2E", line: "#28344A", text: "#E6ECF5", muted: "#8A97AD", red: "#F2585B" };
+const C = { panel: "#FBF8F1", line: "#CFC7B6", text: "#1B1A17", muted: "#5A564E", red: "#B3261E" };
 const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 
 // Catches render-time crashes in whatever it wraps, so one broken piece shows a

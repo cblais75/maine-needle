@@ -10,11 +10,13 @@ import neBaseline from "../data/ne-baseline.json";
 import miBaseline from "../data/mi-baseline.json";
 import nhBaseline from "../data/nh-baseline.json";
 
+// Newspaper palette (Update 42): warm paper, black ink, red/blue kept for results only.
+// `ink` is the PAGE color (the name dates from the old dark theme); `text` is the ink.
 const C = {
-  ink: "#0E1422", panel: "#161E2E", panel2: "#1B2435", line: "#28344A",
-  text: "#E6ECF5", muted: "#8A97AD", brass: "#F4C95D",
+  ink: "#F4EFE4", panel: "#FBF8F1", panel2: "#EFE8D9", line: "#CFC7B6",
+  text: "#1B1A17", muted: "#5A564E", brass: "#8A6116", body: "#3A3732",
 };
-const BLUE = "#4F9DF7", RED = "#F2585B", TEAL = "#46B39D", AMBER = "#E0894B";
+const BLUE = "#1D5FA6", RED = "#B3261E", TEAL = "#0F7A68", AMBER = "#A5520F";
 
 // base county baselines (illustrative two-party Dem share + expected vote)
 const CO = {
@@ -294,7 +296,7 @@ const makeCD2 = (decay, margin = null) => ({
 });
 
 // ---- three-way Governor (plurality, real partisan geography + polling-set statewide split) ----
-const IND = "#A98BE6"; // independent (Bennett)
+const IND = "#6D4BB3"; // independent (Bennett)
 const DEFAULT_B = 18;   // Bennett statewide share, points
 const DEFAULT_GM = 6;   // Pingree minus Charles margin within the two-major pool, points
 // build per-county priors for the three candidates from statewide split + partisan lean.
@@ -465,9 +467,13 @@ function applyAllLive(races, results) {
   return races.map((r) => results.races[r.id] ? applyLive(r, results.races[r.id]) : r);
 }
 
-const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
-const sans = "Inter, ui-sans-serif, system-ui, sans-serif";
-const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: "#9FB3CE", border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
+// Typewriter font is gone from labels; numbers line up via tabular figures (see GLOBAL_CSS).
+const mono = "'Public Sans', ui-sans-serif, system-ui, sans-serif";
+const sans = "'Public Sans', ui-sans-serif, system-ui, sans-serif";
+const serif = "'Newsreader', Georgia, 'Times New Roman', serif";
+const COFFEE_URL = "https://buymeacoffee.com/colinblais";
+const GLOBAL_CSS = `html,body{margin:0;background:${"#F4EFE4"}}body{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}button,input{font-family:inherit}a{color:inherit}::selection{background:#E6D9B8}::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:#CFC7B6;border-radius:9px}::-webkit-scrollbar-track{background:transparent}`;
+const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: C.muted, border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
 const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "NE", label: "Nebraska" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }, { code: "NH", label: "New Hampshire" }];
 
 // Width-based layout switch: >=1000px gets the desktop three-zone layout, anything
@@ -525,6 +531,7 @@ export default function MaineDashboard() {
   const [sel, setSel] = useState(null);
   const wide = useWide(1000);
   const [navOpen, setNavOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [boardView, setBoardView] = useState("cards"); // "cards" | "needles"
   const [running, setRunning] = useState(false);
   const [wire, setWire] = useState([]);
@@ -687,27 +694,96 @@ export default function MaineDashboard() {
   })));
 
   const anyLive = races.some((r) => r.liveOn);
-  const headerBlock = (
-      <>
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-            <svg viewBox="0 0 64 64" width="26" height="26" style={{ flexShrink: 0 }} aria-hidden="true">
-              <path d="M10 42 A22 22 0 0 1 32 20" fill="none" stroke={RED} strokeWidth="5.5" strokeLinecap="round" />
-              <path d="M32 20 A22 22 0 0 1 54 42" fill="none" stroke={BLUE} strokeWidth="5.5" strokeLinecap="round" />
-              <line x1="30.4" y1="46.8" x2="37.9" y2="23.9" stroke={C.brass} strokeWidth="3.2" strokeLinecap="round" />
-              <circle cx="32" cy="42" r="3.4" fill={C.brass} />
-            </svg>
-            <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5 }}>The Needle Project</div>
+  const NAV_ITEMS = [["dashboard", "Races"], ["control", "Senate control"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"]];
+  const go = (k) => { setNavOpen(false); setMoreOpen(false); setView(k); setSel(null); };
+  const today = new Date();
+  const edition = anyLive ? "Election night edition" : "Forecast edition";
+  const longDate = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  const shortDate = today.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const onState = STATES.some((st) => st.code === view);
+  const sortedStates = STATES.slice().sort((a, b) => a.label.localeCompare(b.label));
+  const statusLine = (
+    <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive ? RED : C.muted, fontWeight: anyLive ? 600 : 400 }}>
+      {anyLive ? "Live · The needles are running on official results as they come in." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
+    </p>
+  );
+  const titleBtn = (size) => (
+    <button onClick={() => go("dashboard")} aria-label="The Needle Project, home"
+      style={{ background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer", color: C.text, fontFamily: serif, fontWeight: 700, fontSize: size, letterSpacing: size > 40 ? -1.5 : -0.8, lineHeight: 1 }}>
+      The Needle Project
+    </button>
+  );
+  const navLink = (on) => ({ background: "none", border: "none", cursor: "pointer", color: C.text, fontSize: 15, fontWeight: on ? 700 : 500, padding: "4px 0 3px", borderBottom: `2px solid ${on ? C.text : "transparent"}` });
+  const desktopMasthead = (
+    <header style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, paddingBottom: 12, borderBottom: `3px double ${C.text}` }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", fontSize: 13, color: C.muted }}>
+        <span>{edition} · {longDate}</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 18 }}><span>Election night: Tuesday, Nov. 3</span><SupportSmall /></span>
+      </div>
+      {titleBtn(64)}
+      <nav aria-label="Sections" style={{ position: "relative", display: "flex", alignItems: "center", gap: 26 }}>
+        {NAV_ITEMS.map(([k, label]) => (
+          <button key={k} onClick={() => go(k)} style={navLink(view === k && sel === null)}>{label}</button>
+        ))}
+        <button onClick={() => setNavOpen((o) => !o)} aria-expanded={navOpen} style={navLink(onState)}>
+          {onState ? STATES.find((st) => st.code === view).label : "States"} {navOpen ? "▴" : "▾"}
+        </button>
+        {navOpen && (
+          <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, zIndex: 40, minWidth: 210, background: C.panel, border: `1px solid ${C.text}`, padding: 6, boxShadow: "0 8px 24px rgba(27,26,23,0.16)" }}>
+            {sortedStates.map((st) => (
+              <button key={st.code} onClick={() => openState(st.code)}
+                style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 12px", fontSize: 15, cursor: "pointer", border: "none",
+                  background: view === st.code ? C.panel2 : "transparent", color: C.text, fontWeight: view === st.code ? 700 : 500 }}>
+                {st.label}
+              </button>
+            ))}
           </div>
-          <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginTop: 4 }}>
-            An independent, live-updating tracker for the 2026 elections. Each state's key races, centered on polling now and running on real returns on election night.
-          </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 1.4, color: anyLive ? RED : C.muted, fontFamily: mono, textTransform: "uppercase", marginBottom: 12 }}>
-          <span style={{ width: 7, height: 7, borderRadius: 9, background: anyLive ? RED : C.muted, boxShadow: anyLive ? `0 0 8px ${RED}` : "none" }} />
-          {anyLive ? "Live — real returns coming in" : "Simulation — not election night yet"}
-        </div>
-      </>
+        )}
+      </nav>
+    </header>
+  );
+  const mobileMasthead = (
+    <header style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 7, paddingBottom: 10, borderBottom: `3px double ${C.text}` }}>
+      {titleBtn(34)}
+      <span style={{ fontSize: 12, color: C.muted, textAlign: "center" }}>{edition} · {shortDate} · Election night Nov. 3</span>
+      <SupportSmall />
+    </header>
+  );
+  const TabIcon = ({ d }) => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {d.map((x, i) => <path key={i} d={x} />)}
+    </svg>
+  );
+  const moreKeys = ["polls", "ratings", "method", "wire"];
+  const tabs = [
+    ["dashboard", "Races", ["M4 18a8 8 0 0 1 16 0", "M12 18l4-6"]],
+    ["control", "Senate", ["M3 20h18", "M5 20V10l7-5 7 5v10", "M9 20v-6h6v6"]],
+    ["briefing", "Briefing", ["M5 4h11l3 3v13H5z", "M8 10h8M8 14h8M8 18h5"]],
+    ["more", "More", ["M5 12h.01", "M12 12h.01", "M19 12h.01"]],
+  ];
+  const tabOn = (k) => k === "more" ? (moreOpen || moreKeys.includes(view) || onState) : (!moreOpen && view === k);
+  const tabBar = (
+    <nav aria-label="Sections" style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, background: C.ink, borderTop: `1px solid ${C.text}`, display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", paddingBottom: "env(safe-area-inset-bottom)" }}>
+      {tabs.map(([k, label, d]) => (
+        <button key={k} onClick={() => (k === "more" ? setMoreOpen((o) => !o) : go(k))} aria-expanded={k === "more" ? moreOpen : undefined}
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3, minHeight: 60, background: "none", border: "none", cursor: "pointer",
+            color: tabOn(k) ? C.text : C.muted, fontSize: 12, fontWeight: tabOn(k) ? 700 : 500 }}>
+          <TabIcon d={d} />{label}
+        </button>
+      ))}
+    </nav>
+  );
+  const moreItem = (on) => ({ display: "block", width: "100%", textAlign: "left", minHeight: 44, padding: "10px 14px", fontSize: 16, cursor: "pointer", border: "none", borderBottom: `1px solid ${C.line}`, background: on ? C.panel2 : "transparent", color: C.text, fontWeight: on ? 700 : 500 });
+  const moreSheet = moreOpen && (
+    <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(61px + env(safe-area-inset-bottom))", zIndex: 49, maxHeight: "70vh", overflowY: "auto", background: C.panel, borderTop: `1px solid ${C.text}`, boxShadow: "0 -8px 24px rgba(27,26,23,0.14)" }}>
+      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["wire", "Live wire"]].map(([k, label]) => (
+        <button key={k} onClick={() => go(k)} style={moreItem(view === k)}>{label}</button>
+      ))}
+      <div style={{ padding: "12px 14px 6px", fontFamily: serif, fontSize: 18, fontWeight: 600 }}>States</div>
+      {sortedStates.map((st) => (
+        <button key={st.code} onClick={() => { setMoreOpen(false); openState(st.code); }} style={moreItem(view === st.code)}>{st.label}</button>
+      ))}
+    </div>
   );
   const detailBlock = (
       <ErrorBoundary label="This race view hit an error">
@@ -717,47 +793,14 @@ export default function MaineDashboard() {
               govB={govB} govMargin={govMargin} onGov={setGov} current={current} />
           </ErrorBoundary>
   );
-  const mobileNav = (
-            <div style={{ position: "relative", marginBottom: 14 }}>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                <button onClick={() => setNavOpen((o) => !o)}
-                  style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
-                    background: STATES.some((st) => st.code === view) ? C.panel2 : "transparent",
-                    color: STATES.some((st) => st.code === view) ? C.text : C.muted,
-                    border: `1px solid ${STATES.some((st) => st.code === view) || navOpen ? C.brass : C.line}` }}>
-                  {STATES.some((st) => st.code === view) ? STATES.find((st) => st.code === view).label : "States"} {navOpen ? "▴" : "▾"}
-                </button>
-                {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["wire", "Wire"], ["polls", "Polls"], ["ratings", "Ratings"], ["method", "Method"]].map(([k, label]) => (
-                  <button key={k} onClick={() => { setNavOpen(false); setView(k); setSel(null); }}
-                    style={{ flexShrink: 0, padding: "8px 12px", fontSize: 12.5, fontWeight: 700, fontFamily: mono, borderRadius: 9, cursor: "pointer", whiteSpace: "nowrap",
-                      background: view === k ? C.panel2 : "transparent", color: view === k ? C.text : C.muted, border: `1px solid ${view === k ? C.brass : C.line}` }}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-              {navOpen && (
-                <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 40, minWidth: 190,
-                  background: C.panel, border: `1px solid ${C.brass}55`, borderRadius: 10, padding: 6, boxShadow: "0 10px 28px rgba(0,0,0,0.5)" }}>
-                  {STATES.slice().sort((a, b) => a.label.localeCompare(b.label)).map((st) => (
-                    <button key={st.code} onClick={() => openState(st.code)}
-                      style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 12px", fontSize: 13, fontWeight: 700, fontFamily: mono,
-                        borderRadius: 7, cursor: "pointer", background: view === st.code ? C.panel2 : "transparent",
-                        color: view === st.code ? C.text : "#B9C7DB", border: "none" }}>
-                      {st.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-  );
   const tabBody = (
             <ErrorBoundary key={view} label="This section hit an error">
             {view === "dashboard" && (
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 10, marginBottom: 14 }}>
                   <div>
-                    <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALL RACES · NOVEMBER 2026</div>
-                    <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4 }}>Election Night Board</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>All races · November 2026</div>
+                    <div style={{ fontSize: 30, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>Every race we're tracking</div>
                   </div>
                   <div style={{ display: "inline-flex", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 9, padding: 2 }}>
                     {[["cards", "Cards"], ["needles", "Needles"]].map(([k, lbl]) => (
@@ -781,7 +824,7 @@ export default function MaineDashboard() {
                     if (!sr.length) return null;
                     return (
                       <div key={st.code} style={{ marginBottom: boardView === "needles" ? 14 : 18 }}>
-                        <div style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.5, color: C.brass, textTransform: "uppercase", marginBottom: 8 }}>{st.label}</div>
+                        <div style={{ fontSize: 20, fontFamily: serif, fontWeight: 600, color: C.text, borderBottom: `2px solid ${C.text}`, paddingBottom: 4, marginBottom: 10 }}>{st.label}</div>
                         {boardView === "needles"
                           ? <NeedleGrid races={sr} onPick={setSel} />
                           : <Overview races={sr} onPick={setSel} />}
@@ -794,8 +837,8 @@ export default function MaineDashboard() {
             )}
             {STATES.some((s) => s.code === view) && (
               <div>
-                <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>{STATES.find((s) => s.code === view).label.toUpperCase()} · NOVEMBER 2026</div>
-                <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 14 }}>{STATES.find((s) => s.code === view).label}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>{STATES.find((s) => s.code === view).label} · November 2026</div>
+                <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 14 }}>{STATES.find((s) => s.code === view).label}</div>
                 <Overview races={races.filter((r) => r.state === view)} onPick={setSel} />
                 <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginTop: 12, fontFamily: mono }}>Tap any race to open its needle and county board.</div>
               </div>
@@ -806,19 +849,18 @@ export default function MaineDashboard() {
             {view === "briefing" && <BriefingView posts={briefing} />}
             {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} />}
             {view === "method" && <MethodView />}
-            {["dashboard", "briefing", "polls", "ratings", "method"].includes(view) && <CoffeeButton />}
 
             {(view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
                 <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
                   <button onClick={() => setRunning((r) => !r)}
-                    style={{ flex: 2, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: running ? C.panel2 : BLUE, color: running ? C.text : "#06101F", border: `1px solid ${C.line}`, borderRadius: 10, padding: "11px 0", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
+                    style={{ flex: 2, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: running ? C.panel2 : BLUE, color: running ? C.text : "#FFFFFF", border: `1px solid ${C.line}`, borderRadius: 3, padding: "11px 0", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
                     {running ? <Pause size={16} /> : <Play size={16} />}{running ? "Pause" : "Run election night"}
                   </button>
-                  <button onClick={step} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: C.panel2, color: C.text, border: `1px solid ${C.line}`, borderRadius: 10, padding: "11px 0", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
+                  <button onClick={step} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, background: C.panel2, color: C.text, border: `1px solid ${C.line}`, borderRadius: 3, padding: "11px 0", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                     <SkipForward size={15} /> Step
                   </button>
-                  <button onClick={reset} style={{ width: 46, display: "flex", alignItems: "center", justifyContent: "center", background: C.panel2, color: C.muted, border: `1px solid ${C.line}`, borderRadius: 10, cursor: "pointer" }}>
+                  <button onClick={reset} style={{ width: 46, display: "flex", alignItems: "center", justifyContent: "center", background: C.panel2, color: C.muted, border: `1px solid ${C.line}`, borderRadius: 3, cursor: "pointer" }}>
                     <RotateCcw size={16} />
                   </button>
                 </div>
@@ -831,85 +873,45 @@ export default function MaineDashboard() {
             )}
           </ErrorBoundary>
   );
-  const desktopNav = (
-        <nav style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 16 }}>
-            <svg viewBox="0 0 64 64" width="26" height="26" style={{ flexShrink: 0 }} aria-hidden="true">
-              <path d="M10 42 A22 22 0 0 1 32 20" fill="none" stroke={RED} strokeWidth="5.5" strokeLinecap="round" />
-              <path d="M32 20 A22 22 0 0 1 54 42" fill="none" stroke={BLUE} strokeWidth="5.5" strokeLinecap="round" />
-              <line x1="30.4" y1="46.8" x2="37.9" y2="23.9" stroke={C.brass} strokeWidth="3.2" strokeLinecap="round" />
-              <circle cx="32" cy="42" r="3.4" fill={C.brass} />
-            </svg>
-            <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: -0.4, lineHeight: 1.12 }}>The Needle<br />Project</div>
-          </div>
-          {[["dashboard", "Dashboard"], ["control", "Senate"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Ratings"], ["method", "Method"]].map(([k, label]) => {
-            const on = view === k && sel === null;
-            return (
-              <button key={k} onClick={() => { setView(k); setSel(null); }}
-                style={{ display: "block", width: "100%", textAlign: "left", cursor: "pointer",
-                  background: on ? C.panel2 : "transparent", color: on ? C.text : "#9FB0C6",
-                  border: "none", borderLeft: `2px solid ${on ? C.brass : "transparent"}`,
-                  borderRadius: on ? 7 : 0, padding: "8px 11px", fontSize: 13, fontWeight: 700, fontFamily: mono, marginBottom: 1 }}>
-                {label}
-              </button>
-            );
-          })}
-          <div style={{ fontSize: 10, fontFamily: mono, letterSpacing: 1.4, color: C.muted, margin: "16px 0 7px 11px" }}>STATES</div>
-          <div style={{ overflowY: "auto", minHeight: 0 }}>
-            {STATES.slice().sort((a, b) => a.label.localeCompare(b.label)).map((st) => {
-              const on = view === st.code && sel === null;
-              return (
-                <button key={st.code} onClick={() => openState(st.code)}
-                  style={{ display: "block", width: "100%", textAlign: "left", cursor: "pointer",
-                    background: on ? C.panel2 : "transparent", color: on ? C.text : "#B9C7DB",
-                    border: "none", borderLeft: `2px solid ${on ? C.brass : "transparent"}`,
-                    borderRadius: on ? 6 : 0, padding: "7px 11px 7px 16px", fontSize: 12.5, fontWeight: 700, marginBottom: 1 }}>
-                  {st.label}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-      );
-
-  // ── MOBILE (< 1000px): byte-for-byte the original single column ──────────
+  // ── MOBILE (< 1000px): one column, masthead on top, tab bar at the bottom ──
   if (!wide) {
     return (
-      <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: 16 }}>
-        <div style={{ maxWidth: 480, margin: "0 auto" }}>
-          {headerBlock}
-          {sel !== null ? detailBlock : (<>{mobileNav}{tabBody}</>)}
+      <div style={{ background: C.ink, color: C.text, fontFamily: sans, minHeight: "100vh", padding: "16px 16px 104px" }}>
+        <style>{GLOBAL_CSS}</style>
+        <div style={{ maxWidth: 520, margin: "0 auto" }}>
+          {mobileMasthead}
+          {statusLine}
+          <div style={{ paddingTop: 18 }}>{sel !== null ? detailBlock : tabBody}</div>
+          <SupportBlock compact />
         </div>
+        {moreSheet}
+        {tabBar}
       </div>
     );
   }
 
-  // ── DESKTOP (>= 1000px): three-zone control room ─────────────────────────
-  const anyLiveD = races.some((r) => r.liveOn);
+  // ── DESKTOP (>= 1000px): newspaper front page; the Wire rail appears once there is news ──
+  const showRail = anyLive || wire.length > 0;
   return (
-    <div style={{ height: "100vh", background: C.ink, color: C.text, fontFamily: sans, display: "flex", flexDirection: "column" }}>
-      <style>{`::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:${C.line};border-radius:9px}::-webkit-scrollbar-track{background:transparent}`}</style>
-      <div style={{ flex: 1, minHeight: 0, display: "grid", gridTemplateColumns: "216px minmax(0,1fr) 336px", maxWidth: 1720, width: "100%", margin: "0 auto" }}>
-        <div style={{ borderRight: `1px solid ${C.line}`, padding: "22px 12px 18px 20px", minHeight: 0 }}>
-          {desktopNav}
+    <div style={{ minHeight: "100vh", background: C.ink, color: C.text, fontFamily: sans }}>
+      <style>{GLOBAL_CSS}</style>
+      <div style={{ maxWidth: showRail ? 1360 : 1180, margin: "0 auto", padding: "26px 48px 56px" }}>
+        {desktopMasthead}
+        {statusLine}
+        <div style={{ display: "grid", gridTemplateColumns: showRail ? "minmax(0,1fr) 320px" : "minmax(0,1fr)", gap: 40, paddingTop: 28 }}>
+          <main style={{ minWidth: 0 }}>{sel !== null ? detailBlock : tabBody}</main>
+          {showRail && (
+            <aside style={{ position: "sticky", top: 20, alignSelf: "start", maxHeight: "calc(100vh - 40px)", overflowY: "auto", paddingLeft: 24, borderLeft: `1px solid ${C.line}` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, paddingBottom: 8, borderBottom: `2px solid ${C.text}` }}>
+                <span style={{ width: 9, height: 9, borderRadius: 5, background: anyLive ? RED : C.muted }} />
+                <span style={{ fontFamily: serif, fontSize: 22, fontWeight: 600 }}>The Wire</span>
+              </div>
+              <ErrorBoundary mini label="Wire unavailable"><WireFeed events={wire} embedded /></ErrorBoundary>
+            </aside>
+          )}
         </div>
-        <main style={{ overflowY: "auto", minHeight: 0, padding: "24px 30px 40px" }}>
-          {sel !== null ? detailBlock : tabBody}
-        </main>
-        <div style={{ borderLeft: `1px solid ${C.line}`, padding: "22px 18px 18px", minHeight: 0, display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <span style={{ width: 7, height: 7, borderRadius: 9, background: anyLiveD ? RED : C.muted, boxShadow: anyLiveD ? `0 0 8px ${RED}` : "none" }} />
-            <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1.6, color: anyLiveD ? RED : C.brass }}>LIVE WIRE</span>
-          </div>
-          <div style={{ flex: 1, minHeight: 0, overflowY: "auto", borderTop: `1px solid ${C.line}`, paddingTop: 4 }}>
-            <ErrorBoundary mini label="Wire unavailable"><WireFeed events={wire} embedded /></ErrorBoundary>
-          </div>
-        </div>
+        <SupportBlock />
       </div>
-      <footer style={{ borderTop: `1px solid ${C.line}`, padding: "9px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 11, fontFamily: mono, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>
-        <span style={{ color: anyLiveD ? RED : C.muted }}>{anyLiveD ? "Live — real returns coming in" : "Simulation — not election night yet"}</span>
-        <span>The Needle Project</span>
-      </footer>
     </div>
   );
 }
@@ -924,7 +926,7 @@ function TiltBar({ race }) {
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "50%", background: `${race.left.color}22` }} />
         <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "50%", background: `${race.right.color}22` }} />
         <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 1, background: C.line }} />
-        <div style={{ position: "absolute", top: -2, left: `calc(${x}% - 3px)`, width: 6, height: 12, borderRadius: 3, background: rt.leader.color, boxShadow: `0 0 8px ${rt.leader.color}`, transition: "left .6s ease-out" }} />
+        <div style={{ position: "absolute", top: -2, left: `calc(${x}% - 3px)`, width: 6, height: 12, borderRadius: 3, background: rt.leader.color, boxShadow: "none", transition: "left .6s ease-out" }} />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: mono }}>
         <span style={{ fontSize: 12, fontWeight: 700, color: rt.leader.color }}>{rt.text}</span>
@@ -1008,7 +1010,7 @@ function NeedleGrid({ races, onPick }) {
         return (
           <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
             <button onClick={() => onPick(r.id)}
-              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 10, padding: "11px 13px", cursor: "pointer", color: C.text, width: "100%" }}>
+              style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "11px 13px", cursor: "pointer", color: C.text, width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
                 <span style={{ fontSize: 11, fontFamily: mono, letterSpacing: 1, color: C.brass }}>{r.state}<span style={{ color: C.muted, letterSpacing: 0.3, marginLeft: 6 }}>{raceTag(r)}</span></span>
                 {r.liveOn
@@ -1044,7 +1046,7 @@ function Overview({ races, onPick }) {
       {races.map((r) => (
         <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
         <button onClick={() => onPick(r.id)}
-          style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "12px 14px", cursor: "pointer", color: C.text }}>
+          style={{ textAlign: "left", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "12px 14px", cursor: "pointer", color: C.text }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <div style={{ fontSize: 15, fontWeight: 700 }}>{r.title}</div>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -1078,13 +1080,13 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
       </button>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MAINE · PLURALITY (3-WAY)</div>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+        <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
         {race.liveOn && <span style={{ fontSize: 10, fontFamily: mono, letterSpacing: 0.5, padding: "2px 6px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>}
       </div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 12 }}>{race.sub}</div>
 
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 14px", marginBottom: 12 }}>
-        <div style={{ fontSize: 10.5, color: "#9FB3CE", lineHeight: 1.6, fontFamily: mono }}>
+      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "10px 14px", marginBottom: 12 }}>
+        <div style={{ fontSize: 10.5, color: C.muted, lineHeight: 1.6, fontFamily: mono }}>
           Bennett (I) has no past election to map, so this three-way leans on polling for its starting point: Bennett {govB}%, {govMargin >= 0 ? "Pingree" : "Charles"} +{Math.abs(govMargin)} between the majors.
         </div>
       </div>
@@ -1115,7 +1117,7 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
         <div style={{ textAlign: "center", fontFamily: mono, fontSize: 11, color: C.muted, marginTop: 4 }}>{Math.round(m.fracIn * 100)}% of expected vote in</div>
       </div>
 
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: "#C7D2E3" }}>
+      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: C.body }}>
         {m.fracIn === 0
           ? "No votes counted. A plurality race with a strong independent: whoever leads can win with well under half the vote, so watch the gap between the top two, not the 50% line."
           : `${leader.short} leads with ${(leader.sh * 100).toFixed(1)}% projected. In a three-way, the winner needs only a plurality, so margins between the top two matter more than any majority.`}
@@ -1137,7 +1139,7 @@ function GovDetail({ race, onBack, govB, govMargin, onGov, current }) {
               <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.name}</div>
               <div>
                 <div style={{ height: 5, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
-                  <div style={{ width: `${u.reported * 100}%`, height: "100%", background: u.reported >= 1 ? C.brass : "#4A6FA6", transition: "width .6s ease-out" }} />
+                  <div style={{ width: `${u.reported * 100}%`, height: "100%", background: u.reported >= 1 ? C.brass : "#9DB9DC", transition: "width .6s ease-out" }} />
                 </div>
                 <div style={{ fontSize: 10, color: C.muted, fontFamily: mono, marginTop: 3 }}>{Math.round(u.reported * 100)}% in</div>
               </div>
@@ -1157,7 +1159,7 @@ function BriefingView({ posts }) {
   return (
     <div>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BRIEFING</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>State of the Races</div>
+      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 4 }}>State of the Races</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 16, lineHeight: 1.5 }}>
         Written analysis and notes from the editor. The needles are math; this is the story around them.
       </div>
@@ -1167,11 +1169,11 @@ function BriefingView({ posts }) {
         <div style={{ fontSize: 13, color: C.muted, fontFamily: mono, padding: "16px 0" }}>No briefings posted yet.</div>
       ) : (
         sorted.map((p, i) => (
-          <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
+          <div key={i} style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 }}>
             <div style={{ fontSize: 10.5, fontFamily: mono, color: C.brass, letterSpacing: 0.8, marginBottom: 4 }}>{p.date}</div>
             <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.2, marginBottom: 8 }}>{p.title}</div>
             {String(p.body || "").split(/\n\s*\n/).map((para, j) => (
-              <div key={j} style={{ fontSize: 13.5, color: "#C7D4E6", lineHeight: 1.65, marginBottom: 8 }}>{para}</div>
+              <div key={j} style={{ fontSize: 13.5, color: C.body, lineHeight: 1.65, marginBottom: 8 }}>{para}</div>
             ))}
             {Array.isArray(p.links) && p.links.length > 0 && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
@@ -1253,7 +1255,7 @@ function SenateControlView({ races }) {
   return (
     <div>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>THE BIG PICTURE</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Control of the Senate</div>
+      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 4 }}>Control of the Senate</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
         Every untracked seat is assumed to hold its party. The nine tracked races below flip automatically when their needle crosses the calling threshold — in the simulation now, and on real returns on election night. Tap any tile to explore what-if scenarios; a scenario never changes the needles, and one tap brings you back to live.
       </div>
@@ -1271,7 +1273,7 @@ function SenateControlView({ races }) {
       <div style={{ display: "flex", height: 34, borderRadius: 9, overflow: "hidden", border: `1px solid ${C.line}`, marginBottom: 4 }}>
         <div style={seg(D, BLUE)} />
         {I > 0 && <div style={seg(I, TEAL)} />}
-        <div style={seg(un, "#3A4A66")} />
+        <div style={seg(un, "#B8AE9C")} />
         <div style={seg(R, RED)} />
       </div>
       <div style={{ position: "relative", height: 15, marginBottom: 6 }}>
@@ -1291,7 +1293,7 @@ function SenateControlView({ races }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 8 }}>
         {statuses.map((x) => { const k = chip(x.v); return (
           <button key={x.id} onClick={() => cycleTile(x)}
-            style={{ textAlign: "left", color: C.text, cursor: "pointer", background: ovr[x.id] != null ? C.panel2 : C.panel, border: `1px solid ${x.v === "U" ? C.line : k.c}`, borderRadius: 10, padding: "10px 12px" }}>
+            style={{ textAlign: "left", color: C.text, cursor: "pointer", background: ovr[x.id] != null ? C.panel2 : C.panel, border: `1px solid ${x.v === "U" ? C.line : k.c}`, borderRadius: 3, padding: "10px 12px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ fontSize: 13, fontWeight: 700 }}>{x.label}</span>
               <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, color: k.c, border: `1px solid ${k.c}66`, borderRadius: 5, padding: "2px 6px" }}>{k.t}</span>
@@ -1304,17 +1306,35 @@ function SenateControlView({ races }) {
   );
 }
 
-function CoffeeButton() {
+function CupIcon({ size = 18 }) {
   return (
-    <div style={{ display: "flex", justifyContent: "center", padding: "26px 0 8px" }}>
-      <a href="https://buymeacoffee.com/colinblais" target="_blank" rel="noopener noreferrer"
-        style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#5F7FFF", color: "#ffffff",
-          borderRadius: 10, padding: "11px 18px", fontSize: 14.5, fontWeight: 700, textDecoration: "none",
-          fontFamily: "'Lato', system-ui, sans-serif", border: "1px solid #000000",
-          boxShadow: "0 3px 10px rgba(0,0,0,0.35)" }}>
-        <span style={{ fontSize: 17 }}>☕</span> Buy me a coffee
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+      <path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z" /><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17" /><path d="M8 3c0 1.5 1 1.5 1 3M12 3c0 1.5 1 1.5 1 3" />
+    </svg>
+  );
+}
+// Small outlined button in the masthead.
+function SupportSmall() {
+  return (
+    <a href={COFFEE_URL} target="_blank" rel="noopener noreferrer"
+      style={{ display: "inline-flex", alignItems: "center", gap: 6, minHeight: 34, boxSizing: "border-box", textDecoration: "none", fontSize: 13, fontWeight: 600, color: C.text, border: `1.5px solid ${C.text}`, padding: "5px 12px", whiteSpace: "nowrap" }}>
+      <CupIcon size={16} />Support this project
+    </a>
+  );
+}
+// Sign-off block at the bottom of every page.
+function SupportBlock({ compact }) {
+  return (
+    <section style={{ display: "flex", flexDirection: compact ? "column" : "row", alignItems: compact ? "stretch" : "center", justifyContent: "space-between", gap: compact ? 12 : 40, marginTop: 40, paddingTop: 22, borderTop: `3px double ${C.text}` }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 760 }}>
+        <span style={{ fontFamily: serif, fontSize: compact ? 22 : 26, fontWeight: 600 }}>Support the Needle Project</span>
+        <span style={{ fontFamily: serif, fontSize: compact ? 16 : 18, lineHeight: 1.5, color: C.body }}>It's free, ad-free and built by one person. If it's useful to you, you can chip in to keep it running through election night.</span>
+      </div>
+      <a href={COFFEE_URL} target="_blank" rel="noopener noreferrer"
+        style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, minHeight: 48, boxSizing: "border-box", padding: "12px 22px", background: C.text, color: C.ink, textDecoration: "none", fontSize: 16, fontWeight: 700, whiteSpace: "nowrap" }}>
+        <CupIcon />Buy me a coffee
       </a>
-    </div>
+    </section>
   );
 }
 
@@ -1324,7 +1344,7 @@ function WireFeed({ events, embedded }) {
       {!embedded && (
         <>
           <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>LIVE WIRE</div>
-          <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 4 }}>Election Night Feed</div>
+          <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 4 }}>Election Night Feed</div>
           <div style={{ fontSize: 12, color: C.muted, marginBottom: 14, lineHeight: 1.5 }}>
             Plain-language updates generated straight from the model as results come in: rating changes, lead flips, reporting milestones, and county-by-county overperformance versus baseline. Every line is arithmetic on the numbers, never written commentary. County lines only carry meaning on real returns; in the simulation the county figures are random.
           </div>
@@ -1349,7 +1369,7 @@ function WireFeed({ events, embedded }) {
 function TbdMini({ race }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      <div style={{ fontSize: 12, color: "#9FB3CE", lineHeight: 1.5 }}>{race.tbdNote}</div>
+      <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5 }}>{race.tbdNote}</div>
       <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
         <span style={{ fontSize: 10, fontFamily: mono, fontWeight: 700, letterSpacing: 0.5, color: C.brass, border: `1px solid ${C.brass}66`, borderRadius: 5, padding: "2px 7px" }}>{race.tbdChip}</span>
         <span style={{ fontSize: 11.5, color: C.muted }}>tap for details</span>
@@ -1359,19 +1379,19 @@ function TbdMini({ race }) {
 }
 
 function MaineSenateTbdDetail({ race, onBack }) {
-  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 };
   const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
-  const body = { fontSize: 13, color: "#C7D4E6", lineHeight: 1.6 };
+  const body = { fontSize: 13, color: C.body, lineHeight: 1.6 };
   return (
     <div>
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
         <ChevronLeft size={16} /> All races
       </button>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MAINE · RANKED-CHOICE</div>
-      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+      <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
 
-      <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
+      <div style={{ ...card, borderColor: C.brass, background: "#F3E9D2" }}>
         <div style={h2}>NOMINEE ALL BUT DECIDED</div>
         <div style={body}>Graham Platner, who won the June 9 primary, withdrew on July 10 after a former partner's accusation of sexual assault, which he denies. Former state Senate President Troy Jackson has since emerged as the overwhelming favorite to replace him and face Susan Collins.</div>
       </div>
@@ -1395,18 +1415,18 @@ function MaineSenateTbdDetail({ race, onBack }) {
 }
 
 function MichiganDetail({ race, onBack }) {
-  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 };
   const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
-  const body = { fontSize: 13, color: "#C7D4E6", lineHeight: 1.6 };
+  const body = { fontSize: 13, color: C.body, lineHeight: 1.6 };
   return (
     <div>
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
         <ChevronLeft size={16} /> All races
       </button>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>MICHIGAN · U.S. SENATE</div>
-      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+      <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
-      <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
+      <div style={{ ...card, borderColor: C.brass, background: "#F3E9D2" }}>
         <div style={h2}>COMING AFTER THE AUGUST 4 PRIMARY</div>
         <div style={body}>Michigan's Senate seat is open — Gary Peters is retiring — and neither party has a nominee yet. Both fields are decided in the August 4 primary, so there is no matchup to model or poll here until then.</div>
       </div>
@@ -1425,7 +1445,7 @@ function MichiganDetail({ race, onBack }) {
 function RcvMini({ race }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      <div style={{ fontSize: 12, color: "#9FB3CE", lineHeight: 1.5 }}>
+      <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.5 }}>
         Decided by ranked-choice rounds that Alaska tabulates about two weeks after election night, not a single count.
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
@@ -1437,19 +1457,19 @@ function RcvMini({ race }) {
 }
 
 function AlaskaDetail({ race, onBack }) {
-  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+  const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 };
   const h2 = { fontSize: 12, fontWeight: 700, color: C.brass, marginBottom: 6, fontFamily: mono, letterSpacing: 0.5 };
-  const body = { fontSize: 13, color: "#C7D4E6", lineHeight: 1.6 };
+  const body = { fontSize: 13, color: C.body, lineHeight: 1.6 };
   return (
     <div>
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "transparent", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "4px 0 10px" }}>
         <ChevronLeft size={16} /> All races
       </button>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>ALASKA · RANKED-CHOICE</div>
-      <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+      <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>{race.sub}</div>
 
-      <div style={{ ...card, borderColor: C.brass, background: "rgba(244,201,93,0.07)" }}>
+      <div style={{ ...card, borderColor: C.brass, background: "#F3E9D2" }}>
         <div style={h2}>WON'T BE CALLED ON ELECTION NIGHT</div>
         <div style={body}>Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.</div>
       </div>
@@ -1485,7 +1505,7 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
   const lerp = (a, b, t) => a + (b - a) * t;
   const hx = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
   const mix = (c1, c2, t) => { const a = hx(c1), b = hx(c2); return `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`; };
-  const tcol = (f) => f < 0.5 ? mix(race.left.color, "#3A4A66", f / 0.5) : mix("#3A4A66", race.right.color, (f - 0.5) / 0.5);
+  const tcol = (f) => f < 0.5 ? mix(race.left.color, "#B8AE9C", f / 0.5) : mix("#B8AE9C", race.right.color, (f - 0.5) / 0.5);
   const pt = (r, deg) => { const a = (deg * Math.PI) / 180; return [cx + r * Math.cos(a), cy - r * Math.sin(a)]; };
   const ticks = [];
   for (let i = 0; i <= N; i++) {
@@ -1511,11 +1531,11 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
       </button>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>{(STATES.find((s) => s.code === race.state)?.label || "").toUpperCase()} · {race.system}</div>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: -0.4 }}>{race.title}</div>
+        <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif }}>{race.title}</div>
         {race.liveOn && <span style={{ fontSize: 10, fontFamily: mono, letterSpacing: 0.5, padding: "2px 6px", borderRadius: 4, color: "#fff", background: RED, fontWeight: 700 }}>● LIVE</span>}
       </div>
       <div style={{ fontSize: 12, color: C.muted, marginBottom: race.note ? 6 : 12 }}>{race.sub}</div>
-      {race.note && <div style={{ fontSize: 11, color: "#9FB3CE", lineHeight: 1.5, marginBottom: 12, padding: "8px 10px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8 }}>{race.note}</div>}
+      {race.note && <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.5, marginBottom: 12, padding: "8px 10px", background: C.panel, border: `1px solid ${C.line}`, borderRadius: 8 }}>{race.note}</div>}
 
       
       <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderRadius: 16, padding: "18px 14px 14px" }}>
@@ -1543,7 +1563,7 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
         {race.left && race.right && <Scoreboard race={race} />}
       </div>
 
-      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: "#C7D2E3" }}>{caption}</div>
+      <div style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${C.brass}`, borderRadius: 8, padding: "10px 12px", marginTop: 12, fontSize: 13, lineHeight: 1.5, color: C.body }}>{caption}</div>
 
       <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: 1.5, color: C.muted, margin: "16px 4px 8px", textTransform: "uppercase" }}>County board</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -1558,7 +1578,7 @@ function Detail({ race, onBack, pollMargin, onPoll, cd2Decay, onDecay, govB, gov
               <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.name}</div>
               <div>
                 <div style={{ height: 5, background: C.panel2, borderRadius: 4, overflow: "hidden" }}>
-                  <div style={{ width: `${u.reported * 100}%`, height: "100%", background: u.reported >= 1 ? C.brass : "#4A6FA6", transition: "width .6s ease-out" }} />
+                  <div style={{ width: `${u.reported * 100}%`, height: "100%", background: u.reported >= 1 ? C.brass : "#9DB9DC", transition: "width .6s ease-out" }} />
                 </div>
                 <div style={{ fontSize: 10, color: C.muted, fontFamily: mono, marginTop: 3 }}>base {baseSide}+{Math.abs(lean)} · {Math.round(u.reported * 100)}% in</div>
               </div>
@@ -1582,16 +1602,16 @@ function Stat({ label, value, color }) {
   );
 }
 
-const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 12, padding: "14px 16px", marginBottom: 12 };
+const card = { background: C.panel, border: `1px solid ${C.line}`, borderRadius: 3, padding: "14px 16px", marginBottom: 12 };
 const h2 = { fontSize: 13, fontFamily: mono, letterSpacing: 1.2, color: C.brass, textTransform: "uppercase", marginBottom: 8 };
-const body = { fontSize: 13, lineHeight: 1.6, color: "#C7D2E3" };
+const body = { fontSize: 13, lineHeight: 1.6, color: C.body };
 
 function PollsView({ current, loaded }) {
   const hasData = current && current.senate;
   return (
     <div>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW WE READ THE POLLS</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 6 }}>Polling</div>
+      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 6 }}>Polling</div>
       <div style={{ ...body, marginBottom: 14 }}>
         The needle's starting point isn't any single poll. It's a weighted average: each poll counts more if it's recent and from a higher-quality pollster, and less if it's old or from a campaign's own (partisan) firm.
         {current?.method?.note ? ` ${current.method.note}` : ""}
@@ -1677,15 +1697,15 @@ function PollRace({ title, lead, demName, repName, indName }) {
 
 // ---- Pollster ratings page: built from the live polling data, so it never goes stale ----
 const TIERS = [
-  { name: "Diamond", min: 0.9, range: "0.90 and up", color: "#7FE0FF", mark: "◆",
+  { name: "Diamond", min: 0.9, range: "0.90 and up", color: "#0E6E8C", mark: "◆",
     desc: "The best in the business. Nonpartisan, transparent, strong methods, and long records of accuracy. These move the needle most." },
-  { name: "Gold", min: 0.85, range: "0.85", color: "#F4C95D", mark: "★",
+  { name: "Gold", min: 0.85, range: "0.85", color: "#8A6116", mark: "★",
     desc: "Strong nonpartisan pollsters just below the very top: excellent methods, slightly shorter or noisier records." },
-  { name: "Silver", min: 0.75, range: "0.75 to 0.80", color: "#C4CEDC", mark: "◈",
+  { name: "Silver", min: 0.75, range: "0.75 to 0.80", color: "#5B6472", mark: "◈",
     desc: "Solid university and established media pollsters. Reliable, with more variance or thinner records than the tiers above." },
-  { name: "Bronze", min: 0.6, range: "0.60 to 0.70", color: "#CD8B5C", mark: "▲",
+  { name: "Bronze", min: 0.6, range: "0.60 to 0.70", color: "#8C4F22", mark: "▲",
     desc: "Lightly proven pollsters, several with a known partisan lean. Their numbers count, but at a discount." },
-  { name: "Iron", min: 0, range: "below 0.60", color: "#8D9AAE", mark: "■",
+  { name: "Iron", min: 0, range: "below 0.60", color: "#4A4F57", mark: "■",
     desc: "Partisan, campaign-paid, or unproven. These barely move the needle, and a campaign or party poll can join a race's average but can never be the only poll in it." },
 ];
 // Same pollster, different spellings in the data: fold them into one entry.
@@ -1730,7 +1750,7 @@ function RatingsView({ current, loaded }) {
   return (
     <div>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW WE RATE POLLSTERS</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 12 }}>Pollster Ratings</div>
+      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 12 }}>Pollster Ratings</div>
       <div style={card}>
         <div style={body}>
           Every poll is weighted before it touches a needle. A pollster's rating decides how much its numbers pull the average, and a fresh poll counts for more than a stale one of the same quality. This is the full list of every pollster in the data, built straight from the polls the site is using right now.
@@ -1754,7 +1774,7 @@ function RatingsView({ current, loaded }) {
             <div style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.55, margin: "5px 0 10px" }}>{t.desc}</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
               {members.map((p) => (
-                <div key={p.name} style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${t.color}`, borderRadius: 10, padding: "9px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                <div key={p.name} style={{ background: C.panel, border: `1px solid ${C.line}`, borderLeft: `3px solid ${t.color}`, borderRadius: 3, padding: "9px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</div>
                     <div style={{ fontSize: 11, color: C.muted, marginTop: 1 }}>
@@ -1782,7 +1802,7 @@ function MethodView() {
   return (
     <div>
       <div style={{ fontSize: 13, color: C.muted, fontFamily: mono }}>HOW THE NEEDLE WORKS</div>
-      <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: -0.4, marginBottom: 12 }}>Methodology</div>
+      <div style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.5, fontFamily: serif, marginBottom: 12 }}>Methodology</div>
 
       <div style={card}>
         <div style={h2}>The needle</div>
