@@ -128,7 +128,7 @@ const txUnits = (pollMargin) =>
     : [unit("Texas", clamp(0.5 + (pollMargin - TX_HOUSE) / 200, 0.02, 0.98), 1)];
 const makeTexasSenate = (pollMargin) => ({
   id: "tx_sen", state: "TX", title: "U.S. Senate",
-  sub: "Paxton (R) vs Talarico (D)",
+  sub: "Talarico (D) vs Paxton (R)",
   system: "Plurality", real: true,
   note: `Texas leans strongly Republican, so the poll center is shifted ${TX_HOUSE} pts toward Paxton for the state's fundamentals.${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Paxton", short: "Paxton", color: RED },
@@ -149,7 +149,7 @@ const iaUnits = (pollMargin) =>
     : [unit("Iowa", clamp(0.5 + (pollMargin - IA_HOUSE) / 200, 0.02, 0.98), 1)];
 const makeIowaSenate = (pollMargin) => ({
   id: "ia_sen", state: "IA", title: "U.S. Senate",
-  sub: "Hinson (R) vs Turek (D)",
+  sub: "Turek (D) vs Hinson (R)",
   system: "Plurality", real: true,
   note: `Open seat (Ernst is retiring). Iowa leans strongly Republican, so the poll center is shifted ${IA_HOUSE} pts toward Hinson.${IA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Hinson", short: "Hinson", color: RED },
@@ -210,7 +210,7 @@ const makeNebraskaSenate = (pollMargin) => ({
 const AK_HOUSE = 4;
 const makeAlaskaSenate = (pollMargin = 3) => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
-  sub: "Sullivan (R) vs Peltola (D)",
+  sub: "Peltola (D) vs Sullivan (R)",
   system: "Ranked-Choice Voting", real: true, noNight: true,
   note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
   left: { full: "Sullivan", short: "Sullivan", color: RED },
@@ -898,12 +898,12 @@ export default function MaineDashboard() {
 function TiltBar({ race }) {
   const m = compute(race.units);
   const rt = rateOf(race, m);
-  const x = clamp(m.winRight, 0.02, 0.98) * 100;
+  const x = (1 - clamp(m.winRight, 0.02, 0.98)) * 100; // Democrat side drawn on the left
   return (
     <div>
       <div style={{ position: "relative", height: 8, background: C.panel2, borderRadius: 5, overflow: "hidden", marginBottom: 7 }}>
-        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "50%", background: `${race.left.color}22` }} />
-        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "50%", background: `${race.right.color}22` }} />
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "50%", background: `${race.right.color}22` }} />
+        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "50%", background: `${race.left.color}22` }} />
         <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 1, background: C.line }} />
         <div style={{ position: "absolute", top: -2, left: `calc(${x}% - 3px)`, width: 6, height: 12, borderRadius: 3, background: rt.leader.color, boxShadow: "none", transition: "left .6s ease-out" }} />
       </div>
@@ -1290,7 +1290,7 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 26, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={kicker(hasNeedle ? d.favColor : RED)}>Alaska · {race.title} · Ranked-choice voting · Forecast only</div>
-          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>Sullivan vs. Peltola</h1>
+          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>Peltola vs. Sullivan</h1>
           <p style={deckStyle(wide)}>{hasNeedle ? dekFor(race, d, current) : "Rated Lean Republican."}</p>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>This needle is a polling forecast. It won't move on election night, because Alaska's ranked-choice rounds are counted about two weeks later.</p>
         </div>
@@ -1298,8 +1298,8 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
             <div style={{ width: "100%", maxWidth: 400 }}><Dial pRight={d.pRight} width={400} left={race.left.color} right={race.right.color} /></div>
             <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: 400 }}>
-              <span style={{ display: "flex", flexDirection: "column" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.left.color }}>{leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Sullivan (R)</span></span>
-              <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.right.color }}>{100 - leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Peltola (D)</span></span>
+              <span style={{ display: "flex", flexDirection: "column" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.right.color }}>{100 - leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Peltola (D)</span></span>
+              <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.left.color }}>{leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Sullivan (R)</span></span>
             </div>
             <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>Chance of winning, from the polling average · <b style={{ color: C.text }}>{d.tag}</b></div>
           </div>
@@ -1407,14 +1407,16 @@ function dekFor(r, d, current) {
   return t;
 }
 
-// The signature dial: red half on the left, blue half on the right, needle = chance of winning.
+// The signature dial: Democrat (blue) half on the LEFT, Republican (red) half on the right,
+// needle = chance of winning. Race data keeps Republicans as "left" and Democrats as "right";
+// only the drawing is mirrored, so pRight (the Democrat's chance) swings the needle leftward.
 function Dial({ pRight = 0.5, width = 420, left = RED, right = BLUE, mini = false }) {
-  const deg = (clamp(pRight, 0.01, 0.99) - 0.5) * 180;
+  const deg = (0.5 - clamp(pRight, 0.01, 0.99)) * 180;
   const sw = mini ? 26 : 20;
   return (
     <svg viewBox="0 0 220 125" width={width} height={Math.round((width * 125) / 220)} aria-hidden="true" style={{ display: "block", maxWidth: "100%", height: "auto" }}>
-      <path d="M 20 110 A 90 90 0 0 1 110 20" fill="none" stroke={tintOf(left)} strokeWidth={sw} />
-      <path d="M 110 20 A 90 90 0 0 1 200 110" fill="none" stroke={tintOf(right)} strokeWidth={sw} />
+      <path d="M 20 110 A 90 90 0 0 1 110 20" fill="none" stroke={tintOf(right)} strokeWidth={sw} />
+      <path d="M 110 20 A 90 90 0 0 1 200 110" fill="none" stroke={tintOf(left)} strokeWidth={sw} />
       {!mini && <line x1="110" y1="6" x2="110" y2="34" stroke={C.text} strokeWidth="1" />}
       <g style={{ transform: `rotate(${deg}deg)`, transformBox: "view-box", transformOrigin: "110px 110px", transition: "transform .7s cubic-bezier(0.22, 1, 0.36, 1)" }}>
         <line x1="110" y1="110" x2="110" y2={mini ? 24 : 26} stroke={C.text} strokeWidth={mini ? 10 : 3} strokeLinecap="round" />
@@ -1541,14 +1543,14 @@ function LeadStory({ r, current, wide, onPick }) {
       <p style={deckStyle(wide)}>{dekFor(r, d, current)}</p>
       {wide ? (
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 28, paddingTop: 14 }}>
-          <div style={{ paddingBottom: 14 }}>{side(L, leftPct, "flex-end")}</div>
+          <div style={{ paddingBottom: 14 }}>{side(R, rightPct, "flex-end")}</div>
           <Dial pRight={d.pRight} width={420} left={L.color} right={R.color} />
-          <div style={{ paddingBottom: 14 }}>{side(R, rightPct, "flex-start")}</div>
+          <div style={{ paddingBottom: 14 }}>{side(L, leftPct, "flex-start")}</div>
         </div>
       ) : (
         <>
           <div style={{ alignSelf: "center", width: "100%", maxWidth: 320 }}><Dial pRight={d.pRight} width={320} left={L.color} right={R.color} /></div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>{side(L, leftPct, "flex-start")}{side(R, rightPct, "flex-end")}</div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>{side(R, rightPct, "flex-start")}{side(L, leftPct, "flex-end")}</div>
         </>
       )}
       <p style={{ margin: 0, textAlign: "center", fontSize: 13, color: C.muted }}>
@@ -1701,8 +1703,8 @@ function CountyTable({ race }) {
             <span style={{ fontSize: 15, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.name}</span>
             <span style={{ display: "flex", flexDirection: "column", gap: 3 }}>
               <span style={{ display: "flex", height: 10 }}>
-                <span style={{ width: `${(1 - share) * 100}%`, background: tintOf(race.left.color, 0.45) }} />
                 <span style={{ width: `${share * 100}%`, background: tintOf(race.right.color, 0.45) }} />
+                <span style={{ width: `${(1 - share) * 100}%`, background: tintOf(race.left.color, 0.45) }} />
               </span>
               {anyIn && <span style={{ fontSize: 12, color: C.muted }}>{Math.round(u.reported * 100)}% counted · expected {base >= 0 ? race.right.short : race.left.short} +{Math.abs(base)}</span>}
             </span>
@@ -1744,7 +1746,7 @@ function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={kicker(paused ? C.muted : d.favColor)}>{stateLabel(race.state)} · {race.title} · {race.system}{race.liveOn ? " · Live" : paused ? " · Paused" : ""}</div>
-          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>{L.short} vs. {R.short}</h1>
+          <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>{R.short} vs. {L.short}</h1>
           <p style={deckStyle(wide)}>{dekFor(race, d, current)}</p>
           {race.note && <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{race.note}</p>}
           {paused && <PauseNote state={race.state} />}
@@ -1753,7 +1755,7 @@ function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
           {paused && <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>Pre-election forecast</div>}
           <div style={{ width: "100%", maxWidth: 400 }}><Dial pRight={d.pRight} width={400} left={L.color} right={R.color} /></div>
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: 400 }}>
-            {side(L, leftPct, t.rep, "flex-start")}{side(R, 100 - leftPct, t.dem, "flex-end")}
+            {side(R, 100 - leftPct, t.dem, "flex-start")}{side(L, leftPct, t.rep, "flex-end")}
           </div>
           <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>
             Chance of winning · <b style={{ color: C.text }}>{d.tag}</b> · Projected {d.marginTxt} · {Math.round(d.frac * 100)}% of expected vote in
