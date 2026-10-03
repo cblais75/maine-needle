@@ -37,25 +37,18 @@
       "rep": 45
     },
     {
-      "pollster": "Quantus Insights",
-      "rating": 0.6,
-      "date": "2026-09-15",
-      "dem": 46.4,
-      "rep": 47.1
-    },
-    {
-      "pollster": "NYT/PPH/Siena",
-      "rating": 0.95,
-      "date": "2026-09-22",
-      "dem": 46,
-      "rep": 49
-    },
-    {
       "pollster": "UMass Lowell/YouGov",
       "rating": 0.8,
       "date": "2026-09-14",
       "dem": 48,
       "rep": 43
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-09-15",
+      "dem": 46.4,
+      "rep": 47.1
     },
     {
       "pollster": "UNH Survey Center",
@@ -65,11 +58,39 @@
       "rep": 47
     },
     {
+      "pollster": "AARP (Fabrizio/Impact)",
+      "rating": 0.85,
+      "date": "2026-09-22",
+      "dem": 50,
+      "rep": 47
+    },
+    {
+      "pollster": "NYT/PPH/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 46,
+      "rep": 49
+    },
+    {
       "pollster": "InsiderAdvantage",
       "rating": 0.6,
       "date": "2026-09-23",
       "dem": 46,
       "rep": 46
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-30",
+      "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "Wedgewood Polls",
+      "rating": 0.55,
+      "date": "2026-10-01",
+      "dem": 52,
+      "rep": 48
     }
   ],
   "governor": [
@@ -104,6 +125,22 @@
       "dem": 47,
       "rep": 34,
       "ind": 8
+    },
+    {
+      "pollster": "AARP (Fabrizio/Impact)",
+      "rating": 0.85,
+      "date": "2026-09-22",
+      "dem": 52,
+      "rep": 39,
+      "ind": 6
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-30",
+      "dem": 47,
+      "rep": 38,
+      "ind": 6
     }
   ],
   "cd1": [
@@ -116,6 +153,13 @@
     }
   ],
   "cd2": [
+    {
+      "pollster": "Impact Research (D)",
+      "rating": 0.5,
+      "date": "2026-09-12",
+      "dem": 49,
+      "rep": 49
+    },
     {
       "pollster": "UNH Survey Center",
       "rating": 0.8,
@@ -224,11 +268,11 @@
       "rep": 34.1
     },
     {
-      "pollster": "Rasmussen Reports",
-      "rating": 0.5,
-      "date": "2026-09-22",
-      "dem": 48,
-      "rep": 41
+      "pollster": "Catawba College/YouGov",
+      "rating": 0.8,
+      "date": "2026-09-15",
+      "dem": 47,
+      "rep": 35
     },
     {
       "pollster": "Opinion Diagnostics (Common Cause NC)",
@@ -243,6 +287,13 @@
       "date": "2026-09-20",
       "dem": 53,
       "rep": 42
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-09-22",
+      "dem": 48,
+      "rep": 41
     }
   ],
   "oh_sen": [
@@ -336,6 +387,27 @@
       "date": "2026-09-23",
       "dem": 46,
       "rep": 45
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-09-27",
+      "dem": 51,
+      "rep": 43
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-29",
+      "dem": 44,
+      "rep": 43
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-09-30",
+      "dem": 47,
+      "rep": 44
     }
   ],
   "tx_sen": [
@@ -438,13 +510,6 @@
       "rep": 46
     },
     {
-      "pollster": "Marist Poll",
-      "rating": 0.9,
-      "date": "2026-09-20",
-      "dem": 50,
-      "rep": 44
-    },
-    {
       "pollster": "Texas Southern University",
       "rating": 0.75,
       "date": "2026-09-19",
@@ -452,11 +517,25 @@
       "rep": 46
     },
     {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-09-20",
+      "dem": 50,
+      "rep": 44
+    },
+    {
       "pollster": "Texas Public Opinion Research",
       "rating": 0.5,
       "date": "2026-09-22",
       "dem": 49,
       "rep": 44
+    },
+    {
+      "pollster": "Big Data Poll",
+      "rating": 0.6,
+      "date": "2026-09-26",
+      "dem": 43.6,
+      "rep": 39.3
     }
   ],
   "ia_sen": [
@@ -536,6 +615,27 @@
       "date": "2026-09-20",
       "dem": 50,
       "rep": 42
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-23",
+      "dem": 47,
+      "rep": 46
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-09-28",
+      "dem": 49,
+      "rep": 47
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-09-29",
+      "dem": 45.8,
+      "rep": 47.1
     }
   ],
   "ak_sen": [
@@ -575,13 +675,6 @@
       "rep": 49
     },
     {
-      "pollster": "Rasmussen Reports",
-      "rating": 0.5,
-      "date": "2026-09-14",
-      "dem": 39,
-      "rep": 39
-    },
-    {
       "pollster": "AARP (Fabrizio/Impact)",
       "rating": 0.85,
       "date": "2026-09-11",
@@ -594,6 +687,27 @@
       "date": "2026-09-12",
       "dem": 48.4,
       "rep": 43.8
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-09-14",
+      "dem": 39,
+      "rep": 39
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-17",
+      "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-09-24",
+      "dem": 45.5,
+      "rep": 46.8
     }
   ],
   "ga_sen": [
@@ -656,6 +770,13 @@
   ],
   "ne_sen": [
     {
+      "pollster": "GBAO (Working Class Majority PAC)",
+      "rating": 0.5,
+      "date": "2026-09-08",
+      "dem": 47,
+      "rep": 46
+    },
+    {
       "pollster": "SurveyUSA",
       "rating": 0.8,
       "date": "2026-09-13",
@@ -686,13 +807,6 @@
       "rep": 51
     },
     {
-      "pollster": "Susquehanna Polling & Research",
-      "rating": 0.8,
-      "date": "2026-08-17",
-      "dem": 46,
-      "rep": 39
-    },
-    {
       "pollster": "AARP (Fabrizio/Impact)",
       "rating": 0.85,
       "date": "2026-08-11",
@@ -700,11 +814,11 @@
       "rep": 47
     },
     {
-      "pollster": "EPIC-MRA",
+      "pollster": "Susquehanna Polling & Research",
       "rating": 0.8,
-      "date": "2026-08-28",
-      "dem": 47,
-      "rep": 43
+      "date": "2026-08-17",
+      "dem": 46,
+      "rep": 39
     },
     {
       "pollster": "MSU/IPPSR",
@@ -714,11 +828,11 @@
       "rep": 45
     },
     {
-      "pollster": "CNN/SSRS",
-      "rating": 0.9,
-      "date": "2026-09-06",
+      "pollster": "EPIC-MRA",
+      "rating": 0.8,
+      "date": "2026-08-28",
       "dem": 47,
-      "rep": 44
+      "rep": 43
     },
     {
       "pollster": "Glengariff (Detroit News/WDIV)",
@@ -726,6 +840,13 @@
       "date": "2026-09-03",
       "dem": 44.4,
       "rep": 45.8
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-09-06",
+      "dem": 47,
+      "rep": 44
     },
     {
       "pollster": "Trafalgar Group",
@@ -742,6 +863,13 @@
       "rep": 46
     },
     {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-17",
+      "dem": 47,
+      "rep": 45
+    },
+    {
       "pollster": "Washington Post/Schar School",
       "rating": 0.9,
       "date": "2026-09-17",
@@ -749,11 +877,11 @@
       "rep": 45
     },
     {
-      "pollster": "NYT/Siena",
-      "rating": 0.95,
-      "date": "2026-09-22",
-      "dem": 49,
-      "rep": 44
+      "pollster": "Torchlight Strategies (Common Sense for America PAC)",
+      "rating": 0.5,
+      "date": "2026-09-19",
+      "dem": 43.1,
+      "rep": 44.4
     },
     {
       "pollster": "Suffolk University",
@@ -763,11 +891,11 @@
       "rep": 40
     },
     {
-      "pollster": "InsiderAdvantage",
-      "rating": 0.6,
-      "date": "2026-09-17",
-      "dem": 47,
-      "rep": 45
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 49,
+      "rep": 44
     },
     {
       "pollster": "Big Data Poll",
@@ -777,11 +905,11 @@
       "rep": 40.5
     },
     {
-      "pollster": "Torchlight Strategies (Common Sense for America PAC)",
-      "rating": 0.5,
-      "date": "2026-09-19",
-      "dem": 43.1,
-      "rep": 44.4
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-09-28",
+      "dem": 50,
+      "rep": 49
     }
   ],
   "nh_sen": [
@@ -828,11 +956,11 @@
       "rep": 46
     },
     {
-      "pollster": "NYT/Siena",
-      "rating": 0.95,
-      "date": "2026-09-22",
-      "dem": 50,
-      "rep": 45
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-18",
+      "dem": 48,
+      "rep": 40
     },
     {
       "pollster": "UNH Survey Center",
@@ -840,6 +968,20 @@
       "date": "2026-09-21",
       "dem": 50,
       "rep": 42
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-09-22",
+      "dem": 50,
+      "rep": 45
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-09-27",
+      "dem": 47.4,
+      "rep": 40.5
     }
   ]
 }
