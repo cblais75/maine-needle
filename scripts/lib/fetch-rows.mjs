@@ -15,7 +15,7 @@
 // Clarity links may contain {ver}; the current folder number is looked up automatically.
 import { readFeed } from "./read-feed.mjs";
 
-const UA = { "User-Agent": "Mozilla/5.0 (compatible; TheNeedleProject/1.0; +https://theneedleproject.vercel.app)" };
+const UA = { "User-Agent": "Mozilla/5.0 (compatible; Needlepoint/1.0; +https://needlepoint.news)" };
 
 export async function get(url, ms = 20000) {
   const ctl = new AbortController();

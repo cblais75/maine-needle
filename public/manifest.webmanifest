@@ -1,6 +1,6 @@
 {
-  "name": "The Needle Project",
-  "short_name": "Needle Project",
+  "name": "Needlepoint",
+  "short_name": "Needlepoint",
   "description": "Poll-driven election needles for the 2026 races, live on election night.",
   "start_url": "/",
   "scope": "/",

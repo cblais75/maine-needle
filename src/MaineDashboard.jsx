@@ -725,9 +725,9 @@ export default function MaineDashboard() {
     </p>
   );
   const titleBtn = (size) => (
-    <button onClick={() => go("dashboard")} aria-label="The Needle Project, home"
+    <button onClick={() => go("dashboard")} aria-label="Needlepoint, home"
       style={{ background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer", color: C.text, fontFamily: serif, fontWeight: 700, fontSize: size, letterSpacing: size > 40 ? -1.5 : -0.8, lineHeight: 1 }}>
-      The Needle Project
+      Needlepoint
     </button>
   );
   const navLink = (on) => ({ background: "none", border: "none", cursor: "pointer", color: C.text, fontSize: 15, fontWeight: on ? 700 : 500, padding: "4px 0 3px", borderBottom: `2px solid ${on ? C.text : "transparent"}` });
@@ -1145,7 +1145,7 @@ function SupportBlock({ compact }) {
   return (
     <section style={{ display: "flex", flexDirection: compact ? "column" : "row", alignItems: compact ? "stretch" : "center", justifyContent: "space-between", gap: compact ? 12 : 40, marginTop: 40, paddingTop: 22, borderTop: `3px double ${C.text}` }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 760 }}>
-        <span style={{ fontFamily: serif, fontSize: compact ? 22 : 26, fontWeight: 600 }}>Support the Needle Project</span>
+        <span style={{ fontFamily: serif, fontSize: compact ? 22 : 26, fontWeight: 600 }}>Support Needlepoint</span>
         <span style={{ fontFamily: serif, fontSize: compact ? 16 : 18, lineHeight: 1.5, color: C.body }}>It's free, ad-free and built by one person. If it's useful to you, you can chip in to keep it running through election night.</span>
       </div>
       <a href={COFFEE_URL} target="_blank" rel="noopener noreferrer"
@@ -2123,6 +2123,7 @@ function MethodView({ wide }) {
         </div>
         {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so its needle is a polling forecast that doesn't move on election night.")}
         {note("Where the data comes from", "Polls from public releases, and results from the official files each state's election office publishes. No paid data and no copying from news sites.")}
+        {note("About the name", "Needlepoint was called The Needle Project until October 2026. Same site, same needles, shorter name.")}
       </aside>
     </section>
   );

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://theneedleproject.vercel.app/sitemap.xml
+Sitemap: https://needlepoint.news/sitemap.xml

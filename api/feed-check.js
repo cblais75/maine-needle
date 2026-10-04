@@ -7,7 +7,7 @@ import { aggregate } from "../scripts/lib/aggregate.mjs";
 import { fetchRows } from "../scripts/lib/fetch-rows.mjs";
 import COUNTIES from "../scripts/lib/counties.mjs";
 
-const ALLOWED = [/\.gov$/i, /\.us$/i, /(^|\.)clarityelections\.com$/i, /(^|\.)enhancedvoting\.com$/i, /(^|\.)texas-election\.com$/i, /^theneedleproject\.vercel\.app$/i]; // last one: our own backup copies in public/official/
+const ALLOWED = [/\.gov$/i, /\.us$/i, /(^|\.)clarityelections\.com$/i, /(^|\.)enhancedvoting\.com$/i, /(^|\.)texas-election\.com$/i, /^theneedleproject\.vercel\.app$/i, /^(www\.)?needlepoint\.news$/i]; // last one: our own backup copies in public/official/
 const s3ok = (u) => u.hostname === "s3.amazonaws.com" && u.pathname.startsWith("/dl.ncsbe.gov/");
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
