@@ -76,7 +76,9 @@ const makeSenate = (pollMargin) => ({
 // County-level baseline is pending the real-data step (scripts/build-baseline-nc.mjs pulls
 // NC's past results via dispatch). Until then NC runs on a single statewide unit centered on
 // polling: a valid poll-driven needle now, and a statewide live needle on election night.
-const NC_HOUSE = 6; // toward Whatley: NC has overstated Democrats in 2016/2020/2022, and undecideds there tend to break R
+// Update 47: state shifts halved (Maine Senate and Alaska kept). Past polling misses don't reliably
+// repeat, especially in midterms, so each shift is about half the size of the state's past misses.
+const NC_HOUSE = 3; // toward Whatley: NC polls have overstated Democrats in recent cycles (halved from 6)
 // Real county baseline from NC's 2024 presidential results (scripts/build-baseline-nc.mjs):
 // lean = each county's Dem two-party share minus the statewide share (mean-zero); weight = two-party turnout.
 const NC_LEAN = ncBaseline.lean, NC_W = ncBaseline.weight;
@@ -87,7 +89,7 @@ const makeNCSenate = (pollMargin) => ({
   id: "nc_sen", state: "NC", title: "U.S. Senate",
   sub: "Cooper (D) vs Whatley (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley for North Carolina's Republican lean. County map built from 2024 results.`,
+  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley because North Carolina polls have tended to underestimate Republicans; the shift was halved in October, since past misses don't reliably repeat. County map built from 2024 results.`,
   left: { full: "Whatley", short: "Whatley", color: RED },
   right: { full: "Cooper", short: "Cooper", color: BLUE },
   units: ncUnits(pollMargin),
@@ -98,7 +100,7 @@ const makeNCSenate = (pollMargin) => ({
 // overstated Brown in 2024 (he led several surveys, then lost by ~3.5), so the poll center is
 // shifted toward Husted. Uses the real county map when data/oh-baseline.json is filled in,
 // otherwise a single statewide unit until the dispatch baseline step runs.
-const OH_HOUSE = 4;
+const OH_HOUSE = 2; // halved from 4 in Update 47
 const OH_LEAN = ohBaseline.lean || {}, OH_W = ohBaseline.weight || {};
 const OH_HAS_COUNTIES = Object.keys(OH_LEAN).length > 0;
 const ohUnits = (pollMargin) =>
@@ -109,7 +111,7 @@ const makeOhioSenate = (pollMargin) => ({
   id: "oh_sen", state: "OH", title: "U.S. Senate (special)",
   sub: "Brown (D) vs Husted (R)",
   system: "Plurality", real: true,
-  note: `Special election for JD Vance's old seat. Centered on polls, then shifted ${OH_HOUSE} pts toward Husted for Ohio's Republican lean.${OH_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Special election for JD Vance's old seat. Centered on polls, then shifted ${OH_HOUSE} pts toward Husted because Ohio polls have tended to underestimate Republicans; the shift was halved in October, since past misses don't reliably repeat.${OH_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Husted", short: "Husted", color: RED },
   right: { full: "Brown", short: "Brown", color: BLUE },
   units: ohUnits(pollMargin),
@@ -119,7 +121,7 @@ const makeOhioSenate = (pollMargin) => ({
 // Paxton (R) vs Talarico (D), plurality. Texas leans strongly Republican (Trump +14 in 2024),
 // though the race has polled closer than usual. The poll center is shifted toward Paxton for the
 // state's fundamentals. Uses the real county map when data/tx-baseline.json is filled in.
-const TX_HOUSE = 5;
+const TX_HOUSE = 2.5; // halved from 5 in Update 47
 const TX_LEAN = txBaseline.lean || {}, TX_W = txBaseline.weight || {};
 const TX_HAS_COUNTIES = Object.keys(TX_LEAN).length > 0;
 const txUnits = (pollMargin) =>
@@ -130,7 +132,7 @@ const makeTexasSenate = (pollMargin) => ({
   id: "tx_sen", state: "TX", title: "U.S. Senate",
   sub: "Talarico (D) vs Paxton (R)",
   system: "Plurality", real: true,
-  note: `Texas leans strongly Republican, so the poll center is shifted ${TX_HOUSE} pts toward Paxton for the state's fundamentals.${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Paxton (halved in October, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Paxton", short: "Paxton", color: RED },
   right: { full: "Talarico", short: "Talarico", color: BLUE },
   units: txUnits(pollMargin),
@@ -140,7 +142,7 @@ const makeTexasSenate = (pollMargin) => ({
 // Hinson (R) vs Turek (D), plurality. Iowa leans strongly Republican (Trump +13 in 2024) and a
 // Democrat has not won a Senate race here since 2008, so the center is shifted toward Hinson.
 // No public general-election polls yet, so it runs on fundamentals until the weekly refresh adds them.
-const IA_HOUSE = 5;
+const IA_HOUSE = 2.5; // halved from 5 in Update 47
 const IA_LEAN = iaBaseline.lean || {}, IA_W = iaBaseline.weight || {};
 const IA_HAS_COUNTIES = Object.keys(IA_LEAN).length > 0;
 const iaUnits = (pollMargin) =>
@@ -151,7 +153,7 @@ const makeIowaSenate = (pollMargin) => ({
   id: "ia_sen", state: "IA", title: "U.S. Senate",
   sub: "Turek (D) vs Hinson (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Ernst is retiring). Iowa leans strongly Republican, so the poll center is shifted ${IA_HOUSE} pts toward Hinson.${IA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Open seat (Ernst is retiring). Iowa leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${IA_HOUSE} pts toward Hinson (halved in October, since past misses don't reliably repeat).${IA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Hinson", short: "Hinson", color: RED },
   right: { full: "Turek", short: "Turek", color: BLUE },
   units: iaUnits(pollMargin),
@@ -161,7 +163,7 @@ const makeIowaSenate = (pollMargin) => ({
 // Ossoff (D, incumbent) vs Collins (R), the GOP runoff winner. Georgia is nearly even federally
 // (Trump +2 in 2024) with a Democratic incumbent defending; the center gets a small shift toward
 // Collins for the state's lean. Georgia law requires a December 1 runoff if no candidate tops 50%.
-const GA_HOUSE = 2;
+const GA_HOUSE = 1; // halved from 2 in Update 47
 const GA_LEAN = gaBaseline.lean || {}, GA_W = gaBaseline.weight || {};
 const GA_HAS_COUNTIES = Object.keys(GA_LEAN).length > 0;
 const gaUnits = (pollMargin) =>
@@ -172,7 +174,7 @@ const makeGeorgiaSenate = (pollMargin) => ({
   id: "ga_sen", state: "GA", title: "U.S. Senate",
   sub: "Ossoff (D) vs Collins (R)",
   system: "Majority (runoff Dec 1 if no one tops 50%)", real: true,
-  note: `Ossoff is the incumbent; Collins won the Republican runoff. The poll center is shifted ${GA_HOUSE} pts toward Collins for Georgia's slight Republican lean. If no candidate wins a majority in November, the race goes to a December 1 runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Ossoff is the incumbent; Collins won the Republican runoff. The poll center is shifted ${GA_HOUSE} pt toward Collins for Georgia's slight Republican lean. If no candidate wins a majority in November, the race goes to a December 1 runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Collins", short: "Collins", color: RED },
   right: { full: "Ossoff", short: "Ossoff", color: BLUE },
   units: gaUnits(pollMargin),
@@ -182,7 +184,7 @@ const makeGeorgiaSenate = (pollMargin) => ({
 // Ricketts (R, incumbent) vs Osborn (independent). Public polls show a near-tie, but Nebraska is
 // Trump +20 territory and Osborn polled close in 2024 before losing by ~7, so the center is shifted
 // toward Ricketts. Osborn sits in the challenger (right) slot but is colored as an independent, not blue.
-const NE_HOUSE = 4;
+const NE_HOUSE = 2; // halved from 4 in Update 47
 const NE_LEAN = neBaseline.lean || {}, NE_W = neBaseline.weight || {};
 const NE_HAS_COUNTIES = Object.keys(NE_LEAN).length > 0;
 const neUnits = (pollMargin) =>
@@ -193,7 +195,7 @@ const makeNebraskaSenate = (pollMargin) => ({
   id: "ne_sen", state: "NE", title: "U.S. Senate",
   sub: "Osborn (I) vs Ricketts (R)",
   system: "Independent vs Republican", real: true,
-  note: `Dan Osborn runs as an independent against Republican incumbent Pete Ricketts; the Democratic nominee is expected to step aside for him. Public polls show a near-tie, but the center is shifted ${NE_HOUSE} pts toward Ricketts for Nebraska's strong Republican lean (Trump +20 in 2024) and Osborn's 2024 pattern of polling close before losing by about 7. Osborn has not said which party he would caucus with.${NE_HAS_COUNTIES ? " County map built from past results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Dan Osborn runs as an independent against Republican incumbent Pete Ricketts; the Democratic nominee is expected to step aside for him. Public polls show a near-tie, but the center is shifted ${NE_HOUSE} pts toward Ricketts for Nebraska's strong Republican lean (Trump +20 in 2024) and Osborn's 2024 pattern of polling close before losing by about 7. The shift was halved in October, since one race's miss doesn't reliably repeat. Osborn has not said which party he would caucus with.${NE_HAS_COUNTIES ? " County map built from past results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Ricketts", short: "Ricketts", color: RED },
   right: { full: "Osborn", short: "Osborn", color: TEAL },
   units: neUnits(pollMargin),
@@ -207,12 +209,12 @@ const makeNebraskaSenate = (pollMargin) => ({
 // AK_HOUSE shifts the center toward Sullivan: Alaska polls have underestimated Republicans
 // (Sullivan won by about 13 in 2020 after polling far closer; Peltola lost her 2024 House race
 // by about 2 after polling close).
-const AK_HOUSE = 4;
+const AK_HOUSE = 2; // halved from 4 in Update 47, like the other state shifts
 const makeAlaskaSenate = (pollMargin = 3) => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
   sub: "Peltola (D) vs Sullivan (R)",
   system: "Ranked-Choice Voting", real: true, noNight: true,
-  note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
+  note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans; the shift was halved in October, since past misses don't reliably repeat. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
   left: { full: "Sullivan", short: "Sullivan", color: RED },
   right: { full: "Peltola", short: "Peltola", color: BLUE },
   units: [unit("Alaska", clamp(0.5 + (pollMargin - AK_HOUSE) / 200, 0.02, 0.98), 320000)],
@@ -222,8 +224,8 @@ const makeAlaskaSenate = (pollMargin = 3) => ({
 // Michigan polls have underestimated Republicans repeatedly (about 4 pts in 2016,
 // 5 in 2020, 2 in 2024), but it is also the bluest state on this board at the
 // presidential level (Trump +1.4 in 2024) — narrower than Georgia, which carries a
-// 2-pt shift. The center is shifted 2 pts toward Rogers to keep the ordering honest.
-const MI_HOUSE = 2;
+// 2-pt shift. The center was shifted 2 pts toward Rogers; Update 47 halves it to 1.
+const MI_HOUSE = 1;
 const MI_LEAN = miBaseline.lean || {}, MI_W = miBaseline.weight || {};
 const MI_HAS_COUNTIES = Object.keys(MI_LEAN).length > 0;
 const miUnits = (pollMargin) =>
@@ -233,9 +235,9 @@ const miUnits = (pollMargin) =>
 // New Hampshire leans Democratic at the presidential level (Harris +2.8 in 2024) and
 // Democrats have held this seat and both NH Senate seats for over a decade. But NH
 // polling has a history of underestimating Republicans, and Sununu is a proven
-// statewide crossover name. So the center is shifted just 1 pt toward Sununu — the
-// smallest shift on the board, because the state's fundamentals genuinely lean blue.
-const NH_HOUSE = 1;
+// statewide crossover name. So the center was shifted just 1 pt toward Sununu (halved to
+// 0.5 in Update 47) — the smallest shift on the board, because the state's fundamentals lean blue.
+const NH_HOUSE = 0.5;
 const NH_LEAN = nhBaseline.lean || {}, NH_W = nhBaseline.weight || {};
 const NH_HAS_COUNTIES = Object.keys(NH_LEAN).length > 0;
 const nhUnits = (pollMargin) =>
@@ -246,7 +248,7 @@ const makeNHSenate = (pollMargin) => ({
   id: "nh_sen", state: "NH", title: "U.S. Senate",
   sub: "Pappas (D) vs Sununu (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Shaheen retiring). Chris Pappas (D) faces former Senator John E. Sununu (R). Centered on polls, then shifted ${NH_HOUSE} pt toward Sununu — the smallest shift on the board. New Hampshire leans Democratic at the presidential level and has held this seat for Democrats for over a decade, but its polls have underestimated Republicans before and Sununu is a proven statewide crossover candidate. County map built from 2024 results.`,
+  note: `Open seat (Shaheen retiring). Chris Pappas (D) faces former Senator John E. Sununu (R). Centered on polls, then shifted ${NH_HOUSE} pt toward Sununu, the smallest shift on the board. New Hampshire leans Democratic at the presidential level and has held this seat for Democrats for over a decade, but its polls have underestimated Republicans before and Sununu is a proven statewide crossover candidate. County map built from 2024 results.`,
   left: { full: "Sununu", short: "Sununu", color: RED },
   right: { full: "Pappas", short: "Pappas", color: BLUE },
   units: nhUnits(pollMargin),
@@ -255,7 +257,7 @@ const makeMichiganSenate = (pollMargin) => ({
   id: "mi_sen", state: "MI", title: "U.S. Senate",
   sub: "El-Sayed (D) vs Rogers (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Peters retiring). Abdul El-Sayed won the August 4 Democratic primary over Haley Stevens in a race decided by roughly a point; Mike Rogers was unopposed on the Republican side. Centered on polls, then shifted ${MI_HOUSE} pts toward Rogers — Michigan polling has underestimated Republicans in each of the last three presidential cycles, though the shift is held to 2 because Michigan is the narrowest state on this board at the presidential level. County map built from 2024 results.`,
+  note: `Open seat (Peters retiring). Abdul El-Sayed won the August 4 Democratic primary over Haley Stevens in a race decided by roughly a point; Mike Rogers was unopposed on the Republican side. Centered on polls, then shifted ${MI_HOUSE} pt toward Rogers. Michigan polling underestimated Republicans in each of the last three presidential cycles, but misses like that don't reliably repeat in a midterm, and Michigan is the narrowest state on this board at the presidential level. County map built from 2024 results.`,
   left: { full: "Rogers", short: "Rogers", color: RED },
   right: { full: "El-Sayed", short: "El-Sayed", color: BLUE },
   units: miUnits(pollMargin),
@@ -1310,7 +1312,7 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
           {sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
           {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
           {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
-          {sec("How this needle is built", `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan, because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
+          {sec("How this needle is built", `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
         </div>
         {hasNeedle && onNav && <RacePolls r={race} current={current} onNav={onNav} />}
       </section>
@@ -1940,13 +1942,14 @@ function PollsView({ current, loaded, wide }) {
   const demCol = tab === "ne_sen" ? TEAL : BLUE;
   const avgTxt = mg == null ? "—" : mg === 0 ? "Tied" : mg > 0 ? `${demN} +${Math.abs(mg)}` : `${repN} +${Math.abs(mg)}`;
   const house = HOUSE_BY_POLL[tab] || 0;
-  const cols = wide ? `minmax(0,1fr) 110px 80px 80px ${indN ? "80px " : ""}130px 100px 70px` : "minmax(0,1fr) auto";
+  const cols = wide ? `minmax(0,1fr) 100px 70px 70px ${indN ? "70px " : ""}120px 120px 90px 64px` : "minmax(0,1fr) auto";
+  const mTxt = (x) => { const v = Math.round(x * 10) / 10; return v === 0 ? ["Tied", C.text] : v > 0 ? [`${demN} +${v}`, demCol] : [`${repN} +${-v}`, RED]; };
   const stateName = label.startsWith("Maine") ? "Maine" : label;
   return (
     <div>
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 18 }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>The polls</h1>
-        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Every poll in the averages, newest first. Better pollsters count more, newer polls count more, and a campaign's own poll never stands alone.</p>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Every poll in the averages, newest first. Better pollsters count more, newer polls count more, each poll is corrected for its pollster's measured lean, and a campaign's own poll never stands alone.</p>
       </section>
       <nav aria-label="Races" style={{ display: "flex", flexWrap: wide ? "wrap" : "nowrap", overflowX: wide ? "visible" : "auto", gap: 4, borderBottom: `1px solid ${C.line}` }}>
         {POLL_TABS.map(([k, l]) => (
@@ -1960,18 +1963,18 @@ function PollsView({ current, loaded, wide }) {
               <span style={kicker()}>{label} · polling average{pc.nPolls ? ` of ${pc.nPolls} polls` : ""}</span>
               <span style={{ fontSize: wide ? 40 : 30, fontWeight: 600, color: mg == null || mg === 0 ? C.text : mg > 0 ? demCol : RED }}>{avgTxt}{indN && pc.bennett != null ? <span style={{ fontSize: 20, color: IND }}> · {indN} {pc.bennett}%</span> : null}</span>
             </div>
-            {house > 0 && <span style={{ fontSize: 14, color: C.muted, maxWidth: 440 }}>The needle then shifts its starting point {house} point{house === 1 ? "" : "s"} toward {repN} for {stateName}'s history of polls underestimating Republicans. The How it works page explains each shift.</span>}
+            {house > 0 && <span style={{ fontSize: 14, color: C.muted, maxWidth: 440 }}>The needle then shifts its starting point {house} point{house === 1 ? "" : "s"} toward {repN} {tab === "senate" ? "for her record of beating her polls" : `for ${stateName}'s history of polls underestimating Republicans`}. The How it works page explains each shift.</span>}
           </section>
           {polls.length === 0 ? <p style={{ fontSize: 15, color: C.muted }}>{pc.note || "No public polls yet."}</p> : (
             <div>
               {wide && (
                 <div style={{ display: "grid", gridTemplateColumns: cols, columnGap: 18, padding: "10px 0", fontSize: 12, fontWeight: 600, color: C.muted, borderTop: `2px solid ${C.text}`, borderBottom: `1px solid ${C.line}` }}>
-                  <span>Pollster</span><span>Field end</span><span>{demN}</span><span>{repN}</span>{indN && <span>{indN}</span>}<span>Margin</span><span>Rating</span><span style={{ textAlign: "right" }}>Weight</span>
+                  <span>Pollster</span><span>Field end</span><span>{demN}</span><span>{repN}</span>{indN && <span>{indN}</span>}<span>Margin</span><span>Lean-corrected</span><span>Rating</span><span style={{ textAlign: "right" }}>Weight</span>
                 </div>
               )}
               {polls.map((p, i) => {
-                const x = Math.round((p.dem - p.rep) * 10) / 10;
-                const [mt, mc] = x === 0 ? ["Tied", C.text] : x > 0 ? [`${demN} +${x}`, demCol] : [`${repN} +${-x}`, RED];
+                const [mt, mc] = mTxt(p.dem - p.rep);
+                const [at, ac] = mTxt(p.adjMargin != null ? p.adjMargin : p.dem - p.rep);
                 const tier = tierOf(p.rating);
                 return wide ? (
                   <div key={i} style={{ display: "grid", gridTemplateColumns: cols, columnGap: 18, alignItems: "center", padding: "9px 0", borderBottom: `1px solid ${C.line}`, fontSize: 15 }}>
@@ -1979,6 +1982,7 @@ function PollsView({ current, loaded, wide }) {
                     <span style={{ color: C.muted }}>{fmtDate(p.date).replace(/, \d{4}$/, "")}</span>
                     <span>{p.dem}</span><span>{p.rep}</span>{indN && <span>{p.ind ?? "—"}</span>}
                     <span style={{ color: mc, fontWeight: 600 }}>{mt}</span>
+                    <span style={{ color: ac }}>{at}</span>
                     <span style={{ color: tier.color, fontWeight: 600 }}>{tier.name}</span>
                     <span style={{ textAlign: "right", color: C.muted }}>{p.weightPct}%</span>
                   </div>
@@ -1986,7 +1990,7 @@ function PollsView({ current, loaded, wide }) {
                   <div key={i} style={{ display: "grid", gridTemplateColumns: cols, columnGap: 12, alignItems: "center", padding: "10px 0", borderBottom: `1px solid ${C.line}` }}>
                     <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                       <span style={{ fontFamily: serif, fontSize: 17, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.pollster}</span>
-                      <span style={{ fontSize: 13, color: C.muted }}>{fmtDate(p.date).replace(/, \d{4}$/, "")} · <span style={{ color: tier.color, fontWeight: 600 }}>{tier.name}</span> · {p.dem}–{p.rep}{p.ind != null ? `–${p.ind}` : ""} · weight {p.weightPct}%</span>
+                      <span style={{ fontSize: 13, color: C.muted }}>{fmtDate(p.date).replace(/, \d{4}$/, "")} · <span style={{ color: tier.color, fontWeight: 600 }}>{tier.name}</span> · {p.dem}–{p.rep}{p.ind != null ? `–${p.ind}` : ""} · weight {p.weightPct}%{p.house ? ` · lean-corrected ${at}` : ""}</span>
                     </span>
                     <span style={{ color: mc, fontWeight: 600, fontSize: 15, textAlign: "right" }}>{mt}</span>
                   </div>
@@ -1997,7 +2001,7 @@ function PollsView({ current, loaded, wide }) {
           <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>
             {tab === "ak_sen" ? "Alaska polls are head-to-head surveys. Alaska's needle is built from them as a forecast only; the election itself is ranked-choice. " : ""}
             {tab === "senate" ? "Maine Senate polls count from July 25, when Jackson became the nominee. " : ""}
-            Likely-voter numbers are used when a poll reports both. Weight is each poll's share of the average. Updated {current?.updated || "—"}.
+            Likely-voter numbers are used when a poll reports both. Margin is what the pollster published; lean-corrected is the margin after removing that pollster's measured lean, and that is what goes into the average. Weight is each poll's share of the average. Updated {current?.updated || "—"}.
           </p>
         </>
       )}
@@ -2012,7 +2016,7 @@ function RatingsView({ current, loaded, wide }) {
     <div>
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Pollster ratings</h1>
-        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Not every poll deserves the same trust. Each pollster gets one rating, used everywhere it polls, and that rating decides how much its numbers pull the average. This list is built from the polls the site is using right now.</p>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Not every poll deserves the same trust. Each pollster gets one rating, used everywhere it polls, and that rating decides how much its numbers pull the average. Each pollster's measured lean is shown too, and corrected for. This list is built from the polls the site is using right now.</p>
       </section>
       {!loaded && <p style={{ fontSize: 14, color: C.muted }}>Loading ratings…</p>}
       {TIERS.map((t, i) => {
@@ -2032,6 +2036,7 @@ function RatingsView({ current, loaded, wide }) {
                   <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{p.name}</span>
                     <span style={{ fontSize: 12, color: C.muted }}>{POLLSTER_NOTES[p.name] ? `${POLLSTER_NOTES[p.name]} · ` : ""}{p.n} {p.n === 1 ? "poll" : "polls"} · {[...p.states].sort().join(", ")}</span>
+                    {leanText(p.lean) && <span style={{ fontSize: 12, fontWeight: 600, color: leanColor(p.lean) }}>Measured lean: {leanText(p.lean)}</span>}
                   </span>
                   <span style={{ fontSize: 15, fontWeight: 700, color: t.color }}>{p.rating.toFixed(2)}</span>
                 </div>
@@ -2043,7 +2048,7 @@ function RatingsView({ current, loaded, wide }) {
       <div style={{ paddingTop: 22 }}>
         <SectionHead title="The rules" size={22} />
         <p style={{ margin: "12px 0 0", fontFamily: serif, fontSize: 17, lineHeight: 1.6, color: C.body, maxWidth: 900 }}>
-          A pollster carries one rating everywhere it appears. When a poll publishes both registered-voter and likely-voter numbers, the likely-voter numbers are used. A poll paid for by a campaign or a party is rated at the bottom, and it can join a race's average but can never be the only poll in it. Ratings are separate from the adjustments on the How it works page: a rating measures how much to trust a pollster, while an adjustment corrects for a state's history of polling misses.
+          A pollster carries one rating everywhere it appears. When a poll publishes both registered-voter and likely-voter numbers, the likely-voter numbers are used. A poll paid for by a campaign or a party is rated at the bottom, and it can join a race's average but can never be the only poll in it. A pollster's measured lean is how far its numbers have run from other pollsters in the same races at the same time this year ("runs R+2.0" means about 2 points more Republican than everyone else). Every poll is corrected for its pollster's lean before averaging, in both directions. Pollsters with only a poll or two get a smaller correction, since one poll can differ by luck, and a poll paid for by a campaign, party or PAC starts out assumed to lean 2 points toward its sponsor. A label like "R-leaning reputation" describes a firm's track record in past cycles; the measured lean is what its polls are doing this year. Ratings and leans are separate from the state adjustments on the How it works page, which correct for a state's history of polling misses.
         </p>
       </div>
     </div>
@@ -2055,23 +2060,26 @@ function MethodView({ wide }) {
   const sub = { fontFamily: serif, fontSize: wide ? 18 : 17, lineHeight: 1.6, color: C.body, margin: 0 };
   const item = { fontSize: 15, lineHeight: 1.55, color: C.body, margin: 0 };
   const steps = [
-    ["Start from the polls", <p key="p" style={sub}>Each race begins at its polling average. Every poll is weighted two ways: by how much we trust the pollster (see Pollster ratings) and by how recent it is, with a poll's weight halving every three weeks.</p>],
+    ["Start from the polls", <>
+      <p style={sub}>Each race begins at its polling average. Every poll is weighted two ways: by how much we trust the pollster (see Pollster ratings) and by how recent it is, with a poll's weight halving every three weeks.</p>
+      <p style={sub}>Each poll is also corrected for its pollster's measured lean, or "house effect": how far that pollster's numbers have run from other pollsters in the same races at the same time this year. A pollster with only a poll or two gets a smaller correction, since one poll can differ by luck, and a poll paid for by a campaign, party or PAC starts out assumed to lean 2 points toward its sponsor. This is the approach major polling averages such as Silver Bulletin's use, and it works in both directions. The Pollster ratings page lists every pollster's lean.</p>
+    </>],
     ["Adjust for history", <>
-      <p style={sub}>Polls in some states have missed in the same direction election after election. For those races the starting point shifts a documented amount toward the side polls have underestimated, sized to that state's own record:</p>
+      <p style={sub}>Polls in several of these states underestimated Republicans in recent elections, mostly in presidential years. Misses like that don't reliably repeat (midterm polls have been far closer), so each race's starting point shifts toward the Republican by half of what it did before October. Maine's shift is about Susan Collins herself, whose record of beating her polls is the best documented on the board, so it stays at full size:</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
-        {[["North Carolina", `${NC_HOUSE} pts toward Whatley`, "NC polls overstated Democrats in 2016, 2020 and 2022, and undecided voters there tend to break Republican."],
-          ["Texas", `${TX_HOUSE} pts toward Paxton`, "for Texas's strong Republican lean."],
-          ["Iowa", `${IA_HOUSE} pts toward Hinson`, "for Iowa's strong Republican lean in federal races."],
-          ["Maine", `${SEN_HOUSE} pts toward Collins`, "who has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9)."],
-          ["Ohio", `${OH_HOUSE} pts toward Husted`, "for Ohio's Republican lean in federal races."],
+        {[["Maine", `${SEN_HOUSE} pts toward Collins`, "Collins has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9). Kept at full size."],
+          ["North Carolina", `${NC_HOUSE} pts toward Whatley`, "NC polls have overstated Democrats in recent cycles, and undecided voters there tend to break Republican."],
+          ["Texas", `${TX_HOUSE} pts toward Paxton`, "for Texas's strong Republican lean and its polls' history of underestimating Republicans."],
+          ["Iowa", `${IA_HOUSE} pts toward Hinson`, "for Iowa's strong Republican lean and its polls' history of underestimating Republicans."],
+          ["Ohio", `${OH_HOUSE} pts toward Husted`, "Ohio polls have underestimated Republicans in recent federal races."],
           ["Nebraska", `${NE_HOUSE} pts toward Ricketts`, "for the state's Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven."],
-          ["Georgia", `${GA_HOUSE} pts toward Collins`, "for Georgia's narrow Republican lean."],
-          ["Michigan", `${MI_HOUSE} pts toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it is the closest state on this board."],
+          ["Georgia", `${GA_HOUSE} pt toward Collins`, "for Georgia's narrow Republican lean."],
+          ["Michigan", `${MI_HOUSE} pt toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it is the closest state on this board."],
           ["New Hampshire", `${NH_HOUSE} pt toward Sununu`, "the smallest shift, for NH polls' history and Sununu's crossover appeal."],
           ["Alaska", `${AK_HOUSE} pts toward Sullivan`, "Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close."]].map(([s, a, why]) => (
           <p key={s} style={item}><b style={{ color: C.text }}>{s}:</b> {a}. {why.charAt(0).toUpperCase() + why.slice(1)}</p>
         ))}
-        <p style={item}>Maine's governor and House races get no adjustment.</p>
+        <p style={item}>Maine's governor and House races get no adjustment. These shifts were halved on Oct. 4; before that, every state except Maine carried twice the shift shown here.</p>
       </div>
     </>],
     ["Map it county by county", <>
@@ -2165,11 +2173,11 @@ const POLLSTER_ALIASES = {
 const POLLSTER_NOTES = {
   "Fox News": "Beacon (D) and Shaw (R) pair",
   "AARP (Fabrizio/Impact)": "Fabrizio (R) and Impact (D) pair",
-  "Trafalgar Group": "R-leaning",
-  "Quantus Insights": "R-leaning",
-  "InsiderAdvantage": "R-leaning",
-  "co/efficient": "R-leaning",
-  "Rasmussen Reports": "R-leaning",
+  "Trafalgar Group": "R-leaning reputation",
+  "Quantus Insights": "R-leaning reputation",
+  "InsiderAdvantage": "R-leaning reputation",
+  "co/efficient": "R-leaning reputation",
+  "Rasmussen Reports": "R-leaning reputation",
   "Abacus Data": "lightly proven",
   "Wedgewood Polls": "lightly proven",
 };
@@ -2189,5 +2197,10 @@ function buildRatings(current) {
       map.set(name, cur);
     }
   }
+  const he = (current && current.houseEffects) || {};
+  for (const v of map.values()) v.lean = he[v.name] ? he[v.name].lean : null;
   return [...map.values()].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
 }
+// A pollster's measured lean, in plain words. Positive = more Democratic than other pollsters.
+const leanText = (lean) => lean == null ? null : Math.abs(lean) < 0.5 ? "no measurable lean" : `runs ${lean > 0 ? "D" : "R"}+${Math.abs(lean).toFixed(1)}`;
+const leanColor = (lean) => lean == null || Math.abs(lean) < 0.5 ? C.muted : lean > 0 ? BLUE : RED;

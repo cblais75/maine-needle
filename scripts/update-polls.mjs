@@ -1,8 +1,11 @@
 // Reads data/polls.json, computes a recency- and quality-weighted average per race,
 // and writes public/current.json. Also emits each poll with the weight it carried, so
 // the app's Polls tab can show the methodology transparently.
+// Before averaging, each poll is corrected for its pollster's measured lean ("house
+// effect"); see scripts/lib/house-effects.mjs. The raw published numbers are kept too.
 // Run: node scripts/update-polls.mjs   (or: npm run polls)
 import { readFileSync, writeFileSync } from "node:fs";
+import { measureHouseEffects, adjustPoll, canon } from "./lib/house-effects.mjs";
 
 const HALF_LIFE_DAYS = 21;          // a poll's weight halves every 3 weeks
 const today = new Date();
@@ -10,10 +13,16 @@ const polls = JSON.parse(readFileSync(new URL("../data/polls.json", import.meta.
 const ageDays = (d) => (today - new Date(d)) / 86400000;
 const recency = (d) => Math.pow(0.5, ageDays(d) / HALF_LIFE_DAYS);
 
+// Measure leans on the two-candidate races (the three-way governor race is corrected
+// with the same leans but not used to measure them).
+const TWO_WAY = ["senate", "cd1", "cd2", "nc_sen", "oh_sen", "tx_sen", "ia_sen", "ak_sen", "ga_sen", "ne_sen", "mi_sen", "nh_sen"];
+const effects = measureHouseEffects(Object.fromEntries(TWO_WAY.map((k) => [k, polls[k] || []])));
+
 function summarize(list) {
   if (!list.length) return { margin: null, bennett: null, nPolls: 0, polls: [] };
   let W = 0, wDem = 0, wRep = 0, wInd = 0;
-  const weighted = list.map((p) => {
+  const weighted = list.map((raw) => {
+    const p = adjustPoll(raw, effects);
     const w = p.rating * recency(p.date);
     W += w; wDem += w * p.dem; wRep += w * p.rep; wInd += w * (p.ind || 0);
     return { ...p, _w: w };
@@ -23,7 +32,8 @@ function summarize(list) {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map((p) => ({
       pollster: p.pollster, date: p.date, rating: p.rating,
-      dem: p.dem, rep: p.rep, ind: p.ind || null,
+      dem: p.rawDem, rep: p.rawRep, ind: p.ind || null,
+      house: p.house, adjMargin: Math.round((p.dem - p.rep) * 10) / 10,
       weightPct: Math.round((p._w / W) * 100),
     }));
   return {
@@ -49,7 +59,8 @@ const mi = summarize(polls.mi_sen || []);
 const nh = summarize(polls.nh_sen || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
-  method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower." },
+  method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower. Each poll is first corrected for its pollster's measured lean (house effect)." },
+  houseEffects: Object.fromEntries(Object.entries(effects).map(([n, e]) => [n, { lean: e.lean, polls: e.polls, sponsor: e.sponsor }])),
   senate: { margin: sen.margin ?? 3, nPolls: sen.nPolls, fallback: sen.margin === null, polls: sen.polls },
   governor: {
     bennett: gov.bennett ?? 18, margin: gov.margin ?? 6, nPolls: gov.nPolls, fallback: gov.margin === null,
