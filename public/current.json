@@ -138,21 +138,12 @@
     ]
   },
   "governor": {
-    "bennett": 5,
+    "bennett": 6,
     "margin": 11,
-    "nPolls": 7,
+    "nPolls": 6,
     "fallback": false,
     "note": "",
     "polls": [
-      {
-        "pollster": "CBS News/YouGov",
-        "date": "2026-10-01",
-        "rating": 0.85,
-        "dem": 56,
-        "rep": 44,
-        "ind": null,
-        "weightPct": 25
-      },
       {
         "pollster": "co/efficient",
         "date": "2026-09-30",
@@ -160,7 +151,7 @@
         "dem": 47,
         "rep": 38,
         "ind": 6,
-        "weightPct": 16
+        "weightPct": 21
       },
       {
         "pollster": "NYT/PPH/Siena",
@@ -169,7 +160,7 @@
         "dem": 47,
         "rep": 34,
         "ind": 8,
-        "weightPct": 21
+        "weightPct": 28
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -178,7 +169,7 @@
         "dem": 52,
         "rep": 39,
         "ind": 6,
-        "weightPct": 19
+        "weightPct": 25
       },
       {
         "pollster": "UNH Survey Center",
@@ -187,7 +178,7 @@
         "dem": 48,
         "rep": 40,
         "ind": 5,
-        "weightPct": 17
+        "weightPct": 23
       },
       {
         "pollster": "UNH Survey Center",
@@ -196,7 +187,7 @@
         "dem": 49,
         "rep": 35,
         "ind": 6,
-        "weightPct": 2
+        "weightPct": 3
       },
       {
         "pollster": "NYT/PPH/Siena",
@@ -205,7 +196,7 @@
         "dem": 50,
         "rep": 36,
         "ind": 8,
-        "weightPct": 1
+        "weightPct": 2
       }
     ]
   },
