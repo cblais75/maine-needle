@@ -6,7 +6,7 @@
   },
   "houseEffects": {
     "UNH Survey Center": {
-      "lean": -0.4,
+      "lean": -0.3,
       "polls": 7,
       "sponsor": null
     },
@@ -16,7 +16,7 @@
       "sponsor": "D"
     },
     "Fox News": {
-      "lean": 1.1,
+      "lean": 1,
       "polls": 11,
       "sponsor": null
     },
@@ -41,17 +41,17 @@
       "sponsor": null
     },
     "AARP (Fabrizio/Impact)": {
-      "lean": 0.9,
+      "lean": 0.8,
       "polls": 7,
       "sponsor": null
     },
     "NYT/Siena": {
-      "lean": -1.4,
-      "polls": 10,
+      "lean": -1,
+      "polls": 12,
       "sponsor": null
     },
     "InsiderAdvantage": {
-      "lean": 0,
+      "lean": -0.1,
       "polls": 8,
       "sponsor": null
     },
@@ -71,7 +71,7 @@
       "sponsor": null
     },
     "Marist Poll": {
-      "lean": 3,
+      "lean": 2.9,
       "polls": 5,
       "sponsor": null
     },
@@ -151,7 +151,7 @@
       "sponsor": null
     },
     "Texas Public Opinion Research": {
-      "lean": 2.3,
+      "lean": 2.2,
       "polls": 3,
       "sponsor": "D"
     },
@@ -161,7 +161,7 @@
       "sponsor": null
     },
     "Texas Southern University": {
-      "lean": -0.3,
+      "lean": -0.5,
       "polls": 2,
       "sponsor": null
     },
@@ -176,22 +176,22 @@
       "sponsor": "D"
     },
     "Emerson College": {
-      "lean": -2,
+      "lean": -2.1,
       "polls": 7,
       "sponsor": null
     },
     "Televisa/Univision": {
-      "lean": 0.7,
+      "lean": 0.6,
       "polls": 1,
       "sponsor": null
     },
     "Recon MR": {
-      "lean": 1,
+      "lean": 0.9,
       "polls": 1,
       "sponsor": null
     },
     "Big Data Poll": {
-      "lean": 1,
+      "lean": 0.8,
       "polls": 2,
       "sponsor": null
     },
@@ -216,7 +216,7 @@
       "sponsor": "D"
     },
     "SurveyUSA": {
-      "lean": 1.6,
+      "lean": 1.5,
       "polls": 1,
       "sponsor": null
     },
@@ -246,7 +246,7 @@
       "sponsor": null
     },
     "Torchlight Strategies (Common Sense for America PAC)": {
-      "lean": -2.4,
+      "lean": -2.5,
       "polls": 1,
       "sponsor": "R"
     },
@@ -278,8 +278,8 @@
         "dem": 51,
         "rep": 47,
         "ind": null,
-        "house": 3,
-        "adjMargin": 1,
+        "house": 2.9,
+        "adjMargin": 1.1,
         "weightPct": 13
       },
       {
@@ -333,8 +333,8 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "house": 0,
-        "adjMargin": 0,
+        "house": -0.1,
+        "adjMargin": 0.1,
         "weightPct": 6
       },
       {
@@ -344,8 +344,8 @@
         "dem": 50,
         "rep": 47,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 2.1,
+        "house": 0.8,
+        "adjMargin": 2.2,
         "weightPct": 8
       },
       {
@@ -355,8 +355,8 @@
         "dem": 46,
         "rep": 49,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": -1.6,
+        "house": -1,
+        "adjMargin": -2,
         "weightPct": 9
       },
       {
@@ -366,8 +366,8 @@
         "dem": 51,
         "rep": 47,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": 4.4,
+        "house": -0.3,
+        "adjMargin": 4.3,
         "weightPct": 8
       },
       {
@@ -421,8 +421,8 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 0.9,
+        "house": 1,
+        "adjMargin": 1,
         "weightPct": 2
       },
       {
@@ -443,8 +443,8 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": 3.4,
+        "house": -0.3,
+        "adjMargin": 3.3,
         "weightPct": 1
       }
     ]
@@ -463,8 +463,8 @@
         "dem": 52,
         "rep": 40,
         "ind": 6,
-        "house": 3,
-        "adjMargin": 9,
+        "house": 2.9,
+        "adjMargin": 9.1,
         "weightPct": 28
       },
       {
@@ -485,8 +485,8 @@
         "dem": 47,
         "rep": 34,
         "ind": 8,
-        "house": -1.4,
-        "adjMargin": 14.4,
+        "house": -1,
+        "adjMargin": 14,
         "weightPct": 20
       },
       {
@@ -496,8 +496,8 @@
         "dem": 52,
         "rep": 39,
         "ind": 6,
-        "house": 0.9,
-        "adjMargin": 12.1,
+        "house": 0.8,
+        "adjMargin": 12.2,
         "weightPct": 18
       },
       {
@@ -507,8 +507,8 @@
         "dem": 48,
         "rep": 40,
         "ind": 5,
-        "house": -0.4,
-        "adjMargin": 8.4,
+        "house": -0.3,
+        "adjMargin": 8.3,
         "weightPct": 16
       },
       {
@@ -518,8 +518,8 @@
         "dem": 49,
         "rep": 35,
         "ind": 6,
-        "house": -0.4,
-        "adjMargin": 14.4,
+        "house": -0.3,
+        "adjMargin": 14.3,
         "weightPct": 2
       },
       {
@@ -529,8 +529,8 @@
         "dem": 50,
         "rep": 36,
         "ind": 8,
-        "house": -1.4,
-        "adjMargin": 15.4,
+        "house": -1,
+        "adjMargin": 15,
         "weightPct": 1
       }
     ]
@@ -548,8 +548,8 @@
         "dem": 57,
         "rep": 35,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": 22.4,
+        "house": -0.3,
+        "adjMargin": 22.3,
         "weightPct": 100
       }
     ]
@@ -567,8 +567,8 @@
         "dem": 51,
         "rep": 45,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": 6.4,
+        "house": -0.3,
+        "adjMargin": 6.3,
         "weightPct": 68
       },
       {
@@ -619,8 +619,8 @@
         "dem": 53,
         "rep": 42,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 10.1,
+        "house": 0.8,
+        "adjMargin": 10.2,
         "weightPct": 16
       },
       {
@@ -729,8 +729,8 @@
         "dem": 53,
         "rep": 44,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 7.9,
+        "house": 1,
+        "adjMargin": 8,
         "weightPct": 3
       },
       {
@@ -751,8 +751,8 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": 8.4,
+        "house": -1,
+        "adjMargin": 8,
         "weightPct": 1
       },
       {
@@ -791,11 +791,22 @@
     ]
   },
   "oh_sen": {
-    "margin": 3,
-    "nPolls": 16,
+    "margin": 4,
+    "nPolls": 17,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-10-01",
+        "rating": 0.95,
+        "dem": 49,
+        "rep": 46,
+        "ind": null,
+        "house": -1,
+        "adjMargin": 4,
+        "weightPct": 18
+      },
       {
         "pollster": "Suffolk University",
         "date": "2026-09-30",
@@ -805,7 +816,7 @@
         "ind": null,
         "house": 0.1,
         "adjMargin": 2.9,
-        "weightPct": 18
+        "weightPct": 15
       },
       {
         "pollster": "InsiderAdvantage",
@@ -814,9 +825,9 @@
         "dem": 44,
         "rep": 43,
         "ind": null,
-        "house": 0,
-        "adjMargin": 1,
-        "weightPct": 13
+        "house": -0.1,
+        "adjMargin": 1.1,
+        "weightPct": 11
       },
       {
         "pollster": "Marist Poll",
@@ -825,9 +836,9 @@
         "dem": 51,
         "rep": 43,
         "ind": null,
-        "house": 3,
-        "adjMargin": 5,
-        "weightPct": 18
+        "house": 2.9,
+        "adjMargin": 5.1,
+        "weightPct": 15
       },
       {
         "pollster": "Rasmussen Reports",
@@ -838,7 +849,7 @@
         "ind": null,
         "house": 1,
         "adjMargin": 2,
-        "weightPct": 9
+        "weightPct": 7
       },
       {
         "pollster": "Quantus Insights",
@@ -849,7 +860,7 @@
         "ind": null,
         "house": -1.8,
         "adjMargin": 2.8,
-        "weightPct": 11
+        "weightPct": 9
       },
       {
         "pollster": "Trafalgar Group",
@@ -860,7 +871,7 @@
         "ind": null,
         "house": -0.9,
         "adjMargin": 3.9,
-        "weightPct": 8
+        "weightPct": 7
       },
       {
         "pollster": "BGSU/YouGov",
@@ -871,7 +882,7 @@
         "ind": null,
         "house": -1.1,
         "adjMargin": 4.1,
-        "weightPct": 9
+        "weightPct": 7
       },
       {
         "pollster": "InsiderAdvantage",
@@ -880,9 +891,9 @@
         "dem": 47,
         "rep": 42,
         "ind": null,
-        "house": 0,
-        "adjMargin": 5,
-        "weightPct": 7
+        "house": -0.1,
+        "adjMargin": 5.1,
+        "weightPct": 5
       },
       {
         "pollster": "Wedgewood Polls",
@@ -902,9 +913,9 @@
         "dem": 53,
         "rep": 45,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 6.9,
-        "weightPct": 4
+        "house": 1,
+        "adjMargin": 7,
+        "weightPct": 3
       },
       {
         "pollster": "NYT/Siena",
@@ -913,8 +924,8 @@
         "dem": 47,
         "rep": 50,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": -1.6,
+        "house": -1,
+        "adjMargin": -2,
         "weightPct": 1
       },
       {
@@ -924,9 +935,9 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 2.1,
-        "weightPct": 1
+        "house": 0.8,
+        "adjMargin": 2.2,
+        "weightPct": 0
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -935,8 +946,8 @@
         "dem": 53,
         "rep": 45,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 6.9,
+        "house": 1,
+        "adjMargin": 7,
         "weightPct": 0
       },
       {
@@ -976,10 +987,21 @@
   },
   "tx_sen": {
     "margin": 3,
-    "nPolls": 19,
+    "nPolls": 20,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "NYT/Siena",
+        "date": "2026-10-01",
+        "rating": 0.95,
+        "dem": 51,
+        "rep": 45,
+        "ind": null,
+        "house": -1,
+        "adjMargin": 7,
+        "weightPct": 16
+      },
       {
         "pollster": "Fox News (Beacon/Shaw)",
         "date": "2026-09-28",
@@ -987,9 +1009,9 @@
         "dem": 51,
         "rep": 49,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 0.9,
-        "weightPct": 16
+        "house": 1,
+        "adjMargin": 1,
+        "weightPct": 13
       },
       {
         "pollster": "Big Data Poll",
@@ -998,9 +1020,9 @@
         "dem": 43.6,
         "rep": 39.3,
         "ind": null,
-        "house": 1,
-        "adjMargin": 3.3,
-        "weightPct": 10
+        "house": 0.8,
+        "adjMargin": 3.5,
+        "weightPct": 8
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -1009,9 +1031,9 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": 2.3,
-        "adjMargin": 2.7,
-        "weightPct": 7
+        "house": 2.2,
+        "adjMargin": 2.8,
+        "weightPct": 6
       },
       {
         "pollster": "Marist Poll",
@@ -1020,9 +1042,9 @@
         "dem": 50,
         "rep": 44,
         "ind": null,
-        "house": 3,
-        "adjMargin": 3,
-        "weightPct": 12
+        "house": 2.9,
+        "adjMargin": 3.1,
+        "weightPct": 10
       },
       {
         "pollster": "Texas Southern University",
@@ -1031,9 +1053,9 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": -0.3,
-        "adjMargin": 1.3,
-        "weightPct": 10
+        "house": -0.5,
+        "adjMargin": 1.5,
+        "weightPct": 8
       },
       {
         "pollster": "Emerson College",
@@ -1042,9 +1064,9 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": -2,
-        "adjMargin": 3,
-        "weightPct": 9
+        "house": -2.1,
+        "adjMargin": 3.1,
+        "weightPct": 8
       },
       {
         "pollster": "Recon MR",
@@ -1053,9 +1075,9 @@
         "dem": 49,
         "rep": 43,
         "ind": null,
-        "house": 1,
-        "adjMargin": 5,
-        "weightPct": 8
+        "house": 0.9,
+        "adjMargin": 5.1,
+        "weightPct": 6
       },
       {
         "pollster": "Televisa/Univision",
@@ -1064,9 +1086,9 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 4.3,
-        "weightPct": 6
+        "house": 0.6,
+        "adjMargin": 4.4,
+        "weightPct": 5
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -1075,9 +1097,9 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 3.1,
-        "weightPct": 6
+        "house": 0.8,
+        "adjMargin": 3.2,
+        "weightPct": 5
       },
       {
         "pollster": "UT/Texas Politics Project",
@@ -1097,8 +1119,8 @@
         "dem": 46,
         "rep": 47,
         "ind": null,
-        "house": -2,
-        "adjMargin": 1,
+        "house": -2.1,
+        "adjMargin": 1.1,
         "weightPct": 3
       },
       {
@@ -1119,8 +1141,8 @@
         "dem": 51,
         "rep": 48,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 1.9,
+        "house": 1,
+        "adjMargin": 2,
         "weightPct": 2
       },
       {
@@ -1130,8 +1152,8 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "house": -0.3,
-        "adjMargin": 2.3,
+        "house": -0.5,
+        "adjMargin": 2.5,
         "weightPct": 2
       },
       {
@@ -1152,8 +1174,8 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "house": 2.3,
-        "adjMargin": 2.7,
+        "house": 2.2,
+        "adjMargin": 2.8,
         "weightPct": 1
       },
       {
@@ -1163,8 +1185,8 @@
         "dem": 47,
         "rep": 47,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": 1.4,
+        "house": -1,
+        "adjMargin": 1,
         "weightPct": 1
       },
       {
@@ -1185,8 +1207,8 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": 2.3,
-        "adjMargin": 0.7,
+        "house": 2.2,
+        "adjMargin": 0.8,
         "weightPct": 0
       }
     ]
@@ -1215,8 +1237,8 @@
         "dem": 45,
         "rep": 48,
         "ind": null,
-        "house": -2,
-        "adjMargin": -1,
+        "house": -2.1,
+        "adjMargin": -0.9,
         "weightPct": 13
       },
       {
@@ -1226,8 +1248,8 @@
         "dem": 47,
         "rep": 48,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": 0.4,
+        "house": -1,
+        "adjMargin": 0,
         "weightPct": 15
       },
       {
@@ -1248,8 +1270,8 @@
         "dem": 49,
         "rep": 47,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 0.9,
+        "house": 1,
+        "adjMargin": 1,
         "weightPct": 13
       },
       {
@@ -1259,8 +1281,8 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": 0,
-        "adjMargin": 1,
+        "house": -0.1,
+        "adjMargin": 1.1,
         "weightPct": 7
       },
       {
@@ -1270,8 +1292,8 @@
         "dem": 50,
         "rep": 42,
         "ind": null,
-        "house": 3,
-        "adjMargin": 5,
+        "house": 2.9,
+        "adjMargin": 5.1,
         "weightPct": 10
       },
       {
@@ -1303,8 +1325,8 @@
         "dem": 45,
         "rep": 50,
         "ind": null,
-        "house": -2,
-        "adjMargin": -3,
+        "house": -2.1,
+        "adjMargin": -2.9,
         "weightPct": 5
       },
       {
@@ -1336,8 +1358,8 @@
         "dem": 45,
         "rep": 48,
         "ind": null,
-        "house": -2,
-        "adjMargin": -1,
+        "house": -2.1,
+        "adjMargin": -0.9,
         "weightPct": 2
       },
       {
@@ -1347,8 +1369,8 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": -0.6,
+        "house": -1,
+        "adjMargin": -1,
         "weightPct": 1
       },
       {
@@ -1358,8 +1380,8 @@
         "dem": 50,
         "rep": 46,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 2.9,
+        "house": 1,
+        "adjMargin": 3,
         "weightPct": 1
       },
       {
@@ -1399,8 +1421,8 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": 8.4,
+        "house": -1,
+        "adjMargin": 8,
         "weightPct": 23
       },
       {
@@ -1465,8 +1487,8 @@
         "dem": 46,
         "rep": 41,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 4.1,
+        "house": 0.8,
+        "adjMargin": 4.2,
         "weightPct": 10
       },
       {
@@ -1509,8 +1531,8 @@
         "dem": 45,
         "rep": 47,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": -0.6,
+        "house": -1,
+        "adjMargin": -1,
         "weightPct": 1
       },
       {
@@ -1539,8 +1561,8 @@
         "dem": 50,
         "rep": 42,
         "ind": null,
-        "house": 0,
-        "adjMargin": 8,
+        "house": -0.1,
+        "adjMargin": 8.1,
         "weightPct": 21
       },
       {
@@ -1594,8 +1616,8 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "house": 0,
-        "adjMargin": 7,
+        "house": -0.1,
+        "adjMargin": 7.1,
         "weightPct": 6
       },
       {
@@ -1605,8 +1627,8 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 8.1,
+        "house": 0.8,
+        "adjMargin": 8.2,
         "weightPct": 3
       },
       {
@@ -1616,8 +1638,8 @@
         "dem": 56,
         "rep": 43,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": 11.9,
+        "house": 1,
+        "adjMargin": 12,
         "weightPct": 2
       }
     ]
@@ -1668,8 +1690,8 @@
         "dem": 46,
         "rep": 42,
         "ind": null,
-        "house": 1.6,
-        "adjMargin": 2.4,
+        "house": 1.5,
+        "adjMargin": 2.5,
         "weightPct": 21
       },
       {
@@ -1709,8 +1731,8 @@
         "dem": 50,
         "rep": 49,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": -0.1,
+        "house": 1,
+        "adjMargin": 0,
         "weightPct": 10
       },
       {
@@ -1720,8 +1742,8 @@
         "dem": 51,
         "rep": 44,
         "ind": null,
-        "house": 3,
-        "adjMargin": 4,
+        "house": 2.9,
+        "adjMargin": 4.1,
         "weightPct": 10
       },
       {
@@ -1731,8 +1753,8 @@
         "dem": 45.9,
         "rep": 40.5,
         "ind": null,
-        "house": 1,
-        "adjMargin": 4.4,
+        "house": 0.8,
+        "adjMargin": 4.6,
         "weightPct": 6
       },
       {
@@ -1742,8 +1764,8 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": 6.4,
+        "house": -1,
+        "adjMargin": 6,
         "weightPct": 9
       },
       {
@@ -1764,8 +1786,8 @@
         "dem": 43.1,
         "rep": 44.4,
         "ind": null,
-        "house": -2.4,
-        "adjMargin": 1.1,
+        "house": -2.5,
+        "adjMargin": 1.2,
         "weightPct": 4
       },
       {
@@ -1775,8 +1797,8 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "house": 0,
-        "adjMargin": 2,
+        "house": -0.1,
+        "adjMargin": 2.1,
         "weightPct": 5
       },
       {
@@ -1797,8 +1819,8 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "house": -2,
-        "adjMargin": 4,
+        "house": -2.1,
+        "adjMargin": 4.1,
         "weightPct": 6
       },
       {
@@ -1874,8 +1896,8 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 0.1,
+        "house": 0.8,
+        "adjMargin": 0.2,
         "weightPct": 2
       },
       {
@@ -1885,8 +1907,8 @@
         "dem": 47,
         "rep": 51,
         "ind": null,
-        "house": 1.1,
-        "adjMargin": -5.1,
+        "house": 1,
+        "adjMargin": -5,
         "weightPct": 2
       },
       {
@@ -1948,8 +1970,8 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "house": -1.4,
-        "adjMargin": 6.4,
+        "house": -1,
+        "adjMargin": 6,
         "weightPct": 16
       },
       {
@@ -1959,8 +1981,8 @@
         "dem": 50,
         "rep": 42,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": 8.4,
+        "house": -0.3,
+        "adjMargin": 8.3,
         "weightPct": 13
       },
       {
@@ -1970,8 +1992,8 @@
         "dem": 48,
         "rep": 40,
         "ind": null,
-        "house": 0,
-        "adjMargin": 8,
+        "house": -0.1,
+        "adjMargin": 8.1,
         "weightPct": 9
       },
       {
@@ -2014,8 +2036,8 @@
         "dem": 43,
         "rep": 45,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": -1.6,
+        "house": -0.3,
+        "adjMargin": -1.7,
         "weightPct": 5
       },
       {
@@ -2025,8 +2047,8 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": -0.4,
-        "adjMargin": 3.4,
+        "house": -0.3,
+        "adjMargin": 3.3,
         "weightPct": 1
       },
       {
@@ -2036,8 +2058,8 @@
         "dem": 45,
         "rep": 44,
         "ind": null,
-        "house": -2,
-        "adjMargin": 3,
+        "house": -2.1,
+        "adjMargin": 3.1,
         "weightPct": 0
       }
     ]

@@ -437,6 +437,13 @@
       "date": "2026-09-30",
       "dem": 47,
       "rep": 44
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-10-01",
+      "dem": 49,
+      "rep": 46
     }
   ],
   "tx_sen": [
@@ -572,6 +579,13 @@
       "date": "2026-09-28",
       "dem": 51,
       "rep": 49
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-10-01",
+      "dem": 51,
+      "rep": 45
     }
   ],
   "ia_sen": [
