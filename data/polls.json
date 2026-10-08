@@ -588,6 +588,253 @@
       "rep": 45
     }
   ],
+  "tx_gov": [
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-04-20",
+      "dem": 38,
+      "rep": 44
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-04-20",
+      "dem": 43,
+      "rep": 48
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-05-05",
+      "dem": 43,
+      "rep": 49
+    },
+    {
+      "pollster": "Public Policy Polling (Lone Star Rising PAC)",
+      "rating": 0.5,
+      "date": "2026-05-23",
+      "dem": 44,
+      "rep": 48
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-05-28",
+      "dem": 41,
+      "rep": 46
+    },
+    {
+      "pollster": "Texas Pulse (Texas A&M/ReconMR)",
+      "rating": 0.8,
+      "date": "2026-06-04",
+      "dem": 43,
+      "rep": 49
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-06-04",
+      "dem": 41,
+      "rep": 49
+    },
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-06-12",
+      "dem": 40,
+      "rep": 47
+    },
+    {
+      "pollster": "SoCal Strategies (R)",
+      "rating": 0.6,
+      "date": "2026-06-21",
+      "dem": 42,
+      "rep": 54
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-06-27",
+      "dem": 44,
+      "rep": 51
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-07-17",
+      "dem": 42,
+      "rep": 45
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-07-27",
+      "dem": 49,
+      "rep": 50
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-07-30",
+      "dem": 43,
+      "rep": 49
+    },
+    {
+      "pollster": "Texas Pulse (Texas A&M/ReconMR)",
+      "rating": 0.8,
+      "date": "2026-07-30",
+      "dem": 45,
+      "rep": 46
+    },
+    {
+      "pollster": "Cygnal (R)",
+      "rating": 0.6,
+      "date": "2026-07-31",
+      "dem": 46,
+      "rep": 49
+    },
+    {
+      "pollster": "Wedgewood Polls",
+      "rating": 0.55,
+      "date": "2026-07-31",
+      "dem": 44,
+      "rep": 50
+    },
+    {
+      "pollster": "GBAO (Hinojosa campaign)",
+      "rating": 0.5,
+      "date": "2026-08-09",
+      "dem": 48,
+      "rep": 49
+    },
+    {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-08-10",
+      "dem": 45,
+      "rep": 49
+    },
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-08-13",
+      "dem": 40,
+      "rep": 45
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-08-24",
+      "dem": 42,
+      "rep": 49
+    },
+    {
+      "pollster": "Overton Insights (R)",
+      "rating": 0.6,
+      "date": "2026-08-26",
+      "dem": 46,
+      "rep": 47
+    },
+    {
+      "pollster": "AARP (Fabrizio/Impact)",
+      "rating": 0.85,
+      "date": "2026-09-01",
+      "dem": 46,
+      "rep": 49
+    },
+    {
+      "pollster": "Televisa/Univision",
+      "rating": 0.8,
+      "date": "2026-09-04",
+      "dem": 47,
+      "rep": 47
+    },
+    {
+      "pollster": "Mason-Dixon",
+      "rating": 0.8,
+      "date": "2026-09-10",
+      "dem": 41,
+      "rep": 48
+    },
+    {
+      "pollster": "Recon MR",
+      "rating": 0.75,
+      "date": "2026-09-11",
+      "dem": 49,
+      "rep": 45
+    },
+    {
+      "pollster": "SoCal Strategies (R)",
+      "rating": 0.6,
+      "date": "2026-09-13",
+      "dem": 44,
+      "rep": 52
+    },
+    {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-09-14",
+      "dem": 46,
+      "rep": 49
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-09-19",
+      "dem": 45,
+      "rep": 49
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-09-20",
+      "dem": 49,
+      "rep": 46
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-09-22",
+      "dem": 46,
+      "rep": 50
+    },
+    {
+      "pollster": "Stratus Intelligence (R)",
+      "rating": 0.6,
+      "date": "2026-09-24",
+      "dem": 45,
+      "rep": 50
+    },
+    {
+      "pollster": "Big Data Poll",
+      "rating": 0.6,
+      "date": "2026-09-26",
+      "dem": 44,
+      "rep": 47
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-09-28",
+      "dem": 47,
+      "rep": 52
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-10-01",
+      "dem": 49,
+      "rep": 46
+    },
+    {
+      "pollster": "YouGov",
+      "rating": 0.8,
+      "date": "2026-10-05",
+      "dem": 48,
+      "rep": 47
+    }
+  ],
   "ia_sen": [
     {
       "pollster": "Public Policy Polling (D)",

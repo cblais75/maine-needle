@@ -6,6 +6,8 @@ import { matchCounty } from "./read-feed.mjs";
 // U.S. Senate only. Matches "US SENATE", "U.S. Senator", "U. S. SENATOR", "United States Senator",
 // "U.S. Senator 6 Year Term (1) Position", "2026-ge-us-senate.xls" — but NOT "State Senate District 5".
 const US_SENATE = /\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT/i;
+// Governor, but NOT "Lieutenant Governor" / "Lt. Governor" (Texas lists both on the same ballot).
+const GOVERNOR = /^(?!.*\b(lieutenant|lt\.?)[\s-]+gov).*\bgovernor\b/i;
 
 // Which office maps to which race, and how to tell the sides apart.
 // Sides resolve by party first; if the file has no party column, by candidate name.
@@ -17,6 +19,8 @@ const RACES = [
   { id: "nc_sen", state: "NC", office: US_SENATE, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
   { id: "oh_sen", state: "OH", office: US_SENATE, kind: "two", names: { dem: /brown/i, rep: /husted/i } },
   { id: "tx_sen", state: "TX", office: US_SENATE, kind: "two", names: { dem: /talarico/i, rep: /paxton/i } },
+  // Texas governor (Update 49): same feed as the Senate race, the governor contest instead.
+  { id: "tx_gov", state: "TX", office: GOVERNOR, kind: "two", names: { dem: /hinojosa/i, rep: /abbott/i } },
   { id: "ia_sen", state: "IA", office: US_SENATE, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
   { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", names: { dem: /ossoff/i, rep: /collins/i } },
   // Nebraska: names only. Osborn is an independent, and if the Democratic nominee (Burbank) ends

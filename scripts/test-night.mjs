@@ -73,7 +73,12 @@ function snapshotCounts(frac) {
       if (local <= 0) continue;
       const turnout = Math.round(c.weight * TURNOUT[s.state] * local);
       const demShare = Math.min(0.97, Math.max(0.03, c.demShare + s.swing));
-      list.push({ county: c.name, dem: Math.round(turnout * demShare), rep: Math.round(turnout * (1 - demShare)), local });
+      const row = { county: c.name, dem: Math.round(turnout * demShare), rep: Math.round(turnout * (1 - demShare)), local };
+      if (s.state === "TX") { // Texas also counts its governor race (Update 49), running a little redder than the Senate race
+        const gShare = Math.min(0.97, Math.max(0.03, demShare - 0.015));
+        row.gdem = Math.round(turnout * gShare); row.grep = Math.round(turnout * (1 - gShare));
+      }
+      list.push(row);
     }
     perState[s.state] = list;
   }
@@ -125,6 +130,9 @@ function asFile(s, list) {
       obj[String(48001 + 2 * i)] = { N: c.county.toUpperCase(), TV: 1, C: "#19b90f", Summary: { PRR: Math.round(20 * c.local), PRP: 20 },
         Races: { 1001: { OID: 1001, ON: "U. S. SENATOR ", T: c.dem + c.rep, C: {
           9240: { id: 9240, N: "JAMES TALARICO", P: "DEM", V: c.dem }, 9241: { id: 9241, N: "KEN PAXTON", P: "REP", V: c.rep }, 9242: { id: 9242, N: "WRITE-IN", P: "W", V: 3 } } },
+          1002: { OID: 1002, ON: "GOVERNOR", T: c.gdem + c.grep, C: {
+            9250: { id: 9250, N: "GINA HINOJOSA", P: "DEM", V: c.gdem }, 9251: { id: 9251, N: "GREG ABBOTT", P: "REP", V: c.grep }, 9252: { id: 9252, N: "PAT DIXON", P: "LIB", V: 4 } } },
+          1003: { OID: 1003, ON: "LIEUTENANT GOVERNOR", C: { 9260: { id: 9260, N: "SOMEONE", P: "DEM", V: 6666 }, 9261: { id: 9261, N: "DAN PATRICK", P: "REP", V: 7777 } } }, // must NOT count as governor
           2001: { OID: 2001, ON: "STATE SENATOR, DISTRICT 1", C: { 1: { id: 1, N: "X", P: "DEM", V: 5555 } } } } };
     });
     return enc(JSON.stringify(obj));
@@ -159,20 +167,24 @@ function writeSnapshot(frac) {
     const rows = readFeed(asFile(s, counts[s.state]), s.state);     // <-- the real reader
     const out = aggregate(rows, s.state);                            // <-- the real aggregator
     Object.assign(races, out.races || {});
-    // check nothing was lost or added on the way through
-    const id = Object.keys(out.races)[0];
-    const got = id ? Object.values(out.races[id].counties) : [];
+    // check nothing was lost or added on the way through, for every race in the state
     const sum = (a, k) => a.reduce((t, x) => t + (x[k] || 0), 0);
-    const want = counts[s.state];
-    if (want.length && (got.length !== want.length || Math.abs(sum(got, "dem") - sum(want, "dem")) > want.length || Math.abs(sum(got, "rep") - sum(want, "rep")) > want.length))
-      problems.push(`${s.state}: expected ${want.length} counties / D ${sum(want, "dem")} R ${sum(want, "rep")}, got ${got.length} / D ${sum(got, "dem")} R ${sum(got, "rep")}`);
+    const list = counts[s.state];
+    const expect = s.state === "TX"
+      ? { tx_sen: list, tx_gov: list.map((c) => ({ dem: c.gdem, rep: c.grep })) }
+      : { [Object.keys(out.races)[0] || s.state]: list };
+    for (const [id, want] of Object.entries(expect)) {
+      const got = out.races[id] ? Object.values(out.races[id].counties) : [];
+      if (want.length && (got.length !== want.length || Math.abs(sum(got, "dem") - sum(want, "dem")) > want.length || Math.abs(sum(got, "rep") - sum(want, "rep")) > want.length))
+        problems.push(`${s.state} ${id}: expected ${want.length} counties / D ${sum(want, "dem")} R ${sum(want, "rep")}, got ${got.length} / D ${sum(got, "dem")} R ${sum(got, "rep")}`);
+    }
   }
   fs.writeFileSync(OUT, JSON.stringify({
     updated: new Date().toISOString(),
     source: `stress-test (seed ${seed}, ${(frac * 100).toFixed(0)}% in)`,
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 8 states read correctly"));
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 8 states read correctly (plus the Texas governor race)"));
 }
 
 if (has("--auto")) {
