@@ -35,6 +35,8 @@ const SPONSORED = {
   "Change Research (Carolina Forward)": "D",
   "GBAO (Working Class Majority PAC)": "D",
   "Texas Public Opinion Research": "D",
+  "GBAO (Hinojosa campaign)": "D",
+  "Public Policy Polling (Lone Star Rising PAC)": "D",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

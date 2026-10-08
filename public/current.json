@@ -196,9 +196,9 @@
       "sponsor": null
     },
     "Public Policy Polling (Lone Star Rising PAC)": {
-      "lean": 0.5,
+      "lean": 2,
       "polls": 1,
-      "sponsor": null
+      "sponsor": "D"
     },
     "SoCal Strategies (R)": {
       "lean": -3.7,
@@ -211,9 +211,9 @@
       "sponsor": "R"
     },
     "GBAO (Hinojosa campaign)": {
-      "lean": 0.6,
+      "lean": 2.1,
       "polls": 1,
-      "sponsor": null
+      "sponsor": "D"
     },
     "Overton Insights (R)": {
       "lean": -1,
@@ -251,7 +251,7 @@
       "sponsor": "D"
     },
     "SurveyUSA": {
-      "lean": 1.6,
+      "lean": 1.5,
       "polls": 1,
       "sponsor": null
     },
@@ -1459,8 +1459,8 @@
         "dem": 48,
         "rep": 49,
         "ind": null,
-        "house": 0.6,
-        "adjMargin": -1.6,
+        "house": 2.1,
+        "adjMargin": -3.1,
         "weightPct": 1
       },
       {
@@ -1602,8 +1602,8 @@
         "dem": 44,
         "rep": 48,
         "ind": null,
-        "house": 0.5,
-        "adjMargin": -4.5,
+        "house": 2,
+        "adjMargin": -6,
         "weightPct": 0
       },
       {
@@ -2118,8 +2118,8 @@
         "dem": 46,
         "rep": 42,
         "ind": null,
-        "house": 1.6,
-        "adjMargin": 2.4,
+        "house": 1.5,
+        "adjMargin": 2.5,
         "weightPct": 21
       },
       {
