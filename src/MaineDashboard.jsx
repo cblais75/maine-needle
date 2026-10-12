@@ -279,9 +279,9 @@ const makeMichiganSenate = (pollMargin) => ({
 
 // ---- KANSAS ---- (Update 50)
 // Marshall (R, incumbent) vs Hamilton (D), plurality. Kansas is strongly Republican (Trump +16 in
-// 2024), but there's no clear recent record of Kansas polls missing in either direction, so the
-// center gets a modest 2-pt shift toward Marshall for the state's lean.
-const KS_HOUSE = 2;
+// 2024) and its polls underestimated Republicans in recent federal races (about 10 pts in the 2014
+// Senate race, about 7 in 2020), though they missed the other way in Laura Kelly's governor races.
+const KS_HOUSE = 2.5; // halved scale, Oct 12 (same as Iowa and Texas)
 const KS_LEAN = ksBaseline.lean || {}, KS_W = ksBaseline.weight || {};
 const KS_HAS_COUNTIES = Object.keys(KS_LEAN).length > 0;
 const ksUnits = (pollMargin) =>
@@ -292,7 +292,7 @@ const makeKansasSenate = (pollMargin) => ({
   id: "ks_sen", state: "KS", title: "U.S. Senate",
   sub: "Hamilton (D) vs Marshall (R)",
   system: "Plurality", real: true,
-  note: `Roger Marshall (R) is seeking a second term against Democrat Adam Hamilton. Kansas leans strongly Republican, so the poll center is shifted ${KS_HOUSE} pts toward Marshall. There's no clear recent record of Kansas polls missing, so the shift is modest.${KS_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Roger Marshall (R) is seeking a second term against Democrat Adam Hamilton. Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races (by about 10 points in the 2014 Senate race and about 7 in 2020), so the poll center is shifted ${KS_HOUSE} pts toward Marshall. Polls missed the other way in Gov. Laura Kelly's races, which is part of why the shift isn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Marshall", short: "Marshall", color: RED },
   right: { full: "Hamilton", short: "Hamilton", color: BLUE },
   units: ksUnits(pollMargin),
@@ -2008,7 +2008,7 @@ function PollsView({ current, loaded, wide }) {
               <span style={kicker()}>{label} · polling average{pc.nPolls ? ` of ${pc.nPolls} polls` : ""}</span>
               <span style={{ fontSize: wide ? 40 : 30, fontWeight: 600, color: mg == null || mg === 0 ? C.text : mg > 0 ? demCol : RED }}>{avgTxt}{indN && pc.bennett != null ? <span style={{ fontSize: 20, color: IND }}> · {indN} {pc.bennett}%</span> : null}</span>
             </div>
-            {house > 0 && <span style={{ fontSize: 14, color: C.muted, maxWidth: 440 }}>The needle then shifts its starting point {house} point{house === 1 ? "" : "s"} toward {repN} {tab === "senate" ? "for her record of beating her polls" : tab === "ks_sen" ? "for Kansas's strong Republican lean" : `for ${stateName}'s history of polls underestimating Republicans`}. The How it works page explains each shift.</span>}
+            {house > 0 && <span style={{ fontSize: 14, color: C.muted, maxWidth: 440 }}>The needle then shifts its starting point {house} point{house === 1 ? "" : "s"} toward {repN} {tab === "senate" ? "for her record of beating her polls" : `for ${stateName}'s history of polls underestimating Republicans`}. The How it works page explains each shift.</span>}
           </section>
           {polls.length === 0 ? <p style={{ fontSize: 15, color: C.muted }}>{pc.note || "No public polls yet."}</p> : (
             <div>
@@ -2122,7 +2122,7 @@ function MethodView({ wide }) {
           ["Georgia", `${GA_HOUSE} pt toward Collins`, "for Georgia's narrow Republican lean."],
           ["Michigan", `${MI_HOUSE} pt toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it is the closest state on this board."],
           ["New Hampshire", `${NH_HOUSE} pt toward Sununu`, "the smallest shift, for NH polls' history and Sununu's crossover appeal."],
-          ["Kansas", `${KS_HOUSE} pts toward Marshall`, "for Kansas's strong Republican lean. There's no clear recent record of Kansas polls missing, so the shift is modest."],
+          ["Kansas", `${KS_HOUSE} pts toward Marshall`, "Kansas polls underestimated Republicans in the 2014 and 2020 Senate races, though they missed the other way in Laura Kelly's governor races."],
           ["Alaska", `${AK_HOUSE} pts toward Sullivan`, "Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close."]].map(([s, a, why]) => (
           <p key={s} style={item}><b style={{ color: C.text }}>{s}:</b> {a}. {why.charAt(0).toUpperCase() + why.slice(1)}</p>
         ))}
