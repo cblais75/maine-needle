@@ -1647,6 +1647,8 @@ function pickLead(races, night) {
 const RATING_ORDER = ["Safe D", "Likely D", "Lean D", "Tilt D", "Toss-up", "Tilt R", "Lean R", "Likely R", "Safe R"];
 const partyColor = (p) => (p === "D" ? BLUE : p === "R" ? RED : p === "I" ? TEAL : C.muted);
 const ratingColor = (rt) => (/ D$/.test(rt) ? BLUE : / R$/.test(rt) ? RED : C.text);
+// Card label for a nominee: an explicit short name (e.g. "D. Graham") or the last name.
+const cardName = (x) => x.short || lastName(x.name);
 const lastName = (n) => { const w = String(n).replace(/,?\s+(Jr\.|Sr\.|II|III|IV)$/, "").split(/\s+/); return w[w.length - 1]; };
 const cardSides = (c) => {
   const major = c.nominees.filter((n) => !n.minor);
@@ -1660,16 +1662,16 @@ const pollNames = (c) => {
   const rep = c.nominees.find((x) => !x.minor && x.party === "R");
   return { lead, ind, rep };
 };
-function SeatCard({ c, open, onToggle, night }) {
+function SeatCard({ c, open, onToggle, night, wide }) {
   const { left, right } = cardSides(c);
   const rt = c.consensus.rating;
   const n = c.polls.length;
   const pn = pollNames(c);
-  const dName = pn.lead ? lastName(pn.lead.name) : "D", rName = pn.rep ? lastName(pn.rep.name) : "R", iName = pn.ind ? lastName(pn.ind.name) : "Ind.";
+  const dName = pn.lead ? cardName(pn.lead) : "D", rName = pn.rep ? cardName(pn.rep) : "R", iName = pn.ind ? cardName(pn.ind) : "Ind.";
   const short = (iso) => fmtDate(iso).replace(/, \d{4}$/, "");
   const cand = (list, align) => (
     <span style={{ display: "flex", flexWrap: "wrap", justifyContent: align, gap: "0 8px", minWidth: 0 }}>
-      {list.map((x) => <span key={x.name} style={{ color: partyColor(x.party), fontWeight: 600 }}>{lastName(x.name)} ({x.party})</span>)}
+      {list.map((x) => <span key={x.name} style={{ color: partyColor(x.party), fontWeight: 600 }}>{cardName(x)} ({x.party})</span>)}
     </span>
   );
   return (
@@ -1700,13 +1702,13 @@ function SeatCard({ c, open, onToggle, night }) {
           {night && <div style={{ fontSize: 13, fontWeight: 600 }}>Forecast only, no live count. This seat counts toward Senate control by its forecaster rating.</div>}
           <div style={{ fontSize: 13, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>{n ? "Public polls since the primary" : "No public polls since the primary"}</div>
           {c.polls.map((p, i) => (
-            <div key={i} style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", columnGap: 12, rowGap: 2, padding: "6px 0", borderBottom: `1px solid ${C.line}` }}>
+            <div key={i} style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,1fr) auto" : "minmax(0,1fr)", columnGap: 12, rowGap: 2, padding: "6px 0", borderBottom: `1px solid ${C.line}` }}>
               <span style={{ minWidth: 0 }}>
                 <span style={{ fontWeight: 600, color: C.text }}>{p.pollster}</span>
                 {p.sponsored && <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 700, color: C.muted, border: `1px solid ${C.line}`, padding: "0 5px", verticalAlign: 1 }}>sponsored</span>}
                 <span style={{ display: "block", fontSize: 12.5, color: C.muted }}>{short(p.date)} · rated {p.rating}{p.note ? ` · ${p.note}` : ""}</span>
               </span>
-              <span style={{ textAlign: "right", whiteSpace: "nowrap", fontSize: 14 }}>
+              <span style={{ textAlign: wide ? "right" : "left", whiteSpace: wide ? "nowrap" : "normal", fontSize: 14 }}>
                 <span style={{ color: partyColor(pn.lead ? pn.lead.party : "D") }}>{dName} {p.dem}</span>
                 {p.ind != null && <span style={{ color: TEAL }}> · {iName} {p.ind}</span>}
                 <span style={{ color: RED }}> · {rName} {p.rep}</span>
@@ -1724,7 +1726,7 @@ function SeatCards({ wide, night }) {
     <section style={{ paddingTop: 34 }}>
       <SectionHead title="Every other Senate seat" note={wide ? "Forecaster ratings and public polls · no needle" : null} size={wide ? 28 : 22} />
       <div style={{ display: "grid", gridTemplateColumns: wide ? "repeat(3, minmax(0,1fr))" : "minmax(0,1fr)", gap: wide ? 12 : 8, paddingTop: 14 }}>
-        {CARD_RACES.map((c) => <SeatCard key={c.id} c={c} night={night} open={open === c.id} onToggle={() => setOpen(open === c.id ? null : c.id)} />)}
+        {CARD_RACES.map((c) => <SeatCard key={c.id} c={c} night={night} wide={wide} open={open === c.id} onToggle={() => setOpen(open === c.id ? null : c.id)} />)}
       </div>
       <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>The rating shown is the one most of Cook, Sabato's Crystal Ball and Inside Elections agree on. These seats count toward Senate control by that rating. Their polls are listed for reference and don't feed any needle.</p>
     </section>
