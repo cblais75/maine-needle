@@ -1514,18 +1514,19 @@ function controlTally(races) {
 const sideColor = (s) => (s === "D" ? BLUE : s === "I" ? TEAL : RED);
 
 // ── FRONT PAGE ──────────────────────────────────────────────────────────────
-function RaceTable({ races, onPick, wide, night }) {
+// Front-page race list groups: a title with "House" goes under House, "Governor" under Governor,
+// everything else under Senate.
+const RACE_GROUPS = ["Senate", "Governor", "House"];
+const raceGroup = (r) => (/House/.test(r.title) ? "House" : /Governor/.test(r.title) ? "Governor" : "Senate");
+function RaceTable({ races, onPick, wide, night, grouped = false }) {
   const reads = races.map((r) => ({ r, d: isPaused(r, night) ? { ...readRace(r), paused: true, frac: 0 } : readRace(r) }));
   const anyIn = reads.some((x) => x.d.frac > 0);
   const cols = wide ? `150px minmax(0,1fr) 190px 150px ${anyIn ? "80px " : ""}72px` : "56px minmax(0,1fr) auto";
-  return (
-    <div role="list">
-      {wide && (
-        <div style={{ display: "grid", gridTemplateColumns: cols, columnGap: 20, padding: "9px 0", fontSize: 12, fontWeight: 600, color: C.muted, borderBottom: `1px solid ${C.line}` }}>
-          <span>State</span><span>Race</span><span>Favored</span><span>Rating</span>{anyIn && <span>Counted</span>}<span style={{ textAlign: "right" }}>Needle</span>
-        </div>
-      )}
-      {reads.map(({ r, d }) => {
+  const byName = (a, b) => stateLabel(a.r.state).localeCompare(stateLabel(b.r.state)) || raceName(a.r).localeCompare(raceName(b.r), undefined, { numeric: true });
+  const groups = grouped
+    ? RACE_GROUPS.map((g) => [g, reads.filter((x) => raceGroup(x.r) === g).sort(byName)]).filter(([, list]) => list.length)
+    : [[null, reads]];
+  const row = ({ r, d }) => {
         const gauge = d.kind === "two"
           ? <Dial mini pRight={d.pRight} width={wide ? 64 : 52} left={r.left.color} right={r.right.color} />
           : d.kind === "three" ? <div style={{ width: wide ? 64 : 52 }}><ThreeStrip parts={d.parts} height={8} /></div>
@@ -1562,7 +1563,20 @@ function RaceTable({ races, onPick, wide, night }) {
             </button>
           </ErrorBoundary>
         );
-      })}
+  };
+  return (
+    <div role="list">
+      {wide && (
+        <div style={{ display: "grid", gridTemplateColumns: cols, columnGap: 20, padding: "9px 0", fontSize: 12, fontWeight: 600, color: C.muted, borderBottom: `1px solid ${C.line}` }}>
+          <span>State</span><span>Race</span><span>Favored</span><span>Rating</span>{anyIn && <span>Counted</span>}<span style={{ textAlign: "right" }}>Needle</span>
+        </div>
+      )}
+      {groups.map(([g, list], gi) => g ? (
+        <div key={g} role="group" aria-label={g}>
+          <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2, color: C.muted, padding: gi === 0 && wide ? "14px 0 4px" : "22px 0 4px", borderBottom: `1px solid ${C.line}` }}>{g}</div>
+          {list.map(row)}
+        </div>
+      ) : list.map(row))}
     </div>
   );
 }
@@ -1684,7 +1698,7 @@ function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
       </section>
       <section style={{ paddingTop: 28 }}>
         <SectionHead title={night ? "Counting now" : "Every race we're tracking"} note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
-        <RaceTable races={counting} onPick={onPick} wide={wide} night={night} />
+        <RaceTable races={counting} onPick={onPick} wide={wide} night={night} grouped />
         <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Alaska's needle is a polling forecast only. Its ranked-choice rounds are counted about two weeks after election night, so it doesn't move on election night.</p>
       </section>
       {night && <PausedList races={paused} onPick={onPick} wide={wide} />}
