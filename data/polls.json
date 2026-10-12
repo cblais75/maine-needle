@@ -302,7 +302,7 @@
       "rating": 0.8,
       "date": "2026-08-12",
       "dem": 50,
-      "rep": 42
+      "rep": 45
     },
     {
       "pollster": "Elon University",
@@ -1679,6 +1679,85 @@
       "date": "2026-10-05",
       "dem": 51,
       "rep": 43
+    }
+  ],
+  "ks_sen": [
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-10-10",
+      "dem": 48,
+      "rep": 47
+    },
+    {
+      "pollster": "GBAO (Hamilton campaign)",
+      "rating": 0.5,
+      "date": "2026-10-04",
+      "dem": 46,
+      "rep": 41
+    },
+    {
+      "pollster": "YouGov",
+      "rating": 0.8,
+      "date": "2026-10-04",
+      "dem": 48,
+      "rep": 45
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-10-01",
+      "dem": 44,
+      "rep": 44
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-09-30",
+      "dem": 45,
+      "rep": 45
+    },
+    {
+      "pollster": "Wedgewood Polls",
+      "rating": 0.55,
+      "date": "2026-09-24",
+      "dem": 50,
+      "rep": 48
+    },
+    {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-09-16",
+      "dem": 45,
+      "rep": 43
+    },
+    {
+      "pollster": "Global Strategy Group (D)",
+      "rating": 0.5,
+      "date": "2026-09-16",
+      "dem": 47,
+      "rep": 43
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-10",
+      "dem": 44,
+      "rep": 49
+    },
+    {
+      "pollster": "Global Strategy Group (D)",
+      "rating": 0.5,
+      "date": "2026-08-16",
+      "dem": 44,
+      "rep": 43
+    },
+    {
+      "pollster": "Public Policy Polling (Senate Majority PAC)",
+      "rating": 0.5,
+      "date": "2026-08-08",
+      "dem": 45,
+      "rep": 46
     }
   ]
 }

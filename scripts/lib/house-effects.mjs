@@ -37,6 +37,8 @@ const SPONSORED = {
   "Texas Public Opinion Research": "D",
   "GBAO (Hinojosa campaign)": "D",
   "Public Policy Polling (Lone Star Rising PAC)": "D",
+  "GBAO (Hamilton campaign)": "D",
+  "Public Policy Polling (Senate Majority PAC)": "D",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

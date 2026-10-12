@@ -8,6 +8,9 @@ import { matchCounty } from "./read-feed.mjs";
 const US_SENATE = /\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT/i;
 // Governor, but NOT "Lieutenant Governor" / "Lt. Governor" (Texas lists both on the same ballot).
 const GOVERNOR = /^(?!.*\b(lieutenant|lt\.?)[\s-]+gov).*\bgovernor\b/i;
+// Kansas titles its primary contests "United States Senate (R)" / "(D)" on the same results site,
+// so the general-election match skips any Senate title ending in a party letter.
+const US_SENATE_GENERAL = /^(?!.*\((?:D|R|L|DEM|REP|LIB)\)\s*$)(?=.*(?:\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT))/i;
 
 // Which office maps to which race, and how to tell the sides apart.
 // Sides resolve by party first; if the file has no party column, by candidate name.
@@ -28,6 +31,7 @@ const RACES = [
   { id: "ne_sen", state: "NE", office: US_SENATE, kind: "two", namesOnly: true, names: { dem: /osborn/i, rep: /ricketts/i } },
   { id: "mi_sen", state: "MI", office: US_SENATE, kind: "two", names: { dem: /el-?\s?sayed/i, rep: /rogers/i } },
   { id: "nh_sen", state: "NH", office: US_SENATE, kind: "two", names: { dem: /pappas/i, rep: /sununu/i } },
+  { id: "ks_sen", state: "KS", office: US_SENATE_GENERAL, kind: "two", names: { dem: /hamilton/i, rep: /marshall/i } },
 ];
 
 function lookupMaineCounty(row) {

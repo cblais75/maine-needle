@@ -12,8 +12,10 @@
 //     automated downloads (New Hampshire does). Someone downloads the official file in a
 //     normal browser, it's added to public/official/ with a link on that page, and the
 //     needle finishes from our copy. Links are only followed to the same site or .gov/.us.
+//   - Kansas's unofficial-results page (sos.ks.gov/ent/kssos_ent.html). It has no data file;
+//     the page itself carries every county's votes, so it is read directly.
 // Clarity links may contain {ver}; the current folder number is looked up automatically.
-import { readFeed } from "./read-feed.mjs";
+import { readFeed, isKansasPage } from "./read-feed.mjs";
 
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; Needlepoint/1.0; +https://needlepoint.news)" };
 
@@ -64,15 +66,42 @@ export function findResultLinks(html, baseUrl) {
 }
 const looksHtml = (buf) => /^\s*<(!doctype|html|head|body)/i.test(new TextDecoder().decode(buf.subarray(0, 300)));
 
+// Kansas: ent.sos.ks.gov sits behind a Cloudflare bot check that no server can pass, but the same
+// pages are served without it at sos.ks.gov/ent/ (and www.kssos.org/ent/). If a setting points at
+// ent.sos.ks.gov, read the same page from the mirror instead.
+const KS_CHALLENGED = /^ent\.sos\.ks\.gov$/i;
+function ksMirror(url) {
+  const u = new URL(url);
+  if (!KS_CHALLENGED.test(u.hostname)) return null;
+  const page = u.pathname.replace(/^\/+/, "") || "kssos_ent.html";
+  return `https://sos.ks.gov/ent/${page}`;
+}
+async function download(url) {
+  const alt = ksMirror(url);
+  try {
+    const buf = new Uint8Array(await (await get(url)).arrayBuffer());
+    if (alt && /IM_UNDER_ATTACK/.test(new TextDecoder().decode(buf))) throw new Error("bot check");
+    return buf;
+  } catch (e) {
+    if (!alt) throw e;
+    return new Uint8Array(await (await get(alt)).arrayBuffer());
+  }
+}
+
 // Returns { rows, files }: all vote rows from every file this setting points to.
 export async function fetchRows(setting, state) {
   const urls = String(setting || "").split(/\s+/).filter(Boolean);
   const rows = [], files = [];
   for (const raw of urls) {
     const url = await resolveUrl(raw);
-    const buf = new Uint8Array(await (await get(url)).arrayBuffer());
-    if (looksHtml(buf)) {
-      const links = findResultLinks(new TextDecoder().decode(buf), url);
+    const buf = await download(url);
+    const html = looksHtml(buf) ? new TextDecoder().decode(buf) : null;
+    if (html && isKansasPage(html)) {
+      // Kansas's results page IS the data: every county's votes are in the page itself.
+      for (const r of readFeed(buf, state, url)) rows.push(r);
+      files.push(url);
+    } else if (html) {
+      const links = findResultLinks(html, url);
       for (const l of links) {
         const b = new Uint8Array(await (await get(l.url)).arrayBuffer());
         // Tag every row with the link's label so the office is known even when the

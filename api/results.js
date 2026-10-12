@@ -6,7 +6,9 @@
 //
 // Election night setup (host dashboard -> Environment Variables):
 //   MAINE_RESULTS_URL, NC_RESULTS_URL, OH_RESULTS_URL, TX_RESULTS_URL,
-//   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL, MI_RESULTS_URL, NH_RESULTS_URL
+//   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL, MI_RESULTS_URL, NH_RESULTS_URL, KS_RESULTS_URL
+// Kansas: KS_RESULTS_URL = https://sos.ks.gov/ent/kssos_ent.html (the statewide results page;
+// every county's votes are in the page itself, so one download covers all 105 counties).
 // Clarity sites change their folder number as the night goes on. Put {ver} where that number
 // goes (e.g. https://results.enr.clarityelections.com/IA/123456/{ver}/reports/detailxml.zip)
 // and this looks up the current number from current_ver.txt on every refresh.
@@ -30,6 +32,7 @@ const SOURCES = [
   { state: "NE", env: "NE_RESULTS_URL" },
   { state: "MI", env: "MI_RESULTS_URL" },
   { state: "NH", env: "NH_RESULTS_URL" },
+  { state: "KS", env: "KS_RESULTS_URL" },
 ];
 export { resolveUrl } from "../scripts/lib/fetch-rows.mjs";
 

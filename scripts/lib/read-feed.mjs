@@ -11,6 +11,7 @@
 //   - delimited text: comma, tab, semicolon or pipe, with or without quotes
 //   - Clarity/Scytl detail XML (Iowa, Texas counties, many others)
 //   - JSON (generic walk; used for vendors like Enhanced Voting)
+//   - Kansas's unofficial-results web page (county breakdowns in the map's hover boxes)
 // aggregate.mjs then keeps only the U.S. Senate race and maps counties to the needle's names.
 import * as XLSX from "xlsx";
 import { unzipSync, strFromU8 } from "fflate";
@@ -231,6 +232,34 @@ function rowsFromJSON(obj) {
   return rows;
 }
 
+// ---------- Kansas results web page (sos.ks.gov/ent/kssos_ent.html) ----------
+// Kansas posts no data file, but every page on its unofficial-results site carries each race's
+// full county breakdown in the county map's hover boxes:
+//   <div class='race'> ... <h3>United States Senate</h3> ...
+//   <area ... title="<table>...<span class='county'>Allen County</span><br/>22 of 22 precincts reporting
+//     ...<td ...>R-Roger Marshall</td><td ...>1,191</td>..." />
+// So one page (the statewide "All Races" page) has every county, with precincts reporting.
+export const isKansasPage = (text) => /Unofficial Kansas Election Results/i.test(text) && /class=['"]county['"]/.test(text);
+const unent = (s) => String(s).replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+function rowsFromKansasPage(html) {
+  const rows = [];
+  for (const block of html.split(/<div class=['"]race['"]>/).slice(1)) {
+    const h = block.match(/<h3[^>]*>([\s\S]*?)<\/h3>/);
+    if (!h) continue;
+    const office = unent(h[1].replace(/<[^>]+>/g, "")).replace(/\s+/g, " ").trim();
+    for (const m of block.matchAll(/<area\b[^>]*?\btitle="([^"]*)"/g)) {
+      const tip = unent(unent(m[1])); // names like "Mike" arrive double-escaped
+      const co = tip.match(/class=['"]county['"]>([^<]+)<\/span>(?:<br\s*\/?>)?\s*(\d+)\s+of\s+(\d+)\s+precincts/i);
+      if (!co) continue;
+      for (const c of tip.matchAll(/<td[^>]*>([^<]+)<\/td>\s*<td[^>]*>([\d,]+)<\/td>/g)) {
+        const p = c[1].trim().match(/^([A-Z]{1,3})-(.+)$/);
+        rows.push({ county: co[1].trim(), office, party: p ? p[1] : "", candidate: (p ? p[2] : c[1]).trim(), votes: c[2], pr: Number(co[2]), pt: Number(co[3]) });
+      }
+    }
+  }
+  return rows;
+}
+
 // ---------- entry point ----------
 export function readFeed(input, state, name = "") {
   const buf = input instanceof Uint8Array ? input : new Uint8Array(input);
@@ -253,6 +282,11 @@ export function readFeed(input, state, name = "") {
     let obj = null;
     try { obj = JSON.parse(strFromU8(buf)); } catch { /* not JSON after all: fall through to text */ }
     if (obj) return isTexasShape(obj) ? rowsFromTexas(obj) : rowsFromJSON(obj);
+  }
+  if (/^<(!doctype|html)/i.test(head)) {
+    const html = strFromU8(buf);
+    if (isKansasPage(html)) return rowsFromKansasPage(html);
+    if (/IM_UNDER_ATTACK|Enable JavaScript and cookies to continue/.test(html)) throw new Error(`the site sent a bot check instead of results${name ? ` (${name})` : ""}`);
   }
   if (/^<(!doctype|html)/i.test(head)) throw new Error(`got a web page, not a data file${name ? ` (${name})` : ""} — check the URL`);
   return rowsFromText(strFromU8(buf), state);

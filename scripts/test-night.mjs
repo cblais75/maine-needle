@@ -1,8 +1,9 @@
 // test-night.mjs — election-night stress-test harness.
-// Fabricates a synthetic night for the eight county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH).
+// Fabricates a synthetic night for the nine county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH, KS).
 // Each state's fake returns are written as a realistic, messy DOWNLOAD FILE in that state's own
 // layout (NC-style tab file with State Senate rows mixed in, Clarity XML, Michigan-style tab file,
-// Ohio-style wide spreadsheet, CSV with "County" suffixes and odd capitalization...) and then run
+// Ohio-style wide spreadsheet, CSV with "County" suffixes and odd capitalization, Kansas's results
+// web page with the votes inside the county map's hover boxes...) and then run
 // through the REAL reader + aggregator — the exact code election night uses — at midterm turnout.
 // It writes public/results.json snapshots the app picks up.
 //
@@ -46,6 +47,7 @@ const STATES = [
   { state: "NE", office: "U.S. Senate", dem: "Osborn",   rep: "Ricketts", baseline: "ne-baseline.json" },
   { state: "MI", office: "U.S. Senate", dem: "El-Sayed", rep: "Rogers",   baseline: "mi-baseline.json" },
   { state: "NH", office: "U.S. Senate", dem: "Pappas",   rep: "Sununu",   baseline: "nh-baseline.json" },
+  { state: "KS", office: "United States Senate", dem: "Hamilton", rep: "Marshall", baseline: "ks-baseline.json" },
 ];
 
 // One synthetic "truth" per run: statewide swing per state, county noise, county report order.
@@ -61,7 +63,7 @@ const night = STATES.map((s) => {
   return { ...s, swing: (rng() - 0.5) * 0.08, counties };
 });
 
-const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76 }; // 2022 turnout vs 2024
+const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76, KS: 0.76 }; // 2022 turnout vs 2024
 
 // Per-state fake counts for this moment of the night.
 function snapshotCounts(frac) {
@@ -147,6 +149,19 @@ function asFile(s, list) {
     }
     return enc(JSON.stringify({ d }));
   }
+  if (s.state === "KS") { // Kansas results page (sos.ks.gov/ent/kssos_ent.html): one block per race, each county's
+    // votes inside the map's hover-box title attribute, party-prefixed names and a Libertarian. A primary-style
+    // "(R)" Senate title and a U.S. House race are mixed in and must NOT count.
+    const tip = (c, cands) => `<area shape='poly' coords='1,2,3,4' class="tooltip" href='${c.county.toLowerCase()}.html#top' alt='${c.county}' title="<table style='border-collapse: collapse;' cellpadding='0'><tr><td align='left' colspan='2'><span class='county'>${c.county} County</span><br/>${Math.round(20 * c.local)} of 20 precincts reporting</td></tr><tr><td>Candidate</td><td>Votes</td></tr><tr><td colspan='2'><hr/></td><tr>`
+      + cands.map(([n, v]) => `<tr><td style='padding-right:15px'>${n}</td><td style='text-align:right'>${Number(v).toLocaleString("en-US")}</td></tr>`).join(" ") + `</table>" />`;
+    const race = (title, f) => [`<div class='race'>`, `<div class='row race-heading'><div class='col-11'>`, `<h3>${title}</h3>`, `</div></div>`,
+      `<map name='Map1' id='Map1'>`, ...list.map((c) => tip(c, f(c))), `</map>`, `</div><!--end of .race -->`].join("\n");
+    return enc(["﻿<!DOCTYPE html>", `<html lang="en"><head><title>Unofficial Kansas Election Results</title></head><body>`,
+      race("United States Senate", (c) => [["R-Roger Marshall", c.rep], ["D-Adam Hamilton", c.dem], ["L-David Graham", 222]]),
+      race("United States Senate (R)", () => [["R-Roger Marshall", 8888], ["R-Pond Naramore", 1111]]),
+      race("United States House of Representatives 1", () => [["R-Tracey Mann", 7777], ["D-Someone", 6666]]),
+      "</body></html>"].join("\n"));
+  }
   // everyone else (New Hampshire in this test): plain CSV with "Adams County" style names and shouting capitals
   const out = ["County,Office,Party,Candidate,Votes"];
   for (const c of list) {
@@ -184,7 +199,7 @@ function writeSnapshot(frac) {
     source: `stress-test (seed ${seed}, ${(frac * 100).toFixed(0)}% in)`,
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 8 states read correctly (plus the Texas governor race)"));
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 9 states read correctly (plus the Texas governor race)"));
 }
 
 if (has("--auto")) {
