@@ -1759,5 +1759,91 @@
       "dem": 45,
       "rep": 46
     }
+  ],
+  "mn_sen": [
+    {
+      "pollster": "Morning Consult",
+      "rating": 0.8,
+      "date": "2026-10-07",
+      "dem": 45,
+      "rep": 41
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-10-07",
+      "dem": 48,
+      "rep": 45
+    },
+    {
+      "pollster": "Mason-Dixon",
+      "rating": 0.8,
+      "date": "2026-10-07",
+      "dem": 47,
+      "rep": 43
+    },
+    {
+      "pollster": "GQR (D)",
+      "rating": 0.6,
+      "date": "2026-10-04",
+      "dem": 50,
+      "rep": 42
+    },
+    {
+      "pollster": "Big Data Poll",
+      "rating": 0.6,
+      "date": "2026-09-30",
+      "dem": 40,
+      "rep": 38
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-29",
+      "dem": 46,
+      "rep": 45
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-09-15",
+      "dem": 43,
+      "rep": 42
+    },
+    {
+      "pollster": "SurveyUSA",
+      "rating": 0.8,
+      "date": "2026-09-14",
+      "dem": 42,
+      "rep": 42
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-09-10",
+      "dem": 48,
+      "rep": 44
+    },
+    {
+      "pollster": "TIPP Insights (R)",
+      "rating": 0.6,
+      "date": "2026-09-02",
+      "dem": 44,
+      "rep": 42
+    },
+    {
+      "pollster": "Deep Root Analytics (R)",
+      "rating": 0.6,
+      "date": "2026-08-18",
+      "dem": 50,
+      "rep": 45
+    },
+    {
+      "pollster": "SurveyUSA",
+      "rating": 0.8,
+      "date": "2026-08-17",
+      "dem": 46,
+      "rep": 41
+    }
   ]
 }

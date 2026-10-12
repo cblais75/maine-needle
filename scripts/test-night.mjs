@@ -1,9 +1,10 @@
 // test-night.mjs — election-night stress-test harness.
-// Fabricates a synthetic night for the nine county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH, KS).
+// Fabricates a synthetic night for the ten county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH, KS, MN).
 // Each state's fake returns are written as a realistic, messy DOWNLOAD FILE in that state's own
 // layout (NC-style tab file with State Senate rows mixed in, Clarity XML, Michigan-style tab file,
 // Ohio-style wide spreadsheet, CSV with "County" suffixes and odd capitalization, Kansas's results
-// web page with the votes inside the county map's hover boxes...) and then run
+// web page with the votes inside the county map's hover boxes, Minnesota's headerless ';' file with
+// numeric county codes...) and then run
 // through the REAL reader + aggregator — the exact code election night uses — at midterm turnout.
 // It writes public/results.json snapshots the app picks up.
 //
@@ -48,6 +49,7 @@ const STATES = [
   { state: "MI", office: "U.S. Senate", dem: "El-Sayed", rep: "Rogers",   baseline: "mi-baseline.json" },
   { state: "NH", office: "U.S. Senate", dem: "Pappas",   rep: "Sununu",   baseline: "nh-baseline.json" },
   { state: "KS", office: "United States Senate", dem: "Hamilton", rep: "Marshall", baseline: "ks-baseline.json" },
+  { state: "MN", office: "U.S. Senator", dem: "Flanagan", rep: "Tafoya", baseline: "mn-baseline.json" },
 ];
 
 // One synthetic "truth" per run: statewide swing per state, county noise, county report order.
@@ -63,7 +65,7 @@ const night = STATES.map((s) => {
   return { ...s, swing: (rng() - 0.5) * 0.08, counties };
 });
 
-const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76, KS: 0.76 }; // 2022 turnout vs 2024
+const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76, KS: 0.76, MN: 0.78 }; // 2022 turnout vs 2024
 
 // Per-state fake counts for this moment of the night.
 function snapshotCounts(frac) {
@@ -162,6 +164,21 @@ function asFile(s, list) {
       race("United States House of Representatives 1", () => [["R-Tracey Mann", 7777], ["D-Someone", 6666]]),
       "</body></html>"].join("\n"));
   }
+  if (s.state === "MN") { // Minnesota SoS allracesbycounty.txt: no header, ';', numeric county codes (alphabetical
+    // by the state's own order: 43 McLeod, 44 Mahnomen, 69 St. Louis), DFL party code, a statewide row with no county,
+    // and other offices mixed in that must NOT count
+    const order = ["Aitkin","Anoka","Becker","Beltrami","Benton","Big Stone","Blue Earth","Brown","Carlton","Carver","Cass","Chippewa","Chisago","Clay","Clearwater","Cook","Cottonwood","Crow Wing","Dakota","Dodge","Douglas","Faribault","Fillmore","Freeborn","Goodhue","Grant","Hennepin","Houston","Hubbard","Isanti","Itasca","Jackson","Kanabec","Kandiyohi","Kittson","Koochiching","Lac qui Parle","Lake","Lake of the Woods","Le Sueur","Lincoln","Lyon","McLeod","Mahnomen","Marshall","Martin","Meeker","Mille Lacs","Morrison","Mower","Murray","Nicollet","Nobles","Norman","Olmsted","Otter Tail","Pennington","Pine","Pipestone","Polk","Pope","Ramsey","Red Lake","Redwood","Renville","Rice","Rock","Roseau","St. Louis","Scott","Sherburne","Sibley","Stearns","Steele","Stevens","Swift","Todd","Traverse","Wabasha","Wadena","Waseca","Washington","Watonwan","Wilkin","Winona","Wright","Yellow Medicine"];
+    const out = [];
+    for (const c of list) {
+      const id = String(order.indexOf(c.county) + 1).padStart(2, "0"), pr = Math.round(40 * c.local), tot = c.dem + c.rep + 30;
+      out.push(["MN", id, "", "0102", "U.S. Senator", "", "0403", "Peggy Flanagan", "", "", "DFL", pr, 40, c.dem, "50.00", tot].join(";"));
+      out.push(["MN", id, "", "0102", "U.S. Senator", "", "0304", "Michele Tafoya", "", "", "R", pr, 40, c.rep, "50.00", tot].join(";"));
+      out.push(["MN", id, "", "0102", "U.S. Senator", "", "1102", "Rebecca Whiting", "", "", "LIB", pr, 40, 30, "0.10", tot].join(";"));
+      out.push(["MN", id, "", "0331", "Governor & Lt Governor", "", "0201", "Someone Else", "", "", "DFL", pr, 40, 8888, "50.00", 9999].join(";"));
+    }
+    out.push(["MN", "", "", "0102", "U.S. Senator", "", "0403", "Peggy Flanagan", "", "", "DFL", 1, 1, 99999999, "50.00", 1].join(";"));
+    return enc("﻿" + out.join("\r\n"));
+  }
   // everyone else (New Hampshire in this test): plain CSV with "Adams County" style names and shouting capitals
   const out = ["County,Office,Party,Candidate,Votes"];
   for (const c of list) {
@@ -199,7 +216,7 @@ function writeSnapshot(frac) {
     source: `stress-test (seed ${seed}, ${(frac * 100).toFixed(0)}% in)`,
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 9 states read correctly (plus the Texas governor race)"));
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas governor race)"));
 }
 
 if (has("--auto")) {

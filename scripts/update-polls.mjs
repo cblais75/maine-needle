@@ -15,7 +15,7 @@ const recency = (d) => Math.pow(0.5, ageDays(d) / HALF_LIFE_DAYS);
 
 // Measure leans on the two-candidate races (the three-way governor race is corrected
 // with the same leans but not used to measure them).
-const TWO_WAY = ["senate", "cd1", "cd2", "nc_sen", "oh_sen", "tx_sen", "tx_gov", "ia_sen", "ak_sen", "ga_sen", "ne_sen", "mi_sen", "nh_sen", "ks_sen"];
+const TWO_WAY = ["senate", "cd1", "cd2", "nc_sen", "oh_sen", "tx_sen", "tx_gov", "ia_sen", "ak_sen", "ga_sen", "ne_sen", "mi_sen", "nh_sen", "ks_sen", "mn_sen"];
 const effects = measureHouseEffects(Object.fromEntries(TWO_WAY.map((k) => [k, polls[k] || []])));
 
 function summarize(list) {
@@ -59,6 +59,7 @@ const ne = summarize(polls.ne_sen || []);
 const mi = summarize(polls.mi_sen || []);
 const nh = summarize(polls.nh_sen || []);
 const ks = summarize(polls.ks_sen || []);
+const mn = summarize(polls.mn_sen || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
   method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower. Each poll is first corrected for its pollster's measured lean (house effect)." },
@@ -95,6 +96,8 @@ const current = {
     note: nh.nPolls === 0 ? "No public New Hampshire polls yet." : "", polls: nh.polls },
   ks_sen: { margin: ks.margin, nPolls: ks.nPolls, fallback: ks.margin === null,
     note: ks.nPolls === 0 ? "No public Kansas Senate polls yet." : "", polls: ks.polls },
+  mn_sen: { margin: mn.margin, nPolls: mn.nPolls, fallback: mn.margin === null,
+    note: mn.nPolls === 0 ? "No public Minnesota Senate polls yet." : "", polls: mn.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
 console.log(`Senate: ${current.senate.margin >= 0 ? "Jackson +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
@@ -111,3 +114,4 @@ console.log(`NE Senate: ${current.ne_sen.nPolls} polls${current.ne_sen.nPolls ? 
 console.log(`MI Senate: ${current.mi_sen.nPolls} polls${current.mi_sen.nPolls ? " (" + (current.mi_sen.margin>=0?"El-Sayed +":"Rogers +") + Math.abs(current.mi_sen.margin) + ")" : " (fundamentals)"}`);
 console.log(`NH Senate: ${current.nh_sen.nPolls} polls${current.nh_sen.nPolls ? " (" + (current.nh_sen.margin>=0?"Pappas +":"Sununu +") + Math.abs(current.nh_sen.margin) + ")" : ""}`);
 console.log(`KS Senate: ${current.ks_sen.nPolls} polls${current.ks_sen.nPolls ? " (" + (current.ks_sen.margin>=0?"Hamilton +":"Marshall +") + Math.abs(current.ks_sen.margin) + ")" : ""}`);
+console.log(`MN Senate: ${current.mn_sen.nPolls} polls${current.mn_sen.nPolls ? " (" + (current.mn_sen.margin>=0?"Flanagan +":"Tafoya +") + Math.abs(current.mn_sen.margin) + ")" : ""}`);

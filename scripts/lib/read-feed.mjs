@@ -12,6 +12,7 @@
 //   - Clarity/Scytl detail XML (Iowa, Texas counties, many others)
 //   - JSON (generic walk; used for vendors like Enhanced Voting)
 //   - Kansas's unofficial-results web page (county breakdowns in the map's hover boxes)
+//   - Minnesota's headerless ';' media files with numeric county codes
 // aggregate.mjs then keeps only the U.S. Senate race and maps counties to the needle's names.
 import * as XLSX from "xlsx";
 import { unzipSync, strFromU8 } from "fflate";
@@ -150,7 +151,34 @@ function splitLine(line, d) {
   out.push(cur);
   return out.map((s) => s.trim());
 }
+// Minnesota SoS media files (electionresultsfiles.sos.mn.gov/<yyyymmdd>/allracesbycounty.txt): no header row,
+// ';'-separated, counties as numeric codes:
+//   State;CountyID;Precinct;OfficeID;OfficeName;District;CandOrder;Candidate;Suffix;Incumbent;Party;
+//   PrecinctsReporting;PrecinctsTotal;Votes;Percent;OfficeTotal
+// County codes are the state's alphabetical order (43 = McLeod, 44 = Mahnomen, 69 = St. Louis).
+const MN_COUNTY_CODES = ["Aitkin", "Anoka", "Becker", "Beltrami", "Benton", "Big Stone", "Blue Earth", "Brown", "Carlton", "Carver",
+  "Cass", "Chippewa", "Chisago", "Clay", "Clearwater", "Cook", "Cottonwood", "Crow Wing", "Dakota", "Dodge", "Douglas", "Faribault",
+  "Fillmore", "Freeborn", "Goodhue", "Grant", "Hennepin", "Houston", "Hubbard", "Isanti", "Itasca", "Jackson", "Kanabec", "Kandiyohi",
+  "Kittson", "Koochiching", "Lac qui Parle", "Lake", "Lake of the Woods", "Le Sueur", "Lincoln", "Lyon", "McLeod", "Mahnomen",
+  "Marshall", "Martin", "Meeker", "Mille Lacs", "Morrison", "Mower", "Murray", "Nicollet", "Nobles", "Norman", "Olmsted", "Otter Tail",
+  "Pennington", "Pine", "Pipestone", "Polk", "Pope", "Ramsey", "Red Lake", "Redwood", "Renville", "Rice", "Rock", "Roseau", "St. Louis",
+  "Scott", "Sherburne", "Sibley", "Stearns", "Steele", "Stevens", "Swift", "Todd", "Traverse", "Wabasha", "Wadena", "Waseca",
+  "Washington", "Watonwan", "Wilkin", "Winona", "Wright", "Yellow Medicine"];
+const isMNMedia = (text) => /^MN;\d{0,3};[^;\n]*;\d+;[^;\n]+;/.test(text);
+function rowsFromMN(text) {
+  const rows = [];
+  for (const line of text.split(/\r?\n/)) {
+    const f = line.split(";");
+    if (f.length < 14 || f[0] !== "MN" || !f[1]) continue; // no county code = statewide total row
+    const county = MN_COUNTY_CODES[Number(f[1]) - 1];
+    if (!county) continue;
+    rows.push({ county, precinct: f[2] || undefined, office: f[4], party: f[10], candidate: f[7], votes: f[13], pr: Number(f[11]), pt: Number(f[12]) });
+  }
+  return rows;
+}
+
 function rowsFromText(text, state) {
+  if (isMNMedia(text.replace(/^﻿/, ""))) return rowsFromMN(text.replace(/^﻿/, ""));
   const lines = text.replace(/^﻿/, "").split(/\r?\n/).filter((l) => l.trim());
   if (!lines.length) return [];
   const sample = lines.slice(0, 5).join("\n");

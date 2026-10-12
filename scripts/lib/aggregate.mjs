@@ -32,6 +32,8 @@ const RACES = [
   { id: "mi_sen", state: "MI", office: US_SENATE, kind: "two", names: { dem: /el-?\s?sayed/i, rep: /rogers/i } },
   { id: "nh_sen", state: "NH", office: US_SENATE, kind: "two", names: { dem: /pappas/i, rep: /sununu/i } },
   { id: "ks_sen", state: "KS", office: US_SENATE_GENERAL, kind: "two", names: { dem: /hamilton/i, rep: /marshall/i } },
+  // Minnesota (Update 54): Flanagan runs on the DFL line (Minnesota's Democratic Party).
+  { id: "mn_sen", state: "MN", office: US_SENATE, kind: "two", names: { dem: /flanagan/i, rep: /tafoya/i } },
 ];
 
 function lookupMaineCounty(row) {
@@ -49,7 +51,7 @@ function sideOf(race, party, candidate) {
   // Names first when they match: guards against a stray third candidate sharing a party label.
   for (const s of ["dem", "rep", "ind"]) if (nm[s] && nm[s].test(c)) return s;
   if (race.namesOnly) return null;
-  if (p === "D" || p.startsWith("DEM")) return "dem";
+  if (p === "D" || p.startsWith("DEM") || p === "DFL") return "dem";
   if (p === "R" || p.startsWith("REP")) return "rep";
   return null;
 }
