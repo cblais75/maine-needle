@@ -10,6 +10,7 @@ import neBaseline from "../data/ne-baseline.json";
 import miBaseline from "../data/mi-baseline.json";
 import nhBaseline from "../data/nh-baseline.json";
 import ksBaseline from "../data/ks-baseline.json";
+import senateCards from "../data/senate-cards.json";
 
 // Newspaper palette (Update 42): warm paper, black ink, red/blue kept for results only.
 // `ink` is the PAGE color (the name dates from the old dark theme); `text` is the ink.
@@ -1148,13 +1149,13 @@ function GovDetail({ race, onBack, govB, govMargin, current, night }) {
 }
 
 // ---- CONTROL OF THE SENATE ----
-// Baseline: 53R–47D. Untracked seats are assumed to hold their party:
-// safe-D bloc 44 (King and Sanders, who caucus D, included) and safe-R bloc 45.
-// The 11 tracked races are the live set (NH added — a formerly-safe D seat now competitive;
-// Kansas added in Update 50, moved out of the safe-R bloc). Democrats need 51 outright; 50-50 stays
-// Republican on the Vice President's tie-breaking vote. Osborn (I) counts for
-// neither party unless he declares a caucus.
-const D_SAFE_SEATS = 44, R_SAFE_SEATS = 45; // NH moved from safe-D, KS from safe-R, into the tracked set
+// Baseline: 53R–47D. The 100 seats are counted three ways (Update 53):
+//   1. seats NOT up in 2026, by party (data/senate-cards.json "notUp"; King and Sanders,
+//      who caucus with Democrats, count as Democrats);
+//   2. every card race (data/senate-cards.json), for the party its forecaster consensus favors;
+//   3. the 11 tracked needle races below, by today's leader (or the call, once votes are in).
+// Democrats need 51 outright; 50-50 stays Republican on the Vice President's tie-breaking vote.
+// Osborn (I) counts for neither party unless he declares a caucus.
 const CONTROL_SET = [
   { id: "sen",    label: "Maine",          holder: "R" },
   { id: "nc_sen", label: "North Carolina", holder: "R" },
@@ -1168,6 +1169,15 @@ const CONTROL_SET = [
   { id: "nh_sen", label: "New Hampshire",   holder: "D" },
   { id: "ks_sen", label: "Kansas",          holder: "R" },
 ];
+// Card races: every other 2026 Senate race, shown with forecaster ratings and polls but no needle.
+// A Toss-up card (no consensus favorite) counts for the party that holds the seat now.
+const CARD_RACES = (senateCards.races || []).slice().sort((a, b) => a.stateName.localeCompare(b.stateName));
+const cardSide = (c) => c.consensus.favors || c.incumbent.party;
+const NOT_UP_D = senateCards.notUp.D + senateCards.notUp.I, NOT_UP_R = senateCards.notUp.R;
+const D_SAFE_SEATS = NOT_UP_D + CARD_RACES.filter((c) => cardSide(c) === "D").length;
+const R_SAFE_SEATS = NOT_UP_R + CARD_RACES.filter((c) => cardSide(c) === "R").length;
+const SEAT_TOTAL = D_SAFE_SEATS + R_SAFE_SEATS + CONTROL_SET.length;
+if (SEAT_TOTAL !== 100) console.error(`Senate seat count is ${SEAT_TOTAL}, not 100: check data/senate-cards.json and CONTROL_SET`);
 
 function CupIcon({ size = 18 }) {
   return (
@@ -1632,6 +1642,113 @@ function pickLead(races, night) {
   const open = counting.filter((r) => !readRace(r).tag.startsWith("Called")).sort(byClose);
   return open[0] || counting.sort((a, b) => readRace(b).frac - readRace(a).frac)[0] || two.slice().sort(byClose)[0];
 }
+// ── SENATE SEAT CARDS (Update 53) ───────────────────────────────────────────
+// Every Senate race without a needle: candidates, forecaster ratings and public polls only.
+const RATING_ORDER = ["Safe D", "Likely D", "Lean D", "Tilt D", "Toss-up", "Tilt R", "Lean R", "Likely R", "Safe R"];
+const partyColor = (p) => (p === "D" ? BLUE : p === "R" ? RED : p === "I" ? TEAL : C.muted);
+const ratingColor = (rt) => (/ D$/.test(rt) ? BLUE : / R$/.test(rt) ? RED : C.text);
+// Card label for a nominee: an explicit short name (e.g. "D. Graham") or the last name.
+const cardName = (x) => x.short || lastName(x.name);
+const lastName = (n) => { const w = String(n).replace(/,?\s+(Jr\.|Sr\.|II|III|IV)$/, "").split(/\s+/); return w[w.length - 1]; };
+const cardSides = (c) => {
+  const major = c.nominees.filter((n) => !n.minor);
+  return { left: major.filter((n) => n.party !== "R"), right: major.filter((n) => n.party === "R") };
+};
+// The poll columns: "dem" is the Democrat (or the main independent where no Democrat runs),
+// "ind" the other independent where polls list one (Montana's Bodnar, Mississippi's Pinkins).
+const pollNames = (c) => {
+  const lead = c.nominees.find((x) => !x.minor && x.party === "D") || c.nominees.find((x) => !x.minor && x.party !== "R");
+  const ind = c.nominees.find((x) => x.party === "I" && x !== lead);
+  const rep = c.nominees.find((x) => !x.minor && x.party === "R");
+  return { lead, ind, rep };
+};
+function SeatCard({ c, open, onToggle, night, wide }) {
+  const { left, right } = cardSides(c);
+  const rt = c.consensus.rating;
+  const n = c.polls.length;
+  const pn = pollNames(c);
+  const dName = pn.lead ? cardName(pn.lead) : "D", rName = pn.rep ? cardName(pn.rep) : "R", iName = pn.ind ? cardName(pn.ind) : "Ind.";
+  const short = (iso) => fmtDate(iso).replace(/, \d{4}$/, "");
+  const cand = (list, align) => (
+    <span style={{ display: "flex", flexWrap: "wrap", justifyContent: align, gap: "0 8px", minWidth: 0 }}>
+      {list.map((x) => <span key={x.name} style={{ color: partyColor(x.party), fontWeight: 600 }}>{cardName(x)} ({x.party})</span>)}
+    </span>
+  );
+  return (
+    <div style={{ gridColumn: open ? "1 / -1" : "auto", border: `1px solid ${open ? C.text : C.line}`, background: C.panel2 }}>
+      <button onClick={onToggle} aria-expanded={open}
+        style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%", minHeight: 44, padding: "12px 14px", textAlign: "left", background: "none", border: "none", cursor: "pointer", color: C.text }}>
+        <span style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+          <span style={{ fontSize: 16, fontWeight: 700 }}>{c.stateName}{c.seat === "special" && <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}> · special</span>}</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: ratingColor(rt), whiteSpace: "nowrap" }}>{rt}</span>
+        </span>
+        <span style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto minmax(0,1fr)", alignItems: "baseline", gap: 8, fontSize: 14 }}>
+          {cand(left, "flex-start")}<span style={{ fontSize: 12, color: C.muted }}>vs</span>{cand(right, "flex-end")}
+        </span>
+        <span style={{ fontSize: 12.5, color: C.muted }}>
+          {n ? `${n} poll${n === 1 ? "" : "s"}` : "No public polls"}{night ? " · Forecast only, no live count" : ""}<span style={{ float: "right" }}>{open ? "Close ▴" : "Details ▾"}</span>
+        </span>
+      </button>
+      {open && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "0 14px 14px", fontSize: 14, lineHeight: 1.5, color: C.body }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 18px", paddingTop: 10, borderTop: `1px solid ${C.line}` }}>
+            {[["Cook", "cook"], ["Sabato", "sabato"], ["Inside Elections", "inside"]].map(([lbl, k]) => (
+              <span key={k}><span style={{ color: C.muted }}>{lbl}:</span> <b style={{ color: ratingColor(c.ratings[k].replace(/^Solid/, "Safe")) }}>{c.ratings[k]}</b> <span style={{ fontSize: 12, color: C.muted }}>({short(c.ratings.asOf[k])})</span></span>
+            ))}
+          </div>
+          <div><span style={{ color: C.muted }}>Held by</span> {c.incumbent.name} ({c.incumbent.party}), {c.incumbent.status}.</div>
+          {c.note && <div>{c.note}</div>}
+          {c.nominees.some((x) => x.minor) && <div style={{ fontSize: 13, color: C.muted }}>Also on the ballot: {c.nominees.filter((x) => x.minor).map((x) => `${x.name} (${x.party})`).join(", ")}</div>}
+          {night && <div style={{ fontSize: 13, fontWeight: 600 }}>Forecast only, no live count. This seat counts toward Senate control by its forecaster rating.</div>}
+          <div style={{ fontSize: 13, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>{n ? "Public polls since the primary" : "No public polls since the primary"}</div>
+          {c.polls.map((p, i) => (
+            <div key={i} style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,1fr) auto" : "minmax(0,1fr)", columnGap: 12, rowGap: 2, padding: "6px 0", borderBottom: `1px solid ${C.line}` }}>
+              <span style={{ minWidth: 0 }}>
+                <span style={{ fontWeight: 600, color: C.text }}>{p.pollster}</span>
+                {p.sponsored && <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 700, color: C.muted, border: `1px solid ${C.line}`, padding: "0 5px", verticalAlign: 1 }}>sponsored</span>}
+                <span style={{ display: "block", fontSize: 12.5, color: C.muted }}>{short(p.date)} · rated {p.rating}{p.note ? ` · ${p.note}` : ""}</span>
+              </span>
+              <span style={{ textAlign: wide ? "right" : "left", whiteSpace: wide ? "nowrap" : "normal", fontSize: 14 }}>
+                <span style={{ color: partyColor(pn.lead ? pn.lead.party : "D") }}>{dName} {p.dem}</span>
+                {p.ind != null && <span style={{ color: TEAL }}> · {iName} {p.ind}</span>}
+                <span style={{ color: RED }}> · {rName} {p.rep}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+function SeatCards({ wide, night }) {
+  const [open, setOpen] = useState(null);
+  return (
+    <section style={{ paddingTop: 34 }}>
+      <SectionHead title="Every other Senate seat" note={wide ? "Forecaster ratings and public polls · no needle" : null} size={wide ? 28 : 22} />
+      <div style={{ display: "grid", gridTemplateColumns: wide ? "repeat(3, minmax(0,1fr))" : "minmax(0,1fr)", gap: wide ? 12 : 8, paddingTop: 14 }}>
+        {CARD_RACES.map((c) => <SeatCard key={c.id} c={c} night={night} wide={wide} open={open === c.id} onToggle={() => setOpen(open === c.id ? null : c.id)} />)}
+      </div>
+      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>The rating shown is the one most of Cook, Sabato's Crystal Ball and Inside Elections agree on. These seats count toward Senate control by that rating. Their polls are listed for reference and don't feed any needle.</p>
+    </section>
+  );
+}
+// Senate control page: card seats grouped by consensus rating.
+function CardSeatBlock() {
+  const groups = RATING_ORDER.map((r) => [r, CARD_RACES.filter((c) => c.consensus.rating === r)]).filter(([, l]) => l.length);
+  return (
+    <section style={{ paddingTop: 26 }}>
+      <SectionHead title={`The other ${CARD_RACES.length} seats on the ballot`} note="Counted by forecaster rating" size={22} />
+      {groups.map(([r, list]) => (
+        <div key={r} style={{ display: "grid", gridTemplateColumns: "100px minmax(0,1fr)", columnGap: 14, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: 15, lineHeight: 1.5 }}>
+          <span style={{ fontWeight: 700, color: ratingColor(r) }}>{r} <span style={{ fontWeight: 400, color: C.muted }}>({list.length})</span></span>
+          <span>{list.map((c) => c.stateName + (c.seat === "special" ? " (special)" : "")).join(", ")}</span>
+        </div>
+      ))}
+      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>These races have no needle and no live count on election night. Each counts for the party its forecaster rating favors. Seats not up this year: {NOT_UP_D} Democrats (including two independents who caucus with them) and {NOT_UP_R} Republicans.</p>
+    </section>
+  );
+}
+
 function PausedList({ races, onPick, wide }) {
   if (!races.length) return null;
   return (
@@ -1702,6 +1819,7 @@ function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
         <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Alaska's needle is a polling forecast only. Its ranked-choice rounds are counted about two weeks after election night, so it doesn't move on election night.</p>
       </section>
       {night && <PausedList races={paused} onPick={onPick} wide={wide} />}
+      <ErrorBoundary mini label="Senate seat cards unavailable"><SeatCards wide={wide} night={night} /></ErrorBoundary>
     </div>
   );
 }
@@ -1874,7 +1992,7 @@ function SenateControlView({ races, wide, onPick, night }) {
           <div style={{ position: "absolute", left: "calc(50% - 1px)", top: -8, width: 2, height: wide ? 42 : 36, background: C.text }} />
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 24px", fontSize: 13, color: C.muted }}>
-          <span>Dark: seats not up this year or safe ({D_SAFE_SEATS} D, {R_SAFE_SEATS} R)</span><span>Light: the {CONTROL_SET.length} races we track, by current leader</span><span>Line: 51 for control; the vice president breaks a 50–50 tie</span>
+          <span>Dark: seats not up this year, plus the other {CARD_RACES.length} races by forecaster rating ({D_SAFE_SEATS} D, {R_SAFE_SEATS} R)</span><span>Light: the {CONTROL_SET.length} races we track, by current leader</span><span>Line: 51 for control; the vice president breaks a 50–50 tie</span>
         </div>
         {scenario && <button onClick={() => setOvr({})} style={{ ...linkBtn, color: RED }}>Clear my scenario and go back to the forecast</button>}
       </section>
@@ -1908,8 +2026,9 @@ function SenateControlView({ races, wide, onPick, night }) {
             </div>
           );
         })}
-        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Seats not listed are assumed to stay with their party. Osborn counts for neither party. A scenario never changes the needles.</p>
+        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Osborn counts for neither party. A scenario never changes the needles.</p>
       </section>
+      <CardSeatBlock />
     </div>
   );
 }
@@ -2183,6 +2302,7 @@ function MethodView({ wide }) {
         <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}` }}>
           {note("Maine and New Hampshire", "These states don't publish results on election night. Their needles will pause and finish on their own when the states post official results; in the meantime each paused race links to the AP's live count.")}
         </div>
+        {note("Every other Senate seat", "The Senate races without a needle get a card instead. A card shows the candidates, the ratings from Cook, Sabato's Crystal Ball and Inside Elections, and the public polls, but no needle and no live count; it counts toward Senate control by the forecasters' rating. A card gets a full needle if at least two of those forecasters rate it Toss-up or Lean, or nonpartisan polls show it within about 5 points.")}
         {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so its needle is a polling forecast that doesn't move on election night.")}
         {note("Where the data comes from", "Polls from public releases, and results from the official files each state's election office publishes. No paid data and no copying from news sites.")}
         {note("About the name", "Needlepoint was called The Needle Project until October 2026. Same site, same needles, shorter name.")}
