@@ -1,0 +1,1787 @@
+{
+  "_comment": "Senate races with a card instead of a needle (Update 53). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
+  "asOf": "2026-10-12",
+  "notUp": {
+    "D": 32,
+    "I": 2,
+    "R": 31,
+    "note": "King (ME) and Sanders (VT) caucus with Democrats and count as Democrats."
+  },
+  "races": [
+    {
+      "id": "al_card",
+      "state": "AL",
+      "stateName": "Alabama",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Tommy Tuberville",
+        "party": "R",
+        "status": "retiring (running for governor)",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Everett Wess",
+          "party": "D"
+        },
+        {
+          "name": "Barry Moore",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat. Both nominees won June 16 primary runoffs.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "RMG Research (R)",
+          "date": "2026-09-25",
+          "dem": 33,
+          "rep": 54,
+          "rating": 0.6,
+          "note": "Conducted for Alabama Policy Action; registered voters"
+        },
+        {
+          "pollster": "yes. every kid.",
+          "date": "2026-07-11",
+          "dem": 32,
+          "rep": 47,
+          "rating": 0.6,
+          "note": "Advocacy group's own poll"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alabama",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "ar_card",
+      "state": "AR",
+      "stateName": "Arkansas",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Tom Cotton",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Hallie Shoffner",
+          "party": "D"
+        },
+        {
+          "name": "Tom Cotton",
+          "party": "R"
+        },
+        {
+          "name": "Jeff Wadlin",
+          "party": "L",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "GrayHouse (R)",
+          "date": "2026-10-04",
+          "dem": 39,
+          "rep": 50,
+          "rating": 0.6
+        },
+        {
+          "pollster": "J.L. Partners",
+          "date": "2026-08-18",
+          "dem": 35,
+          "rep": 51,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Hendrix College",
+          "date": "2026-08-12",
+          "dem": 47,
+          "rep": 44,
+          "rating": 0.8,
+          "note": "Sponsored by Talk Business & Politics"
+        },
+        {
+          "pollster": "2040 Strategy Group (Shoffner campaign)",
+          "date": "2026-07-25",
+          "dem": 43,
+          "rep": 46,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Shoffner campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Arkansas",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "co_card",
+      "state": "CO",
+      "stateName": "Colorado",
+      "seat": "regular",
+      "incumbent": {
+        "name": "John Hickenlooper",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "John Hickenlooper",
+          "party": "D"
+        },
+        {
+          "name": "Mark Baisley",
+          "party": "R"
+        },
+        {
+          "name": "Blake Huber",
+          "party": "L",
+          "minor": true
+        },
+        {
+          "name": "Christopher Baum",
+          "party": "Approval Voting",
+          "minor": true
+        },
+        {
+          "name": "Bob Chew",
+          "party": "Forward",
+          "minor": true
+        },
+        {
+          "name": "Adam Withrow",
+          "party": "Unity",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Colorado",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "de_card",
+      "state": "DE",
+      "stateName": "Delaware",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Chris Coons",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Chris Coons",
+          "party": "D"
+        },
+        {
+          "name": "Michael Katz",
+          "party": "R"
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Delaware",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "fl_card",
+      "state": "FL",
+      "stateName": "Florida",
+      "seat": "special",
+      "incumbent": {
+        "name": "Ashley Moody",
+        "party": "R",
+        "status": "appointed in 2025, running"
+      },
+      "nominees": [
+        {
+          "name": "Angie Nixon",
+          "party": "D"
+        },
+        {
+          "name": "Ashley Moody",
+          "party": "R"
+        },
+        {
+          "name": "Neil Gillespie",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Special election for the last two years of Marco Rubio's term (he resigned to become Secretary of State).",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "St. Pete Polls",
+          "date": "2026-10-07",
+          "dem": 45,
+          "rep": 47,
+          "rating": 0.6,
+          "note": "Sponsored by Florida Politics"
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-05",
+          "dem": 44,
+          "rep": 49,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Targoz Market Research",
+          "date": "2026-10-04",
+          "dem": 42,
+          "rep": 52,
+          "rating": 0.6,
+          "note": "Sponsored by the James Madison Institute, a conservative think tank"
+        },
+        {
+          "pollster": "Mason-Dixon",
+          "date": "2026-10-01",
+          "dem": 40,
+          "rep": 50,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Change Research (D)",
+          "date": "2026-09-27",
+          "dem": 47,
+          "rep": 48,
+          "rating": 0.6,
+          "note": "Commissioned by Freedom Project USA"
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-09-21",
+          "dem": 42,
+          "rep": 49,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Stetson University",
+          "date": "2026-09-21",
+          "dem": 40,
+          "rep": 51,
+          "rating": 0.8
+        },
+        {
+          "pollster": "St. Pete Polls",
+          "date": "2026-09-17",
+          "dem": 45,
+          "rep": 45,
+          "rating": 0.6,
+          "note": "Sponsored by Florida Politics"
+        },
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-09-10",
+          "dem": 43,
+          "rep": 50,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Change Research (D)",
+          "date": "2026-09-09",
+          "dem": 47,
+          "rep": 47,
+          "rating": 0.6,
+          "note": "Commissioned by Freedom Project USA"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "id_card",
+      "state": "ID",
+      "stateName": "Idaho",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Jim Risch",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Todd Achilles",
+          "party": "I"
+        },
+        {
+          "name": "Jim Risch",
+          "party": "R"
+        },
+        {
+          "name": "Natalie Fleming",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Matt Loesby",
+          "party": "L",
+          "minor": true
+        }
+      ],
+      "note": "No Democrat on the ballot: nominee David Roth withdrew in July to help independent Todd Achilles, who has Democratic leaders' support. Achilles is shown on the left and in the polls' first column.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Peak Insights (Risch campaign)",
+          "date": "2026-09-30",
+          "dem": 24,
+          "rep": 49,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Risch campaign"
+        },
+        {
+          "pollster": "Advanced Targeting Research",
+          "date": "2026-09-16",
+          "dem": 46,
+          "rep": 39,
+          "rating": 0.6,
+          "note": "Registered voters; Achilles 50, Risch 39 head-to-head"
+        },
+        {
+          "pollster": "Peak Insights (Risch campaign)",
+          "date": "2026-08-13",
+          "dem": 18,
+          "rep": 52,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Risch campaign"
+        },
+        {
+          "pollster": "The Bullfinch Group (Achilles campaign)",
+          "date": "2026-08-07",
+          "dem": 38,
+          "rep": 33,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Achilles campaign"
+        },
+        {
+          "pollster": "Change Research (Stegner campaign)",
+          "date": "2026-07-30",
+          "dem": 21,
+          "rep": 45,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "John Stegner, independent candidate for governor"
+        },
+        {
+          "pollster": "The Bullfinch Group (Achilles campaign)",
+          "date": "2026-06-01",
+          "dem": 36,
+          "rep": 40,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Achilles campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Idaho",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "il_card",
+      "state": "IL",
+      "stateName": "Illinois",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Dick Durbin",
+        "party": "D",
+        "status": "retiring",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Juliana Stratton",
+          "party": "D"
+        },
+        {
+          "name": "Don Tracy",
+          "party": "R"
+        },
+        {
+          "name": "Whitfield Harrington Jr.",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Public Policy Polling (D)",
+          "date": "2026-10-01",
+          "dem": 49,
+          "rep": 36,
+          "rating": 0.55,
+          "note": "Conducted for Chicago News Weekly"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Illinois",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "ky_card",
+      "state": "KY",
+      "stateName": "Kentucky",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Mitch McConnell",
+        "party": "R",
+        "status": "retiring",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Charles Booker",
+          "party": "D"
+        },
+        {
+          "name": "Andy Barr",
+          "party": "R"
+        },
+        {
+          "name": "Christopher Campbell",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Global Strategy Group (Booker campaign)",
+          "date": "2026-08-27",
+          "dem": 40,
+          "rep": 49,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Booker campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kentucky",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "la_card",
+      "state": "LA",
+      "stateName": "Louisiana",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Bill Cassidy",
+        "party": "R",
+        "status": "lost renomination",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Jamie Davis",
+          "party": "D"
+        },
+        {
+          "name": "Julia Letlow",
+          "party": "R"
+        }
+      ],
+      "note": "Louisiana's first closed party primaries for Senate (no more all-party \"jungle\" primary). Cassidy lost the Republican primary; Letlow won the June 27 runoff.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Hart Research Associates (Davis campaign)",
+          "date": "2026-09-19",
+          "dem": 44,
+          "rep": 48,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Davis campaign"
+        },
+        {
+          "pollster": "Public Policy Polling (Davis campaign)",
+          "date": "2026-07-22",
+          "dem": 37,
+          "rep": 41,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Davis campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Louisiana",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "ma_card",
+      "state": "MA",
+      "stateName": "Massachusetts",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Ed Markey",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Ed Markey",
+          "party": "D"
+        },
+        {
+          "name": "John Deaton",
+          "party": "R"
+        },
+        {
+          "name": "Shiva Ayyadurai",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Joe Tache",
+          "party": "PSL",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "MassINC Polling Group",
+          "date": "2026-09-22",
+          "dem": 52,
+          "rep": 26,
+          "rating": 0.8
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 53,
+          "rep": 30,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Massachusetts",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "mn_card",
+      "state": "MN",
+      "stateName": "Minnesota",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Tina Smith",
+        "party": "D",
+        "status": "retiring",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Peggy Flanagan",
+          "party": "D"
+        },
+        {
+          "name": "Michele Tafoya",
+          "party": "R"
+        },
+        {
+          "name": "Marisa Simonetti",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Rebecca Whiting",
+          "party": "L",
+          "minor": true
+        }
+      ],
+      "note": "Open seat. Flanagan runs on the Democratic-Farmer-Labor (DFL) line, Minnesota's Democratic Party.",
+      "ratings": {
+        "cook": "Likely D",
+        "sabato": "Likely D",
+        "inside": "Lean D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Morning Consult",
+          "date": "2026-10-07",
+          "dem": 45,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "Conducted for The Daily Agenda; registered voters"
+        },
+        {
+          "pollster": "Rasmussen Reports",
+          "date": "2026-10-07",
+          "dem": 48,
+          "rep": 45,
+          "rating": 0.5
+        },
+        {
+          "pollster": "Mason-Dixon",
+          "date": "2026-10-07",
+          "dem": 47,
+          "rep": 43,
+          "rating": 0.8,
+          "note": "Sponsored by KARE 11 / Minnesota Star Tribune"
+        },
+        {
+          "pollster": "GQR (D)",
+          "date": "2026-10-04",
+          "dem": 50,
+          "rep": 42,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Big Data Poll",
+          "date": "2026-09-30",
+          "dem": 40,
+          "rep": 38,
+          "rating": 0.6
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-09-29",
+          "dem": 46,
+          "rep": 45,
+          "rating": 0.6
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-15",
+          "dem": 43,
+          "rep": 42,
+          "rating": 0.55
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-09-14",
+          "dem": 42,
+          "rep": 42,
+          "rating": 0.8,
+          "note": "For KSTP"
+        },
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-09-10",
+          "dem": 48,
+          "rep": 44,
+          "rating": 0.6
+        },
+        {
+          "pollster": "TIPP Insights (R)",
+          "date": "2026-09-02",
+          "dem": 44,
+          "rep": 42,
+          "rating": 0.6,
+          "note": "Sponsored by the League of American Workers"
+        },
+        {
+          "pollster": "Deep Root Analytics (R)",
+          "date": "2026-08-18",
+          "dem": 50,
+          "rep": 45,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-08-17",
+          "dem": 46,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "For KSTP"
+        }
+      ],
+      "consensus": {
+        "rating": "Likely D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "ms_card",
+      "state": "MS",
+      "stateName": "Mississippi",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Cindy Hyde-Smith",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Scott Colom",
+          "party": "D"
+        },
+        {
+          "name": "Cindy Hyde-Smith",
+          "party": "R"
+        },
+        {
+          "name": "Ty Pinkins",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Data for Progress (Way to Lead PAC)",
+          "date": "2026-08-15",
+          "dem": 38,
+          "rep": 44,
+          "ind": 7,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Way to Lead PAC"
+        },
+        {
+          "pollster": "Impact Research (D)",
+          "date": "2026-04-12",
+          "dem": 39,
+          "rep": 42,
+          "ind": 6,
+          "rating": 0.5,
+          "note": "Sponsored by the SPLC Action Fund, which opposes Hyde-Smith"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Mississippi",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "mt_card",
+      "state": "MT",
+      "stateName": "Montana",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Steve Daines",
+        "party": "R",
+        "status": "retiring",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Alani Bankhead",
+          "party": "D"
+        },
+        {
+          "name": "Seth Bodnar",
+          "party": "I"
+        },
+        {
+          "name": "Kurt Alme",
+          "party": "R"
+        },
+        {
+          "name": "Kyle Austin",
+          "party": "L",
+          "minor": true
+        }
+      ],
+      "note": "Open seat and a three-way race: independent Seth Bodnar, backed by Jon Tester, runs alongside the Democratic nominee. Polls list Bankhead, Bodnar and Alme.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Aspect Strategic (Montana Freedom PAC)",
+          "date": "2026-09-15",
+          "dem": 14,
+          "rep": 44,
+          "ind": 32,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Montana Freedom PAC, which supports Bodnar"
+        },
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-09-15",
+          "dem": 23,
+          "rep": 44,
+          "ind": 24,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Rutgers-Eagleton",
+          "date": "2026-09-07",
+          "dem": 16,
+          "rep": 38,
+          "ind": 30,
+          "rating": 0.8,
+          "note": "Sponsored by the Montana Free Press; registered voters"
+        },
+        {
+          "pollster": "Peak Insights (Alme campaign)",
+          "date": "2026-08-25",
+          "dem": 19,
+          "rep": 44,
+          "ind": 22,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Alme campaign"
+        },
+        {
+          "pollster": "Hart Research (D)",
+          "date": "2026-08-04",
+          "dem": 15,
+          "rep": 45,
+          "ind": 30,
+          "rating": 0.6,
+          "note": "Sponsored by Forward Montana, which supports Bodnar"
+        },
+        {
+          "pollster": "Tavern Research (D)",
+          "date": "2026-07-27",
+          "dem": 24,
+          "rep": 49,
+          "ind": 25,
+          "rating": 0.6
+        },
+        {
+          "pollster": "GQR (D)",
+          "date": "2026-07-26",
+          "dem": 22,
+          "rep": 41,
+          "ind": 27,
+          "rating": 0.6,
+          "note": "Commissioned by Contours Inc."
+        },
+        {
+          "pollster": "Bullfinch Group (R)",
+          "date": "2026-07-16",
+          "dem": 22,
+          "rep": 36,
+          "ind": 24,
+          "rating": 0.6,
+          "note": "Commissioned by Contours Inc."
+        },
+        {
+          "pollster": "Hart Research (D)",
+          "date": "2026-06-24",
+          "dem": 22,
+          "rep": 47,
+          "ind": 25,
+          "rating": 0.6,
+          "note": "Commissioned by The Majority Institute"
+        },
+        {
+          "pollster": "GrayHouse (R)",
+          "date": "2026-06-24",
+          "dem": 25,
+          "rep": 41,
+          "ind": 17,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Tavern Research (D)",
+          "date": "2026-06-19",
+          "dem": 26,
+          "rep": 49,
+          "ind": 24,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Public Opinion Strategies (R)",
+          "date": "2026-06-11",
+          "dem": 25,
+          "rep": 44,
+          "ind": 20,
+          "rating": 0.6,
+          "note": "Commissioned by The Political Company"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "nj_card",
+      "state": "NJ",
+      "stateName": "New Jersey",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Cory Booker",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Cory Booker",
+          "party": "D"
+        },
+        {
+          "name": "Justin Murphy",
+          "party": "R"
+        },
+        {
+          "name": "Veronica Fernandez",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Joanne Kuniansky",
+          "party": "Socialist Workers",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Jersey",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "nm_card",
+      "state": "NM",
+      "stateName": "New Mexico",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Ben Ray Luján",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Ben Ray Luján",
+          "party": "D"
+        },
+        {
+          "name": "Larry Marker",
+          "party": "R"
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-09-30",
+          "dem": 54,
+          "rep": 36,
+          "rating": 0.8,
+          "note": "Sponsored by KOB-TV"
+        },
+        {
+          "pollster": "Research & Polling Inc.",
+          "date": "2026-08-28",
+          "dem": 53,
+          "rep": 38,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Mexico",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "ok_card",
+      "state": "OK",
+      "stateName": "Oklahoma",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Alan Armstrong",
+        "party": "R",
+        "status": "appointed in March 2026, not running",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "N'Kiyla Jasmine Thomas",
+          "party": "D"
+        },
+        {
+          "name": "Kevin Hern",
+          "party": "R"
+        },
+        {
+          "name": "Ron Meinhardt",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Curtis Stinnett",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Sevier White",
+          "party": "L",
+          "minor": true
+        }
+      ],
+      "note": "Open seat. Markwayne Mullin resigned in March to become Secretary of Homeland Security; appointee Alan Armstrong can't seek a full term. Thomas won the Democratic runoff on Aug. 25 (the one poll of this matchup was taken before that runoff, so it isn't listed).",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Oklahoma",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "or_card",
+      "state": "OR",
+      "stateName": "Oregon",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Jeff Merkley",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Jeff Merkley",
+          "party": "D"
+        },
+        {
+          "name": "David Brock Smith",
+          "party": "R"
+        },
+        {
+          "name": "Gary Lyndon Dye",
+          "party": "L",
+          "minor": true
+        },
+        {
+          "name": "Chris Henry",
+          "party": "Progressive",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Oregon",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "ri_card",
+      "state": "RI",
+      "stateName": "Rhode Island",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Jack Reed",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Jack Reed",
+          "party": "D"
+        },
+        {
+          "name": "Raymond McKay",
+          "party": "R"
+        },
+        {
+          "name": "Michael Bahry",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 53,
+          "rep": 33,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Rhode_Island",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "sc_card",
+      "state": "SC",
+      "stateName": "South Carolina",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Darline Graham",
+        "party": "R",
+        "status": "appointed in 2026, running"
+      },
+      "nominees": [
+        {
+          "name": "Annie Andrews",
+          "party": "D"
+        },
+        {
+          "name": "Darline Graham",
+          "party": "R"
+        },
+        {
+          "name": "Mark Hackett",
+          "party": "Constitution",
+          "minor": true
+        },
+        {
+          "name": "Kasie Whitener",
+          "party": "L",
+          "minor": true
+        }
+      ],
+      "note": "Lindsey Graham won the June primary but died on July 11. His sister Darline Graham was appointed to the seat and won an Aug. 25 special Republican runoff to replace him on the ballot.",
+      "ratings": {
+        "cook": "Likely R",
+        "sabato": "Likely R",
+        "inside": "Likely R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Rasmussen Reports",
+          "date": "2026-10-08",
+          "dem": 45,
+          "rep": 49,
+          "rating": 0.5
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-09-29",
+          "dem": 45,
+          "rep": 46,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Trafalgar Group",
+          "date": "2026-09-25",
+          "dem": 42,
+          "rep": 43,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Rasmussen Reports",
+          "date": "2026-09-14",
+          "dem": 43,
+          "rep": 48,
+          "rating": 0.5
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-09-09",
+          "dem": 43,
+          "rep": 45,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Abacus Data",
+          "date": "2026-08-28",
+          "dem": 42,
+          "rep": 55,
+          "rating": 0.55,
+          "note": "306 likely voters (registered voters: Andrews 48, Graham 47)"
+        }
+      ],
+      "consensus": {
+        "rating": "Likely R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "sd_card",
+      "state": "SD",
+      "stateName": "South Dakota",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Mike Rounds",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Brian Bengs",
+          "party": "I"
+        },
+        {
+          "name": "Mike Rounds",
+          "party": "R"
+        }
+      ],
+      "note": "No Democrat on the ballot: nominee Julian Beaudion withdrew on Aug. 4. Independent Brian Bengs (the 2022 Democratic nominee) is shown on the left and in the polls' first column.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Zenith Research (Bengs campaign)",
+          "date": "2026-09-27",
+          "dem": 38,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Bengs campaign"
+        },
+        {
+          "pollster": "Public Policy Polling (Bengs campaign)",
+          "date": "2026-09-09",
+          "dem": 42,
+          "rep": 45,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Bengs campaign"
+        },
+        {
+          "pollster": "Lake Research Partners (D)",
+          "date": "2026-08-30",
+          "dem": 51,
+          "rep": 44,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Impact Research (Bengs campaign)",
+          "date": "2026-08-17",
+          "dem": 44,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Bengs campaign"
+        },
+        {
+          "pollster": "Public Opinion Strategies (NRSC)",
+          "date": "2026-07-09",
+          "dem": 33,
+          "rep": 56,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "National Republican Senatorial Committee"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Dakota",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "tn_card",
+      "state": "TN",
+      "stateName": "Tennessee",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Bill Hagerty",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Marquita Bradshaw",
+          "party": "D"
+        },
+        {
+          "name": "Bill Hagerty",
+          "party": "R"
+        }
+      ],
+      "note": "Eight independents are also on the ballot.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Targoz Market Research",
+          "date": "2026-08-26",
+          "dem": 31,
+          "rep": 51,
+          "rating": 0.6,
+          "note": "Sponsored by the Beacon Center of Tennessee; registered voters"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Tennessee",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "va_card",
+      "state": "VA",
+      "stateName": "Virginia",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Mark Warner",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Mark Warner",
+          "party": "D"
+        },
+        {
+          "name": "Bert Mizusawa",
+          "party": "R"
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Virginia",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "wv_card",
+      "state": "WV",
+      "stateName": "West Virginia",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Shelley Moore Capito",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Rachel Fetty Anderson",
+          "party": "D"
+        },
+        {
+          "name": "Shelley Moore Capito",
+          "party": "R"
+        },
+        {
+          "name": "S. Marshall Wilson",
+          "party": "Constitution",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_West_Virginia",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    },
+    {
+      "id": "wy_card",
+      "state": "WY",
+      "stateName": "Wyoming",
+      "seat": "regular",
+      "incumbent": {
+        "name": "Cynthia Lummis",
+        "party": "R",
+        "status": "retiring",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "James W. Byrd",
+          "party": "D"
+        },
+        {
+          "name": "Harriet Hageman",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-06",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-01"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Wyoming",
+        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
+        "https://www.cookpolitical.com/ratings/senate-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-senate/",
+        "https://www.insideelections.com/ratings/senate"
+      ]
+    }
+  ]
+}
