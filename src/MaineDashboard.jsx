@@ -79,7 +79,7 @@ const makeSenate = (pollMargin) => ({
 // polling: a valid poll-driven needle now, and a statewide live needle on election night.
 // Update 47: state shifts halved (Maine Senate and Alaska kept). Past polling misses don't reliably
 // repeat, especially in midterms, so each shift is about half the size of the state's past misses.
-const NC_HOUSE = 3; // toward Whatley: NC polls have overstated Democrats in recent cycles (halved from 6)
+const NC_HOUSE = 1.5; // toward Whatley. audited Oct 12: about half the typical recent polling miss (was 3; 6 before Update 47)
 // Real county baseline from NC's 2024 presidential results (scripts/build-baseline-nc.mjs):
 // lean = each county's Dem two-party share minus the statewide share (mean-zero); weight = two-party turnout.
 const NC_LEAN = ncBaseline.lean, NC_W = ncBaseline.weight;
@@ -90,7 +90,7 @@ const makeNCSenate = (pollMargin) => ({
   id: "nc_sen", state: "NC", title: "U.S. Senate",
   sub: "Cooper (D) vs Whatley (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley because North Carolina polls have tended to underestimate Republicans; the shift was halved in October, since past misses don't reliably repeat. County map built from 2024 results.`,
+  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley because North Carolina polls have tended to underestimate Republicans; the shift is about half of how far North Carolina polls have typically missed in recent elections, since past misses don't reliably repeat. County map built from 2024 results.`,
   left: { full: "Whatley", short: "Whatley", color: RED },
   right: { full: "Cooper", short: "Cooper", color: BLUE },
   units: ncUnits(pollMargin),
@@ -122,7 +122,7 @@ const makeOhioSenate = (pollMargin) => ({
 // Paxton (R) vs Talarico (D), plurality. Texas leans strongly Republican (Trump +14 in 2024),
 // though the race has polled closer than usual. The poll center is shifted toward Paxton for the
 // state's fundamentals. Uses the real county map when data/tx-baseline.json is filled in.
-const TX_HOUSE = 2.5; // halved from 5 in Update 47
+const TX_HOUSE = 1.5; // audited Oct 12: about half the typical recent polling miss (was 2.5; 5 before Update 47)
 const TX_LEAN = txBaseline.lean || {}, TX_W = txBaseline.weight || {};
 const TX_HAS_COUNTIES = Object.keys(TX_LEAN).length > 0;
 const txUnits = (pollMargin) =>
@@ -133,7 +133,7 @@ const makeTexasSenate = (pollMargin) => ({
   id: "tx_sen", state: "TX", title: "U.S. Senate",
   sub: "Talarico (D) vs Paxton (R)",
   system: "Plurality", real: true,
-  note: `Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Paxton (halved in October, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Paxton (about half of how far Texas polls have typically missed in recent elections, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Paxton", short: "Paxton", color: RED },
   right: { full: "Talarico", short: "Talarico", color: BLUE },
   units: txUnits(pollMargin),
@@ -146,7 +146,7 @@ const makeTexasGov = (pollMargin) => ({
   id: "tx_gov", state: "TX", title: "Governor",
   sub: "Hinojosa (D) vs Abbott (R)",
   system: "Plurality", real: true,
-  note: `Greg Abbott is seeking a fourth term. Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Abbott, the same shift as the Texas Senate race (halved in October, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Greg Abbott is seeking a fourth term. Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Abbott, the same shift as the Texas Senate race (about half of how far Texas polls have typically missed in recent elections, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Abbott", short: "Abbott", color: RED },
   right: { full: "Hinojosa", short: "Hinojosa", color: BLUE },
   units: txUnits(pollMargin),
@@ -281,7 +281,7 @@ const makeMichiganSenate = (pollMargin) => ({
 // Marshall (R, incumbent) vs Hamilton (D), plurality. Kansas is strongly Republican (Trump +16 in
 // 2024) and its polls underestimated Republicans in recent federal races (about 10 pts in the 2014
 // Senate race, about 7 in 2020), though they missed the other way in Laura Kelly's governor races.
-const KS_HOUSE = 2.5; // halved scale, Oct 12 (same as Iowa and Texas)
+const KS_HOUSE = 2.5; // halved scale, Oct 12 (same as Iowa)
 const KS_LEAN = ksBaseline.lean || {}, KS_W = ksBaseline.weight || {};
 const KS_HAS_COUNTIES = Object.keys(KS_LEAN).length > 0;
 const ksUnits = (pollMargin) =>
@@ -2110,7 +2110,7 @@ function MethodView({ wide }) {
       <p style={sub}>Each poll is also corrected for its pollster's measured lean, or "house effect": how far that pollster's numbers have run from other pollsters in the same races at the same time this year. A pollster with only a poll or two gets a smaller correction, since one poll can differ by luck, and a poll paid for by a campaign, party or PAC starts out assumed to lean 2 points toward its sponsor. This is the approach major polling averages such as Silver Bulletin's use, and it works in both directions. The Pollster ratings page lists every pollster's lean.</p>
     </>],
     ["Adjust for history", <>
-      <p style={sub}>Polls in several of these states underestimated Republicans in recent elections, mostly in presidential years. Misses like that don't reliably repeat (midterm polls have been far closer), so each race's starting point shifts toward the Republican by half of what it did before October. Maine's shift is about Susan Collins herself, whose record of beating her polls is the best documented on the board, so it stays at full size:</p>
+      <p style={sub}>Polls in several of these states underestimated Republicans in recent elections, mostly in presidential years. Misses like that don't reliably repeat (midterm polls have been far closer), so each race's starting point shifts only part of the way toward the Republican. Each shift is about half of how far that state's polls have typically missed in recent elections, since past misses don't reliably repeat. Maine's shift is about Susan Collins herself, whose record of beating her polls is the best documented on the board, so it stays at full size:</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
         {[["Maine", `${SEN_HOUSE} pts toward Collins`, "Collins has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9). Kept at full size."],
           ["North Carolina", `${NC_HOUSE} pts toward Whatley`, "NC polls have overstated Democrats in recent cycles, and undecided voters there tend to break Republican."],
@@ -2126,7 +2126,7 @@ function MethodView({ wide }) {
           ["Alaska", `${AK_HOUSE} pts toward Sullivan`, "Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close."]].map(([s, a, why]) => (
           <p key={s} style={item}><b style={{ color: C.text }}>{s}:</b> {a}. {why.charAt(0).toUpperCase() + why.slice(1)}</p>
         ))}
-        <p style={item}>Maine's governor and House races get no adjustment. These shifts were halved on Oct. 4; before that, every state except Maine carried twice the shift shown here. Kansas joined the board on Oct. 12 with its shift already at this size.</p>
+        <p style={item}>Maine's governor and House races get no adjustment. These shifts were halved on Oct. 4, and North Carolina's and Texas's were trimmed again on Oct. 12 after an audit of how far their polls have actually missed. Kansas joined the board on Oct. 12.</p>
       </div>
     </>],
     ["Map it county by county", <>
