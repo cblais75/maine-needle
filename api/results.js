@@ -21,13 +21,13 @@
 // everything and is served as-is.
 // Any state without an env var is skipped. Any state that errors or times out is skipped
 // (listed in `errors`) without taking down the rest.
-// START GATE (Update 55): before 7 p.m. ET Nov 3 (00:00 UTC Nov 4) this returns no races at all,
-// because states post test files with fake votes at their election-night addresses. So the
-// state links above can be set ahead of time. /api/results?night=1 (sent by the app when the
-// page address has ?night) and TEST_RESULTS_URL skip the gate for testing.
+// START GATE (Updates 55-56): a state's file isn't even downloaded before that state's last polls
+// close on Nov 3 (scripts/lib/results-gate.mjs has the times), because states post test files with
+// fake votes at their election-night addresses. So the state links above can be set ahead of time.
+// Only TEST_RESULTS_URL (a marked stress test) skips the gate; ?night previews use simulated data.
 import { aggregate } from "../scripts/lib/aggregate.mjs";
 import { fetchRows } from "../scripts/lib/fetch-rows.mjs";
-import { resultsOpen, waitingPayload } from "../scripts/lib/results-gate.mjs";
+import { stateOpen, waitingPayload, waitingNote, gateResults } from "../scripts/lib/results-gate.mjs";
 
 const SOURCES = [
   { state: "ME", env: "MAINE_RESULTS_URL" },
@@ -51,12 +51,14 @@ async function fetchState(setting, state) {
   return out;
 }
 
-// The results payload for a given moment. now / bypass / fetchStateFn are injectable so
+// The results payload for a given moment. now / fetchStateFn are injectable so
 // scripts/test-night.mjs can prove the start gate works without touching any state site.
-export async function buildPayload({ env = process.env, now = Date.now(), bypass = false, fetchStateFn = fetchState } = {}) {
-  const active = SOURCES.filter((s) => env[s.env]);
-  if (!active.length) return { updated: null, source: "simulation", races: {} };
-  if (!bypass && !resultsOpen(now)) return waitingPayload(); // don't even download test files early
+export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
+  const configured = SOURCES.filter((s) => env[s.env]);
+  if (!configured.length) return { updated: null, source: "simulation", races: {} };
+  const active = configured.filter((s) => stateOpen(s.state, now)); // don't even download test files early
+  const closed = configured.filter((s) => !stateOpen(s.state, now)).map((s) => s.state);
+  if (!active.length) return waitingPayload(now, closed);
   const races = {}, sources = [], errors = [], diag = {};
   await Promise.all(active.map(async (s) => {
     try {
@@ -69,14 +71,15 @@ export async function buildPayload({ env = process.env, now = Date.now(), bypass
       errors.push(`${s.state}: ${String(e)}`);
     }
   }));
-  return {
+  // gateResults again, race by race: a belt-and-braces check that no early state slips through.
+  return gateResults({
     updated: new Date(now).toISOString(),
     source: sources.length ? `live (${sources.join(", ")})` : errors.every((e) => /no results files posted yet/.test(e)) ? "waiting" : "error",
-    ...(bypass && !resultsOpen(now) ? { preview: true } : {}),
+    ...(closed.length ? { note: waitingNote(now, closed) } : {}),
     ...(errors.length ? { errors } : {}),
     diag,
     races,
-  };
+  }, { now });
 }
 
 export default async function handler(req, res) {
@@ -93,7 +96,5 @@ export default async function handler(req, res) {
     }
     return;
   }
-  const q = (req && req.query) || {};
-  const bypass = q.night != null; // the ?night preview
-  res.status(200).json(await buildPayload({ bypass }));
+  res.status(200).json(await buildPayload());
 }

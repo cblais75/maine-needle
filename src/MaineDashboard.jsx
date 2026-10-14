@@ -13,6 +13,7 @@ import ksBaseline from "../data/ks-baseline.json";
 import mnBaseline from "../data/mn-baseline.json";
 import senateCards from "../data/senate-cards.json";
 import { gateResults } from "../scripts/lib/results-gate.mjs";
+import { simulatedPreview } from "../scripts/lib/night-preview.mjs";
 
 // Newspaper palette (Update 42): warm paper, black ink, red/blue kept for results only.
 // `ink` is the PAGE color (the name dates from the old dark theme); `text` is the ink.
@@ -610,7 +611,9 @@ export default function MaineDashboard() {
     rollRace(makeMinnesotaSenate(mnm)),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
+  const racesRef = useRef([]);
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY, DEFAULT_CD1_MARGIN, DEFAULT_CD2_MARGIN));
+  racesRef.current = races; // the ?night preview simulates from the current needles' county units
   const [sel, setSel] = useState(null);
   const wide = useWide(1000);
   const [navOpen, setNavOpen] = useState(false);
@@ -682,17 +685,24 @@ export default function MaineDashboard() {
 
   // load live returns now and every 20s; races with real data switch to LIVE automatically.
   // hosted: /api/results (self-updating function). local dev: falls back to /results.json.
-  // START GATE (Update 55): results received before 7 p.m. ET Nov 3 are ignored (states post test
-  // files with fake votes), unless the address has ?night or the payload is a marked test.
+  // START GATE (Updates 55-56): a race's results are ignored until its state's last polls close on
+  // Nov 3 (states post test files with fake votes). Only marked test payloads skip the gate. With ?night,
+  // states that haven't closed yet show SIMULATED practice returns instead, never a real file.
   useEffect(() => {
     const preview = nightPreview();
-    const apply = (raw) => { const res = gateResults(raw, { bypass: preview }); resultsRef.current = res; setResults(res); setRaces((prev) => applyAllLive(prev, res)); };
+    const t0 = Date.now();
+    const apply = (raw) => {
+      const now = Date.now();
+      const gated = gateResults(raw, { now });
+      const res = preview ? simulatedPreview(gated, racesRef.current, now, t0, { turnout: MIDTERM_TURNOUT, pauseStates: PAUSE_STATES }) : gated;
+      resultsRef.current = res; setResults(res); setRaces((prev) => applyAllLive(prev, res));
+    };
     const load = () =>
-      fetch(`/api/results?${preview ? "night=1&" : ""}t=${Date.now()}`)
+      fetch(`/api/results?t=${Date.now()}`)
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .catch(() => fetch(`/results.json?t=${Date.now()}`).then((r) => r.json()))
         .then(apply)
-        .catch(() => {});
+        .catch(() => { if (preview) apply(null); }); // the preview still simulates if no file loads
     load();
     const id = setInterval(load, 20000);
     return () => clearInterval(id);
@@ -794,11 +804,16 @@ export default function MaineDashboard() {
   const shortDate = today.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   const onState = STATES.some((st) => st.code === view);
   const sortedStates = STATES.slice().sort((a, b) => a.label.localeCompare(b.label));
-  const statusLine = (
+  const simBanner = results && results.simulated ? (
+    <div role="status" style={{ margin: "10px 0 0", padding: "9px 12px", background: AMBER, color: "#fff", fontWeight: 700, textAlign: "center", fontSize: wide ? 15 : 13.5, lineHeight: 1.4 }}>
+      Preview with simulated results · not real votes. Real results show as each state's polls close.
+    </div>
+  ) : null;
+  const statusLine = (<>{simBanner}
     <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
       {anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
       {anyPaused ? " Maine and New Hampshire are paused until official results are posted." : ""}
-    </p>
+    </p></>
   );
   const titleBtn = (size) => (
     <button onClick={() => go("dashboard")} aria-label="Needlepoint, home"
@@ -1424,6 +1439,7 @@ function nightPreview() {
 function nightStarted() {
   return nightPreview() || Date.now() >= ELECTION_NIGHT_START;
 }
+// ?night preview (Update 56): scripts/lib/night-preview.mjs simulates practice returns for states not yet closed.
 const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn);
 const PAUSE_TEXT = {
   ME: "Maine doesn't publish results on election night. Towns report to the press and the AP, and the state posts official town-by-town results only after they're certified, usually a few weeks later. If a ranked-choice count is needed, first-choice results come about a week after the election. This needle will finish on its own when those files are posted.",

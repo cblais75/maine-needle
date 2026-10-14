@@ -21,7 +21,8 @@ import url from "node:url";
 import * as XLSX from "xlsx";
 import { aggregate } from "./lib/aggregate.mjs";
 import { readFeed } from "./lib/read-feed.mjs";
-import { gateResults, RESULTS_START } from "./lib/results-gate.mjs";
+import { gateResults } from "./lib/results-gate.mjs";
+import { simulatedPreview } from "./lib/night-preview.mjs";
 import { buildPayload } from "../api/results.js";
 
 const ROOT = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "..");
@@ -222,28 +223,41 @@ function writeSnapshot(frac) {
   console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas governor race)"));
 }
 
-// START GATE CHECK (Update 55): a results file full of fake votes must not go live before
-// 7 p.m. ET Nov 3, through either the API or the app, and must go live after it.
+// START GATE CHECK (Updates 55-56): fake votes in a state's file must not go live before that
+// state's last polls close, through either the API or the app, and must go live after; and the
+// ?night preview must show simulated returns, never the state's real (test) file.
 async function gateCheck() {
   const counts = snapshotCounts(0.7);
-  const fake = night.find((s) => s.state === "MN");
-  const fetchStateFn = async (setting, state) => aggregate(readFeed(asFile(fake, counts.MN), state), state);
-  const env = { MN_RESULTS_URL: "https://example.invalid/allracesbycounty.txt" };
-  const before = RESULTS_START - 3600e3, after = RESULTS_START + 60e3;
-  const live = (p) => Object.keys((p && p.races) || {}).length > 0;
+  const fakeFile = (st) => asFile(night.find((s) => s.state === st), counts[st]);
+  const fetchStateFn = async (setting, state) => aggregate(readFeed(fakeFile(state), state), state);
+  const env = { MN_RESULTS_URL: "https://example.invalid/mn.txt", GA_RESULTS_URL: "https://example.invalid/ga.xml" };
+  const et = (h, m) => Date.UTC(2026, 10, 3, h + 5, m); // Nov 3, Eastern -> UTC
+  const has = (p, id) => !!(p && p.races && p.races[id]);
   const fails = [];
-  const apiBefore = await buildPayload({ env, now: before, fetchStateFn });
-  const apiAfter = await buildPayload({ env, now: after, fetchStateFn });
-  const apiPreview = await buildPayload({ env, now: before, bypass: true, fetchStateFn });
-  if (live(apiBefore) || apiBefore.source !== "waiting") fails.push("API showed results before the start time");
-  if (!live(apiAfter)) fails.push("API showed no results after the start time");
-  if (!live(apiPreview)) fails.push("API ?night preview showed no results");
-  const leaked = { ...apiAfter }; // a payload that somehow reached the app early
-  if (live(gateResults(leaked, { now: before }))) fails.push("app accepted results before the start time");
-  if (!live(gateResults(leaked, { now: after }))) fails.push("app rejected results after the start time");
-  if (!live(gateResults(leaked, { now: before, bypass: true }))) fails.push("app ?night preview rejected results");
-  if (!live(gateResults({ ...leaked, test: true }, { now: before }))) fails.push("app rejected a marked test payload");
-  console.log(fails.length ? "gate check FAILED:\n  " + fails.join("\n  ") : "gate check passed: fake votes stay hidden before 7 p.m. ET Nov 3 (API and app), go live after it, and ?night/test payloads still show");
+  const at = async (h, m) => buildPayload({ env, now: et(h, m), fetchStateFn });
+  const p659 = await at(18, 59), p701 = await at(19, 1), p859 = await at(20, 59), p901 = await at(21, 1);
+  if (has(p659, "ga_sen") || has(p659, "mn_sen") || p659.source !== "waiting") fails.push("API showed results at 6:59 p.m.");
+  if (!has(p701, "ga_sen")) fails.push("API hid Georgia at 7:01 p.m.");
+  if (has(p701, "mn_sen") || has(p859, "mn_sen")) fails.push("API showed Minnesota's test votes before 9 p.m.");
+  if (!has(p901, "mn_sen") || !has(p901, "ga_sen")) fails.push("API hid Minnesota or Georgia at 9:01 p.m.");
+  // the app's own gate, on a payload that somehow arrived early with every state in it
+  const leaked = p901;
+  const app = (h, m) => gateResults(leaked, { now: et(h, m) });
+  if (has(app(20, 59), "mn_sen")) fails.push("app accepted Minnesota at 8:59 p.m.");
+  if (!has(app(21, 1), "mn_sen")) fails.push("app rejected Minnesota at 9:01 p.m.");
+  if (!has(app(19, 1), "ga_sen") || has(app(19, 1), "mn_sen")) fails.push("app got Georgia/Minnesota wrong at 7:01 p.m.");
+  if (!has(gateResults({ ...leaked, test: true }, { now: et(12, 0) }), "mn_sen")) fails.push("app rejected a marked test payload");
+  // ?night before 9 p.m.: Minnesota must come from the simulator, not from Minnesota's (test) file
+  const units = (st) => { const b = JSON.parse(fs.readFileSync(path.join(ROOT, "data", `${st.toLowerCase()}-baseline.json`), "utf8"));
+    return Object.keys(b.lean).map((name) => ({ name, weight: b.weight[name], prior: Math.min(0.98, Math.max(0.02, b.statewideDemTwoParty + b.lean[name])) })); };
+  const needles = [{ id: "mn_sen", state: "MN", units: units("MN") }, { id: "ga_sen", state: "GA", units: units("GA") }];
+  const t0 = et(18, 0), now = et(20, 30);
+  const preview = simulatedPreview(gateResults(leaked, { now }), needles, now, t0 + 200000);
+  const real = leaked.races.mn_sen.counties, shown = preview.races.mn_sen && preview.races.mn_sen.counties;
+  if (!shown || !preview.simulated || !preview.simulated.includes("mn_sen")) fails.push("?night preview had no simulated Minnesota returns");
+  else if (Object.keys(shown).some((c) => real[c] && real[c].dem === shown[c].dem && real[c].rep === shown[c].rep)) fails.push("?night preview showed Minnesota's real file");
+  if (!has(preview, "ga_sen") || (preview.simulated || []).includes("ga_sen")) fails.push("?night preview didn't show Georgia's real results after 7 p.m.");
+  console.log(fails.length ? "gate check FAILED:\n  " + fails.join("\n  ") : "gate check passed: Minnesota hidden at 8:59 p.m. ET, shown at 9:01; Georgia shown at 7:01; ?night shows simulated Minnesota returns before 9, never its file; marked tests still show");
   if (fails.length) process.exitCode = 1;
 }
 await gateCheck();
