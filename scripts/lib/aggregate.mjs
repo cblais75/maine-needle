@@ -25,7 +25,8 @@ const RACES = [
   // Texas governor (Update 49): same feed as the Senate race, the governor contest instead.
   { id: "tx_gov", state: "TX", office: GOVERNOR, kind: "two", names: { dem: /hinojosa/i, rep: /abbott/i } },
   { id: "ia_sen", state: "IA", office: US_SENATE, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
-  { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", names: { dem: /ossoff/i, rep: /collins/i } },
+  // Georgia: majority required (Dec. 1 runoff otherwise), so third-party votes are kept as "oth" (Update 57).
+  { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", trackOther: true, names: { dem: /ossoff/i, rep: /collins/i } },
   // Nebraska: names only. Osborn is an independent, and if the Democratic nominee (Burbank) ends
   // up on the ballot her votes must NOT be counted as Osborn's.
   { id: "ne_sen", state: "NE", office: US_SENATE, kind: "two", namesOnly: true, names: { dem: /osborn/i, rep: /ricketts/i } },
@@ -35,6 +36,9 @@ const RACES = [
   // Minnesota (Update 54): Flanagan runs on the DFL line (Minnesota's Democratic Party).
   { id: "mn_sen", state: "MN", office: US_SENATE, kind: "two", names: { dem: /flanagan/i, rep: /tafoya/i } },
 ];
+
+// Summary rows some files list as if they were candidates.
+const NOT_A_CANDIDATE = /^(total|totals|total votes( cast)?|ballots cast|registered voters|times (cast|blank voted|over voted)|over ?votes|under ?votes|blank( votes)?|)$/i;
 
 function lookupMaineCounty(row) {
   const byCounty = matchCounty("ME", row.county);
@@ -83,15 +87,25 @@ function dropDuplicateSheets(rows, pool, state) {
 // reader on past elections (e.g. the 2024 President race) before our candidates are on a ballot.
 export function aggregate(rows, state = "ME", options = {}) {
   let pool = RACES.filter((R) => R.state === state);
-  if (options.office) pool = [{ id: options.id || pool[0]?.id || "test", state, office: options.office, kind: "two", namesOnly: pool[0]?.namesOnly, names: options.names || {} }];
+  if (options.office) pool = [{ id: options.id || pool[0]?.id || "test", state, office: options.office, kind: "two", namesOnly: pool[0]?.namesOnly, trackOther: pool[0]?.trackOther, names: options.names || {} }];
   const acc = {}, prec = {}, unmatchedPlaces = new Set(), offices = new Set();
   let skippedSide = 0;
+  // Some exports label the county column "Precinct" (Georgia's re-exported 2022 file: sheet
+  // "Precinct Results", every row a county). If no row has a county and nearly every distinct
+  // "precinct" is a county name, read that column as the county.
+  if (state !== "ME" && !rows.some((r) => r.county != null && r.county !== "")) {
+    const vals = [...new Set(rows.map((r) => r.precinct).filter((v) => v != null && v !== ""))];
+    const hits = vals.filter((v) => matchCounty(state, v)).length;
+    if (vals.length && hits / vals.length >= 0.9) rows = rows.map((r) => (r.precinct != null ? { ...r, county: r.precinct } : r));
+  }
   rows = dropDuplicateSheets(rows, pool, state);
   for (const r of rows) {
     const off = String(r.office ?? "");
     const race = pool.find((R) => R.office.test(off));
     if (!race) { if (off) offices.add(off); continue; }
-    const side = sideOf(race, r.party, r.candidate);
+    let side = sideOf(race, r.party, r.candidate);
+    // A runoff state needs every other candidate's votes too (but never a "Total Votes" or ballots-cast row).
+    if (!side && race.trackOther && !NOT_A_CANDIDATE.test(String(r.candidate ?? "").trim())) side = "oth";
     if (!side) { skippedSide++; continue; }
     const county = state === "ME" ? lookupMaineCounty(r) : matchCounty(state, r.county);
     if (!county) {
@@ -101,7 +115,7 @@ export function aggregate(rows, state = "ME", options = {}) {
     }
     const votes = Number(String(r.votes ?? "").replace(/[^0-9.-]/g, "")) || 0;
     acc[race.id] = acc[race.id] || {};
-    acc[race.id][county] = acc[race.id][county] || { dem: 0, rep: 0, ind: 0 };
+    acc[race.id][county] = acc[race.id][county] || { dem: 0, rep: 0, ind: 0, oth: 0 };
     acc[race.id][county][side] += votes;
     if (Number.isFinite(r.pt) && r.pt > 0) {
       prec[race.id] = prec[race.id] || {};
@@ -114,6 +128,7 @@ export function aggregate(rows, state = "ME", options = {}) {
     for (const [co, v] of Object.entries(acc[id])) {
       const o = { dem: Math.round(v.dem), rep: Math.round(v.rep) };
       if (v.ind) o.ind = Math.round(v.ind);
+      if (v.oth) o.oth = Math.round(v.oth);
       const p = prec[id]?.[co];
       if (p && Number.isFinite(p.pr)) { o.pr = p.pr; o.pt = p.pt; }
       counties[co] = o;

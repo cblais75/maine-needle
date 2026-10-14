@@ -23,6 +23,7 @@ import { aggregate } from "./lib/aggregate.mjs";
 import { readFeed } from "./lib/read-feed.mjs";
 import { gateResults } from "./lib/results-gate.mjs";
 import { simulatedPreview } from "./lib/night-preview.mjs";
+import { runoffStatus, otherShare } from "./lib/runoff.mjs";
 import { buildPayload } from "../api/results.js";
 
 const ROOT = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "..");
@@ -85,6 +86,7 @@ function snapshotCounts(frac) {
         const gShare = Math.min(0.97, Math.max(0.03, demShare - 0.015));
         row.gdem = Math.round(turnout * gShare); row.grep = Math.round(turnout * (1 - gShare));
       }
+      if (s.state === "GA") row.oth = Math.round(turnout * 0.025); // a Libertarian on Georgia's ballot (runoff rule, Update 57)
       list.push(row);
     }
     perState[s.state] = list;
@@ -109,7 +111,7 @@ function asFile(s, list) {
     const cty = (f) => list.map((c) => `<County name="${c.county}" votes="${f(c)}" />`).join("");
     const part = list.map((c) => `<County name="${c.county}" precinctsParticipating="20" precinctsReported="${Math.round(20 * c.local)}" />`).join("");
     const ch = (name, party, key) => `<Choice key="1" text="${name}" party="${party}"><VoteType name="Election Day">${cty((c) => Math.round(c[key] * 0.7))}</VoteType><VoteType name="Absentee">${cty((c) => c[key] - Math.round(c[key] * 0.7))}</VoteType></Choice>`;
-    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}</Contest><Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
+    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest><Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
   }
   if (s.state === "MI") { // Michigan county file: tab-delimited, split first/last names, "ST. CLAIR"
     const out = ["ElectionDate\tOfficeCode\tDistrictCode\tStatusCode\tCountyCode\tCountyName\tOfficeDescription\tPartyOrder\tPartyName\tPartyDescription\tCandidateID\tCandidateLastName\tCandidateFirstName\tCandidateMiddleName\tCandidateFormerName\tCandidateVotes\tWriteIn(W)/Uncommitted(Z)\tRecount(*)"];
@@ -261,6 +263,29 @@ async function gateCheck() {
   if (fails.length) process.exitCode = 1;
 }
 await gateCheck();
+
+// RUNOFF CHECK (Update 57): Georgia needs more than 50% of ALL votes. The reader must keep the
+// Libertarian's votes ("oth"), and the runoff rule must send a 49.4% leader (Warnock 2022) to a
+// runoff instead of calling the race, while still calling a clear majority.
+function runoffCheck() {
+  const fails = [];
+  const counts = snapshotCounts(1);
+  const ga = night.find((s) => s.state === "GA");
+  const out = aggregate(readFeed(asFile(ga, counts.GA), "GA"), "GA");
+  const got = Object.values(out.races.ga_sen.counties).reduce((t, c) => t + (c.oth || 0), 0);
+  const want = counts.GA.reduce((t, c) => t + c.oth, 0);
+  if (got !== want) fails.push(`Georgia third-party votes: expected ${want}, got ${got}`);
+  // the 2022 certified count: Warnock 1,946,117, Walker 1,908,442, Oliver 81,365, all counted
+  const w = 1946117, k = 1908442, o = 81365;
+  const full = { margin: (w - k) / (w + k), se: 0.004, fracIn: 1 };
+  if (runoffStatus(full, 0.999, otherShare([{ vDem: w, vRep: k, vOth: o }])).status !== "runoff") fails.push("a 49.4% leader was not sent to a runoff");
+  const clear = { margin: 0.08, se: 0.004, fracIn: 1 }; // leader ~52.6% of all votes
+  if (runoffStatus(clear, 0.999, 0.025).status !== "called") fails.push("a clear majority was not called");
+  if (runoffStatus({ ...full, fracIn: 0.3, se: 0.07 }, 0.6, 0.02).status === "called") fails.push("called with only 30% in");
+  console.log(fails.length ? "runoff check FAILED:\n  " + fails.join("\n  ") : "runoff check passed: Georgia's Libertarian votes kept; 49.4% leader goes to a Dec. 1 runoff (no call); a clear majority is still called");
+  if (fails.length) process.exitCode = 1;
+}
+runoffCheck();
 
 if (has("--auto")) {
   const minutes = val("--minutes", 30);

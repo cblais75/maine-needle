@@ -14,6 +14,7 @@ import mnBaseline from "../data/mn-baseline.json";
 import senateCards from "../data/senate-cards.json";
 import { gateResults } from "../scripts/lib/results-gate.mjs";
 import { simulatedPreview } from "../scripts/lib/night-preview.mjs";
+import { RUNOFF_RACES, otherShare, runoffStatus } from "../scripts/lib/runoff.mjs";
 
 // Newspaper palette (Update 42): warm paper, black ink, red/blue kept for results only.
 // `ink` is the PAGE color (the name dates from the old dark theme); `text` is the ink.
@@ -484,6 +485,14 @@ function rateOf(race, m) {
   else if (pct >= 85) tag = "Likely";
   else if (pct >= 65) tag = "Leans";
   else tag = "Toss-up";
+  // Majority-or-runoff races (Georgia, Update 57): no call unless the leader is also on track for
+  // more than 50% of ALL votes; if that's unlikely with half the vote in, the race is headed for a runoff.
+  const ro = RUNOFF_RACES[race.id];
+  if (ro && m.fracIn > 0) {
+    const rs = runoffStatus(m, p, otherShare(race.units));
+    if (rs.status === "runoff") return { pct, leader, text: `Headed for a ${ro.date} runoff`, runoff: true };
+    if (tag === "Called" && rs.status !== "called") tag = "Likely";
+  }
   return { pct, leader, text: tag === "Toss-up" ? "Toss-up" : `${tag} ${leader.short}` };
 }
 
@@ -504,8 +513,8 @@ function liveTwoWay(units, counties, state) {
   return units.map((u) => {
     const c = counties[u.name];
     const counted = c ? (c.dem || 0) + (c.rep || 0) : 0;
-    if (counted <= 0) return { ...u, reported: 0, vDem: 0, vRep: 0 };
-    return { ...u, reported: reportedFrac(counted, u, c, state), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0 };
+    if (counted <= 0) return { ...u, reported: 0, vDem: 0, vRep: 0, vOth: 0 };
+    return { ...u, reported: reportedFrac(counted, u, c, state), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0, vOth: c.oth || 0 };
   });
 }
 // Sum raw votes across a race's units for the live scoreboard.
@@ -721,7 +730,7 @@ export default function MaineDashboard() {
     for (const r of races) {
       if (r.type === "rcv" || r.type === "tbd" || r.type === "three" || !r.right || !r.left || !r.units || !r.units.length) continue;
       const m = compute(r.units); const rt = rateOf(r, m);
-      const cur = { pct: rt.pct, tag: rt.text.split(" ")[0], leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
+      const cur = { pct: rt.pct, tag: rt.runoff ? "Runoff" : rt.text.split(" ")[0], leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
       snap[r.id] = cur;
       const prev = wirePrev.current ? wirePrev.current[r.id] : null;
       if (!prev || cur.frac === 0) continue;
@@ -732,6 +741,7 @@ export default function MaineDashboard() {
       if (!wasCalled && prev.leader !== cur.leader) events.push({ kind: "flip", text: `${abbr(r)}: lead flip — ${cur.leader} now ahead (${cur.pct}%).`, color: cur.color });
       else if (!wasCalled && prev.tag !== cur.tag) {
         if (cur.tag === "Called") events.push({ kind: "call", text: `${abbr(r)}: called — ${cur.leader} wins.`, color: C.brass });
+        else if (cur.tag === "Runoff") events.push({ kind: "call", text: `${abbr(r)}: headed for a ${RUNOFF_RACES[r.id].date} runoff — no candidate is on track for a majority.`, color: C.brass });
         else events.push({ kind: "tier", text: `${abbr(r)}: now ${rt.text} (${cur.pct}%).`, color: cur.color });
       }
       // Once called, skip all county-watch and path narration for this race.
@@ -1482,7 +1492,7 @@ function readRace(r) {
   }
   if (!r.left || !r.right || !r.units || !r.units.length) return { kind: "none", fav: r.title, favColor: C.muted, pct: null, tag: r.system || "", frac: 0 };
   const m = compute(r.units); const rt = rateOf(r, m);
-  return { kind: "two", fav: rt.leader.short, favColor: rt.leader.color, pct: rt.pct, tag: rt.text, frac: m.fracIn, pRight: m.winRight, m,
+  return { kind: "two", fav: rt.leader.short, favColor: rt.leader.color, pct: rt.pct, tag: rt.text, runoff: !!rt.runoff, frac: m.fracIn, pRight: m.winRight, m,
     marginTxt: `${(m.margin >= 0 ? r.right : r.left).short} +${Math.abs(m.margin * 100).toFixed(1)}`, favSide: m.margin >= 0 ? "right" : "left" };
 }
 function swingCaption(r, m) {
@@ -1495,6 +1505,7 @@ function headlineFor(r, d) {
   if (d.kind !== "two" && d.kind !== "three") return raceName(r);
   const names = d.kind === "two" ? [r.left.short, r.right.short] : r.cands.map((c) => c.short);
   const other = names.find((n) => n !== d.fav) || "";
+  if (d.runoff) return `${r.right.short} and ${r.left.short} are headed for a ${RUNOFF_RACES[r.id].date} runoff`;
   if (d.tag.startsWith("Called")) return `${d.fav} wins`;
   if (d.frac > 0) return d.tag === "Toss-up" ? `${d.fav} and ${other} are neck and neck as votes come in` : `${d.fav} leads as votes are counted`;
   if (d.tag === "Toss-up") return `${d.fav} and ${other} are nearly even`;
@@ -1559,8 +1570,16 @@ function controlTally(races) {
   const rows = CONTROL_SET.map((c) => {
     const r = races.find((x) => x.id === c.id);
     const d = readRace(r);
-    let side = "R", name = "Sullivan (R)", pct = null, called = false;
-    if (d.kind === "two") {
+    let side = "R", name = "Sullivan (R)", pct = null, called = false, runoff = false;
+    if (d.kind === "two" && d.runoff) {
+      // Headed for a runoff: undecided tonight, so the seat counts by its pre-election forecast.
+      const f = compute(r.units.map((u) => ({ ...u, reported: 0 })));
+      const right = f.margin >= 0;
+      side = right ? (c.indRight ? "I" : "D") : "R";
+      const cand = right ? r.right : r.left;
+      name = `${cand.short} (${right ? (c.indRight ? "I" : "D") : "R"})`;
+      pct = Math.round((right ? f.winRight : 1 - f.winRight) * 100); runoff = true;
+    } else if (d.kind === "two") {
       const right = d.favSide === "right";
       side = right ? (c.indRight ? "I" : "D") : "R";
       const cand = right ? r.right : r.left;
@@ -1569,7 +1588,7 @@ function controlTally(races) {
     }
     if (side === "D") dL++; else if (side === "R") rL++; else iL++;
     if (called) { if (side === "D") dC++; else if (side === "R") rC++; else iC++; }
-    return { ...c, race: r, d, side, name, pct, called, flip: side !== c.holder };
+    return { ...c, race: r, d, side, name, pct, called, runoff, flip: side !== c.holder };
   });
   return { rows, D: D_SAFE_SEATS + dL, R: R_SAFE_SEATS + rL, I: iL, calledD: D_SAFE_SEATS + dC, calledR: R_SAFE_SEATS + rC, calledI: iC };
 }
@@ -1593,8 +1612,8 @@ function RaceTable({ races, onPick, wide, night, grouped = false }) {
           ? <Dial mini pRight={d.pRight} width={wide ? 64 : 52} left={r.left.color} right={r.right.color} />
           : d.kind === "three" ? <div style={{ width: wide ? 64 : 52 }}><ThreeStrip parts={d.parts} height={8} /></div>
           : <span style={{ fontSize: 11, color: C.muted }}>No needle</span>;
-        const fav = d.paused ? "Paused" : d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
-        const favCol = d.paused ? C.muted : d.favColor;
+        const fav = d.paused ? "Paused" : d.runoff ? "Runoff" : d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
+        const favCol = d.paused ? C.muted : d.runoff ? C.text : d.favColor;
         const ratingTxt = d.paused ? "Waiting for official results" : d.kind === "rcv" ? "No night-of call" : r.noNight ? `${d.tag} · forecast only` : d.tag;
         return (
           <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
@@ -2061,7 +2080,7 @@ function SenateControlView({ races, wide, onPick, night }) {
                 <>
                   <button onClick={() => x.race && onPick(x.id)} style={{ ...linkBtn, textDecoration: "none", fontSize: 16 }}>{x.label}</button>
                   <span style={{ fontSize: 14, color: C.muted }}>Held by {x.holder === "D" ? "Dem." : "GOP"}</span>
-                  <span style={{ fontFamily: serif, fontSize: 18, color: sideColor(x.side) }}>{x.name}{isPaused(x.race, night) ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · paused, forecast shown</span> : x.race && x.race.noNight ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · forecast only</span> : null}</span>
+                  <span style={{ fontFamily: serif, fontSize: 18, color: sideColor(x.side) }}>{x.name}{x.runoff ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · headed for a {RUNOFF_RACES[x.id].date} runoff, forecast shown</span> : isPaused(x.race, night) ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · paused, forecast shown</span> : x.race && x.race.noNight ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · forecast only</span> : null}</span>
                   <span style={{ fontSize: 16, fontWeight: 600, color: sideColor(x.side) }}>{x.pct != null ? `${x.pct}%` : "—"}{x.called ? " · Called" : ""}</span>
                   <span>{flip && <span style={{ fontSize: 12, fontWeight: 700, color: PAPER, background: col, padding: "2px 8px" }}>Would flip</span>}</span>
                   <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 13, fontWeight: 600, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
@@ -2070,7 +2089,7 @@ function SenateControlView({ races, wide, onPick, night }) {
                 <>
                   <span style={{ display: "flex", flexDirection: "column" }}>
                     <span style={{ fontSize: 16, fontWeight: 600 }}>{x.label} <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}>held by {x.holder === "D" ? "Dem." : "GOP"}</span></span>
-                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.pct != null ? `${x.pct}%` : ""}{flip ? " · would flip" : ""}{isPaused(x.race, night) ? " · paused" : x.race && x.race.noNight ? " · forecast only" : ""}</span>
+                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.pct != null ? `${x.pct}%` : ""}{flip ? " · would flip" : ""}{x.runoff ? " · runoff, forecast shown" : isPaused(x.race, night) ? " · paused" : x.race && x.race.noNight ? " · forecast only" : ""}</span>
                   </span>
                   <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 12, fontWeight: 600, minHeight: 36, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
                 </>
