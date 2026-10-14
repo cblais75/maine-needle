@@ -12,6 +12,7 @@ import nhBaseline from "../data/nh-baseline.json";
 import ksBaseline from "../data/ks-baseline.json";
 import mnBaseline from "../data/mn-baseline.json";
 import senateCards from "../data/senate-cards.json";
+import { gateResults } from "../scripts/lib/results-gate.mjs";
 
 // Newspaper palette (Update 42): warm paper, black ink, red/blue kept for results only.
 // `ink` is the PAGE color (the name dates from the old dark theme); `text` is the ink.
@@ -681,10 +682,13 @@ export default function MaineDashboard() {
 
   // load live returns now and every 20s; races with real data switch to LIVE automatically.
   // hosted: /api/results (self-updating function). local dev: falls back to /results.json.
+  // START GATE (Update 55): results received before 7 p.m. ET Nov 3 are ignored (states post test
+  // files with fake votes), unless the address has ?night or the payload is a marked test.
   useEffect(() => {
-    const apply = (res) => { resultsRef.current = res; setResults(res); setRaces((prev) => applyAllLive(prev, res)); };
+    const preview = nightPreview();
+    const apply = (raw) => { const res = gateResults(raw, { bypass: preview }); resultsRef.current = res; setResults(res); setRaces((prev) => applyAllLive(prev, res)); };
     const load = () =>
-      fetch(`/api/results?t=${Date.now()}`)
+      fetch(`/api/results?${preview ? "night=1&" : ""}t=${Date.now()}`)
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .catch(() => fetch(`/results.json?t=${Date.now()}`).then((r) => r.json()))
         .then(apply)
@@ -1413,9 +1417,12 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
 const ELECTION_NIGHT_START = Date.UTC(2026, 10, 4, 0, 0);
 const PAUSE_STATES = ["ME", "NH"]; // no official results on election night; finish from official files
 const AP_URL = "https://apnews.com/projects/elections-2026/";
+// ?night in the address previews election night any time (and lets results through the start gate).
+function nightPreview() {
+  try { return new URLSearchParams(window.location.search).has("night"); } catch { return false; /* no window */ }
+}
 function nightStarted() {
-  try { if (new URLSearchParams(window.location.search).has("night")) return true; } catch { /* no window */ }
-  return Date.now() >= ELECTION_NIGHT_START;
+  return nightPreview() || Date.now() >= ELECTION_NIGHT_START;
 }
 const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn);
 const PAUSE_TEXT = {

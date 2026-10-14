@@ -21,6 +21,8 @@ import url from "node:url";
 import * as XLSX from "xlsx";
 import { aggregate } from "./lib/aggregate.mjs";
 import { readFeed } from "./lib/read-feed.mjs";
+import { gateResults, RESULTS_START } from "./lib/results-gate.mjs";
+import { buildPayload } from "../api/results.js";
 
 const ROOT = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "public", "results.json");
@@ -214,10 +216,37 @@ function writeSnapshot(frac) {
   fs.writeFileSync(OUT, JSON.stringify({
     updated: new Date().toISOString(),
     source: `stress-test (seed ${seed}, ${(frac * 100).toFixed(0)}% in)`,
+    test: true, // a marked test: shown even before the results start gate (Update 55)
     races,
   }, null, 2));
   console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas governor race)"));
 }
+
+// START GATE CHECK (Update 55): a results file full of fake votes must not go live before
+// 7 p.m. ET Nov 3, through either the API or the app, and must go live after it.
+async function gateCheck() {
+  const counts = snapshotCounts(0.7);
+  const fake = night.find((s) => s.state === "MN");
+  const fetchStateFn = async (setting, state) => aggregate(readFeed(asFile(fake, counts.MN), state), state);
+  const env = { MN_RESULTS_URL: "https://example.invalid/allracesbycounty.txt" };
+  const before = RESULTS_START - 3600e3, after = RESULTS_START + 60e3;
+  const live = (p) => Object.keys((p && p.races) || {}).length > 0;
+  const fails = [];
+  const apiBefore = await buildPayload({ env, now: before, fetchStateFn });
+  const apiAfter = await buildPayload({ env, now: after, fetchStateFn });
+  const apiPreview = await buildPayload({ env, now: before, bypass: true, fetchStateFn });
+  if (live(apiBefore) || apiBefore.source !== "waiting") fails.push("API showed results before the start time");
+  if (!live(apiAfter)) fails.push("API showed no results after the start time");
+  if (!live(apiPreview)) fails.push("API ?night preview showed no results");
+  const leaked = { ...apiAfter }; // a payload that somehow reached the app early
+  if (live(gateResults(leaked, { now: before }))) fails.push("app accepted results before the start time");
+  if (!live(gateResults(leaked, { now: after }))) fails.push("app rejected results after the start time");
+  if (!live(gateResults(leaked, { now: before, bypass: true }))) fails.push("app ?night preview rejected results");
+  if (!live(gateResults({ ...leaked, test: true }, { now: before }))) fails.push("app rejected a marked test payload");
+  console.log(fails.length ? "gate check FAILED:\n  " + fails.join("\n  ") : "gate check passed: fake votes stay hidden before 7 p.m. ET Nov 3 (API and app), go live after it, and ?night/test payloads still show");
+  if (fails.length) process.exitCode = 1;
+}
+await gateCheck();
 
 if (has("--auto")) {
   const minutes = val("--minutes", 30);

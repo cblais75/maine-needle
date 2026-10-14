@@ -21,8 +21,13 @@
 // everything and is served as-is.
 // Any state without an env var is skipped. Any state that errors or times out is skipped
 // (listed in `errors`) without taking down the rest.
+// START GATE (Update 55): before 7 p.m. ET Nov 3 (00:00 UTC Nov 4) this returns no races at all,
+// because states post test files with fake votes at their election-night addresses. So the
+// state links above can be set ahead of time. /api/results?night=1 (sent by the app when the
+// page address has ?night) and TEST_RESULTS_URL skip the gate for testing.
 import { aggregate } from "../scripts/lib/aggregate.mjs";
 import { fetchRows } from "../scripts/lib/fetch-rows.mjs";
+import { resultsOpen, waitingPayload } from "../scripts/lib/results-gate.mjs";
 
 const SOURCES = [
   { state: "ME", env: "MAINE_RESULTS_URL" },
@@ -46,30 +51,16 @@ async function fetchState(setting, state) {
   return out;
 }
 
-export default async function handler(req, res) {
-  res.setHeader("Cache-Control", "s-maxage=90, stale-while-revalidate=240");
-
-  const testUrl = process.env.TEST_RESULTS_URL;
-  if (testUrl) {
-    try {
-      const r = await fetch(testUrl);
-      if (!r.ok) throw new Error(`test source ${r.status}`);
-      res.status(200).json(await r.json());
-    } catch (e) {
-      res.status(200).json({ updated: null, source: "error", error: String(e), races: {} });
-    }
-    return;
-  }
-
-  const active = SOURCES.filter((s) => process.env[s.env]);
-  if (!active.length) {
-    res.status(200).json({ updated: null, source: "simulation", races: {} });
-    return;
-  }
+// The results payload for a given moment. now / bypass / fetchStateFn are injectable so
+// scripts/test-night.mjs can prove the start gate works without touching any state site.
+export async function buildPayload({ env = process.env, now = Date.now(), bypass = false, fetchStateFn = fetchState } = {}) {
+  const active = SOURCES.filter((s) => env[s.env]);
+  if (!active.length) return { updated: null, source: "simulation", races: {} };
+  if (!bypass && !resultsOpen(now)) return waitingPayload(); // don't even download test files early
   const races = {}, sources = [], errors = [], diag = {};
   await Promise.all(active.map(async (s) => {
     try {
-      const out = await fetchState(process.env[s.env], s.state);
+      const out = await fetchStateFn(env[s.env], s.state);
       Object.assign(races, out.races || {});
       if (Object.keys(out.races || {}).length) sources.push(s.state);
       diag[s.state] = out._diag;
@@ -78,11 +69,31 @@ export default async function handler(req, res) {
       errors.push(`${s.state}: ${String(e)}`);
     }
   }));
-  res.status(200).json({
-    updated: new Date().toISOString(),
+  return {
+    updated: new Date(now).toISOString(),
     source: sources.length ? `live (${sources.join(", ")})` : errors.every((e) => /no results files posted yet/.test(e)) ? "waiting" : "error",
+    ...(bypass && !resultsOpen(now) ? { preview: true } : {}),
     ...(errors.length ? { errors } : {}),
     diag,
     races,
-  });
+  };
+}
+
+export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "s-maxage=90, stale-while-revalidate=240");
+
+  const testUrl = process.env.TEST_RESULTS_URL;
+  if (testUrl) {
+    try {
+      const r = await fetch(testUrl);
+      if (!r.ok) throw new Error(`test source ${r.status}`);
+      res.status(200).json({ ...(await r.json()), test: true }); // a stress test: always shown
+    } catch (e) {
+      res.status(200).json({ updated: null, source: "error", error: String(e), races: {} });
+    }
+    return;
+  }
+  const q = (req && req.query) || {};
+  const bypass = q.night != null; // the ?night preview
+  res.status(200).json(await buildPayload({ bypass }));
 }
