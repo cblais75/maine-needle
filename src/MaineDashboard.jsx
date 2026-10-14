@@ -811,7 +811,7 @@ export default function MaineDashboard() {
   ) : null;
   const statusLine = (<>{simBanner}
     <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
-      {anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
+      {results && results.simulated ? "Simulated · These needles are running on practice numbers, not real votes." : anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
       {anyPaused ? " Maine and New Hampshire are paused until official results are posted." : ""}
     </p></>
   );
