@@ -1,6 +1,6 @@
 {
   "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
-  "asOf": "2026-10-12",
+  "asOf": "2026-10-14",
   "notUp": {
     "D": 32,
     "I": 2,
@@ -36,7 +36,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -102,7 +102,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -198,7 +198,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -242,7 +242,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -291,11 +291,18 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
       "polls": [
+        {
+          "pollster": "Stetson University",
+          "date": "2026-10-09",
+          "dem": 41,
+          "rep": 52,
+          "rating": 0.8
+        },
         {
           "pollster": "St. Pete Polls",
           "date": "2026-10-07",
@@ -335,18 +342,18 @@
           "note": "Commissioned by Freedom Project USA"
         },
         {
-          "pollster": "InsiderAdvantage",
-          "date": "2026-09-21",
-          "dem": 42,
-          "rep": 49,
-          "rating": 0.6
-        },
-        {
           "pollster": "Stetson University",
           "date": "2026-09-21",
           "dem": 40,
           "rep": 51,
           "rating": 0.8
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-09-21",
+          "dem": 42,
+          "rep": 49,
+          "rating": 0.6
         },
         {
           "pollster": "St. Pete Polls",
@@ -421,7 +428,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -525,7 +532,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -584,7 +591,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -639,7 +646,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -712,7 +719,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -772,11 +779,11 @@
       "note": "",
       "ratings": {
         "cook": "Solid R",
-        "sabato": "Safe R",
+        "sabato": "Likely R",
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -850,7 +857,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1012,7 +1019,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1056,11 +1063,19 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
       "polls": [
+        {
+          "pollster": "Research & Polling Inc.",
+          "date": "2026-10-09",
+          "dem": 53,
+          "rep": 37,
+          "rating": 0.8,
+          "note": "For the Albuquerque Journal"
+        },
         {
           "pollster": "SurveyUSA",
           "date": "2026-09-30",
@@ -1132,7 +1147,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1186,7 +1201,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1235,11 +1250,19 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
       "polls": [
+        {
+          "pollster": "Emerson College",
+          "date": "2026-10-11",
+          "dem": 59,
+          "rep": 25,
+          "rating": 0.85,
+          "note": "For WPRI-TV"
+        },
         {
           "pollster": "UNH Survey Center",
           "date": "2026-09-21",
@@ -1298,7 +1321,7 @@
         "inside": "Likely R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1386,7 +1409,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1474,7 +1497,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1527,7 +1550,7 @@
         "inside": "Solid D",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1576,7 +1599,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },
@@ -1621,7 +1644,7 @@
         "inside": "Solid R",
         "asOf": {
           "cook": "2026-10-06",
-          "sabato": "2026-10-06",
+          "sabato": "2026-10-14",
           "inside": "2026-10-01"
         }
       },

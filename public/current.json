@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-12",
+  "updated": "2026-10-15",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower. Each poll is first corrected for its pollster's measured lean (house effect)."
@@ -36,12 +36,12 @@
       "sponsor": null
     },
     "Quantus Insights": {
-      "lean": -1.7,
-      "polls": 10,
+      "lean": -1.8,
+      "polls": 11,
       "sponsor": null
     },
     "AARP (Fabrizio/Impact)": {
-      "lean": 0.7,
+      "lean": 0.6,
       "polls": 8,
       "sponsor": null
     },
@@ -66,13 +66,13 @@
       "sponsor": null
     },
     "CBS News/YouGov": {
-      "lean": -0.3,
+      "lean": -0.4,
       "polls": 1,
       "sponsor": null
     },
     "Marist Poll": {
-      "lean": 3.2,
-      "polls": 6,
+      "lean": 2.3,
+      "polls": 8,
       "sponsor": null
     },
     "Maine People's Resource Center (D)": {
@@ -86,13 +86,18 @@
       "sponsor": null
     },
     "Rasmussen Reports": {
-      "lean": 0.7,
+      "lean": 0.6,
       "polls": 11,
       "sponsor": null
     },
     "Trafalgar Group": {
       "lean": -1,
       "polls": 13,
+      "sponsor": null
+    },
+    "Suffolk University": {
+      "lean": 0.6,
+      "polls": 5,
       "sponsor": null
     },
     "Impact Research (D)": {
@@ -106,7 +111,7 @@
       "sponsor": "D"
     },
     "Carolina Journal/Civitas (R)": {
-      "lean": 1.2,
+      "lean": 1.1,
       "polls": 4,
       "sponsor": "R"
     },
@@ -121,13 +126,13 @@
       "sponsor": "D"
     },
     "Elon University": {
-      "lean": 1.3,
+      "lean": 1.2,
       "polls": 2,
       "sponsor": null
     },
     "Change Research (Carolina Forward)": {
-      "lean": 1.3,
-      "polls": 1,
+      "lean": 1.2,
+      "polls": 2,
       "sponsor": "D"
     },
     "High Point University Poll": {
@@ -136,23 +141,28 @@
       "sponsor": null
     },
     "East Carolina University": {
-      "lean": -0.6,
+      "lean": -0.7,
       "polls": 2,
       "sponsor": null
     },
     "Opinion Diagnostics (Common Cause NC)": {
-      "lean": 0.5,
+      "lean": 0.4,
       "polls": 1,
       "sponsor": null
     },
     "Big Data Poll": {
-      "lean": 1.2,
+      "lean": 1.1,
       "polls": 7,
       "sponsor": null
     },
     "YouGov": {
       "lean": 1.3,
-      "polls": 9,
+      "polls": 10,
+      "sponsor": null
+    },
+    "SurveyUSA": {
+      "lean": 1.4,
+      "polls": 4,
       "sponsor": null
     },
     "On Message Inc. (R)": {
@@ -165,19 +175,14 @@
       "polls": 2,
       "sponsor": null
     },
-    "Suffolk University": {
-      "lean": 0.7,
-      "polls": 4,
-      "sponsor": null
-    },
     "Texas Public Opinion Research": {
       "lean": 0.9,
       "polls": 8,
       "sponsor": "D"
     },
     "UT/Texas Politics Project": {
-      "lean": -0.8,
-      "polls": 5,
+      "lean": -0.2,
+      "polls": 7,
       "sponsor": null
     },
     "Texas Southern University": {
@@ -206,12 +211,12 @@
       "sponsor": null
     },
     "Recon MR": {
-      "lean": 2.2,
+      "lean": 2.1,
       "polls": 2,
       "sponsor": null
     },
     "Guidant Polling & Strategy (Public First Action)": {
-      "lean": 0.6,
+      "lean": 0.5,
       "polls": 3,
       "sponsor": null
     },
@@ -224,6 +229,11 @@
       "lean": -2.2,
       "polls": 2,
       "sponsor": "R"
+    },
+    "ReconMR/Siena": {
+      "lean": 0.6,
+      "polls": 2,
+      "sponsor": null
     },
     "Public Policy Polling (Lone Star Rising PAC)": {
       "lean": 2,
@@ -241,8 +251,8 @@
       "sponsor": "R"
     },
     "GBAO (Hinojosa campaign)": {
-      "lean": 2.2,
-      "polls": 1,
+      "lean": 2.6,
+      "polls": 2,
       "sponsor": "D"
     },
     "Overton Insights (R)": {
@@ -266,17 +276,12 @@
       "sponsor": null
     },
     "GBAO (Working Class Majority PAC)": {
-      "lean": 1.9,
+      "lean": 2,
       "polls": 1,
       "sponsor": "D"
     },
-    "SurveyUSA": {
-      "lean": 0.8,
-      "polls": 3,
-      "sponsor": null
-    },
     "National Public Affairs (R)": {
-      "lean": -2,
+      "lean": -1.9,
       "polls": 1,
       "sponsor": "R"
     },
@@ -306,12 +311,12 @@
       "sponsor": "R"
     },
     "Mitchell Research & Communications": {
-      "lean": 0.5,
+      "lean": 0.4,
       "polls": 1,
       "sponsor": null
     },
     "Z to A Research (D)": {
-      "lean": 2.7,
+      "lean": 2.6,
       "polls": 1,
       "sponsor": "D"
     },
@@ -321,7 +326,7 @@
       "sponsor": "D"
     },
     "Cygnal/Beacon Research (Michigan Enjoyer)": {
-      "lean": 0.7,
+      "lean": 0.6,
       "polls": 1,
       "sponsor": null
     },
@@ -361,21 +366,32 @@
       "sponsor": "D"
     },
     "TIPP Insights (R)": {
-      "lean": -1.6,
+      "lean": -1.5,
       "polls": 1,
       "sponsor": "R"
     },
     "Deep Root Analytics (R)": {
-      "lean": -0.9,
+      "lean": -0.8,
       "polls": 1,
       "sponsor": "R"
     }
   },
   "senate": {
     "margin": 2,
-    "nPolls": 19,
+    "nPolls": 20,
     "fallback": false,
     "polls": [
+      {
+        "pollster": "Suffolk University",
+        "date": "2026-10-11",
+        "rating": 0.8,
+        "dem": 49,
+        "rep": 47,
+        "ind": null,
+        "house": 0.6,
+        "adjMargin": 1.4,
+        "weightPct": 10
+      },
       {
         "pollster": "Rasmussen Reports",
         "date": "2026-10-08",
@@ -383,8 +399,8 @@
         "dem": 49,
         "rep": 47,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 1.3,
+        "house": 0.6,
+        "adjMargin": 1.4,
         "weightPct": 6
       },
       {
@@ -396,7 +412,7 @@
         "ind": null,
         "house": 0.6,
         "adjMargin": 3.4,
-        "weightPct": 11
+        "weightPct": 9
       },
       {
         "pollster": "Marist Poll",
@@ -405,9 +421,9 @@
         "dem": 51,
         "rep": 47,
         "ind": null,
-        "house": 3.2,
-        "adjMargin": 0.8,
-        "weightPct": 10
+        "house": 2.3,
+        "adjMargin": 1.7,
+        "weightPct": 9
       },
       {
         "pollster": "Wedgewood Polls",
@@ -418,7 +434,7 @@
         "ind": null,
         "house": 0,
         "adjMargin": 4,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "CBS News/YouGov",
@@ -427,9 +443,9 @@
         "dem": 50,
         "rep": 50,
         "ind": null,
-        "house": -0.3,
-        "adjMargin": 0.3,
-        "weightPct": 9
+        "house": -0.4,
+        "adjMargin": 0.4,
+        "weightPct": 8
       },
       {
         "pollster": "Trafalgar Group",
@@ -462,7 +478,7 @@
         "ind": null,
         "house": 1.9,
         "adjMargin": 0.9,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "InsiderAdvantage",
@@ -473,7 +489,7 @@
         "ind": null,
         "house": -0.4,
         "adjMargin": 0.4,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -482,8 +498,8 @@
         "dem": 50,
         "rep": 47,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 2.3,
+        "house": 0.6,
+        "adjMargin": 2.4,
         "weightPct": 6
       },
       {
@@ -495,7 +511,7 @@
         "ind": null,
         "house": -0.7,
         "adjMargin": -2.3,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "UNH Survey Center",
@@ -506,7 +522,7 @@
         "ind": null,
         "house": -0.4,
         "adjMargin": 4.4,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Quantus Insights",
@@ -515,9 +531,9 @@
         "dem": 46.4,
         "rep": 47.1,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 1,
-        "weightPct": 4
+        "house": -1.8,
+        "adjMargin": 1.1,
+        "weightPct": 3
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -528,7 +544,7 @@
         "ind": null,
         "house": -0.1,
         "adjMargin": 5.1,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "CNN/SSRS",
@@ -550,7 +566,7 @@
         "ind": null,
         "house": 1.9,
         "adjMargin": 7.1,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -561,7 +577,7 @@
         "ind": null,
         "house": 1,
         "adjMargin": 1,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "Hart Research (Senate Majority PAC)",
@@ -590,10 +606,21 @@
   "governor": {
     "bennett": 7,
     "margin": 11,
-    "nPolls": 8,
+    "nPolls": 9,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Suffolk University",
+        "date": "2026-10-11",
+        "rating": 0.8,
+        "dem": 49,
+        "rep": 38,
+        "ind": 8,
+        "house": 0.6,
+        "adjMargin": 10.4,
+        "weightPct": 20
+      },
       {
         "pollster": "Washington Post/Schar School",
         "date": "2026-10-05",
@@ -603,7 +630,7 @@
         "ind": 11,
         "house": 0.6,
         "adjMargin": 12.4,
-        "weightPct": 22
+        "weightPct": 18
       },
       {
         "pollster": "Marist Poll",
@@ -612,9 +639,9 @@
         "dem": 52,
         "rep": 40,
         "ind": 6,
-        "house": 3.2,
-        "adjMargin": 8.8,
-        "weightPct": 22
+        "house": 2.3,
+        "adjMargin": 9.7,
+        "weightPct": 17
       },
       {
         "pollster": "co/efficient",
@@ -625,7 +652,7 @@
         "ind": 6,
         "house": -3.2,
         "adjMargin": 12.2,
-        "weightPct": 12
+        "weightPct": 9
       },
       {
         "pollster": "NYT/PPH/Siena",
@@ -636,7 +663,7 @@
         "ind": 8,
         "house": -0.7,
         "adjMargin": 13.7,
-        "weightPct": 15
+        "weightPct": 12
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -645,9 +672,9 @@
         "dem": 52,
         "rep": 39,
         "ind": 6,
-        "house": 0.7,
-        "adjMargin": 12.3,
-        "weightPct": 14
+        "house": 0.6,
+        "adjMargin": 12.4,
+        "weightPct": 11
       },
       {
         "pollster": "UNH Survey Center",
@@ -658,7 +685,7 @@
         "ind": 5,
         "house": -0.4,
         "adjMargin": 8.4,
-        "weightPct": 13
+        "weightPct": 10
       },
       {
         "pollster": "UNH Survey Center",
@@ -669,7 +696,7 @@
         "ind": 6,
         "house": -0.4,
         "adjMargin": 14.4,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "NYT/PPH/Siena",
@@ -746,10 +773,21 @@
   },
   "nc_sen": {
     "margin": 9,
-    "nPolls": 25,
+    "nPolls": 27,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "SurveyUSA",
+        "date": "2026-10-11",
+        "rating": 0.8,
+        "dem": 54,
+        "rep": 40,
+        "ind": null,
+        "house": 1.4,
+        "adjMargin": 12.6,
+        "weightPct": 12
+      },
       {
         "pollster": "Trafalgar Group",
         "date": "2026-10-10",
@@ -759,7 +797,18 @@
         "ind": null,
         "house": -1,
         "adjMargin": 9,
-        "weightPct": 10
+        "weightPct": 9
+      },
+      {
+        "pollster": "Change Research (Carolina Forward)",
+        "date": "2026-10-07",
+        "rating": 0.5,
+        "dem": 50,
+        "rep": 40,
+        "ind": null,
+        "house": 1.2,
+        "adjMargin": 8.8,
+        "weightPct": 6
       },
       {
         "pollster": "East Carolina University",
@@ -768,9 +817,9 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 7.6,
-        "weightPct": 11
+        "house": -0.7,
+        "adjMargin": 7.7,
+        "weightPct": 9
       },
       {
         "pollster": "Big Data Poll",
@@ -779,9 +828,9 @@
         "dem": 47,
         "rep": 35,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 10.8,
-        "weightPct": 7
+        "house": 1.1,
+        "adjMargin": 10.9,
+        "weightPct": 6
       },
       {
         "pollster": "Rasmussen Reports",
@@ -790,9 +839,9 @@
         "dem": 48,
         "rep": 41,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 6.3,
-        "weightPct": 5
+        "house": 0.6,
+        "adjMargin": 6.4,
+        "weightPct": 4
       },
       {
         "pollster": "Quantus Insights",
@@ -801,9 +850,9 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 6.7,
-        "weightPct": 6
+        "house": -1.8,
+        "adjMargin": 6.8,
+        "weightPct": 5
       },
       {
         "pollster": "Opinion Diagnostics (Common Cause NC)",
@@ -812,9 +861,9 @@
         "dem": 51,
         "rep": 41,
         "ind": null,
-        "house": 0.5,
-        "adjMargin": 9.5,
-        "weightPct": 5
+        "house": 0.4,
+        "adjMargin": 9.6,
+        "weightPct": 4
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -823,9 +872,9 @@
         "dem": 53,
         "rep": 42,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 10.3,
-        "weightPct": 8
+        "house": 0.6,
+        "adjMargin": 10.4,
+        "weightPct": 6
       },
       {
         "pollster": "YouGov",
@@ -836,7 +885,7 @@
         "ind": null,
         "house": 1.3,
         "adjMargin": 11.7,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "InsiderAdvantage",
@@ -847,7 +896,7 @@
         "ind": null,
         "house": -0.4,
         "adjMargin": 5.4,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "High Point University Poll",
@@ -858,7 +907,7 @@
         "ind": null,
         "house": -0.8,
         "adjMargin": 8.8,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Carolina Journal/Civitas (R)",
@@ -867,9 +916,9 @@
         "dem": 49.2,
         "rep": 34.1,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 13.9,
-        "weightPct": 4
+        "house": 1.1,
+        "adjMargin": 14,
+        "weightPct": 3
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -880,7 +929,7 @@
         "ind": null,
         "house": 2,
         "adjMargin": 10,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "Trafalgar Group",
@@ -891,7 +940,7 @@
         "ind": null,
         "house": -1,
         "adjMargin": 7,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "East Carolina University",
@@ -900,9 +949,9 @@
         "dem": 46,
         "rep": 39,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 7.6,
-        "weightPct": 4
+        "house": -0.7,
+        "adjMargin": 7.7,
+        "weightPct": 3
       },
       {
         "pollster": "Elon University",
@@ -911,9 +960,9 @@
         "dem": 49,
         "rep": 38,
         "ind": null,
-        "house": 1.3,
-        "adjMargin": 9.7,
-        "weightPct": 4
+        "house": 1.2,
+        "adjMargin": 9.8,
+        "weightPct": 3
       },
       {
         "pollster": "High Point University Poll",
@@ -933,8 +982,8 @@
         "dem": 51.5,
         "rep": 39,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 11.3,
+        "house": 1.1,
+        "adjMargin": 11.4,
         "weightPct": 1
       },
       {
@@ -944,8 +993,8 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "house": 1.3,
-        "adjMargin": 5.7,
+        "house": 1.2,
+        "adjMargin": 5.8,
         "weightPct": 1
       },
       {
@@ -955,8 +1004,8 @@
         "dem": 53,
         "rep": 42,
         "ind": null,
-        "house": 1.3,
-        "adjMargin": 9.7,
+        "house": 1.2,
+        "adjMargin": 9.8,
         "weightPct": 1
       },
       {
@@ -990,7 +1039,7 @@
         "ind": null,
         "house": -0.7,
         "adjMargin": 7.7,
-        "weightPct": 1
+        "weightPct": 0
       },
       {
         "pollster": "Catawba College/YouGov",
@@ -1010,8 +1059,8 @@
         "dem": 49.8,
         "rep": 38.7,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 9.9,
+        "house": 1.1,
+        "adjMargin": 10,
         "weightPct": 0
       },
       {
@@ -1021,8 +1070,8 @@
         "dem": 48.9,
         "rep": 41.1,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 6.6,
+        "house": 1.1,
+        "adjMargin": 6.7,
         "weightPct": 0
       }
     ]
@@ -1073,8 +1122,8 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 2.3,
+        "house": 0.6,
+        "adjMargin": 2.4,
         "weightPct": 9
       },
       {
@@ -1106,8 +1155,8 @@
         "dem": 51,
         "rep": 43,
         "ind": null,
-        "house": 3.2,
-        "adjMargin": 4.8,
+        "house": 2.3,
+        "adjMargin": 5.7,
         "weightPct": 9
       },
       {
@@ -1117,8 +1166,8 @@
         "dem": 46,
         "rep": 41,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 3.8,
+        "house": 1.1,
+        "adjMargin": 3.9,
         "weightPct": 6
       },
       {
@@ -1128,8 +1177,8 @@
         "dem": 46,
         "rep": 43,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 2.3,
+        "house": 0.6,
+        "adjMargin": 2.4,
         "weightPct": 5
       },
       {
@@ -1139,8 +1188,8 @@
         "dem": 46,
         "rep": 45,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 2.7,
+        "house": -1.8,
+        "adjMargin": 2.8,
         "weightPct": 6
       },
       {
@@ -1216,8 +1265,8 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 2.3,
+        "house": 0.6,
+        "adjMargin": 2.4,
         "weightPct": 0
       },
       {
@@ -1249,8 +1298,8 @@
         "dem": 44,
         "rep": 46,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": -0.3,
+        "house": -1.8,
+        "adjMargin": -0.2,
         "weightPct": 0
       },
       {
@@ -1268,10 +1317,32 @@
   },
   "tx_sen": {
     "margin": 3,
-    "nPolls": 27,
+    "nPolls": 31,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Marist Poll",
+        "date": "2026-10-11",
+        "rating": 0.9,
+        "dem": 47,
+        "rep": 45,
+        "ind": null,
+        "house": 2.3,
+        "adjMargin": -0.3,
+        "weightPct": 9
+      },
+      {
+        "pollster": "Quantus Insights",
+        "date": "2026-10-11",
+        "rating": 0.6,
+        "dem": 47,
+        "rep": 47,
+        "ind": null,
+        "house": -1.8,
+        "adjMargin": 1.8,
+        "weightPct": 6
+      },
       {
         "pollster": "Trafalgar Group",
         "date": "2026-10-08",
@@ -1281,6 +1352,17 @@
         "ind": null,
         "house": -1,
         "adjMargin": 4,
+        "weightPct": 5
+      },
+      {
+        "pollster": "ReconMR/Siena",
+        "date": "2026-10-08",
+        "rating": 0.8,
+        "dem": 48,
+        "rep": 44,
+        "ind": null,
+        "house": 0.6,
+        "adjMargin": 3.4,
         "weightPct": 7
       },
       {
@@ -1292,7 +1374,18 @@
         "ind": null,
         "house": 1.3,
         "adjMargin": 4.7,
-        "weightPct": 9
+        "weightPct": 6
+      },
+      {
+        "pollster": "UT/Texas Politics Project",
+        "date": "2026-10-05",
+        "rating": 0.85,
+        "dem": 50,
+        "rep": 47,
+        "ind": null,
+        "house": -0.2,
+        "adjMargin": 3.2,
+        "weightPct": 7
       },
       {
         "pollster": "NYT/Siena",
@@ -1303,7 +1396,7 @@
         "ind": null,
         "house": -0.7,
         "adjMargin": 6.7,
-        "weightPct": 9
+        "weightPct": 7
       },
       {
         "pollster": "Rasmussen Reports",
@@ -1312,9 +1405,9 @@
         "dem": 46,
         "rep": 45,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 0.3,
-        "weightPct": 5
+        "house": 0.6,
+        "adjMargin": 0.4,
+        "weightPct": 3
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -1325,7 +1418,7 @@
         "ind": null,
         "house": 1,
         "adjMargin": 1,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -1336,7 +1429,7 @@
         "ind": null,
         "house": -0.1,
         "adjMargin": 0.1,
-        "weightPct": 7
+        "weightPct": 5
       },
       {
         "pollster": "Guidant Polling & Strategy (Public First Action)",
@@ -1345,9 +1438,9 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": 0.6,
-        "adjMargin": 2.4,
-        "weightPct": 4
+        "house": 0.5,
+        "adjMargin": 2.5,
+        "weightPct": 3
       },
       {
         "pollster": "Pulse Decision Science (R)",
@@ -1358,7 +1451,7 @@
         "ind": null,
         "house": -2.8,
         "adjMargin": -0.2,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Big Data Poll",
@@ -1367,9 +1460,9 @@
         "dem": 43.6,
         "rep": 39.3,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 3.1,
-        "weightPct": 5
+        "house": 1.1,
+        "adjMargin": 3.2,
+        "weightPct": 4
       },
       {
         "pollster": "Stratus Intelligence (R)",
@@ -1380,7 +1473,7 @@
         "ind": null,
         "house": -2.2,
         "adjMargin": 2.2,
-        "weightPct": 5
+        "weightPct": 3
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -1391,7 +1484,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": 4.1,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Marist Poll",
@@ -1400,9 +1493,9 @@
         "dem": 50,
         "rep": 44,
         "ind": null,
-        "house": 3.2,
-        "adjMargin": 2.8,
-        "weightPct": 6
+        "house": 2.3,
+        "adjMargin": 3.7,
+        "weightPct": 4
       },
       {
         "pollster": "Texas Southern University",
@@ -1413,7 +1506,7 @@
         "ind": null,
         "house": -0.8,
         "adjMargin": 1.8,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Emerson College",
@@ -1424,7 +1517,7 @@
         "ind": null,
         "house": -1.5,
         "adjMargin": 2.5,
-        "weightPct": 5
+        "weightPct": 3
       },
       {
         "pollster": "Recon MR",
@@ -1433,9 +1526,9 @@
         "dem": 49,
         "rep": 43,
         "ind": null,
-        "house": 2.2,
-        "adjMargin": 3.8,
-        "weightPct": 4
+        "house": 2.1,
+        "adjMargin": 3.9,
+        "weightPct": 3
       },
       {
         "pollster": "Televisa/Univision",
@@ -1446,7 +1539,7 @@
         "ind": null,
         "house": 1.1,
         "adjMargin": 3.9,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -1455,9 +1548,9 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 3.3,
-        "weightPct": 3
+        "house": 0.6,
+        "adjMargin": 3.4,
+        "weightPct": 2
       },
       {
         "pollster": "UT/Texas Politics Project",
@@ -1466,9 +1559,9 @@
         "dem": 42,
         "rep": 39,
         "ind": null,
-        "house": -0.8,
-        "adjMargin": 3.8,
-        "weightPct": 2
+        "house": -0.2,
+        "adjMargin": 3.2,
+        "weightPct": 1
       },
       {
         "pollster": "Emerson College",
@@ -1490,7 +1583,7 @@
         "ind": null,
         "house": 1.8,
         "adjMargin": 1.2,
-        "weightPct": 1
+        "weightPct": 0
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -1554,8 +1647,8 @@
         "dem": 42,
         "rep": 43,
         "ind": null,
-        "house": -0.8,
-        "adjMargin": -0.2,
+        "house": -0.2,
+        "adjMargin": -0.8,
         "weightPct": 0
       },
       {
@@ -1573,10 +1666,43 @@
   },
   "tx_gov": {
     "margin": -2,
-    "nPolls": 37,
+    "nPolls": 41,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "Marist Poll",
+        "date": "2026-10-11",
+        "rating": 0.9,
+        "dem": 45,
+        "rep": 49,
+        "ind": null,
+        "house": 2.3,
+        "adjMargin": -6.3,
+        "weightPct": 9
+      },
+      {
+        "pollster": "ReconMR/Siena",
+        "date": "2026-10-08",
+        "rating": 0.8,
+        "dem": 47,
+        "rep": 48,
+        "ind": null,
+        "house": 0.6,
+        "adjMargin": -1.6,
+        "weightPct": 7
+      },
+      {
+        "pollster": "GBAO (Hinojosa campaign)",
+        "date": "2026-10-08",
+        "rating": 0.5,
+        "dem": 47,
+        "rep": 45,
+        "ind": null,
+        "house": 2.6,
+        "adjMargin": -0.6,
+        "weightPct": 5
+      },
       {
         "pollster": "YouGov",
         "date": "2026-10-05",
@@ -1586,7 +1712,18 @@
         "ind": null,
         "house": 1.3,
         "adjMargin": -0.3,
-        "weightPct": 9
+        "weightPct": 7
+      },
+      {
+        "pollster": "UT/Texas Politics Project",
+        "date": "2026-10-05",
+        "rating": 0.85,
+        "dem": 49,
+        "rep": 48,
+        "ind": null,
+        "house": -0.2,
+        "adjMargin": 1.2,
+        "weightPct": 7
       },
       {
         "pollster": "NYT/Siena",
@@ -1597,7 +1734,7 @@
         "ind": null,
         "house": -0.7,
         "adjMargin": 3.7,
-        "weightPct": 10
+        "weightPct": 7
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -1608,7 +1745,7 @@
         "ind": null,
         "house": 1,
         "adjMargin": -6,
-        "weightPct": 8
+        "weightPct": 6
       },
       {
         "pollster": "UMass Lowell/YouGov",
@@ -1619,7 +1756,7 @@
         "ind": null,
         "house": -0.1,
         "adjMargin": -3.9,
-        "weightPct": 7
+        "weightPct": 5
       },
       {
         "pollster": "Guidant Polling & Strategy (Public First Action)",
@@ -1628,9 +1765,9 @@
         "dem": 44,
         "rep": 46,
         "ind": null,
-        "house": 0.6,
-        "adjMargin": -2.6,
-        "weightPct": 5
+        "house": 0.5,
+        "adjMargin": -2.5,
+        "weightPct": 3
       },
       {
         "pollster": "Big Data Poll",
@@ -1639,9 +1776,9 @@
         "dem": 44,
         "rep": 47,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": -4.2,
-        "weightPct": 5
+        "house": 1.1,
+        "adjMargin": -4.1,
+        "weightPct": 4
       },
       {
         "pollster": "Stratus Intelligence (R)",
@@ -1652,7 +1789,7 @@
         "ind": null,
         "house": -2.2,
         "adjMargin": -2.8,
-        "weightPct": 5
+        "weightPct": 3
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -1663,7 +1800,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": -4.9,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Marist Poll",
@@ -1672,9 +1809,9 @@
         "dem": 49,
         "rep": 46,
         "ind": null,
-        "house": 3.2,
-        "adjMargin": -0.2,
-        "weightPct": 6
+        "house": 2.3,
+        "adjMargin": 0.7,
+        "weightPct": 5
       },
       {
         "pollster": "Texas Southern University",
@@ -1685,7 +1822,7 @@
         "ind": null,
         "house": -0.8,
         "adjMargin": -3.2,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Emerson College",
@@ -1696,7 +1833,7 @@
         "ind": null,
         "house": -1.5,
         "adjMargin": -1.5,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "SoCal Strategies (R)",
@@ -1707,7 +1844,7 @@
         "ind": null,
         "house": -3.6,
         "adjMargin": -4.4,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Recon MR",
@@ -1716,9 +1853,9 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "house": 2.2,
-        "adjMargin": 1.8,
-        "weightPct": 4
+        "house": 2.1,
+        "adjMargin": 1.9,
+        "weightPct": 3
       },
       {
         "pollster": "Mason-Dixon",
@@ -1729,7 +1866,7 @@
         "ind": null,
         "house": -0.5,
         "adjMargin": -6.5,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Televisa/Univision",
@@ -1740,7 +1877,7 @@
         "ind": null,
         "house": 1.1,
         "adjMargin": -1.1,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -1749,9 +1886,9 @@
         "dem": 46,
         "rep": 49,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": -3.7,
-        "weightPct": 3
+        "house": 0.6,
+        "adjMargin": -3.6,
+        "weightPct": 2
       },
       {
         "pollster": "Overton Insights (R)",
@@ -1762,7 +1899,7 @@
         "ind": null,
         "house": -0.9,
         "adjMargin": -0.1,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "Texas Public Opinion Research",
@@ -1782,9 +1919,9 @@
         "dem": 40,
         "rep": 45,
         "ind": null,
-        "house": -0.8,
-        "adjMargin": -4.2,
-        "weightPct": 2
+        "house": -0.2,
+        "adjMargin": -4.8,
+        "weightPct": 1
       },
       {
         "pollster": "Emerson College",
@@ -1795,7 +1932,7 @@
         "ind": null,
         "house": -1.5,
         "adjMargin": -2.5,
-        "weightPct": 2
+        "weightPct": 1
       },
       {
         "pollster": "GBAO (Hinojosa campaign)",
@@ -1804,8 +1941,8 @@
         "dem": 48,
         "rep": 49,
         "ind": null,
-        "house": 2.2,
-        "adjMargin": -3.2,
+        "house": 2.6,
+        "adjMargin": -3.6,
         "weightPct": 1
       },
       {
@@ -1903,8 +2040,8 @@
         "dem": 40,
         "rep": 47,
         "ind": null,
-        "house": -0.8,
-        "adjMargin": -6.2,
+        "house": -0.2,
+        "adjMargin": -6.8,
         "weightPct": 0
       },
       {
@@ -1925,8 +2062,8 @@
         "dem": 41,
         "rep": 49,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": -6.3,
+        "house": -1.8,
+        "adjMargin": -6.2,
         "weightPct": 0
       },
       {
@@ -1969,8 +2106,8 @@
         "dem": 38,
         "rep": 44,
         "ind": null,
-        "house": -0.8,
-        "adjMargin": -5.2,
+        "house": -0.2,
+        "adjMargin": -5.8,
         "weightPct": 0
       },
       {
@@ -1988,10 +2125,21 @@
   },
   "ia_sen": {
     "margin": 0,
-    "nPolls": 21,
+    "nPolls": 22,
     "fallback": false,
     "note": "",
     "polls": [
+      {
+        "pollster": "YouGov",
+        "date": "2026-10-12",
+        "rating": 0.8,
+        "dem": 47,
+        "rep": 46,
+        "ind": null,
+        "house": 1.3,
+        "adjMargin": -0.3,
+        "weightPct": 11
+      },
       {
         "pollster": "Emerson College",
         "date": "2026-10-06",
@@ -2001,7 +2149,7 @@
         "ind": null,
         "house": -1.5,
         "adjMargin": -0.5,
-        "weightPct": 11
+        "weightPct": 9
       },
       {
         "pollster": "CNN/SSRS",
@@ -2012,7 +2160,7 @@
         "ind": null,
         "house": 0.3,
         "adjMargin": -2.3,
-        "weightPct": 11
+        "weightPct": 10
       },
       {
         "pollster": "Suffolk University",
@@ -2021,9 +2169,9 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 3.3,
-        "weightPct": 9
+        "house": 0.6,
+        "adjMargin": 3.4,
+        "weightPct": 8
       },
       {
         "pollster": "Rasmussen Reports",
@@ -2032,8 +2180,8 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 3.3,
+        "house": 0.6,
+        "adjMargin": 3.4,
         "weightPct": 5
       },
       {
@@ -2045,7 +2193,7 @@
         "ind": null,
         "house": -1.5,
         "adjMargin": -1.5,
-        "weightPct": 9
+        "weightPct": 8
       },
       {
         "pollster": "NYT/Siena",
@@ -2056,7 +2204,7 @@
         "ind": null,
         "house": -0.7,
         "adjMargin": -0.3,
-        "weightPct": 10
+        "weightPct": 9
       },
       {
         "pollster": "Quantus Insights",
@@ -2065,9 +2213,9 @@
         "dem": 45.8,
         "rep": 47.1,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 0.4,
-        "weightPct": 6
+        "house": -1.8,
+        "adjMargin": 0.5,
+        "weightPct": 5
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -2078,7 +2226,7 @@
         "ind": null,
         "house": 1,
         "adjMargin": 1,
-        "weightPct": 9
+        "weightPct": 8
       },
       {
         "pollster": "InsiderAdvantage",
@@ -2089,7 +2237,7 @@
         "ind": null,
         "house": -0.4,
         "adjMargin": 1.4,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Marist Poll",
@@ -2098,9 +2246,9 @@
         "dem": 50,
         "rep": 42,
         "ind": null,
-        "house": 3.2,
-        "adjMargin": 4.8,
-        "weightPct": 7
+        "house": 2.3,
+        "adjMargin": 5.7,
+        "weightPct": 6
       },
       {
         "pollster": "Trafalgar Group",
@@ -2122,7 +2270,7 @@
         "ind": null,
         "house": -3.2,
         "adjMargin": -0.8,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "Rasmussen Reports",
@@ -2131,9 +2279,9 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 4.3,
-        "weightPct": 3
+        "house": 0.6,
+        "adjMargin": 4.4,
+        "weightPct": 2
       },
       {
         "pollster": "Emerson College",
@@ -2164,8 +2312,8 @@
         "dem": 41,
         "rep": 45,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": -4.7,
+        "house": 0.6,
+        "adjMargin": -4.6,
         "weightPct": 2
       },
       {
@@ -2271,8 +2419,8 @@
         "dem": 45.5,
         "rep": 46.1,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 1.1,
+        "house": -1.8,
+        "adjMargin": 1.2,
         "weightPct": 10
       },
       {
@@ -2304,8 +2452,8 @@
         "dem": 39,
         "rep": 39,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": -0.7,
+        "house": 0.6,
+        "adjMargin": -0.6,
         "weightPct": 5
       },
       {
@@ -2326,8 +2474,8 @@
         "dem": 46,
         "rep": 41,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 4.3,
+        "house": 0.6,
+        "adjMargin": 4.4,
         "weightPct": 7
       },
       {
@@ -2433,8 +2581,8 @@
         "dem": 52,
         "rep": 41,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 9.8,
+        "house": 1.1,
+        "adjMargin": 9.9,
         "weightPct": 11
       },
       {
@@ -2455,8 +2603,8 @@
         "dem": 48.2,
         "rep": 44.4,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 5.5,
+        "house": -1.8,
+        "adjMargin": 5.6,
         "weightPct": 9
       },
       {
@@ -2466,8 +2614,8 @@
         "dem": 51,
         "rep": 42,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 8.3,
+        "house": 0.6,
+        "adjMargin": 8.4,
         "weightPct": 7
       },
       {
@@ -2499,8 +2647,8 @@
         "dem": 52,
         "rep": 43,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 8.3,
+        "house": 0.6,
+        "adjMargin": 8.4,
         "weightPct": 2
       },
       {
@@ -2529,8 +2677,8 @@
         "dem": 43,
         "rep": 46,
         "ind": null,
-        "house": -2,
-        "adjMargin": -1,
+        "house": -1.9,
+        "adjMargin": -1.1,
         "weightPct": 24
       },
       {
@@ -2573,8 +2721,8 @@
         "dem": 46,
         "rep": 42,
         "ind": null,
-        "house": 0.8,
-        "adjMargin": 3.2,
+        "house": 1.4,
+        "adjMargin": 2.6,
         "weightPct": 16
       },
       {
@@ -2584,8 +2732,8 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": 1.9,
-        "adjMargin": -0.9,
+        "house": 2,
+        "adjMargin": -1,
         "weightPct": 8
       }
     ]
@@ -2625,8 +2773,8 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 2.7,
+        "house": -1.8,
+        "adjMargin": 2.8,
         "weightPct": 5
       },
       {
@@ -2647,8 +2795,8 @@
         "dem": 45.6,
         "rep": 41.4,
         "ind": null,
-        "house": 0.5,
-        "adjMargin": 3.7,
+        "house": 0.4,
+        "adjMargin": 3.8,
         "weightPct": 4
       },
       {
@@ -2658,8 +2806,8 @@
         "dem": 49,
         "rep": 42,
         "ind": null,
-        "house": 2.7,
-        "adjMargin": 4.3,
+        "house": 2.6,
+        "adjMargin": 4.4,
         "weightPct": 4
       },
       {
@@ -2691,8 +2839,8 @@
         "dem": 51,
         "rep": 44,
         "ind": null,
-        "house": 3.2,
-        "adjMargin": 3.8,
+        "house": 2.3,
+        "adjMargin": 4.7,
         "weightPct": 6
       },
       {
@@ -2702,8 +2850,8 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "house": 0.6,
-        "adjMargin": 4.4,
+        "house": 0.5,
+        "adjMargin": 4.5,
         "weightPct": 3
       },
       {
@@ -2713,8 +2861,8 @@
         "dem": 45.9,
         "rep": 40.5,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 4.2,
+        "house": 1.1,
+        "adjMargin": 4.3,
         "weightPct": 3
       },
       {
@@ -2757,8 +2905,8 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 4.3,
+        "house": 0.6,
+        "adjMargin": 4.4,
         "weightPct": 3
       },
       {
@@ -2768,8 +2916,8 @@
         "dem": 47,
         "rep": 40,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 6.3,
+        "house": 0.6,
+        "adjMargin": 6.4,
         "weightPct": 4
       },
       {
@@ -2889,8 +3037,8 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 0.3,
+        "house": 0.6,
+        "adjMargin": 0.4,
         "weightPct": 1
       },
       {
@@ -2941,8 +3089,8 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 4.3,
+        "house": 0.6,
+        "adjMargin": 4.4,
         "weightPct": 10
       },
       {
@@ -3018,8 +3166,8 @@
         "dem": 45,
         "rep": 34,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 10.3,
+        "house": 0.6,
+        "adjMargin": 10.4,
         "weightPct": 5
       },
       {
@@ -3221,8 +3369,8 @@
         "dem": 48,
         "rep": 45,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 2.3,
+        "house": 0.6,
+        "adjMargin": 2.4,
         "weightPct": 10
       },
       {
@@ -3254,8 +3402,8 @@
         "dem": 40,
         "rep": 38,
         "ind": null,
-        "house": 1.2,
-        "adjMargin": 0.8,
+        "house": 1.1,
+        "adjMargin": 0.9,
         "weightPct": 10
       },
       {
@@ -3287,8 +3435,8 @@
         "dem": 42,
         "rep": 42,
         "ind": null,
-        "house": 0.8,
-        "adjMargin": -0.8,
+        "house": 1.4,
+        "adjMargin": -1.4,
         "weightPct": 8
       },
       {
@@ -3298,8 +3446,8 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "house": -1.7,
-        "adjMargin": 5.7,
+        "house": -1.8,
+        "adjMargin": 5.8,
         "weightPct": 5
       },
       {
@@ -3309,8 +3457,8 @@
         "dem": 44,
         "rep": 42,
         "ind": null,
-        "house": -1.6,
-        "adjMargin": 3.6,
+        "house": -1.5,
+        "adjMargin": 3.5,
         "weightPct": 4
       },
       {
@@ -3320,8 +3468,8 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "house": -0.9,
-        "adjMargin": 5.9,
+        "house": -0.8,
+        "adjMargin": 5.8,
         "weightPct": 2
       },
       {
@@ -3331,8 +3479,8 @@
         "dem": 46,
         "rep": 41,
         "ind": null,
-        "house": 0.8,
-        "adjMargin": 4.2,
+        "house": 1.4,
+        "adjMargin": 3.6,
         "weightPct": 3
       }
     ]

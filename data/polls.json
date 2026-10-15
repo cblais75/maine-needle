@@ -133,6 +133,13 @@
       "date": "2026-10-01",
       "dem": 46,
       "rep": 46
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-10-11",
+      "dem": 49,
+      "rep": 47
     }
   ],
   "governor": [
@@ -199,6 +206,14 @@
       "dem": 49,
       "rep": 36,
       "ind": 11
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-10-11",
+      "dem": 49,
+      "rep": 38,
+      "ind": 8
     }
   ],
   "cd1": [
@@ -408,6 +423,20 @@
       "date": "2026-09-16",
       "dem": 50,
       "rep": 42
+    },
+    {
+      "pollster": "SurveyUSA",
+      "rating": 0.8,
+      "date": "2026-10-11",
+      "dem": 54,
+      "rep": 40
+    },
+    {
+      "pollster": "Change Research (Carolina Forward)",
+      "rating": 0.5,
+      "date": "2026-10-07",
+      "dem": 50,
+      "rep": 40
     }
   ],
   "oh_sen": [
@@ -748,6 +777,34 @@
       "date": "2026-09-24",
       "dem": 48,
       "rep": 48
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-10-11",
+      "dem": 47,
+      "rep": 45
+    },
+    {
+      "pollster": "ReconMR/Siena",
+      "rating": 0.8,
+      "date": "2026-10-08",
+      "dem": 48,
+      "rep": 44
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-10-11",
+      "dem": 47,
+      "rep": 47
+    },
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-10-05",
+      "dem": 50,
+      "rep": 47
     }
   ],
   "tx_gov": [
@@ -1009,6 +1066,34 @@
       "date": "2026-09-28",
       "dem": 44,
       "rep": 46
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-10-11",
+      "dem": 45,
+      "rep": 49
+    },
+    {
+      "pollster": "ReconMR/Siena",
+      "rating": 0.8,
+      "date": "2026-10-08",
+      "dem": 47,
+      "rep": 48
+    },
+    {
+      "pollster": "GBAO (Hinojosa campaign)",
+      "rating": 0.5,
+      "date": "2026-10-08",
+      "dem": 47,
+      "rep": 45
+    },
+    {
+      "pollster": "UT/Texas Politics Project",
+      "rating": 0.85,
+      "date": "2026-10-05",
+      "dem": 49,
+      "rep": 48
     }
   ],
   "ia_sen": [
@@ -1158,6 +1243,13 @@
       "date": "2026-09-18",
       "dem": 42,
       "rep": 44
+    },
+    {
+      "pollster": "YouGov",
+      "rating": 0.8,
+      "date": "2026-10-12",
+      "dem": 47,
+      "rep": 46
     }
   ],
   "ak_sen": [
