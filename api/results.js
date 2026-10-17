@@ -12,6 +12,9 @@
 // Texas: TX_RESULTS_URL = https://goelect.txelections.civixapps.com/api-ivis-system/api/s3/enr/election/countyInfo/53815
 // (Texas's new Civix results system; 53815 is the 2026 November general election; the Senate and governor
 // races both come from this one file).
+// Michigan: the county file is MVIC's https://mvic.sos.state.mi.us/VoteHistory/GetElectionResultFile?electionId=<id>
+// (read fine by read-feed.mjs), but as of Oct 2026 that site answers servers with a Cloudflare security challenge
+// (403), from Vercel too, so MI_RESULTS_URL can't work there unless the state lifts it.
 // Minnesota: MN_RESULTS_URL = https://electionresultsfiles.sos.mn.gov/20261103/allracesbycounty.txt
 // (the state posts TEST data at that address before election day: set it only on election night).
 // Clarity sites change their folder number as the night goes on. Put {ver} where that number

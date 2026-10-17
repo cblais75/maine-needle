@@ -113,14 +113,21 @@ function asFile(s, list) {
     const ch = (name, party, key) => `<Choice key="1" text="${name}" party="${party}"><VoteType name="Election Day">${cty((c) => Math.round(c[key] * 0.7))}</VoteType><VoteType name="Absentee">${cty((c) => c[key] - Math.round(c[key] * 0.7))}</VoteType></Choice>`;
     return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest><Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
   }
-  if (s.state === "MI") { // Michigan county file: tab-delimited, split first/last names, "ST. CLAIR"
-    const out = ["ElectionDate\tOfficeCode\tDistrictCode\tStatusCode\tCountyCode\tCountyName\tOfficeDescription\tPartyOrder\tPartyName\tPartyDescription\tCandidateID\tCandidateLastName\tCandidateFirstName\tCandidateMiddleName\tCandidateFormerName\tCandidateVotes\tWriteIn(W)/Uncommitted(Z)\tRecount(*)"];
-    for (const c of list) {
-      out.push(["11/3/2026", "5", "0", "0", "1", c.county.toUpperCase(), "U.S. Senator 6 Year Term (1) Position", "1", "DEM", "Democratic", "1", "El-Sayed", "Abdul", "", "", c.dem, "", ""].join("\t"));
-      out.push(["11/3/2026", "5", "0", "0", "1", c.county.toUpperCase(), "U.S. Senator 6 Year Term (1) Position", "2", "REP", "Republican", "2", "Rogers", "Mike", "", "", c.rep, "", ""].join("\t"));
-      out.push(["11/3/2026", "7", "0", "0", "1", c.county.toUpperCase(), "State Senator 4 Year Term (1) Position", "1", "DEM", "Democratic", "3", "Else", "Some", "", "", 7777, "", ""].join("\t"));
-    }
-    return enc(out.join("\n"));
+  if (s.state === "MI") { // Michigan Voter Information Center download (Update 60): MVIC GetElectionResultFile, the old
+    // CENR_BY_COUNTY layout. A "TOTAL VOTER TURNOUT" line comes before the header; no precincts-reporting column;
+    // a governor race and "DISTRICT STATE SENATOR" rows are mixed in and must NOT count for the Senate race.
+    const H = ["ElectionDate", "OfficeCode", "DistrictCode", "StatusCode", "CountyCode", "CountyName", "OfficeDescription", "PartyOrder", "PartyDescription", "CandidateID",
+      "CandidateLastName", "CandidateFirstName", "CandidateMiddleName", "CandidateFormerName", "CandidateVotes", "WriteIn(W)/Uncommitted(Z)", "Recount(*)", "Nominated(N)/Elected(E)"];
+    const row = (c, i, code, office, order, party, id, last, first, votes) => ["11/3/2026", code, "0", "0", String(i + 1).padStart(2, "0"), c.county.toUpperCase(), office, order, party, id, last, first, "", "", votes, "", "", ""].join(String.fromCharCode(9));
+    const out = ["TOTAL VOTER TURNOUT" + String.fromCharCode(9) + "4,321,987", H.join(String.fromCharCode(9))];
+    list.forEach((c, i) => {
+      out.push(row(c, i, "5", "UNITED STATES SENATOR 6 YEAR TERM (1) POSITION", "1", "Democratic", "101", "EL-SAYED", "ABDUL", c.dem));
+      out.push(row(c, i, "5", "UNITED STATES SENATOR 6 YEAR TERM (1) POSITION", "2", "Republican", "102", "ROGERS", "MIKE", c.rep));
+      out.push(row(c, i, "5", "UNITED STATES SENATOR 6 YEAR TERM (1) POSITION", "3", "Libertarian", "103", "CHRISTENSEN", "LYDIA", 11));
+      out.push(row(c, i, "2", "GOVERNOR 4 YEAR TERM (1) POSITION", "1", "Democratic", "201", "BENSON", "JOCELYN", 8888));
+      out.push(row(c, i, "7", "DISTRICT STATE SENATOR 4 YEAR TERM (1) POSITION", "1", "Democratic", "301", "ELSE", "SOME", 7777));
+    });
+    return enc(out.join(String.fromCharCode(13, 10)));
   }
   if (s.state === "OH") { // Ohio-style wide workbook: counties down the side, candidates across, merged office title,
     // a Total and a Percentage column per candidate, and the SAME race repeated on a "Master" summary sheet

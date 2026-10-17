@@ -56,7 +56,7 @@ const SYN = {
               "name_on_ballot", "ballot name", "ballotname"],
   first: ["candidatefirstname", "candidate first name", "first name", "firstname"],
   last: ["candidatelastname", "candidate last name", "last name", "lastname"],
-  party: ["choice party", "party", "party code", "party_cd", "partycode", "party name", "partyname", "candidate party", "party abbreviation"],
+  party: ["choice party", "party", "party code", "party_cd", "partycode", "party name", "partyname", "candidate party", "party abbreviation", "partydescription", "party description"],
   votes: ["total votes", "total_votes", "totalvotes", "votes", "candidatevotes", "candidate votes", "vote count", "votecount",
           "total vote count", "total_vote_count", "count", "total"],
   votetype: ["vote type", "votetype", "vote mode", "votemode", "vote_mode", "ballot type", "mode"],
