@@ -1,0 +1,3463 @@
+{
+  "_comment": "Governor races with a card instead of a needle (Update 58). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Maine and Texas governor have needles and are not listed. Ratings: Cook from its own site (matches Wikipedia); Sabato and Inside Elections via Wikipedia's ratings table. 'competitive' marks the promote-to-needle rule. For Alaska, 'rep' is the leading Republican's first choices. For RI and ID, 'ind' is the major independent.",
+  "asOf": "2026-10-16",
+  "races": [
+    {
+      "id": "al_gov_card",
+      "state": "AL",
+      "stateName": "Alabama",
+      "incumbent": {
+        "name": "Kay Ivey",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Doug Jones",
+          "party": "D"
+        },
+        {
+          "name": "Tommy Tuberville",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat. A rematch of the 2020 Senate race, which Tuberville won.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "RMG Research (R)",
+          "date": "2026-09-25",
+          "dem": 37,
+          "rep": 50,
+          "rating": 0.6,
+          "note": "Conducted for Alabama Policy Action; registered voters"
+        },
+        {
+          "pollster": "yes. every kid.",
+          "date": "2026-07-11",
+          "dem": 41,
+          "rep": 49,
+          "rating": 0.6,
+          "note": "Advocacy group's own poll"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Alabama_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ak_gov_card",
+      "state": "AK",
+      "stateName": "Alaska",
+      "incumbent": {
+        "name": "Mike Dunleavy",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Jonathan Kreiss-Tomkins",
+          "party": "D"
+        },
+        {
+          "name": "Bernadette Wilson",
+          "party": "R"
+        },
+        {
+          "name": "Dave Bronson",
+          "party": "R"
+        },
+        {
+          "name": "Treg Taylor",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat. Ranked-choice voting: four candidates advanced from the Aug. 18 top-four primary, and the rounds are counted about two weeks after Election Day. Democrat Tom Begich withdrew after finishing second, so Taylor advanced. Poll numbers are first choices for Kreiss-Tomkins and the leading Republican, Wilson.",
+      "ratings": {
+        "cook": "Lean D",
+        "sabato": "Lean D",
+        "inside": "Toss-up",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Alaska Survey Research",
+          "date": "2026-10-03",
+          "dem": 48,
+          "rep": 27,
+          "rating": 0.8,
+          "note": "First choices; Bronson 15, Taylor 10. Final round: Kreiss-Tomkins 54, Wilson 46"
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-10-01",
+          "dem": 40,
+          "rep": 20,
+          "rating": 0.95,
+          "note": "First choices; Bronson 15, Taylor 11. Final round: Kreiss-Tomkins 52, Wilson 48"
+        },
+        {
+          "pollster": "Cygnal (R)",
+          "date": "2026-09-27",
+          "dem": 44,
+          "rep": 24,
+          "rating": 0.6,
+          "note": "First choices; Bronson 8, Taylor 9"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-17",
+          "dem": 43,
+          "rep": 20,
+          "rating": 0.55,
+          "note": "First choices; Bronson 17, Taylor 6"
+        },
+        {
+          "pollster": "AARP (Fabrizio/Impact)",
+          "date": "2026-09-11",
+          "dem": 40,
+          "rep": 20,
+          "rating": 0.85,
+          "note": "First choices; Bronson 14, Taylor 7. Final round: Kreiss-Tomkins 55, Wilson 45"
+        }
+      ],
+      "consensus": {
+        "rating": "Lean D",
+        "favors": "D"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Alaska_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "az_gov_card",
+      "state": "AZ",
+      "stateName": "Arizona",
+      "futureNeedle": true,
+      "incumbent": {
+        "name": "Katie Hobbs",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Katie Hobbs",
+          "party": "D"
+        },
+        {
+          "name": "Andy Biggs",
+          "party": "R"
+        },
+        {
+          "name": "Teri Hourihan",
+          "party": "No Labels",
+          "minor": true
+        },
+        {
+          "name": "Risa Lombardo",
+          "party": "Green",
+          "minor": true
+        }
+      ],
+      "note": "The first Arizona governor's race in which candidates run with a lieutenant governor as a ticket (Proposition 131).",
+      "ratings": {
+        "cook": "Lean D",
+        "sabato": "Lean D",
+        "inside": "Tilt D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "GrayHouse (Norton campaign)",
+          "date": "2026-10-08",
+          "dem": 50,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Campaign of Elijah Norton, a Republican running for another statewide office"
+        },
+        {
+          "pollster": "HighGround, Inc.",
+          "date": "2026-10-08",
+          "dem": 51,
+          "rep": 34,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Wick (R)",
+          "date": "2026-10-06",
+          "dem": 49,
+          "rep": 43,
+          "rating": 0.6
+        },
+        {
+          "pollster": "GQR (Hobbs campaign)",
+          "date": "2026-10-05",
+          "dem": 49,
+          "rep": 45,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Hobbs campaign"
+        },
+        {
+          "pollster": "Equis Research",
+          "date": "2026-09-09",
+          "dem": 49,
+          "rep": 43,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Arizona State University",
+          "date": "2026-09-04",
+          "dem": 47,
+          "rep": 34,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "NextGen Polling (R)",
+          "date": "2026-08-19",
+          "dem": 39,
+          "rep": 38,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-08-17",
+          "dem": 49,
+          "rep": 43,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Kreate Strategies (R)",
+          "date": "2026-08-16",
+          "dem": 45,
+          "rep": 40,
+          "rating": 0.6,
+          "note": "Sponsored by American Encore, a conservative group"
+        },
+        {
+          "pollster": "Noble Predictive Insights",
+          "date": "2026-08-13",
+          "dem": 48,
+          "rep": 35,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Stealth Analytics",
+          "date": "2026-08-13",
+          "dem": 43,
+          "rep": 38,
+          "rating": 0.6
+        },
+        {
+          "pollster": "GrayHouse (R)",
+          "date": "2026-08-11",
+          "dem": 49,
+          "rep": 45,
+          "rating": 0.6
+        },
+        {
+          "pollster": "The Tarrance Group (R)",
+          "date": "2026-07-30",
+          "dem": 52,
+          "rep": 48,
+          "rating": 0.6,
+          "note": "Sponsored by the Democracy Defense Foundation, a 501(c)(3)"
+        },
+        {
+          "pollster": "AARP (Fabrizio/Impact)",
+          "date": "2026-07-28",
+          "dem": 52,
+          "rep": 44,
+          "rating": 0.85
+        }
+      ],
+      "consensus": {
+        "rating": "Lean D",
+        "favors": "D"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Arizona_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ar_gov_card",
+      "state": "AR",
+      "stateName": "Arkansas",
+      "incumbent": {
+        "name": "Sarah Huckabee Sanders",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Fredrick Love",
+          "party": "D"
+        },
+        {
+          "name": "Sarah Huckabee Sanders",
+          "party": "R",
+          "short": "Sanders"
+        },
+        {
+          "name": "Colt Shelby",
+          "party": "Libertarian",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Hendrix College",
+          "date": "2026-08-12",
+          "dem": 40,
+          "rep": 45,
+          "rating": 0.8,
+          "note": "Sponsored by Talk Business & Politics"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Arkansas_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ca_gov_card",
+      "state": "CA",
+      "stateName": "California",
+      "incumbent": {
+        "name": "Gavin Newsom",
+        "party": "D",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Xavier Becerra",
+          "party": "D"
+        },
+        {
+          "name": "Steve Hilton",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat. California's top-two primary (June 2) sends the top two finishers to November regardless of party.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Manhattan Institute (R)",
+          "date": "2026-10-01",
+          "dem": 57,
+          "rep": 39,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Independent Voter Project",
+          "date": "2026-09-28",
+          "dem": 48,
+          "rep": 38,
+          "rating": 0.6
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-09-20",
+          "dem": 55,
+          "rep": 33,
+          "rating": 0.8,
+          "note": "For KGTV and The San Diego Union-Tribune"
+        },
+        {
+          "pollster": "Berkeley IGS",
+          "date": "2026-09-20",
+          "dem": 58,
+          "rep": 33,
+          "rating": 0.8,
+          "note": "Sponsored by the Los Angeles Times"
+        },
+        {
+          "pollster": "UC Berkeley Citrin Center/TrueDot/Politico",
+          "date": "2026-09-14",
+          "dem": 54,
+          "rep": 36,
+          "rating": 0.8
+        },
+        {
+          "pollster": "PPIC",
+          "date": "2026-09-10",
+          "dem": 60,
+          "rep": 38,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Berkeley IGS",
+          "date": "2026-08-09",
+          "dem": 55,
+          "rep": 37,
+          "rating": 0.8,
+          "note": "Sponsored by the Los Angeles Times"
+        },
+        {
+          "pollster": "PPIC",
+          "date": "2026-07-06",
+          "dem": 61,
+          "rep": 36,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Kreate Strategies (R)",
+          "date": "2026-06-17",
+          "dem": 58,
+          "rep": 33,
+          "rating": 0.6
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_California_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "co_gov_card",
+      "state": "CO",
+      "stateName": "Colorado",
+      "incumbent": {
+        "name": "Jared Polis",
+        "party": "D",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Phil Weiser",
+          "party": "D"
+        },
+        {
+          "name": "Victor Marx",
+          "party": "R"
+        },
+        {
+          "name": "Greg Lopez",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Eric Mulder",
+          "party": "Libertarian",
+          "minor": true
+        },
+        {
+          "name": "Stephen Hamilton",
+          "party": "American Constitution",
+          "minor": true
+        },
+        {
+          "name": "Jeff Peckman",
+          "party": "Unity",
+          "minor": true
+        },
+        {
+          "name": "Erik Underwood",
+          "party": "Approval Voting",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Colorado_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ct_gov_card",
+      "state": "CT",
+      "stateName": "Connecticut",
+      "incumbent": {
+        "name": "Ned Lamont",
+        "party": "D",
+        "status": "running for a third term"
+      },
+      "nominees": [
+        {
+          "name": "Ned Lamont",
+          "party": "D"
+        },
+        {
+          "name": "Ryan Fazio",
+          "party": "R"
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Quinnipiac University",
+          "date": "2026-10-12",
+          "dem": 58,
+          "rep": 38,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-10-12",
+          "dem": 51,
+          "rep": 38,
+          "rating": 0.85,
+          "note": "Sponsored by Nexstar Media"
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 55,
+          "rep": 38,
+          "rating": 0.8
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-17",
+          "dem": 48,
+          "rep": 41,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Quinnipiac University",
+          "date": "2026-09-14",
+          "dem": 55,
+          "rep": 38,
+          "rating": 0.8
+        },
+        {
+          "pollster": "GreatBlue Research",
+          "date": "2026-09-08",
+          "dem": 48,
+          "rep": 34,
+          "rating": 0.8,
+          "note": "For CT Insider and Sacred Heart University; registered voters"
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-08-24",
+          "dem": 52,
+          "rep": 37,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Connecticut_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "fl_gov_card",
+      "state": "FL",
+      "stateName": "Florida",
+      "incumbent": {
+        "name": "Ron DeSantis",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "David Jolly",
+          "party": "D"
+        },
+        {
+          "name": "Byron Donalds",
+          "party": "R"
+        },
+        {
+          "name": "Scott Jewett",
+          "party": "Libertarian",
+          "minor": true
+        },
+        {
+          "name": "Dean Abrams",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Charles Burkett",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Jeffrey Datto",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Moe Dimanche",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Frank Russo",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Lean R",
+        "sabato": "Lean R",
+        "inside": "Lean R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Fabrizio Lee (Donalds campaign)",
+          "date": "2026-10-11",
+          "dem": 43,
+          "rep": 49,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Donalds campaign"
+        },
+        {
+          "pollster": "MDW Communications (D)",
+          "date": "2026-10-10",
+          "dem": 44,
+          "rep": 46,
+          "rating": 0.6,
+          "note": "For EDGE Communications"
+        },
+        {
+          "pollster": "Change Research (D)",
+          "date": "2026-10-10",
+          "dem": 47,
+          "rep": 47,
+          "rating": 0.6,
+          "note": "Commissioned by Freedom Project USA"
+        },
+        {
+          "pollster": "Stetson University",
+          "date": "2026-10-09",
+          "dem": 41,
+          "rep": 52,
+          "rating": 0.8
+        },
+        {
+          "pollster": "St. Pete Polls",
+          "date": "2026-10-07",
+          "dem": 45,
+          "rep": 45,
+          "rating": 0.6,
+          "note": "Sponsored by Florida Politics"
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-05",
+          "dem": 45,
+          "rep": 47,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Targoz Market Research",
+          "date": "2026-10-04",
+          "dem": 42,
+          "rep": 52,
+          "rating": 0.6,
+          "note": "Sponsored by the James Madison Institute, a conservative think tank"
+        },
+        {
+          "pollster": "Mason-Dixon",
+          "date": "2026-10-01",
+          "dem": 41,
+          "rep": 48,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Change Research (D)",
+          "date": "2026-09-27",
+          "dem": 48,
+          "rep": 46,
+          "rating": 0.6,
+          "note": "Commissioned by Freedom Project USA"
+        },
+        {
+          "pollster": "Stetson University",
+          "date": "2026-09-21",
+          "dem": 39,
+          "rep": 51,
+          "rating": 0.8
+        },
+        {
+          "pollster": "St. Pete Polls",
+          "date": "2026-09-17",
+          "dem": 43,
+          "rep": 44,
+          "rating": 0.6,
+          "note": "Sponsored by Florida Politics"
+        },
+        {
+          "pollster": "Change Research (D)",
+          "date": "2026-09-09",
+          "dem": 47,
+          "rep": 44,
+          "rating": 0.6,
+          "note": "Commissioned by Freedom Project USA"
+        }
+      ],
+      "consensus": {
+        "rating": "Lean R",
+        "favors": "R"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Florida_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ga_gov_card",
+      "state": "GA",
+      "stateName": "Georgia",
+      "incumbent": {
+        "name": "Brian Kemp",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Keisha Lance Bottoms",
+          "party": "D",
+          "short": "Bottoms"
+        },
+        {
+          "name": "Rick Jackson",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat. Georgia requires a majority: if no one tops 50%, the top two meet in a Dec. 1 runoff.",
+      "ratings": {
+        "cook": "Toss-up",
+        "sabato": "Toss-up",
+        "inside": "Toss-up",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-10-13",
+          "dem": 47,
+          "rep": 49,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-10-03",
+          "dem": 49,
+          "rep": 51,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Big Data Poll",
+          "date": "2026-09-23",
+          "dem": 47,
+          "rep": 49,
+          "rating": 0.6,
+          "note": "Sponsored by the Public Polling Project"
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-09-23",
+          "dem": 46,
+          "rep": 48,
+          "rating": 0.6
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-09-18",
+          "dem": 44,
+          "rep": 47,
+          "rating": 0.8,
+          "note": "Strict likely voters"
+        },
+        {
+          "pollster": "Rasmussen Reports",
+          "date": "2026-09-14",
+          "dem": 45,
+          "rep": 48,
+          "rating": 0.5
+        },
+        {
+          "pollster": "InsiderAdvantage",
+          "date": "2026-08-17",
+          "dem": 46,
+          "rep": 46,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-08-01",
+          "dem": 46,
+          "rep": 45,
+          "rating": 0.6,
+          "note": "Sponsored by the Natural Gas Association of Georgia"
+        },
+        {
+          "pollster": "AARP (Fabrizio/Impact)",
+          "date": "2026-07-16",
+          "dem": 48,
+          "rep": 46,
+          "rating": 0.85
+        },
+        {
+          "pollster": "State Navigate",
+          "date": "2026-07-13",
+          "dem": 50,
+          "rep": 43,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Wick (R)",
+          "date": "2026-06-30",
+          "dem": 43,
+          "rep": 43,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-06-27",
+          "dem": 52,
+          "rep": 47,
+          "rating": 0.9,
+          "note": "Registered voters"
+        }
+      ],
+      "consensus": {
+        "rating": "Toss-up",
+        "favors": null
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
+        "nonpartisan polls average within 1.8 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Georgia_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "hi_gov_card",
+      "state": "HI",
+      "stateName": "Hawaii",
+      "incumbent": {
+        "name": "Josh Green",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Josh Green",
+          "party": "D"
+        },
+        {
+          "name": "Gary Cordery",
+          "party": "R"
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Hawaii_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "id_gov_card",
+      "state": "ID",
+      "stateName": "Idaho",
+      "incumbent": {
+        "name": "Brad Little",
+        "party": "R",
+        "status": "running for a third term"
+      },
+      "nominees": [
+        {
+          "name": "Terri Pickens",
+          "party": "D"
+        },
+        {
+          "name": "John Stegner",
+          "party": "I"
+        },
+        {
+          "name": "Brad Little",
+          "party": "R"
+        },
+        {
+          "name": "Paul Sand",
+          "party": "Libertarian",
+          "minor": true
+        },
+        {
+          "name": "Pro-Life",
+          "party": "Constitution",
+          "minor": true
+        }
+      ],
+      "note": "Independent John Stegner, a retired state Supreme Court justice, is polling in double digits. (\"Pro-Life\" is a candidate's legal name.)",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Advanced Targeting Research",
+          "date": "2026-09-16",
+          "dem": 27,
+          "rep": 37,
+          "ind": 13,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Change Research (Stegner campaign)",
+          "date": "2026-07-30",
+          "dem": 27,
+          "rep": 48,
+          "ind": 11,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Stegner campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Idaho_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "il_gov_card",
+      "state": "IL",
+      "stateName": "Illinois",
+      "incumbent": {
+        "name": "JB Pritzker",
+        "party": "D",
+        "status": "running for a third term"
+      },
+      "nominees": [
+        {
+          "name": "JB Pritzker",
+          "party": "D"
+        },
+        {
+          "name": "Darren Bailey",
+          "party": "R"
+        },
+        {
+          "name": "Collin Corbett",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "A rematch of 2022.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Public Policy Polling (D)",
+          "date": "2026-10-01",
+          "dem": 54,
+          "rep": 34,
+          "rating": 0.55,
+          "note": "Conducted for Chicago News Weekly"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Illinois_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ia_gov_card",
+      "state": "IA",
+      "stateName": "Iowa",
+      "incumbent": {
+        "name": "Kim Reynolds",
+        "party": "R",
+        "status": "retiring",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Rob Sand",
+          "party": "D"
+        },
+        {
+          "name": "Zach Lahn",
+          "party": "R"
+        },
+        {
+          "name": "Sondra Wilson",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Lean D",
+        "sabato": "Lean D",
+        "inside": "Tilt D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-12",
+          "dem": 50,
+          "rep": 44,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Marist Poll",
+          "date": "2026-10-11",
+          "dem": 52,
+          "rep": 45,
+          "rating": 0.9,
+          "note": "Likely voters"
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-10-06",
+          "dem": 49,
+          "rep": 45,
+          "rating": 0.85,
+          "note": "Sponsored by Nexstar Media Group"
+        },
+        {
+          "pollster": "CNN/SSRS",
+          "date": "2026-10-05",
+          "dem": 51,
+          "rep": 42,
+          "rating": 0.9
+        },
+        {
+          "pollster": "Suffolk University",
+          "date": "2026-10-04",
+          "dem": 55,
+          "rep": 43,
+          "rating": 0.8
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-10-01",
+          "dem": 52,
+          "rep": 41,
+          "rating": 0.95
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-09-28",
+          "dem": 53,
+          "rep": 44,
+          "rating": 0.9
+        },
+        {
+          "pollster": "Marist Poll",
+          "date": "2026-09-20",
+          "dem": 54,
+          "rep": 42,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-16",
+          "dem": 46,
+          "rep": 42,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Cygnal (R)",
+          "date": "2026-09-11",
+          "dem": 48,
+          "rep": 44,
+          "rating": 0.6,
+          "note": "Sponsored by the Iowans for Tax Relief Foundation"
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-09-08",
+          "dem": 51,
+          "rep": 41,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-09-01",
+          "dem": 49,
+          "rep": 46,
+          "rating": 0.85
+        },
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-08-29",
+          "dem": 51,
+          "rep": 46,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Suffolk University",
+          "date": "2026-08-23",
+          "dem": 48,
+          "rep": 44,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-08-04",
+          "dem": 48,
+          "rep": 43,
+          "rating": 0.85
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-06-27",
+          "dem": 48,
+          "rep": 47,
+          "rating": 0.95
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-06-27",
+          "dem": 53,
+          "rep": 44,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Cygnal (R)",
+          "date": "2026-06-19",
+          "dem": 48,
+          "rep": 43,
+          "rating": 0.6,
+          "note": "Sponsored by the Iowans for Tax Relief Foundation"
+        }
+      ],
+      "consensus": {
+        "rating": "Lean D",
+        "favors": "D"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Iowa_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ks_gov_card",
+      "state": "KS",
+      "stateName": "Kansas",
+      "incumbent": {
+        "name": "Laura Kelly",
+        "party": "D",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Cindy Holscher",
+          "party": "D"
+        },
+        {
+          "name": "Ty Masterson",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Lean R",
+        "sabato": "Lean R",
+        "inside": "Tilt R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-04",
+          "dem": 44,
+          "rep": 47,
+          "rating": 0.8
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-09-30",
+          "dem": 44,
+          "rep": 49,
+          "rating": 0.95
+        },
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-09-24",
+          "dem": 48,
+          "rep": 52,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Global Strategy Group (D)",
+          "date": "2026-09-16",
+          "dem": 49,
+          "rep": 46,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Democratic Attorneys General Association"
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-09-16",
+          "dem": 44,
+          "rep": 51,
+          "rating": 0.85,
+          "note": "Sponsored by Nexstar Media Group"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-10",
+          "dem": 43,
+          "rep": 51,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Global Strategy Group (Holscher campaign)",
+          "date": "2026-08-16",
+          "dem": 47,
+          "rep": 46,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Holscher campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Lean R",
+        "favors": "R"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
+        "nonpartisan polls average within 4.9 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Kansas_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "md_gov_card",
+      "state": "MD",
+      "stateName": "Maryland",
+      "incumbent": {
+        "name": "Wes Moore",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Wes Moore",
+          "party": "D"
+        },
+        {
+          "name": "Dan Cox",
+          "party": "R"
+        },
+        {
+          "name": "Andy Ellis",
+          "party": "Green",
+          "minor": true
+        },
+        {
+          "name": "Cathy White",
+          "party": "Working Class",
+          "minor": true
+        }
+      ],
+      "note": "A rematch of 2022.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "UMBC",
+          "date": "2026-09-27",
+          "dem": 51,
+          "rep": 24,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Zenith Research",
+          "date": "2026-08-03",
+          "dem": 58,
+          "rep": 31,
+          "rating": 0.6,
+          "note": "Sponsored by Blended Public Affairs and Perry Jacobson"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Maryland_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ma_gov_card",
+      "state": "MA",
+      "stateName": "Massachusetts",
+      "incumbent": {
+        "name": "Maura Healey",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Maura Healey",
+          "party": "D"
+        },
+        {
+          "name": "Mike Minogue",
+          "party": "R"
+        },
+        {
+          "name": "Andrea James",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "MassINC Polling Group",
+          "date": "2026-09-22",
+          "dem": 51,
+          "rep": 30,
+          "rating": 0.8
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 54,
+          "rep": 38,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Massachusetts_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "mi_gov_card",
+      "state": "MI",
+      "stateName": "Michigan",
+      "incumbent": {
+        "name": "Gretchen Whitmer",
+        "party": "D",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Jocelyn Benson",
+          "party": "D"
+        },
+        {
+          "name": "John James",
+          "party": "R"
+        },
+        {
+          "name": "Anthony Hudson",
+          "party": "Libertarian",
+          "minor": true
+        },
+        {
+          "name": "Douglas Campbell",
+          "party": "Green",
+          "minor": true
+        },
+        {
+          "name": "Donna Brandenburg",
+          "party": "U.S. Taxpayers",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Lean D",
+        "sabato": "Lean D",
+        "inside": "Tilt D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-10-09",
+          "dem": 55,
+          "rep": 45,
+          "rating": 0.55
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-04",
+          "dem": 48,
+          "rep": 45,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Z to A Research (D)",
+          "date": "2026-10-01",
+          "dem": 50,
+          "rep": 40,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Rust Belt Rising"
+        },
+        {
+          "pollster": "Mitchell Research & Communications",
+          "date": "2026-10-01",
+          "dem": 46,
+          "rep": 39,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-09-28",
+          "dem": 54,
+          "rep": 45,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Guidant Polling & Strategy (Public First Action)",
+          "date": "2026-09-27",
+          "dem": 50,
+          "rep": 45,
+          "rating": 0.5,
+          "note": "Sponsored by Public First Action, a PAC that backs candidates in both parties"
+        },
+        {
+          "pollster": "Marist Poll",
+          "date": "2026-09-27",
+          "dem": 53,
+          "rep": 41,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-23",
+          "dem": 47,
+          "rep": 44,
+          "rating": 0.55
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-09-22",
+          "dem": 48,
+          "rep": 43,
+          "rating": 0.95
+        },
+        {
+          "pollster": "Cygnal/Beacon Research (Michigan Enjoyer)",
+          "date": "2026-09-21",
+          "dem": 45,
+          "rep": 38,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Suffolk University",
+          "date": "2026-09-20",
+          "dem": 51,
+          "rep": 34,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Torchlight Strategies (Common Sense for America PAC)",
+          "date": "2026-09-19",
+          "dem": 42,
+          "rep": 41,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Common Sense for America PAC"
+        },
+        {
+          "pollster": "Washington Post/Schar School",
+          "date": "2026-09-14",
+          "dem": 53,
+          "rep": 41,
+          "rating": 0.9
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-09-14",
+          "dem": 49,
+          "rep": 42,
+          "rating": 0.85
+        },
+        {
+          "pollster": "CNN/SSRS",
+          "date": "2026-09-06",
+          "dem": 50,
+          "rep": 41,
+          "rating": 0.9
+        },
+        {
+          "pollster": "Glengariff (Detroit News/WDIV)",
+          "date": "2026-09-03",
+          "dem": 47,
+          "rep": 43,
+          "rating": 0.8
+        },
+        {
+          "pollster": "EPIC-MRA",
+          "date": "2026-08-28",
+          "dem": 45,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "Commissioned by MIRS"
+        },
+        {
+          "pollster": "Michigan State University/YouGov",
+          "date": "2026-08-20",
+          "dem": 52,
+          "rep": 43,
+          "rating": 0.8
+        },
+        {
+          "pollster": "AARP (Fabrizio/Impact)",
+          "date": "2026-08-11",
+          "dem": 49,
+          "rep": 44,
+          "rating": 0.85
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-08-10",
+          "dem": 52,
+          "rep": 47,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "TIPP Insights (R)",
+          "date": "2026-08-10",
+          "dem": 53,
+          "rep": 37,
+          "rating": 0.6,
+          "note": "Sponsored by the League of American Workers"
+        }
+      ],
+      "consensus": {
+        "rating": "Lean D",
+        "favors": "D"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Michigan_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "mn_gov_card",
+      "state": "MN",
+      "stateName": "Minnesota",
+      "incumbent": {
+        "name": "Tim Walz",
+        "party": "D",
+        "status": "withdrew in January",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Amy Klobuchar",
+          "party": "D"
+        },
+        {
+          "name": "Lisa Demuth",
+          "party": "R"
+        },
+        {
+          "name": "Steven Young",
+          "party": "Green",
+          "minor": true
+        }
+      ],
+      "note": "Open seat. Walz dropped his bid for a third term in January after a scandal over fraud in state-funded social services. Klobuchar runs on the DFL line, Minnesota's Democratic Party.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Likely D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-10-12",
+          "dem": 48,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "For KSTP"
+        },
+        {
+          "pollster": "Morning Consult",
+          "date": "2026-10-07",
+          "dem": 48,
+          "rep": 39,
+          "rating": 0.8,
+          "note": "Conducted for The Daily Agenda; registered voters"
+        },
+        {
+          "pollster": "Mason-Dixon",
+          "date": "2026-10-07",
+          "dem": 50,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "For KARE 11 / Minnesota Star Tribune"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-15",
+          "dem": 47,
+          "rep": 45,
+          "rating": 0.55
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-09-14",
+          "dem": 47,
+          "rep": 40,
+          "rating": 0.8,
+          "note": "For KSTP"
+        },
+        {
+          "pollster": "TIPP Insights (R)",
+          "date": "2026-09-02",
+          "dem": 50,
+          "rep": 40,
+          "rating": 0.6,
+          "note": "Sponsored by the League of American Workers"
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-08-17",
+          "dem": 51,
+          "rep": 36,
+          "rating": 0.8,
+          "note": "For KSTP"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Minnesota_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ne_gov_card",
+      "state": "NE",
+      "stateName": "Nebraska",
+      "incumbent": {
+        "name": "Jim Pillen",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Lynne Walz",
+          "party": "D"
+        },
+        {
+          "name": "Jim Pillen",
+          "party": "R"
+        },
+        {
+          "name": "Brett Lindstrom",
+          "party": "America First",
+          "minor": true
+        },
+        {
+          "name": "Rick Beard",
+          "party": "Legal Marijuana Now",
+          "minor": true
+        }
+      ],
+      "note": "Brett Lindstrom, a former Republican state senator, is running on the America First line and polls in the mid to high single digits.",
+      "ratings": {
+        "cook": "Likely R",
+        "sabato": "Likely R",
+        "inside": "Likely R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "National Public Affairs (R)",
+          "date": "2026-10-05",
+          "dem": 40,
+          "rep": 44,
+          "rating": 0.6,
+          "note": "Lindstrom 7"
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-03",
+          "dem": 43,
+          "rep": 44,
+          "rating": 0.8
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-30",
+          "dem": 38,
+          "rep": 43,
+          "rating": 0.55,
+          "note": "Lindstrom 5"
+        },
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-09-16",
+          "dem": 36,
+          "rep": 53,
+          "rating": 0.55,
+          "note": "Lindstrom 5"
+        },
+        {
+          "pollster": "Lake Research Partners (Walz campaign)",
+          "date": "2026-09-14",
+          "dem": 40,
+          "rep": 40,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Walz campaign",
+          "note": "Registered voters; Lindstrom 9"
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-09-13",
+          "dem": 35,
+          "rep": 43,
+          "rating": 0.8,
+          "note": "Sponsored by Grant Forbes, LLC"
+        },
+        {
+          "pollster": "Public Policy Polling (DGA)",
+          "date": "2026-09-02",
+          "dem": 31,
+          "rep": 32,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Democratic Governors Association",
+          "note": "Registered voters; Lindstrom 10"
+        }
+      ],
+      "consensus": {
+        "rating": "Likely R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Nebraska_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "nv_gov_card",
+      "state": "NV",
+      "stateName": "Nevada",
+      "futureNeedle": true,
+      "incumbent": {
+        "name": "Joe Lombardo",
+        "party": "R",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Aaron Ford",
+          "party": "D"
+        },
+        {
+          "name": "Joe Lombardo",
+          "party": "R"
+        },
+        {
+          "name": "Danielle Ford",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Nevada ballots also offer \"None of these candidates.\"",
+      "ratings": {
+        "cook": "Toss-up",
+        "sabato": "Toss-up",
+        "inside": "Tilt R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Noble Predictive Insights",
+          "date": "2026-09-26",
+          "dem": 40,
+          "rep": 42,
+          "rating": 0.6,
+          "note": "Danielle Ford (I) 7"
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-09-08",
+          "dem": 44,
+          "rep": 42,
+          "rating": 0.85
+        },
+        {
+          "pollster": "Tarrance Group (Better Nevada PAC/RGA)",
+          "date": "2026-07-29",
+          "dem": 43,
+          "rep": 50,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Better Nevada PAC and the Republican Governors Association"
+        },
+        {
+          "pollster": "Public Policy Polling (DGA)",
+          "date": "2026-07-16",
+          "dem": 44,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Democratic Governors Association"
+        },
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-07-12",
+          "dem": 47,
+          "rep": 50,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Grassroots Targeting (Better Nevada PAC/RGA)",
+          "date": "2026-07-08",
+          "dem": 40,
+          "rep": 52,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Better Nevada PAC and the Republican Governors Association"
+        },
+        {
+          "pollster": "Public Opinion Strategies (RGA)",
+          "date": "2026-06-29",
+          "dem": 42,
+          "rep": 51,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Republican Governors Association"
+        }
+      ],
+      "consensus": {
+        "rating": "Toss-up",
+        "favors": null
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
+        "nonpartisan polls average within 0.4 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Nevada_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "nh_gov_card",
+      "state": "NH",
+      "stateName": "New Hampshire",
+      "incumbent": {
+        "name": "Kelly Ayotte",
+        "party": "R",
+        "status": "running for a second two-year term"
+      },
+      "nominees": [
+        {
+          "name": "Cinde Warmington",
+          "party": "D"
+        },
+        {
+          "name": "Kelly Ayotte",
+          "party": "R"
+        },
+        {
+          "name": "Jon Kiper",
+          "party": "Community First",
+          "minor": true
+        }
+      ],
+      "note": "New Hampshire governors serve two-year terms.",
+      "ratings": {
+        "cook": "Likely R",
+        "sabato": "Likely R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "YouGov",
+          "date": "2026-10-05",
+          "dem": 40,
+          "rep": 49,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Saint Anselm NHIOP (AARP)",
+          "date": "2026-09-29",
+          "dem": 45,
+          "rep": 52,
+          "rating": 0.8
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-09-22",
+          "dem": 41,
+          "rep": 52,
+          "rating": 0.95
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 43,
+          "rep": 47,
+          "rating": 0.8
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-11",
+          "dem": 34,
+          "rep": 55,
+          "rating": 0.55
+        }
+      ],
+      "consensus": {
+        "rating": "Likely R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_New_Hampshire_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "nm_gov_card",
+      "state": "NM",
+      "stateName": "New Mexico",
+      "incumbent": {
+        "name": "Michelle Lujan Grisham",
+        "party": "D",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Deb Haaland",
+          "party": "D"
+        },
+        {
+          "name": "Gregg Hull",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Likely D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Research & Polling Inc.",
+          "date": "2026-10-09",
+          "dem": 49,
+          "rep": 42,
+          "rating": 0.8,
+          "note": "For the Albuquerque Journal"
+        },
+        {
+          "pollster": "SurveyUSA",
+          "date": "2026-09-30",
+          "dem": 47,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "Commissioned by KOB-TV"
+        },
+        {
+          "pollster": "Research & Polling Inc.",
+          "date": "2026-08-28",
+          "dem": 49,
+          "rep": 43,
+          "rating": 0.8,
+          "note": "For the Albuquerque Journal"
+        },
+        {
+          "pollster": "BSP Research (D)",
+          "date": "2026-08-07",
+          "dem": 41,
+          "rep": 24,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "McLaughlin & Associates (Hull campaign)",
+          "date": "2026-07-15",
+          "dem": 46,
+          "rep": 45,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Hull campaign"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_New_Mexico_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ny_gov_card",
+      "state": "NY",
+      "stateName": "New York",
+      "incumbent": {
+        "name": "Kathy Hochul",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Kathy Hochul",
+          "party": "D"
+        },
+        {
+          "name": "Bruce Blakeman",
+          "party": "R"
+        }
+      ],
+      "note": "Blakeman also has the Conservative Party line.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Likely D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Pollfinity Research",
+          "date": "2026-10-12",
+          "dem": 47,
+          "rep": 44,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Beacon Research (D)",
+          "date": "2026-10-06",
+          "dem": 53,
+          "rep": 31,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-10-05",
+          "dem": 52,
+          "rep": 40,
+          "rating": 0.85,
+          "note": "Sponsored by WPIX"
+        },
+        {
+          "pollster": "Marist Poll",
+          "date": "2026-10-04",
+          "dem": 53,
+          "rep": 42,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-09-25",
+          "dem": 48,
+          "rep": 41,
+          "rating": 0.55,
+          "note": "Sponsored by the Coalition to Protect Nassau Taxpayers"
+        },
+        {
+          "pollster": "Quinnipiac University",
+          "date": "2026-09-20",
+          "dem": 58,
+          "rep": 39,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Siena College",
+          "date": "2026-09-17",
+          "dem": 50,
+          "rep": 41,
+          "rating": 0.8
+        },
+        {
+          "pollster": "McLaughlin & Associates (Blakeman campaign)",
+          "date": "2026-08-31",
+          "dem": 50,
+          "rep": 46,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Blakeman campaign"
+        },
+        {
+          "pollster": "Concord Public Opinion Partners (D)",
+          "date": "2026-08-21",
+          "dem": 50,
+          "rep": 34,
+          "rating": 0.6,
+          "note": "Sponsored by Education Reform Now"
+        },
+        {
+          "pollster": "Siena College",
+          "date": "2026-08-06",
+          "dem": 49,
+          "rep": 39,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Moxie Strategies",
+          "date": "2026-07-28",
+          "dem": 49,
+          "rep": 37,
+          "rating": 0.6,
+          "note": "Sponsored by the Firefighters Association of the State of New York; registered voters"
+        },
+        {
+          "pollster": "Red Oak Strategic (Strong And Safe PAC)",
+          "date": "2026-07-12",
+          "dem": 47,
+          "rep": 43,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Strong And Safe, a super PAC backing Blakeman",
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-07-02",
+          "dem": 47,
+          "rep": 41,
+          "rating": 0.55,
+          "note": "Sponsored by the Coalition to Protect Nassau Taxpayers"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_New_York_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "oh_gov_card",
+      "state": "OH",
+      "stateName": "Ohio",
+      "incumbent": {
+        "name": "Mike DeWine",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Amy Acton",
+          "party": "D"
+        },
+        {
+          "name": "Vivek Ramaswamy",
+          "party": "R"
+        },
+        {
+          "name": "Donald Kissick",
+          "party": "Libertarian",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Toss-up",
+        "sabato": "Toss-up",
+        "inside": "Toss-up",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "BGSU/YouGov",
+          "date": "2026-10-09",
+          "dem": 50,
+          "rep": 44,
+          "rating": 0.8
+        },
+        {
+          "pollster": "co/efficient",
+          "date": "2026-10-06",
+          "dem": 43,
+          "rep": 45,
+          "rating": 0.55
+        },
+        {
+          "pollster": "CNN/SSRS",
+          "date": "2026-10-05",
+          "dem": 50,
+          "rep": 42,
+          "rating": 0.9
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-10-01",
+          "dem": 49,
+          "rep": 45,
+          "rating": 0.95
+        },
+        {
+          "pollster": "YouGov",
+          "date": "2026-09-30",
+          "dem": 48,
+          "rep": 44,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Suffolk University",
+          "date": "2026-09-27",
+          "dem": 50,
+          "rep": 41,
+          "rating": 0.8,
+          "note": "Sponsored by USA Today"
+        },
+        {
+          "pollster": "Marist Poll",
+          "date": "2026-09-27",
+          "dem": 50,
+          "rep": 44,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Big Data Poll",
+          "date": "2026-09-27",
+          "dem": 44,
+          "rep": 46,
+          "rating": 0.6
+        },
+        {
+          "pollster": "BGSU/YouGov",
+          "date": "2026-09-10",
+          "dem": 48,
+          "rep": 45,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-08-13",
+          "dem": 47,
+          "rep": 46,
+          "rating": 0.55
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-08-10",
+          "dem": 48,
+          "rep": 50,
+          "rating": 0.9,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Tulchin Research (Kulewicz campaign)",
+          "date": "2026-08-04",
+          "dem": 46,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Campaign of John Kulewicz, Democratic candidate for attorney general"
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-06-28",
+          "dem": 47,
+          "rep": 47,
+          "rating": 0.95
+        },
+        {
+          "pollster": "AARP (Fabrizio/Impact)",
+          "date": "2026-06-16",
+          "dem": 47,
+          "rep": 44,
+          "rating": 0.85
+        },
+        {
+          "pollster": "Tulchin Research (Kulewicz campaign)",
+          "date": "2026-06-04",
+          "dem": 47,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Campaign of John Kulewicz, Democratic candidate for attorney general"
+        },
+        {
+          "pollster": "Fox News (Beacon/Shaw)",
+          "date": "2026-06-01",
+          "dem": 50,
+          "rep": 49,
+          "rating": 0.9,
+          "note": "Registered voters"
+        }
+      ],
+      "consensus": {
+        "rating": "Toss-up",
+        "favors": null
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
+        "nonpartisan polls average within 4.3 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Ohio_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ok_gov_card",
+      "state": "OK",
+      "stateName": "Oklahoma",
+      "incumbent": {
+        "name": "Kevin Stitt",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Cyndi Munson",
+          "party": "D"
+        },
+        {
+          "name": "Mike Mazzei",
+          "party": "R"
+        },
+        {
+          "name": "Robert Brooks Sr.",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Orlando Bush",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Jerry Griffin",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Likely R",
+        "sabato": "Safe R",
+        "inside": "Likely R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Likely R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Oklahoma_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "or_gov_card",
+      "state": "OR",
+      "stateName": "Oregon",
+      "futureNeedle": true,
+      "incumbent": {
+        "name": "Tina Kotek",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Tina Kotek",
+          "party": "D"
+        },
+        {
+          "name": "Christine Drazan",
+          "party": "R"
+        },
+        {
+          "name": "Brett Smith",
+          "party": "Pacific Green",
+          "minor": true
+        }
+      ],
+      "note": "A rematch of 2022.",
+      "ratings": {
+        "cook": "Lean D",
+        "sabato": "Lean D",
+        "inside": "Lean D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "GBAO (Kotek campaign)",
+          "date": "2026-10-04",
+          "dem": 46,
+          "rep": 42,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Kotek campaign"
+        },
+        {
+          "pollster": "DHM Research",
+          "date": "2026-10-01",
+          "dem": 46,
+          "rep": 44,
+          "rating": 0.8,
+          "note": "For The Oregonian"
+        },
+        {
+          "pollster": "DHM Research",
+          "date": "2026-09-27",
+          "dem": 44,
+          "rep": 46,
+          "rating": 0.8,
+          "note": "For Oregon Public Broadcasting"
+        },
+        {
+          "pollster": "DHM Research",
+          "date": "2026-09-09",
+          "dem": 43,
+          "rep": 45,
+          "rating": 0.8,
+          "note": "For Grow Oregon"
+        },
+        {
+          "pollster": "Public Opinion Strategies (Drazan campaign)",
+          "date": "2026-06-24",
+          "dem": 44,
+          "rep": 48,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Drazan campaign",
+          "note": "Registered voters"
+        }
+      ],
+      "consensus": {
+        "rating": "Lean D",
+        "favors": "D"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
+        "nonpartisan polls average within 0.3 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Oregon_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "pa_gov_card",
+      "state": "PA",
+      "stateName": "Pennsylvania",
+      "incumbent": {
+        "name": "Josh Shapiro",
+        "party": "D",
+        "status": "running"
+      },
+      "nominees": [
+        {
+          "name": "Josh Shapiro",
+          "party": "D"
+        },
+        {
+          "name": "Stacy Garrity",
+          "party": "R"
+        },
+        {
+          "name": "Ken Krawchuk",
+          "party": "Libertarian",
+          "minor": true
+        }
+      ],
+      "note": "",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Quinnipiac University",
+          "date": "2026-10-05",
+          "dem": 59,
+          "rep": 34,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Z to A Research (D)",
+          "date": "2026-10-01",
+          "dem": 53,
+          "rep": 34,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Rust Belt Rising"
+        },
+        {
+          "pollster": "Susquehanna Polling & Research",
+          "date": "2026-09-30",
+          "dem": 52,
+          "rep": 31,
+          "rating": 0.8
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-09-22",
+          "dem": 58,
+          "rep": 38,
+          "rating": 0.95,
+          "note": "With The Philadelphia Inquirer"
+        },
+        {
+          "pollster": "PennLive (Bravo Group)",
+          "date": "2026-09-22",
+          "dem": 55,
+          "rep": 28,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Franklin & Marshall College",
+          "date": "2026-08-23",
+          "dem": 50,
+          "rep": 25,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "PennLive (Bravo Group)",
+          "date": "2026-08-22",
+          "dem": 56,
+          "rep": 25,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-08-21",
+          "dem": 55,
+          "rep": 39,
+          "rating": 0.95,
+          "note": "With The Philadelphia Inquirer"
+        },
+        {
+          "pollster": "National Public Affairs (R)",
+          "date": "2026-07-30",
+          "dem": 50,
+          "rep": 43,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Quinnipiac University",
+          "date": "2026-07-13",
+          "dem": 53,
+          "rep": 40,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "PennLive (Bravo Group)",
+          "date": "2026-06-25",
+          "dem": 54,
+          "rep": 29,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Franklin & Marshall College",
+          "date": "2026-06-14",
+          "dem": 50,
+          "rep": 28,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "MAD Global Strategy",
+          "date": "2026-06-11",
+          "dem": 48,
+          "rep": 31,
+          "rating": 0.6,
+          "note": "Sponsored by Natural Allies for a Clean Energy Future"
+        },
+        {
+          "pollster": "PennLive (Bravo Group)",
+          "date": "2026-05-24",
+          "dem": 53,
+          "rep": 29,
+          "rating": 0.6
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Pennsylvania_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "ri_gov_card",
+      "state": "RI",
+      "stateName": "Rhode Island",
+      "incumbent": {
+        "name": "Dan McKee",
+        "party": "D",
+        "status": "lost renomination",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Helena Foulkes",
+          "party": "D"
+        },
+        {
+          "name": "Ken Block",
+          "party": "I"
+        },
+        {
+          "name": "Aaron Guckian",
+          "party": "R"
+        },
+        {
+          "name": "Jasjit Gotra",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "CD Reynolds",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Gov. McKee lost the Sept. 9 Democratic primary to Foulkes. Independent Ken Block is running a strong second in recent polls.",
+      "ratings": {
+        "cook": "Solid D",
+        "sabato": "Safe D",
+        "inside": "Solid D",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Emerson College",
+          "date": "2026-10-11",
+          "dem": 44,
+          "rep": 10,
+          "ind": 35,
+          "rating": 0.85,
+          "note": "For WPRI-TV"
+        },
+        {
+          "pollster": "Opinion Diagnostics (Block campaign)",
+          "date": "2026-09-25",
+          "dem": 41,
+          "rep": 19,
+          "ind": 24,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Block campaign"
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 44,
+          "rep": 17,
+          "ind": 25,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Safe D",
+        "favors": "D"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Rhode_Island_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "sc_gov_card",
+      "state": "SC",
+      "stateName": "South Carolina",
+      "incumbent": {
+        "name": "Henry McMaster",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Jermaine Johnson",
+          "party": "D"
+        },
+        {
+          "name": "Alan Wilson",
+          "party": "R"
+        },
+        {
+          "name": "Michael Addison",
+          "party": "United Citizens",
+          "minor": true
+        },
+        {
+          "name": "Walid Hakim",
+          "party": "Green",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Resonance Media",
+          "date": "2026-10-03",
+          "dem": 35,
+          "rep": 45,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
+        {
+          "pollster": "Hart Research (Johnson campaign)",
+          "date": "2026-08-15",
+          "dem": 42,
+          "rep": 50,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Johnson campaign"
+        },
+        {
+          "pollster": "Public Policy Polling (Andrews campaign)",
+          "date": "2026-07-17",
+          "dem": 37,
+          "rep": 45,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Campaign of Annie Andrews, Democratic nominee for U.S. Senate"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_South_Carolina_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "sd_gov_card",
+      "state": "SD",
+      "stateName": "South Dakota",
+      "incumbent": {
+        "name": "Larry Rhoden",
+        "party": "R",
+        "status": "running for a first full term"
+      },
+      "nominees": [
+        {
+          "name": "Dan Ahlers",
+          "party": "D"
+        },
+        {
+          "name": "Larry Rhoden",
+          "party": "R"
+        }
+      ],
+      "note": "Rhoden became governor in 2025 when Kristi Noem left to become Secretary of Homeland Security, and won a July 28 primary runoff.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Concord Public Opinion Partners (D)",
+          "date": "2026-10-08",
+          "dem": 38,
+          "rep": 48,
+          "rating": 0.6,
+          "note": "Sponsored by Democrats for Education Reform"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_South_Dakota_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "tn_gov_card",
+      "state": "TN",
+      "stateName": "Tennessee",
+      "incumbent": {
+        "name": "Bill Lee",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Jerri Green",
+          "party": "D"
+        },
+        {
+          "name": "Marsha Blackburn",
+          "party": "R"
+        },
+        {
+          "name": "David Hatley",
+          "party": "I",
+          "minor": true
+        }
+      ],
+      "note": "Open seat. More than a dozen independents are also on the ballot; David Hatley has polled near 10%.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "TargetSmart (Progress Fund)",
+          "date": "2026-09-12",
+          "dem": 36,
+          "rep": 45,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "The Progress Fund, which backs Green",
+          "note": "Hatley (I) 10"
+        },
+        {
+          "pollster": "Targoz Market Research",
+          "date": "2026-08-26",
+          "dem": 34,
+          "rep": 55,
+          "rating": 0.6,
+          "note": "Sponsored by the Beacon Center of Tennessee"
+        }
+      ],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Tennessee_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "vt_gov_card",
+      "state": "VT",
+      "stateName": "Vermont",
+      "incumbent": {
+        "name": "Phil Scott",
+        "party": "R",
+        "status": "running for a sixth two-year term"
+      },
+      "nominees": [
+        {
+          "name": "Amanda Janoo",
+          "party": "D"
+        },
+        {
+          "name": "Phil Scott",
+          "party": "R"
+        },
+        {
+          "name": "Brian Judd",
+          "party": "I",
+          "minor": true
+        },
+        {
+          "name": "Dean Roy",
+          "party": "Freedom and Unity",
+          "minor": true
+        },
+        {
+          "name": "June Goodband",
+          "party": "Green Mountain",
+          "minor": true
+        }
+      ],
+      "note": "Vermont governors serve two-year terms.",
+      "ratings": {
+        "cook": "Likely R",
+        "sabato": "Likely R",
+        "inside": "Likely R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "State Navigate",
+          "date": "2026-10-04",
+          "dem": 43,
+          "rep": 46,
+          "rating": 0.6
+        },
+        {
+          "pollster": "UNH Survey Center",
+          "date": "2026-09-21",
+          "dem": 49,
+          "rep": 43,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Braun Research/Vermont Public",
+          "date": "2026-09-21",
+          "dem": 34,
+          "rep": 44,
+          "rating": 0.8
+        }
+      ],
+      "consensus": {
+        "rating": "Likely R",
+        "favors": "R"
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "nonpartisan polls average within 2.4 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Vermont_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "wi_gov_card",
+      "state": "WI",
+      "stateName": "Wisconsin",
+      "futureNeedle": true,
+      "incumbent": {
+        "name": "Tony Evers",
+        "party": "D",
+        "status": "not seeking a third term",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "David Crowley",
+          "party": "D"
+        },
+        {
+          "name": "Tom Tiffany",
+          "party": "R"
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Toss-up",
+        "sabato": "Lean D",
+        "inside": "Toss-up",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [
+        {
+          "pollster": "Z to A Research (D)",
+          "date": "2026-10-01",
+          "dem": 49,
+          "rep": 44,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Rust Belt Rising"
+        },
+        {
+          "pollster": "Marquette University",
+          "date": "2026-09-23",
+          "dem": 49,
+          "rep": 46,
+          "rating": 0.8
+        },
+        {
+          "pollster": "Marquette University",
+          "date": "2026-08-20",
+          "dem": 49,
+          "rep": 44,
+          "rating": 0.8
+        },
+        {
+          "pollster": "TIPP Insights (R)",
+          "date": "2026-08-18",
+          "dem": 47,
+          "rep": 43,
+          "rating": 0.6,
+          "note": "Sponsored by the League of American Workers"
+        },
+        {
+          "pollster": "Platform Communications (R)",
+          "date": "2026-08-13",
+          "dem": 48,
+          "rep": 44,
+          "rating": 0.6
+        }
+      ],
+      "consensus": {
+        "rating": "Toss-up",
+        "favors": null
+      },
+      "competitive": true,
+      "competitiveWhy": [
+        "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
+        "nonpartisan polls average within 3.5 points"
+      ],
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Wisconsin_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    },
+    {
+      "id": "wy_gov_card",
+      "state": "WY",
+      "stateName": "Wyoming",
+      "incumbent": {
+        "name": "Mark Gordon",
+        "party": "R",
+        "status": "term-limited",
+        "open": true
+      },
+      "nominees": [
+        {
+          "name": "Kenneth Casner",
+          "party": "D"
+        },
+        {
+          "name": "Eric Barlow",
+          "party": "R"
+        },
+        {
+          "name": "Joseph Kibler",
+          "party": "Constitution",
+          "minor": true
+        }
+      ],
+      "note": "Open seat.",
+      "ratings": {
+        "cook": "Solid R",
+        "sabato": "Safe R",
+        "inside": "Solid R",
+        "asOf": {
+          "cook": "2026-10-13",
+          "sabato": "2026-10-06",
+          "inside": "2026-10-15"
+        }
+      },
+      "polls": [],
+      "consensus": {
+        "rating": "Safe R",
+        "favors": "R"
+      },
+      "competitive": false,
+      "sources": [
+        "https://en.wikipedia.org/wiki/2026_Wyoming_gubernatorial_election",
+        "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
+        "https://www.cookpolitical.com/ratings/governor-race-ratings",
+        "https://centerforpolitics.org/crystalball/2026-governor/",
+        "https://www.insideelections.com/ratings/governor"
+      ]
+    }
+  ]
+}

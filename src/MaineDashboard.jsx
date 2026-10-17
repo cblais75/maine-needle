@@ -12,6 +12,7 @@ import nhBaseline from "../data/nh-baseline.json";
 import ksBaseline from "../data/ks-baseline.json";
 import mnBaseline from "../data/mn-baseline.json";
 import senateCards from "../data/senate-cards.json";
+import governorCards from "../data/governor-cards.json";
 import { gateResults } from "../scripts/lib/results-gate.mjs";
 import { simulatedPreview } from "../scripts/lib/night-preview.mjs";
 import { RUNOFF_RACES, otherShare, runoffStatus } from "../scripts/lib/runoff.mjs";
@@ -1750,7 +1751,7 @@ function SeatCard({ c, open, onToggle, night, wide }) {
       <button onClick={onToggle} aria-expanded={open}
         style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%", minHeight: 44, padding: "12px 14px", textAlign: "left", background: "none", border: "none", cursor: "pointer", color: C.text }}>
         <span style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-          <span style={{ fontSize: 16, fontWeight: 700 }}>{c.stateName}{c.seat === "special" && <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}> · special</span>}</span>
+          <span style={{ fontSize: 16, fontWeight: 700 }}>{c.stateName}{c.seat === "special" && <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}> · special</span>}{c.competitive && <span style={{ marginLeft: 8, fontSize: 10.5, fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase", color: C.text, border: `1px solid ${C.text}`, padding: "1px 5px", verticalAlign: 2 }}>Competitive</span>}</span>
           <span style={{ fontSize: 14, fontWeight: 700, color: ratingColor(rt), whiteSpace: "nowrap" }}>{rt}</span>
         </span>
         <span style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto minmax(0,1fr)", alignItems: "baseline", gap: 8, fontSize: 14 }}>
@@ -1769,8 +1770,10 @@ function SeatCard({ c, open, onToggle, night, wide }) {
           </div>
           <div><span style={{ color: C.muted }}>Held by</span> {c.incumbent.name} ({c.incumbent.party}), {c.incumbent.status}.</div>
           {c.note && <div>{c.note}</div>}
+          {c.competitive && c.competitiveWhy && <div style={{ fontSize: 13 }}><b>Competitive:</b> {c.competitiveWhy.join("; ")}.</div>}
+          {c.futureNeedle && <div style={{ fontSize: 13, fontWeight: 600 }}>A full needle for this state is planned for future elections.</div>}
           {c.nominees.some((x) => x.minor) && <div style={{ fontSize: 13, color: C.muted }}>Also on the ballot: {c.nominees.filter((x) => x.minor).map((x) => `${x.name} (${x.party})`).join(", ")}</div>}
-          {night && <div style={{ fontSize: 13, fontWeight: 600 }}>Forecast only, no live count. This seat counts toward Senate control by its forecaster rating.</div>}
+          {night && <div style={{ fontSize: 13, fontWeight: 600 }}>Forecast only, no live count.{/_gov_card$/.test(c.id) ? "" : " This seat counts toward Senate control by its forecaster rating."}</div>}
           <div style={{ fontSize: 13, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>{n ? "Public polls since the primary" : "No public polls since the primary"}</div>
           {c.polls.map((p, i) => (
             <div key={i} style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,1fr) auto" : "minmax(0,1fr)", columnGap: 12, rowGap: 2, padding: "6px 0", borderBottom: `1px solid ${C.line}` }}>
@@ -1791,15 +1794,18 @@ function SeatCard({ c, open, onToggle, night, wide }) {
     </div>
   );
 }
-function SeatCards({ wide, night }) {
+// Governor race cards (Update 58): same cards, for every governor's race without a needle (Maine and
+// Texas have needles). They never touch the Senate count or the Senate control page.
+const GOV_CARD_RACES = (governorCards.races || []).slice().sort((a, b) => a.stateName.localeCompare(b.stateName));
+function SeatCards({ wide, night, cards = CARD_RACES, title = "Every other Senate seat", footer }) {
   const [open, setOpen] = useState(null);
   return (
     <section style={{ paddingTop: 34 }}>
-      <SectionHead title="Every other Senate seat" note={wide ? "Forecaster ratings and public polls · no needle" : null} size={wide ? 28 : 22} />
+      <SectionHead title={title} note={wide ? "Forecaster ratings and public polls · no needle" : null} size={wide ? 28 : 22} />
       <div style={{ display: "grid", gridTemplateColumns: wide ? "repeat(3, minmax(0,1fr))" : "minmax(0,1fr)", gap: wide ? 12 : 8, paddingTop: 14 }}>
-        {CARD_RACES.map((c) => <SeatCard key={c.id} c={c} night={night} wide={wide} open={open === c.id} onToggle={() => setOpen(open === c.id ? null : c.id)} />)}
+        {cards.map((c) => <SeatCard key={c.id} c={c} night={night} wide={wide} open={open === c.id} onToggle={() => setOpen(open === c.id ? null : c.id)} />)}
       </div>
-      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>The rating shown is the one most of Cook, Sabato's Crystal Ball and Inside Elections agree on. These seats count toward Senate control by that rating. Their polls are listed for reference and don't feed any needle.</p>
+      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>{footer || "The rating shown is the one most of Cook, Sabato's Crystal Ball and Inside Elections agree on. These seats count toward Senate control by that rating. Their polls are listed for reference and don't feed any needle."}</p>
     </section>
   );
 }
@@ -1891,6 +1897,8 @@ function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
       </section>
       {night && <PausedList races={paused} onPick={onPick} wide={wide} />}
       <ErrorBoundary mini label="Senate seat cards unavailable"><SeatCards wide={wide} night={night} /></ErrorBoundary>
+      <ErrorBoundary mini label="Governor cards unavailable"><SeatCards wide={wide} night={night} cards={GOV_CARD_RACES} title="Every other governor's race"
+        footer="The rating shown is the one most of Cook, Sabato's Crystal Ball and Inside Elections agree on. A Competitive tag marks a race that meets our rule for a full needle. Governor races don't affect the Senate count, and their polls don't feed any needle." /></ErrorBoundary>
     </div>
   );
 }
@@ -2374,7 +2382,7 @@ function MethodView({ wide }) {
         <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}` }}>
           {note("Maine and New Hampshire", "These states don't publish results on election night. Their needles will pause and finish on their own when the states post official results; in the meantime each paused race links to the AP's live count.")}
         </div>
-        {note("Every other Senate seat", "The Senate races without a needle get a card instead. A card shows the candidates, the ratings from Cook, Sabato's Crystal Ball and Inside Elections, and the public polls, but no needle and no live count; it counts toward Senate control by the forecasters' rating. A card gets a full needle if at least two of those forecasters rate it Toss-up or Lean, or nonpartisan polls show it within about 5 points.")}
+        {note("Every other Senate seat and governor's race", "The Senate races without a needle get a card instead. A card shows the candidates, the ratings from Cook, Sabato's Crystal Ball and Inside Elections, and the public polls, but no needle and no live count; it counts toward Senate control by the forecasters' rating. A card gets a full needle if at least two of those forecasters rate it Toss-up or Lean, or nonpartisan polls show it within about 5 points. Governor races without a needle get the same cards and the same promotion rule; a card that meets it is tagged Competitive. Governor cards don't affect the Senate count.")}
         {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so its needle is a polling forecast that doesn't move on election night.")}
         {note("Where the data comes from", "Polls from public releases, and results from the official files each state's election office publishes. No paid data and no copying from news sites.")}
         {note("About the name", "Needlepoint was called The Needle Project until October 2026. Same site, same needles, shorter name.")}
