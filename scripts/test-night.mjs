@@ -1,5 +1,5 @@
 // test-night.mjs — election-night stress-test harness.
-// Fabricates a synthetic night for the ten county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH, KS, MN).
+// Fabricates a synthetic night for the eleven county-mapped states (NC, OH, TX, IA, GA, NE, MI, NH, KS, MN, SC).
 // Each state's fake returns are written as a realistic, messy DOWNLOAD FILE in that state's own
 // layout (NC-style tab file with State Senate rows mixed in, Clarity XML, Michigan-style tab file,
 // Ohio-style wide spreadsheet, CSV with "County" suffixes and odd capitalization, Kansas's results
@@ -54,6 +54,7 @@ const STATES = [
   { state: "NH", office: "U.S. Senate", dem: "Pappas",   rep: "Sununu",   baseline: "nh-baseline.json" },
   { state: "KS", office: "United States Senate", dem: "Hamilton", rep: "Marshall", baseline: "ks-baseline.json" },
   { state: "MN", office: "U.S. Senator", dem: "Flanagan", rep: "Tafoya", baseline: "mn-baseline.json" },
+  { state: "SC", office: "U.S. Senate", dem: "Annie Andrews", rep: "Darline Graham", baseline: "sc-baseline.json" },
 ];
 
 // One synthetic "truth" per run: statewide swing per state, county noise, county report order.
@@ -69,7 +70,7 @@ const night = STATES.map((s) => {
   return { ...s, swing: (rng() - 0.5) * 0.08, counties };
 });
 
-const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76, KS: 0.76, MN: 0.78 }; // 2022 turnout vs 2024
+const TURNOUT = { NC: 0.66, OH: 0.72, TX: 0.71, IA: 0.73, GA: 0.75, NE: 0.72, MI: 0.79, NH: 0.76, KS: 0.76, MN: 0.78, SC: 0.67 }; // 2022 turnout vs 2024
 
 // Per-state fake counts for this moment of the night.
 function snapshotCounts(frac) {
@@ -107,11 +108,13 @@ function asFile(s, list) {
     }
     return enc(out.join("\n"));
   }
-  if (s.state === "IA" || s.state === "GA") { // Clarity detail XML, split by vote type, with precincts reporting
+  if (s.state === "IA" || s.state === "GA" || s.state === "SC") { // Clarity detail XML, split by vote type, with precincts reporting
+    // South Carolina (Update 64): the general contest is "U.S. Senate"; a primary-style "U.S.  Senate  - REP" (with a
+    // Graham in it) and a State Senate race are mixed in and must NOT count.
     const cty = (f) => list.map((c) => `<County name="${c.county}" votes="${f(c)}" />`).join("");
     const part = list.map((c) => `<County name="${c.county}" precinctsParticipating="20" precinctsReported="${Math.round(20 * c.local)}" />`).join("");
     const ch = (name, party, key) => `<Choice key="1" text="${name}" party="${party}"><VoteType name="Election Day">${cty((c) => Math.round(c[key] * 0.7))}</VoteType><VoteType name="Absentee">${cty((c) => c[key] - Math.round(c[key] * 0.7))}</VoteType></Choice>`;
-    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest>${s.state === "GA" ? `<Contest key="3" text="Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Keisha Lance Bottoms", "DEM", "gdem")}${ch("Rick Jackson", "REP", "grep")}${ch("Some Libertarian", "LIB", "goth")}</Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Burt Jones" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}${s.state === "IA" ? `<Contest key="3" text="Governor/Lieutenant Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Rob Sand", "DEM", "gdem")}${ch("Zach Lahn", "REP", "grep")}<Choice key="7" text="Sondra Wilson" party="NP"><VoteType name="Election Day">${cty(() => 33)}</VoteType></Choice></Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Someone" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}<Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
+    return enc(`<?xml version="1.0"?><ElectionResult>${s.state === "SC" ? `<Contest key="7" text="U.S.  Senate  - REP" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Lindsey Graham", "REP", "rep")}</Contest><Contest key="8" text="State Senate District 15"><Choice key="9" text="Someone" party="DEM"><VoteType name="Election Day">${cty(() => 4444)}</VoteType></Choice></Contest>` : ""}<Contest key="1" text="${s.state === "SC" ? "U.S. Senate" : "United States Senator"}" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest>${s.state === "GA" ? `<Contest key="3" text="Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Keisha Lance Bottoms", "DEM", "gdem")}${ch("Rick Jackson", "REP", "grep")}${ch("Some Libertarian", "LIB", "goth")}</Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Burt Jones" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}${s.state === "IA" ? `<Contest key="3" text="Governor/Lieutenant Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Rob Sand", "DEM", "gdem")}${ch("Zach Lahn", "REP", "grep")}<Choice key="7" text="Sondra Wilson" party="NP"><VoteType name="Election Day">${cty(() => 33)}</VoteType></Choice></Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Someone" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}<Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
   }
   if (s.state === "MI") { // Michigan Voter Information Center download (Update 60): MVIC GetElectionResultFile, the old
     // CENR_BY_COUNTY layout. A "TOTAL VOTER TURNOUT" line comes before the header; no precincts-reporting column;
@@ -239,7 +242,7 @@ function writeSnapshot(frac) {
     test: true, // a marked test: shown even before the results start gate (Update 55)
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas, Ohio, Georgia, Iowa and Kansas governor races)"));
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 11 states read correctly (plus the Texas, Ohio, Georgia, Iowa and Kansas governor races)"));
 }
 
 // START GATE CHECK (Updates 55-56): fake votes in a state's file must not go live before that
@@ -335,8 +338,33 @@ async function discoveryCheck() {
   const evItem = (id, office, opts) => ({ ballotItemWithBreakdown: { id, name: T(office), breakdownResults: counts.GA.map((c) => ({
     locality: { name: T(`${c.county} County`) }, precinctReportingStatus: { reportingUnits: Math.round(10 * c.local), totalUnits: 10 },
     ballotOptions: opts.map(([cand, party, key]) => ({ name: T(cand), party: { abbreviation: party }, voteCount: c[key] })) })) } });
+  // South Carolina (Update 64): the official results page links each election; each election's settings file has its date.
+  const sc = night.find((s) => s.state === "SC");
+  const SC_PAGE = "https://scvotes.gov/elections-statistics/election-results/", SC = "https://www.enr-scvotes.org/SC";
+  const scElections = [ // id, label on the page, date in its settings file, internal name
+    ["128050", "2026 General Election (test site)", "10/1/2026", "2026 General Election Test"], // labeled general, wrong date: must be skipped
+    ["128000", "2026 Statewide General Election", "11/3/2026", "2026 Statewide General Election"],
+    ["127990", "2026 General Election Runoffs", "11/17/2026", "2026 General Election Runoffs"],
+    ["127227", "State Senate 15 Special Primary", "9/1/2026", "State Senate District 15 Special Primary"],
+    ["127179", "U.S. Senate Special Republican Runoff", "8/25/2026", "U.S. Senate Special Republican Primary - Runoff"],
+    ["127017", "U.S. Senate Special Republican Primary", "8/11/2026", "US Senate Special Republican Primary"],
+    ["126294", "Statewide Primaries", "6/9/2026", "2026 Statewide Primary"],
+    ["122436", "2024 General Election", "11/5/2024", "2024 Statewide General Election"],
+  ];
+  const scPage = () => "<html><body><h2>Election Results</h2><ul>" + scElections.filter(([id]) => posted || id !== "128000")
+    .map(([id, label]) => `<li><a href="${SC}/${id}/${id === "126294" ? "web.345435/#/summary" : ""}"><span>${label}</span></a></li>`).join("") + "</ul></body></html>";
+  const scSite = (u) => {
+    if (u === SC_PAGE) return scPage();
+    for (const [id, , date, name] of scElections) {
+      if (u === `${SC}/${id}/current_ver.txt`) return `38${id.slice(-4)}`;
+      if (u === `${SC}/${id}/38${id.slice(-4)}/json/en/electionsettings.json`) return JSON.stringify({ settings: { electiondetails: { electionid: id, internalname: name, electiondate: date } } });
+    }
+    if (posted && u === `${SC}/128000/388000/reports/detailxml.zip`) return asFile(sc, counts.SC);
+    return null;
+  };
   let posted = true;
   const site = (u) => {
+    const scv = scSite(u); if (scv != null) return scv;
     if (u === IA_LIST) return JSON.stringify(posted ? [...iaDecoys, iaGeneral] : iaDecoys);
     if (u === "https://electionresults.iowa.gov/IA/126900/current_ver.txt") return "377001";
     if (u === "https://electionresults.iowa.gov/IA/126900/377001/reports/detailxml.zip") return asFile(ia, counts.IA);
@@ -358,20 +386,22 @@ async function discoveryCheck() {
         fails.push(`${id}: expected ${w.n} counties / D ${w.dem} R ${w.rep} O ${w.oth}, got ${co ? Object.keys(co).length : 0} / D ${sum(co, "dem")} R ${sum(co, "rep")} O ${sum(co, "oth")}`);
     };
     // 1. Through the real endpoint, gate and all: before 7 p.m. nothing is downloaded; 7:01 Georgia only; 9:01 both.
-    const env = { IA_RESULTS_URL: IA_LIST, GA_RESULTS_URL: GA_LIST };
+    const env = { IA_RESULTS_URL: IA_LIST, GA_RESULTS_URL: GA_LIST, SC_RESULTS_URL: SC_PAGE };
     const et = (h, m) => Date.UTC(2026, 10, 3, h + 5, m);
     requested.length = 0;
     const p659 = await buildPayload({ env, now: et(18, 59) });
     if (requested.length || Object.keys(p659.races).length) fails.push("a list or file was downloaded before 7 p.m.");
     const p701 = await buildPayload({ env, now: et(19, 1) });
     if (requested.some((u) => u.includes("iowa.gov"))) fails.push("Iowa's list was read before 9 p.m.");
-    if (!p701.races.ga_sen || p701.races.ia_sen) fails.push("7:01 p.m.: expected Georgia only");
+    if (!p701.races.ga_sen || !p701.races.sc_sen || p701.races.ia_sen) fails.push("7:01 p.m.: expected Georgia and South Carolina only");
     requested.length = 0;
     const p901 = await buildPayload({ env, now: et(21, 1) });
     checkRace(p901, "ia_sen", want(counts.IA, "dem", "rep"));
     checkRace(p901, "ia_gov", want(counts.IA, "gdem", "grep"));
     checkRace(p901, "ga_sen", want(counts.GA, "dem", "rep", "oth"));
     checkRace(p901, "ga_gov", want(counts.GA, "gdem", "grep", "goth"));
+    checkRace(p901, "sc_sen", want(counts.SC, "dem", "rep"));
+    if (p901.diag?.SC?.election?.id !== "128000") fails.push(`South Carolina picked election ${p901.diag?.SC?.election?.id}, not the general`);
     if (p901.diag?.IA?.election?.id !== "126900") fails.push(`Iowa picked election ${p901.diag?.IA?.election?.id}, not the general`);
     if (p901.diag?.GA?.election?.id !== "11032026GeneralElection") fails.push(`Georgia picked election ${p901.diag?.GA?.election?.id}, not the general`);
     const bad = requested.filter((u) => site(u) == null);
@@ -381,12 +411,13 @@ async function discoveryCheck() {
     posted = false; requested.length = 0;
     const pNot = await buildPayload({ env, now: et(21, 1) });
     if (Object.keys(pNot.races).length) fails.push("showed results from a decoy election");
-    for (const msg of ["Iowa: Nov 3 general not posted yet", "Georgia: Nov 3 general not posted yet"])
+    for (const msg of ["Iowa: Nov 3 general not posted yet", "Georgia: Nov 3 general not posted yet", "South Carolina: Nov 3 general not posted yet"])
       if (!(pNot.errors || []).includes(msg)) fails.push(`missing message "${msg}" (got ${JSON.stringify(pNot.errors)})`);
     if (pNot.source !== "waiting") fails.push(`source should be "waiting" before the general is listed, got "${pNot.source}"`);
-    if (requested.some((u) => !(u === IA_LIST || u === GA_LIST))) fails.push("downloaded a decoy election's files");
+    // (South Carolina may read the settings files of the elections it considers, but never a results file)
+    if (requested.some((u) => /detailxml|\/data(\/|$)/.test(u))) fails.push("downloaded a decoy election's files");
   } finally { globalThis.fetch = realFetch; }
-  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa and Georgia pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs and recounts, even ones dated Nov 3 and listed first); county totals exact (Iowa Senate and governor, Georgia Senate and governor); Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; nothing downloaded before 7 p.m. (Georgia) / 9 p.m. (Iowa)");
+  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa, Georgia and South Carolina pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs, recounts and SC's Aug special primary and runoff, even ones dated Nov 3 and listed first; SC's mislabeled 'general' with the wrong date is rejected by its settings file); county totals exact (Iowa Senate and governor, Georgia Senate and governor, South Carolina Senate); Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; nothing downloaded before 7 p.m. (Georgia, South Carolina) / 9 p.m. (Iowa)");
   if (fails.length) process.exitCode = 1;
 }
 await discoveryCheck();

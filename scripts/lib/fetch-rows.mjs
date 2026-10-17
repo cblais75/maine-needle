@@ -14,7 +14,7 @@
 //     needle finishes from our copy. Links are only followed to the same site or .gov/.us.
 //   - Kansas's unofficial-results page (sos.ks.gov/ent/kssos_ent.html). It has no data file;
 //     the page itself carries every county's votes, so it is read directly.
-//   - a state's LIST of elections (Iowa, Georgia; Update 62): the Nov 3, 2026 general is picked from
+//   - a state's LIST of elections (Iowa, Georgia; Update 62; South Carolina's results page, Update 64): the Nov 3, 2026 general is picked from
 //     the list on every refresh and its results read (see discover.mjs). Until it's listed, the state
 //     reports "<State>: Nov 3 general not posted yet" and shows no results.
 // Clarity links may contain {ver}; the current folder number is looked up automatically.
@@ -98,7 +98,7 @@ export async function fetchRows(setting, state) {
   const urls = [], rows = [], files = [], out = { rows, files };
   for (const link of String(setting || "").split(/\s+/).filter(Boolean)) {
     if (!isElectionList(link)) { urls.push(link); continue; }
-    const d = await discover(link, state, async (u) => (await get(u)).json());
+    const d = await discover(link, state, async (u) => (await get(u)).json(), async (u) => (await get(u)).text());
     if (d.picked) out.picked = d.picked;
     if (d.notPosted) out.notPosted = d.notPosted;
     urls.push(...d.urls);

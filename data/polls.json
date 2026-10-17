@@ -2379,5 +2379,49 @@
       "dem": 47,
       "rep": 46
     }
+  ],
+  "sc_sen": [
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-10-08",
+      "dem": 45,
+      "rep": 49
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-29",
+      "dem": 45,
+      "rep": 46
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-09-25",
+      "dem": 42,
+      "rep": 43
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-09-14",
+      "dem": 43,
+      "rep": 48
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-09-09",
+      "dem": 43,
+      "rep": 45
+    },
+    {
+      "pollster": "Abacus Data",
+      "rating": 0.55,
+      "date": "2026-08-28",
+      "dem": 42,
+      "rep": 55
+    }
   ]
 }

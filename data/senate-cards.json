@@ -1,5 +1,5 @@
 {
-  "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
+  "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54, South Carolina in Update 64). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
   "asOf": "2026-10-16",
   "notUp": {
     "D": 32,
@@ -1328,105 +1328,6 @@
       },
       "sources": [
         "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Rhode_Island",
-        "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
-        "https://www.cookpolitical.com/ratings/senate-race-ratings",
-        "https://centerforpolitics.org/crystalball/2026-senate/",
-        "https://www.insideelections.com/ratings/senate"
-      ]
-    },
-    {
-      "id": "sc_card",
-      "state": "SC",
-      "stateName": "South Carolina",
-      "seat": "regular",
-      "incumbent": {
-        "name": "Darline Graham",
-        "party": "R",
-        "status": "appointed in 2026, running"
-      },
-      "nominees": [
-        {
-          "name": "Annie Andrews",
-          "party": "D"
-        },
-        {
-          "name": "Darline Graham",
-          "party": "R",
-          "short": "D. Graham"
-        },
-        {
-          "name": "Mark Hackett",
-          "party": "Constitution",
-          "minor": true
-        },
-        {
-          "name": "Kasie Whitener",
-          "party": "L",
-          "minor": true
-        }
-      ],
-      "note": "Lindsey Graham won the June primary but died on July 11. His sister Darline Graham was appointed to the seat and won an Aug. 25 special Republican runoff to replace him on the ballot.",
-      "ratings": {
-        "cook": "Likely R",
-        "sabato": "Likely R",
-        "inside": "Lean R",
-        "asOf": {
-          "cook": "2026-10-06",
-          "sabato": "2026-10-14",
-          "inside": "2026-10-15"
-        }
-      },
-      "polls": [
-        {
-          "pollster": "Rasmussen Reports",
-          "date": "2026-10-08",
-          "dem": 45,
-          "rep": 49,
-          "rating": 0.5
-        },
-        {
-          "pollster": "InsiderAdvantage",
-          "date": "2026-09-29",
-          "dem": 45,
-          "rep": 46,
-          "rating": 0.6
-        },
-        {
-          "pollster": "Trafalgar Group",
-          "date": "2026-09-25",
-          "dem": 42,
-          "rep": 43,
-          "rating": 0.6
-        },
-        {
-          "pollster": "Rasmussen Reports",
-          "date": "2026-09-14",
-          "dem": 43,
-          "rep": 48,
-          "rating": 0.5
-        },
-        {
-          "pollster": "InsiderAdvantage",
-          "date": "2026-09-09",
-          "dem": 43,
-          "rep": 45,
-          "rating": 0.6
-        },
-        {
-          "pollster": "Abacus Data",
-          "date": "2026-08-28",
-          "dem": 42,
-          "rep": 55,
-          "rating": 0.55,
-          "note": "306 likely voters (registered voters: Andrews 48, Graham 47)"
-        }
-      ],
-      "consensus": {
-        "rating": "Likely R",
-        "favors": "R"
-      },
-      "sources": [
-        "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina",
         "https://en.wikipedia.org/wiki/2026_United_States_Senate_elections",
         "https://www.cookpolitical.com/ratings/senate-race-ratings",
         "https://centerforpolitics.org/crystalball/2026-senate/",

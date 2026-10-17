@@ -6,7 +6,7 @@
 //
 // Election night setup (host dashboard -> Environment Variables):
 //   MAINE_RESULTS_URL, NC_RESULTS_URL, OH_RESULTS_URL, TX_RESULTS_URL,
-//   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL, MI_RESULTS_URL, NH_RESULTS_URL, KS_RESULTS_URL, MN_RESULTS_URL
+//   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL, MI_RESULTS_URL, NH_RESULTS_URL, KS_RESULTS_URL, MN_RESULTS_URL, SC_RESULTS_URL
 // Kansas: KS_RESULTS_URL = https://sos.ks.gov/ent/kssos_ent.html (the statewide results page;
 // every county's votes are in the page itself, so one download covers all 105 counties).
 // Texas: TX_RESULTS_URL = https://goelect.txelections.civixapps.com/api-ivis-system/api/s3/enr/election/countyInfo/53815
@@ -22,6 +22,9 @@
 //   GA_RESULTS_URL = https://results.sos.ga.gov/results/public/api/jurisdictions/Georgia
 // and the Nov 3, 2026 general is found automatically once the state lists it (scripts/lib/discover.mjs).
 // Until then the state reports "Iowa: Nov 3 general not posted yet" (or Georgia) and shows no results.
+// South Carolina (Update 64): SC_RESULTS_URL = https://scvotes.gov/elections-statistics/election-results/
+//   (SC's Clarity elections.json is empty, so its official results page is read instead: the Nov 3 general's
+//   link is found there, its date confirmed from the election's own settings file, and its detailxml.zip read.)
 // Clarity sites change their folder number as the night goes on. Put {ver} where that number
 // goes (e.g. https://results.enr.clarityelections.com/IA/123456/{ver}/reports/detailxml.zip)
 // and this looks up the current number from current_ver.txt on every refresh.
@@ -52,6 +55,7 @@ const SOURCES = [
   { state: "NH", env: "NH_RESULTS_URL" },
   { state: "KS", env: "KS_RESULTS_URL" },
   { state: "MN", env: "MN_RESULTS_URL" },
+  { state: "SC", env: "SC_RESULTS_URL" },
 ];
 export { resolveUrl } from "../scripts/lib/fetch-rows.mjs";
 

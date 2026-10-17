@@ -14,13 +14,17 @@
 //     -> .../api/elections/Georgia/<id>/data  (the contests; the same data the app loads)
 //     -> .../api/elections/Georgia/<id>/data/ballot-item/<contest id>  (county breakdown, for each contest we track)
 //     If no tracked contest is listed yet but the election's "Total Votes Excel" report is posted, that's read instead.
+//   South Carolina (Clarity, but its elections.json is empty): https://scvotes.gov/elections-statistics/election-results/
+//     -> the page's links to https://www.enr-scvotes.org/SC/<id>/, labeled ("2024 General Election", "Statewide Primaries")
+//     -> confirmed by .../SC/<id>/<ver>/json/en/electionsettings.json (electiondate "11/3/2026")
+//     -> https://www.enr-scvotes.org/SC/<id>/{ver}/reports/detailxml.zip
 //
 // TESTING ONLY: add #election=<election ID or YYYY-MM-DD> to the list link to pick that election instead
 // (any kind, e.g. #election=126082 for Iowa's June primary). Never put that in the Vercel setting.
 import { tracksOffice } from "./aggregate.mjs";
 
 export const GENERAL_DATE = "2026-11-03";
-const STATE_NAMES = { IA: "Iowa", GA: "Georgia" };
+const STATE_NAMES = { IA: "Iowa", GA: "Georgia", SC: "South Carolina" };
 // Never the general: primaries, runoffs, recounts, city/school/municipal, presidential preference primaries.
 const NOT_GENERAL = /primar|runoff|recount|municipal|city|school|preference/i;
 
@@ -30,7 +34,45 @@ const isClarityList = (u) => IOWA_LIST.test(u.pathname);
 const GA_API = /^\/results\/public\/api\/jurisdictions\/([^/]+)\/?$/i;
 const GA_PAGE = /^\/results\/public\/([^/]+)\/?$/i;
 const isEVList = (u) => /(^|\.)sos\.ga\.gov$/i.test(u.hostname) && (GA_API.test(u.pathname) || (GA_PAGE.test(u.pathname) && !/^api$/i.test(u.pathname.match(GA_PAGE)[1])));
-export const isElectionList = (link) => { try { const u = new URL(link); return isClarityList(u) || isEVList(u); } catch { return false; } };
+// South Carolina (Update 64): its Clarity elections.json is empty, so the list is the official results page,
+// https://scvotes.gov/elections-statistics/election-results/, which links every election on enr-scvotes.org.
+const isSCPage = (u) => /(^|\.)scvotes\.(gov|sc\.gov)$/i.test(u.hostname) && /election-results/i.test(u.pathname);
+export const isElectionList = (link) => { try { const u = new URL(link); return isClarityList(u) || isEVList(u) || isSCPage(u); } catch { return false; } };
+
+// SC page links: <a href="https://www.enr-scvotes.org/SC/126294/">Statewide Primaries</a> (labels may sit in nested tags).
+export function scLinks(html) {
+  const out = [], seen = new Set(), re = /<a\b[^>]*href\s*=\s*["']([^"']*enr-scvotes\.org\/SC\/(\d+)[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let m;
+  while ((m = re.exec(String(html)))) {
+    if (seen.has(m[2])) continue; seen.add(m[2]);
+    out.push({ id: m[2], name: m[3].replace(/<[^>]+>/g, " ").replace(/&#8211;|&ndash;/g, "–").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim() });
+  }
+  return out.sort((a, b) => Number(b.id) - Number(a.id)); // newest first
+}
+const SC_ROOT = "https://www.enr-scvotes.org/SC";
+const SC_NOT_GENERAL = /primar|runoff|recount|municipal|city|school|preference|special/i;
+// Pick SC's Nov 3, 2026 statewide general: links labeled as a general election (never a primary, runoff,
+// recount or special), newest first, each confirmed by the date in its own settings file. If no label fits
+// (SC hasn't labeled it yet), the three newest links are checked by their settings files instead.
+async function discoverSC(html, override, getJson, getText) {
+  const links = scLinks(html);
+  const settings = async (id) => {
+    const ver = String(await getText(`${SC_ROOT}/${id}/current_ver.txt`)).trim();
+    const d = (await getJson(`${SC_ROOT}/${id}/${ver}/json/en/electionsettings.json`))?.settings?.electiondetails || {};
+    return { date: isoDate(d.electiondate), name: String(d.internalname || "") };
+  };
+  if (override) {
+    const l = links.find((x) => x.id === override);
+    return l ? { id: l.id, name: l.name, date: (await settings(l.id)).date } : null;
+  }
+  const labeled = links.filter((l) => /general/i.test(l.name) && !SC_NOT_GENERAL.test(l.name));
+  const pool = (labeled.length ? labeled : links).slice(0, 3);
+  for (const l of pool) {
+    let s; try { s = await settings(l.id); } catch { continue; }
+    if (s.date === GENERAL_DATE && !SC_NOT_GENERAL.test(s.name) && (labeled.length || /general/i.test(s.name))) return { id: l.id, name: l.name || s.name, date: s.date };
+  }
+  return null;
+}
 
 // "6/2/2026 12:00:00 AM" -> "2026-06-02"; "2026-06-16" stays.
 export function isoDate(s) {
@@ -59,9 +101,9 @@ export function listFromEV(json) {
   return (json?.elections || []).map((e) => ({ id: String(e.publicElectionId ?? ""), name: String(text(e.name)), date: isoDate(e.electionDate) })).filter((e) => e.id);
 }
 
-// link: the setting; getJson(url) downloads and parses JSON. Returns
+// link: the setting; getJson(url) downloads and parses JSON, getText(url) downloads text. Returns
 //   { urls: [result files to read], picked: { id, name, date } }  or  { urls: [], notPosted: "Iowa: Nov 3 general not posted yet" }
-export async function discover(link, state, getJson) {
+export async function discover(link, state, getJson, getText = async () => "") {
   const [base, frag = ""] = link.split("#");
   const override = (frag.match(/(?:^|&)election=([^&]+)/) || [])[1] || null;
   const u = new URL(base);
@@ -72,6 +114,11 @@ export async function discover(link, state, getJson) {
     if (!picked) return notPosted;
     const root = base.replace(/elections\.json$/i, "");
     return { urls: [`${root}${picked.id}/{ver}/reports/detailxml.zip`], picked };
+  }
+  if (isSCPage(u)) {
+    const picked = await discoverSC(await getText(base), override && decodeURIComponent(override), getJson, getText);
+    if (!picked) return notPosted;
+    return { urls: [`${SC_ROOT}/${picked.id}/{ver}/reports/detailxml.zip`], picked };
   }
   // Georgia (Enhanced Voting)
   const jur = (u.pathname.match(GA_API) || u.pathname.match(GA_PAGE))[1];

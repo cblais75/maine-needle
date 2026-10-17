@@ -11,17 +11,17 @@
 // TEST_RESULTS_URL, which carry test: true) always pass.
 //
 // Times are the LAST poll close in each state, Eastern (EST, UTC-5, on Nov 3):
-//   GA 7:00 · NC, OH 7:30 · ME, NH 8:00 (NH's last towns) · MI 9:00 (Central-time Upper Peninsula),
+//   GA, SC 7:00 · NC, OH 7:30 · ME, NH 8:00 (NH's last towns) · MI 9:00 (Central-time Upper Peninsula),
 //   TX 9:00 (El Paso/Hudspeth, Mountain), KS 9:00 (western Mountain-time counties), NE, MN, IA 9:00.
 const ET = (h, m = 0) => Date.UTC(2026, 10, 3, h + 5, m); // Nov 3 local Eastern -> UTC
 export const STATE_START = {
-  GA: ET(19), NC: ET(19, 30), OH: ET(19, 30), ME: ET(20), NH: ET(20),
+  GA: ET(19), SC: ET(19), NC: ET(19, 30), OH: ET(19, 30), ME: ET(20), NH: ET(20),
   MI: ET(21), TX: ET(21), KS: ET(21), NE: ET(21), MN: ET(21), IA: ET(21),
 };
 const LATEST = ET(25); // any state not listed: 1 a.m. ET Nov 4, after every poll in the country closes
 export const stateStart = (st) => STATE_START[st] ?? LATEST;
 export const stateOpen = (st, now = Date.now()) => now >= stateStart(st);
-export const RESULTS_START = Math.min(...Object.values(STATE_START)); // the first poll close (Georgia)
+export const RESULTS_START = Math.min(...Object.values(STATE_START)); // the first poll close (Georgia and South Carolina)
 
 // Which state a results race belongs to: Maine's races are sen/gov/cd1/cd2, the rest are "xx_sen" etc.
 export const raceState = (id) => (["sen", "gov", "cd1", "cd2"].includes(id) ? "ME" : String(id).split("_")[0].toUpperCase());

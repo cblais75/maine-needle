@@ -12,7 +12,8 @@ const US_SENATE = /\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT/i
 const GOVERNOR = /^(?!\s*(lieutenant|lt\.?)[\s-])(?=.*\bgovernor\b)/i;
 // Kansas titles its primary contests "United States Senate (R)" / "(D)" on the same results site,
 // so the general-election match skips any Senate title ending in a party letter.
-const US_SENATE_GENERAL = /^(?!.*\((?:D|R|L|DEM|REP|LIB)\)\s*$)(?=.*(?:\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT))/i;
+// South Carolina's primaries end in a dash instead: "U.S.  Senate  - REP" (Update 64), so those are skipped too.
+const US_SENATE_GENERAL = /^(?!.*(?:\((?:D|R|L|DEM|REP|LIB)\)|\s[-–]\s*(?:D|R|L|DEM|REP|LIB|GRN|CON|ALN|WFM)\.?)\s*$)(?!.*\b(?:primary|runoff)\b)(?=.*(?:\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT))/i;
 // Same for Kansas's governor ticket: "Governor / Lt. Governor" in November, "Governor / Lt. Governor (R)" in the primary (Update 63).
 const GOVERNOR_GENERAL = /^(?!.*\((?:D|R|L|DEM|REP|LIB)\)\s*$)(?!\s*(lieutenant|lt\.?)[\s-])(?=.*\bgovernor\b)/i;
 
@@ -45,6 +46,8 @@ const RACES = [
   { id: "ks_gov", state: "KS", office: GOVERNOR_GENERAL, kind: "two", names: { dem: /holscher/i, rep: /masterson/i } },
   // Minnesota (Update 54): Flanagan runs on the DFL line (Minnesota's Democratic Party).
   { id: "mn_sen", state: "MN", office: US_SENATE, kind: "two", names: { dem: /flanagan/i, rep: /tafoya/i } },
+  // South Carolina (Update 64): Clarity, like Iowa. November's contest is "U.S. Senate"; never a "- REP" primary or a State Senate race.
+  { id: "sc_sen", state: "SC", office: US_SENATE_GENERAL, kind: "two", names: { dem: /andrews/i, rep: /graham/i } },
 ];
 
 // Is this contest one of the races we track in that state? (Georgia's link discovery, Update 62, uses
