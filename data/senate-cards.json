@@ -1,6 +1,6 @@
 {
   "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
-  "asOf": "2026-10-14",
+  "asOf": "2026-10-16",
   "notUp": {
     "D": 32,
     "I": 2,
@@ -37,7 +37,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -103,10 +103,18 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Hendrix College",
+          "date": "2026-10-13",
+          "dem": 41,
+          "rep": 50,
+          "rating": 0.8,
+          "note": "Sponsored by Talk Business & Politics; Wadlin (L) 5"
+        },
         {
           "pollster": "GrayHouse (R)",
           "date": "2026-10-04",
@@ -199,7 +207,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -243,7 +251,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -288,14 +296,22 @@
       "ratings": {
         "cook": "Solid R",
         "sabato": "Safe R",
-        "inside": "Solid R",
+        "inside": "Likely R",
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "MDW Communications (D)",
+          "date": "2026-10-10",
+          "dem": 42,
+          "rep": 48,
+          "rating": 0.6,
+          "note": "Conducted for EDGE Communications"
+        },
         {
           "pollster": "Stetson University",
           "date": "2026-10-09",
@@ -429,7 +445,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -533,7 +549,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -592,7 +608,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -647,7 +663,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -720,7 +736,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -784,10 +800,17 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Wedgewood Polls",
+          "date": "2026-10-14",
+          "dem": 48,
+          "rep": 52,
+          "rating": 0.55
+        },
         {
           "pollster": "Data for Progress (Way to Lead PAC)",
           "date": "2026-08-15",
@@ -858,10 +881,38 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Peak Insights (Alme campaign)",
+          "date": "2026-10-12",
+          "dem": 12,
+          "rep": 44,
+          "ind": 29,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Alme campaign"
+        },
+        {
+          "pollster": "Concord Public Opinion Partners (Bodnar campaign)",
+          "date": "2026-10-08",
+          "dem": 13,
+          "rep": 35,
+          "ind": 37,
+          "rating": 0.5,
+          "sponsored": "I",
+          "sponsor": "Bodnar campaign"
+        },
+        {
+          "pollster": "American Pulse Research",
+          "date": "2026-09-24",
+          "dem": 19,
+          "rep": 45,
+          "ind": 26,
+          "rating": 0.6
+        },
         {
           "pollster": "Aspect Strategic (Montana Freedom PAC)",
           "date": "2026-09-15",
@@ -1020,7 +1071,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -1064,7 +1115,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -1148,7 +1199,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -1202,7 +1253,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -1251,7 +1302,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -1318,11 +1369,11 @@
       "ratings": {
         "cook": "Likely R",
         "sabato": "Likely R",
-        "inside": "Likely R",
+        "inside": "Lean R",
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -1410,10 +1461,18 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Concord Public Opinion Partners (D)",
+          "date": "2026-10-08",
+          "dem": 43,
+          "rep": 42,
+          "rating": 0.6,
+          "note": "Sponsored by Democrats for Education Reform"
+        },
         {
           "pollster": "Zenith Research (Bengs campaign)",
           "date": "2026-09-27",
@@ -1498,7 +1557,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [
@@ -1551,7 +1610,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -1600,7 +1659,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],
@@ -1645,7 +1704,7 @@
         "asOf": {
           "cook": "2026-10-06",
           "sabato": "2026-10-14",
-          "inside": "2026-10-01"
+          "inside": "2026-10-15"
         }
       },
       "polls": [],

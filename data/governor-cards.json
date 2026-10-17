@@ -1518,6 +1518,14 @@
       },
       "polls": [
         {
+          "pollster": "Public Policy Polling (D)",
+          "date": "2026-10-14",
+          "dem": 43,
+          "rep": 44,
+          "rating": 0.55,
+          "note": "Democratic sponsor; Lindstrom 5, Beard 3"
+        },
+        {
           "pollster": "National Public Affairs (R)",
           "date": "2026-10-05",
           "dem": 40,
