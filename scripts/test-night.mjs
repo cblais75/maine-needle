@@ -82,7 +82,7 @@ function snapshotCounts(frac) {
       const turnout = Math.round(c.weight * TURNOUT[s.state] * local);
       const demShare = Math.min(0.97, Math.max(0.03, c.demShare + s.swing));
       const row = { county: c.name, dem: Math.round(turnout * demShare), rep: Math.round(turnout * (1 - demShare)), local };
-      if (["TX", "OH", "GA"].includes(s.state)) { // governor races (TX Update 49; OH, GA Update 61), a little redder than the Senate race
+      if (["TX", "OH", "GA", "IA", "KS"].includes(s.state)) { // governor races (TX Update 49; OH, GA Update 61; IA, KS Update 63), a little redder than the Senate race
         const gShare = Math.min(0.97, Math.max(0.03, demShare - 0.015));
         row.gdem = Math.round(turnout * gShare); row.grep = Math.round(turnout * (1 - gShare));
       }
@@ -111,7 +111,7 @@ function asFile(s, list) {
     const cty = (f) => list.map((c) => `<County name="${c.county}" votes="${f(c)}" />`).join("");
     const part = list.map((c) => `<County name="${c.county}" precinctsParticipating="20" precinctsReported="${Math.round(20 * c.local)}" />`).join("");
     const ch = (name, party, key) => `<Choice key="1" text="${name}" party="${party}"><VoteType name="Election Day">${cty((c) => Math.round(c[key] * 0.7))}</VoteType><VoteType name="Absentee">${cty((c) => c[key] - Math.round(c[key] * 0.7))}</VoteType></Choice>`;
-    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest>${s.state === "GA" ? `<Contest key="3" text="Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Keisha Lance Bottoms", "DEM", "gdem")}${ch("Rick Jackson", "REP", "grep")}${ch("Some Libertarian", "LIB", "goth")}</Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Burt Jones" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}<Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
+    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest>${s.state === "GA" ? `<Contest key="3" text="Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Keisha Lance Bottoms", "DEM", "gdem")}${ch("Rick Jackson", "REP", "grep")}${ch("Some Libertarian", "LIB", "goth")}</Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Burt Jones" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}${s.state === "IA" ? `<Contest key="3" text="Governor/Lieutenant Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Rob Sand", "DEM", "gdem")}${ch("Zach Lahn", "REP", "grep")}<Choice key="7" text="Sondra Wilson" party="NP"><VoteType name="Election Day">${cty(() => 33)}</VoteType></Choice></Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Someone" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}<Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
   }
   if (s.state === "MI") { // Michigan Voter Information Center download (Update 60): MVIC GetElectionResultFile, the old
     // CENR_BY_COUNTY layout. A "TOTAL VOTER TURNOUT" line comes before the header; no precincts-reporting column;
@@ -180,6 +180,9 @@ function asFile(s, list) {
     return enc(["﻿<!DOCTYPE html>", `<html lang="en"><head><title>Unofficial Kansas Election Results</title></head><body>`,
       race("United States Senate", (c) => [["R-Roger Marshall", c.rep], ["D-Adam Hamilton", c.dem], ["L-David Graham", 222]]),
       race("United States Senate (R)", () => [["R-Roger Marshall", 8888], ["R-Pond Naramore", 1111]]),
+      // Governor (Update 63): Kansas's ticket is "Governor / Lt. Governor"; a primary-style "(R)" copy must NOT count.
+      race("Governor / Lt. Governor", (c) => [["R-Ty Masterson", c.grep], ["D-Cindy Holscher", c.gdem], ["L-Someone Else", 111]]),
+      race("Governor / Lt. Governor (R)", () => [["R-Ty Masterson", 5555], ["R-Someone", 4444]]),
       race("United States House of Representatives 1", () => [["R-Tracey Mann", 7777], ["D-Someone", 6666]]),
       "</body></html>"].join("\n"));
   }
@@ -222,7 +225,7 @@ function writeSnapshot(frac) {
     const sum = (a, k) => a.reduce((t, x) => t + (x[k] || 0), 0);
     const list = counts[s.state];
     const gov = list.map((c) => ({ dem: c.gdem, rep: c.grep }));
-    const expect = { TX: { tx_sen: list, tx_gov: gov }, OH: { oh_sen: list, oh_gov: gov }, GA: { ga_sen: list, ga_gov: gov } }[s.state]
+    const expect = { TX: { tx_sen: list, tx_gov: gov }, OH: { oh_sen: list, oh_gov: gov }, GA: { ga_sen: list, ga_gov: gov }, IA: { ia_sen: list, ia_gov: gov }, KS: { ks_sen: list, ks_gov: gov } }[s.state]
       || { [Object.keys(out.races)[0] || s.state]: list };
     for (const [id, want] of Object.entries(expect)) {
       const got = out.races[id] ? Object.values(out.races[id].counties) : [];
@@ -236,7 +239,7 @@ function writeSnapshot(frac) {
     test: true, // a marked test: shown even before the results start gate (Update 55)
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas, Ohio and Georgia governor races)"));
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas, Ohio, Georgia, Iowa and Kansas governor races)"));
 }
 
 // START GATE CHECK (Updates 55-56): fake votes in a state's file must not go live before that
@@ -366,6 +369,7 @@ async function discoveryCheck() {
     requested.length = 0;
     const p901 = await buildPayload({ env, now: et(21, 1) });
     checkRace(p901, "ia_sen", want(counts.IA, "dem", "rep"));
+    checkRace(p901, "ia_gov", want(counts.IA, "gdem", "grep"));
     checkRace(p901, "ga_sen", want(counts.GA, "dem", "rep", "oth"));
     checkRace(p901, "ga_gov", want(counts.GA, "gdem", "grep", "goth"));
     if (p901.diag?.IA?.election?.id !== "126900") fails.push(`Iowa picked election ${p901.diag?.IA?.election?.id}, not the general`);
@@ -382,7 +386,7 @@ async function discoveryCheck() {
     if (pNot.source !== "waiting") fails.push(`source should be "waiting" before the general is listed, got "${pNot.source}"`);
     if (requested.some((u) => !(u === IA_LIST || u === GA_LIST))) fails.push("downloaded a decoy election's files");
   } finally { globalThis.fetch = realFetch; }
-  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa and Georgia pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs and recounts, even ones dated Nov 3 and listed first); county totals exact; Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; nothing downloaded before 7 p.m. (Georgia) / 9 p.m. (Iowa)");
+  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa and Georgia pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs and recounts, even ones dated Nov 3 and listed first); county totals exact (Iowa Senate and governor, Georgia Senate and governor); Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; nothing downloaded before 7 p.m. (Georgia) / 9 p.m. (Iowa)");
   if (fails.length) process.exitCode = 1;
 }
 await discoveryCheck();

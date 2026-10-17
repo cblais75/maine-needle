@@ -40,6 +40,7 @@ const SPONSORED = {
   "GBAO (Hamilton campaign)": "D",
   "Public Policy Polling (Senate Majority PAC)": "D",
   "Tulchin Research (Kulewicz campaign)": "D",
+  "Global Strategy Group (Holscher campaign)": "D",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

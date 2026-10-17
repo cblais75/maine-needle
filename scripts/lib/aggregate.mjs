@@ -13,6 +13,8 @@ const GOVERNOR = /^(?!\s*(lieutenant|lt\.?)[\s-])(?=.*\bgovernor\b)/i;
 // Kansas titles its primary contests "United States Senate (R)" / "(D)" on the same results site,
 // so the general-election match skips any Senate title ending in a party letter.
 const US_SENATE_GENERAL = /^(?!.*\((?:D|R|L|DEM|REP|LIB)\)\s*$)(?=.*(?:\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT))/i;
+// Same for Kansas's governor ticket: "Governor / Lt. Governor" in November, "Governor / Lt. Governor (R)" in the primary (Update 63).
+const GOVERNOR_GENERAL = /^(?!.*\((?:D|R|L|DEM|REP|LIB)\)\s*$)(?!\s*(lieutenant|lt\.?)[\s-])(?=.*\bgovernor\b)/i;
 
 // Which office maps to which race, and how to tell the sides apart.
 // Sides resolve by party first; if the file has no party column, by candidate name.
@@ -29,6 +31,8 @@ const RACES = [
   // Texas governor (Update 49): same feed as the Senate race, the governor contest instead.
   { id: "tx_gov", state: "TX", office: GOVERNOR, kind: "two", names: { dem: /hinojosa/i, rep: /abbott/i } },
   { id: "ia_sen", state: "IA", office: US_SENATE, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
+  // Iowa and Kansas governor (Update 63): the same state data, the governor contest instead.
+  { id: "ia_gov", state: "IA", office: GOVERNOR, kind: "two", names: { dem: /\bsand\b/i, rep: /lahn/i } },
   // Georgia: majority required (Dec. 1 runoff otherwise), so third-party votes are kept as "oth" (Update 57).
   { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", trackOther: true, names: { dem: /ossoff/i, rep: /collins/i } },
   { id: "ga_gov", state: "GA", office: GOVERNOR, kind: "two", trackOther: true, names: { dem: /bottoms/i, rep: /jackson/i } },
@@ -38,6 +42,7 @@ const RACES = [
   { id: "mi_sen", state: "MI", office: US_SENATE, kind: "two", names: { dem: /el-?\s?sayed/i, rep: /rogers/i } },
   { id: "nh_sen", state: "NH", office: US_SENATE, kind: "two", names: { dem: /pappas/i, rep: /sununu/i } },
   { id: "ks_sen", state: "KS", office: US_SENATE_GENERAL, kind: "two", names: { dem: /hamilton/i, rep: /marshall/i } },
+  { id: "ks_gov", state: "KS", office: GOVERNOR_GENERAL, kind: "two", names: { dem: /holscher/i, rep: /masterson/i } },
   // Minnesota (Update 54): Flanagan runs on the DFL line (Minnesota's Democratic Party).
   { id: "mn_sen", state: "MN", office: US_SENATE, kind: "two", names: { dem: /flanagan/i, rep: /tafoya/i } },
 ];

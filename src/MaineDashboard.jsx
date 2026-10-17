@@ -190,6 +190,18 @@ const makeIowaSenate = (pollMargin) => ({
   right: { full: "Turek", short: "Turek", color: BLUE },
   units: iaUnits(pollMargin),
 });
+// ---- IOWA GOVERNOR ---- (Update 63; promoted from a governor card)
+// Sand (D) vs Lahn (R), open seat (Reynolds isn't running). Same county map and the same shift toward
+// the Republican as the Iowa Senate race. Not a Senate seat: left out of CONTROL_SET.
+const makeIowaGov = (pollMargin) => ({
+  id: "ia_gov", state: "IA", title: "Governor",
+  sub: "Sand (D) vs Lahn (R)",
+  system: "Plurality", real: true,
+  note: `Open seat (Kim Reynolds isn't running). Iowa leans Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${IA_HOUSE} pts toward Lahn, the same shift as the Iowa Senate race.${IA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
+  left: { full: "Lahn", short: "Lahn", color: RED },
+  right: { full: "Sand", short: "Sand", color: BLUE },
+  units: iaUnits(pollMargin),
+});
 
 // ---- GEORGIA ----
 // Ossoff (D, incumbent) vs Collins (R), the GOP runoff winner. Georgia is nearly even federally
@@ -325,6 +337,18 @@ const makeKansasSenate = (pollMargin) => ({
   note: `Roger Marshall (R) is seeking a second term against Democrat Adam Hamilton. Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races (by about 10 points in the 2014 Senate race and about 7 in 2020), so the poll center is shifted ${KS_HOUSE} pts toward Marshall. Polls missed the other way in Gov. Laura Kelly's races, which is part of why the shift isn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
   left: { full: "Marshall", short: "Marshall", color: RED },
   right: { full: "Hamilton", short: "Hamilton", color: BLUE },
+  units: ksUnits(pollMargin),
+});
+// ---- KANSAS GOVERNOR ---- (Update 63; promoted from a governor card)
+// Holscher (D) vs Masterson (R), open seat (Laura Kelly is term-limited). Same county map and the same shift
+// toward the Republican as the Kansas Senate race. Not a Senate seat: left out of CONTROL_SET.
+const makeKansasGov = (pollMargin) => ({
+  id: "ks_gov", state: "KS", title: "Governor",
+  sub: "Holscher (D) vs Masterson (R)",
+  system: "Plurality", real: true,
+  note: `Open seat (Laura Kelly is term-limited). Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races, so the poll center is shifted ${KS_HOUSE} pts toward Masterson, the same shift as the Kansas Senate race. Polls missed the other way in Kelly's own governor races, which is part of why the shift isn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
+  left: { full: "Masterson", short: "Masterson", color: RED },
+  right: { full: "Holscher", short: "Holscher", color: BLUE },
   units: ksUnits(pollMargin),
 });
 
@@ -601,6 +625,8 @@ export default function MaineDashboard() {
   const DEFAULT_TXGOV_MARGIN = -2; // Abbott +2, polling average, Oct 12 (public/current.json)
   const DEFAULT_OHGOV_MARGIN = 4; // Acton +4, polling average, Oct 16 (public/current.json)
   const DEFAULT_GAGOV_MARGIN = -2; // Jackson +2, polling average, Oct 16 (public/current.json)
+  const DEFAULT_IAGOV_MARGIN = 7; // Sand +7, polling average, Oct 16 (public/current.json)
+  const DEFAULT_KSGOV_MARGIN = -4; // Masterson +4, polling average, Oct 16 (public/current.json)
   const DEFAULT_IA_MARGIN = 0; // Turek +0.4, rounds to a tie, polling average, Oct 12 (public/current.json)
   const DEFAULT_GA_MARGIN = 8; // Ossoff +8, polling average, Oct 12 (public/current.json)
   const DEFAULT_NE_MARGIN = -1; // Ricketts +1 over Osborn, polling average, Oct 12 (public/current.json)
@@ -618,6 +644,8 @@ export default function MaineDashboard() {
   const [txGovMargin, setTxGovMargin] = useState(DEFAULT_TXGOV_MARGIN);
   const [ohGovMargin, setOhGovMargin] = useState(DEFAULT_OHGOV_MARGIN);
   const [gaGovMargin, setGaGovMargin] = useState(DEFAULT_GAGOV_MARGIN);
+  const [iaGovMargin, setIaGovMargin] = useState(DEFAULT_IAGOV_MARGIN);
+  const [ksGovMargin, setKsGovMargin] = useState(DEFAULT_KSGOV_MARGIN);
   const [iaMargin, setIaMargin] = useState(DEFAULT_IA_MARGIN);
   const [gaMargin, setGaMargin] = useState(DEFAULT_GA_MARGIN);
   const [neMargin, setNeMargin] = useState(DEFAULT_NE_MARGIN);
@@ -630,7 +658,7 @@ export default function MaineDashboard() {
   const [cd2Decay, setCd2Decay] = useState(DEFAULT_DECAY);
   const [govB, setGovB] = useState(DEFAULT_B);
   const [govMargin, setGovMargin] = useState(DEFAULT_GM);
-  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN, mim = DEFAULT_MI_MARGIN, nhm = DEFAULT_NH_MARGIN, akm = DEFAULT_AK_MARGIN, txgm = DEFAULT_TXGOV_MARGIN, ksm = DEFAULT_KS_MARGIN, mnm = DEFAULT_MN_MARGIN, ohgm = DEFAULT_OHGOV_MARGIN, gagm = DEFAULT_GAGOV_MARGIN) => [
+  const buildAll = (pm, gb, gm, dc, cd1m = null, cd2m = null, ncm = DEFAULT_NC_MARGIN, ohm = DEFAULT_OH_MARGIN, txm = DEFAULT_TX_MARGIN, iam = DEFAULT_IA_MARGIN, gam = DEFAULT_GA_MARGIN, nem = DEFAULT_NE_MARGIN, mim = DEFAULT_MI_MARGIN, nhm = DEFAULT_NH_MARGIN, akm = DEFAULT_AK_MARGIN, txgm = DEFAULT_TXGOV_MARGIN, ksm = DEFAULT_KS_MARGIN, mnm = DEFAULT_MN_MARGIN, ohgm = DEFAULT_OHGOV_MARGIN, gagm = DEFAULT_GAGOV_MARGIN, iagm = DEFAULT_IAGOV_MARGIN, ksgm = DEFAULT_KSGOV_MARGIN) => [
     rollRace(makeSenate(pm)),
     rollGov(makeGov(gb, gm)),
     rollRace(makeCD1(cd1m)),
@@ -641,6 +669,7 @@ export default function MaineDashboard() {
     rollRace(makeTexasSenate(txm)),
     rollRace(makeTexasGov(txgm)),
     rollRace(makeIowaSenate(iam)),
+    rollRace(makeIowaGov(iagm)),
     rollRace(makeGeorgiaSenate(gam)),
     rollRace(makeGeorgiaGov(gagm)),
     rollRace(makeNebraskaSenate(nem)),
@@ -648,6 +677,7 @@ export default function MaineDashboard() {
     rollRace(makeMichiganSenate(mim)),
     rollRace(makeNHSenate(nhm)),
     rollRace(makeKansasSenate(ksm)),
+    rollRace(makeKansasGov(ksgm)),
     rollRace(makeMinnesotaSenate(mnm)),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
@@ -710,6 +740,8 @@ export default function MaineDashboard() {
         if (c?.tx_gov) setTxGovMargin(c.tx_gov.margin ?? DEFAULT_TXGOV_MARGIN);
         if (c?.oh_gov) setOhGovMargin(c.oh_gov.margin ?? DEFAULT_OHGOV_MARGIN);
         if (c?.ga_gov) setGaGovMargin(c.ga_gov.margin ?? DEFAULT_GAGOV_MARGIN);
+        if (c?.ia_gov) setIaGovMargin(c.ia_gov.margin ?? DEFAULT_IAGOV_MARGIN);
+        if (c?.ks_gov) setKsGovMargin(c.ks_gov.margin ?? DEFAULT_KSGOV_MARGIN);
         if (c?.ia_sen) setIaMargin(c.ia_sen.margin ?? DEFAULT_IA_MARGIN);
         if (c?.ga_sen) setGaMargin(c.ga_sen.margin ?? DEFAULT_GA_MARGIN);
         if (c?.ne_sen) setNeMargin(c.ne_sen.margin ?? DEFAULT_NE_MARGIN);
@@ -719,7 +751,7 @@ export default function MaineDashboard() {
         if (c?.mn_sen) setMnMargin(c.mn_sen.margin ?? DEFAULT_MN_MARGIN);
         if (c?.ak_sen) setAkMargin(c.ak_sen.margin ?? DEFAULT_AK_MARGIN);
         if (c?.governor) { setGovB(c.governor.bennett ?? DEFAULT_B); setGovMargin(c.governor.margin ?? DEFAULT_GM); }
-        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN, c?.ne_sen?.margin ?? DEFAULT_NE_MARGIN, c?.mi_sen?.margin ?? DEFAULT_MI_MARGIN, c?.nh_sen?.margin ?? DEFAULT_NH_MARGIN, c?.ak_sen?.margin ?? DEFAULT_AK_MARGIN, c?.tx_gov?.margin ?? DEFAULT_TXGOV_MARGIN, c?.ks_sen?.margin ?? DEFAULT_KS_MARGIN, c?.mn_sen?.margin ?? DEFAULT_MN_MARGIN, c?.oh_gov?.margin ?? DEFAULT_OHGOV_MARGIN, c?.ga_gov?.margin ?? DEFAULT_GAGOV_MARGIN), resultsRef.current));
+        setRaces(applyAllLive(buildAll(c?.senate?.margin ?? DEFAULT_MARGIN, c?.governor?.bennett ?? DEFAULT_B, c?.governor?.margin ?? DEFAULT_GM, DEFAULT_DECAY, c?.cd1?.margin ?? null, c?.cd2?.margin ?? null, c?.nc_sen?.margin ?? DEFAULT_NC_MARGIN, c?.oh_sen?.margin ?? DEFAULT_OH_MARGIN, c?.tx_sen?.margin ?? DEFAULT_TX_MARGIN, c?.ia_sen?.margin ?? DEFAULT_IA_MARGIN, c?.ga_sen?.margin ?? DEFAULT_GA_MARGIN, c?.ne_sen?.margin ?? DEFAULT_NE_MARGIN, c?.mi_sen?.margin ?? DEFAULT_MI_MARGIN, c?.nh_sen?.margin ?? DEFAULT_NH_MARGIN, c?.ak_sen?.margin ?? DEFAULT_AK_MARGIN, c?.tx_gov?.margin ?? DEFAULT_TXGOV_MARGIN, c?.ks_sen?.margin ?? DEFAULT_KS_MARGIN, c?.mn_sen?.margin ?? DEFAULT_MN_MARGIN, c?.oh_gov?.margin ?? DEFAULT_OHGOV_MARGIN, c?.ga_gov?.margin ?? DEFAULT_GAGOV_MARGIN, c?.ia_gov?.margin ?? DEFAULT_IAGOV_MARGIN, c?.ks_gov?.margin ?? DEFAULT_KSGOV_MARGIN), resultsRef.current));
       })
       .catch(() => {})
       .finally(() => setCurrentLoaded(true));
@@ -827,7 +859,7 @@ export default function MaineDashboard() {
     setSel(null);
     if (r && r.state !== "ME" && races.filter((x) => x.state === r.state).length === 1) setView("dashboard");
   };
-  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin, neMargin, miMargin, nhMargin, akMargin, txGovMargin, ksMargin, mnMargin, ohGovMargin, gaGovMargin), resultsRef.current)); };
+  const reset = () => { setRunning(false); setWire([]); wirePrev.current = null; wireSeen.current = {}; setRaces(applyAllLive(buildAll(pollMargin, govB, govMargin, cd2Decay, current?.cd1?.margin ?? null, current?.cd2?.margin ?? null, ncMargin, ohMargin, txMargin, iaMargin, gaMargin, neMargin, miMargin, nhMargin, akMargin, txGovMargin, ksMargin, mnMargin, ohGovMargin, gaGovMargin, iaGovMargin, ksGovMargin), resultsRef.current)); };
   const setPoll = (v) => { setPollMargin(v); setRaces((prev) => prev.map((r) => r.id === "sen" ? rollRace(makeSenate(v)) : r)); };
   const setDecay = (v) => { setCd2Decay(v); setRaces((prev) => prev.map((r) => r.id === "cd2" ? rollRace(makeCD2(v, current?.cd2?.margin ?? null)) : r)); };
   const setGov = (b, m) => { setGovB(b); setGovMargin(m); setRaces((prev) => prev.map((r) => r.id === "gov" ? rollGov(makeGov(b, m)) : r)); };
@@ -1100,7 +1132,7 @@ function ThreeBar({ race }) {
 }
 
 // Short race label for the Needles view, so Maine's two Pingree races (Governor vs House 1) are easy to tell apart.
-const raceTag = (r) => ({ sen: "Senate", gov: "Governor", cd1: "House 1", cd2: "House 2", tx_gov: "Governor", oh_gov: "Governor", ga_gov: "Governor" }[r.id] || "Senate");
+const raceTag = (r) => ({ sen: "Senate", gov: "Governor", cd1: "House 1", cd2: "House 2", tx_gov: "Governor", oh_gov: "Governor", ga_gov: "Governor", ia_gov: "Governor", ks_gov: "Governor" }[r.id] || "Senate");
 function NeedleGrid({ races, onPick }) {
   // Scoreboard rows: state, favored candidate, win %, and a plain-language rating.
   // No bars — just the number and who's ahead, scannable at a glance.
@@ -1509,7 +1541,7 @@ function PauseNote({ state, compact }) {
 
 const POLL_KEY = { sen: "senate", gov: "governor" };
 const pollKey = (id) => POLL_KEY[id] || id;
-const HOUSE_BY_RACE = { ak_sen: AK_HOUSE, sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, tx_gov: TX_HOUSE, oh_gov: OH_HOUSE, ga_gov: GA_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE, ks_sen: KS_HOUSE, mn_sen: MN_HOUSE };
+const HOUSE_BY_RACE = { ak_sen: AK_HOUSE, sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, tx_gov: TX_HOUSE, oh_gov: OH_HOUSE, ga_gov: GA_HOUSE, ia_gov: IA_HOUSE, ks_gov: KS_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE, ks_sen: KS_HOUSE, mn_sen: MN_HOUSE };
 const stateLabel = (code) => (STATES.find((s) => s.code === code) || {}).label || code;
 const raceName = (r) => String(r.title || "").replace("U.S. House · District", "House District").replace("U.S. ", "");
 const PAPER = "#F4EFE4";
@@ -2225,10 +2257,10 @@ const POLL_TABS = [
   ["senate", "Maine Senate", "Jackson", "Collins"], ["governor", "Maine Governor", "Pingree", "Charles", "Bennett"],
   ["cd1", "Maine House 1", "Pingree", "Russell"], ["cd2", "Maine House 2", "Dunlap", "LePage"],
   ["nc_sen", "North Carolina", "Cooper", "Whatley"], ["oh_sen", "Ohio Senate", "Brown", "Husted"], ["oh_gov", "Ohio Governor", "Acton", "Ramaswamy"], ["tx_sen", "Texas Senate", "Talarico", "Paxton"], ["tx_gov", "Texas Governor", "Hinojosa", "Abbott"],
-  ["ia_sen", "Iowa", "Turek", "Hinson"], ["ga_sen", "Georgia Senate", "Ossoff", "Collins"], ["ga_gov", "Georgia Governor", "Bottoms", "Jackson"], ["ne_sen", "Nebraska", "Osborn", "Ricketts"],
-  ["mi_sen", "Michigan", "El-Sayed", "Rogers"], ["nh_sen", "New Hampshire", "Pappas", "Sununu"], ["ks_sen", "Kansas", "Hamilton", "Marshall"], ["mn_sen", "Minnesota", "Flanagan", "Tafoya"], ["ak_sen", "Alaska", "Peltola", "Sullivan"],
+  ["ia_sen", "Iowa Senate", "Turek", "Hinson"], ["ia_gov", "Iowa Governor", "Sand", "Lahn"], ["ga_sen", "Georgia Senate", "Ossoff", "Collins"], ["ga_gov", "Georgia Governor", "Bottoms", "Jackson"], ["ne_sen", "Nebraska", "Osborn", "Ricketts"],
+  ["mi_sen", "Michigan", "El-Sayed", "Rogers"], ["nh_sen", "New Hampshire", "Pappas", "Sununu"], ["ks_sen", "Kansas Senate", "Hamilton", "Marshall"], ["ks_gov", "Kansas Governor", "Holscher", "Masterson"], ["mn_sen", "Minnesota", "Flanagan", "Tafoya"], ["ak_sen", "Alaska", "Peltola", "Sullivan"],
 ];
-const HOUSE_BY_POLL = { ak_sen: AK_HOUSE, senate: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, tx_gov: TX_HOUSE, oh_gov: OH_HOUSE, ga_gov: GA_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE, ks_sen: KS_HOUSE, mn_sen: MN_HOUSE };
+const HOUSE_BY_POLL = { ak_sen: AK_HOUSE, senate: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, tx_gov: TX_HOUSE, oh_gov: OH_HOUSE, ga_gov: GA_HOUSE, ia_gov: IA_HOUSE, ks_gov: KS_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE, ks_sen: KS_HOUSE, mn_sen: MN_HOUSE };
 const tierOf = (rating) => TIERS.find((t) => (rating || 0) >= t.min) || TIERS[TIERS.length - 1];
 function PollsView({ current, loaded, wide }) {
   const [tab, setTab] = useState("senate");
@@ -2371,6 +2403,8 @@ function MethodView({ wide }) {
           ["Texas Governor", `${TX_HOUSE} pts toward Abbott`, "the same shift as the Texas Senate race, for the same reasons."],
           ["Ohio Governor", `${OH_HOUSE} pts toward Ramaswamy`, "the same shift as the Ohio Senate race, for the same reasons."],
           ["Georgia Governor", `${GA_HOUSE} pt toward Jackson`, "the same shift as the Georgia Senate race; a Dec. 1 runoff follows if no one tops 50%."],
+          ["Iowa Governor", `${IA_HOUSE} pts toward Lahn`, "the same shift as the Iowa Senate race, for the same reasons."],
+          ["Kansas Governor", `${KS_HOUSE} pts toward Masterson`, "the same shift as the Kansas Senate race, for the same reasons."],
           ["Iowa", `${IA_HOUSE} pts toward Hinson`, "for Iowa's strong Republican lean and its polls' history of underestimating Republicans."],
           ["Ohio", `${OH_HOUSE} pts toward Husted`, "Ohio polls have underestimated Republicans in recent federal races."],
           ["Nebraska", `${NE_HOUSE} pts toward Ricketts`, "for the state's Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven."],
@@ -2393,7 +2427,7 @@ function MethodView({ wide }) {
         <p style={item}><b style={{ color: C.text }}>Maine Governor:</b> the blended presidential map for shape, with the three-way split (Pingree, Charles, Bennett) set by polling.</p>
         <p style={item}><b style={{ color: C.text }}>Alaska:</b> a single statewide forecast from polling. Alaska reports by state house district, not county, and counts its ranked-choice rounds about two weeks after election night, so its needle never goes live; it still counts toward Senate control.</p>
         <p style={item}><b style={{ color: C.text }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan, New Hampshire, Kansas and Minnesota:</b> 2024 presidential results in every county. Ohio's race is a special election; Georgia goes to a Dec. 1 runoff if no one tops 50%; Nebraska's Dan Osborn is an independent, shown in green.</p>
-        <p style={item}><b style={{ color: C.text }}>Texas, Ohio and Georgia Governor:</b> each state's Senate county map, centered on governor polling. They're on the board as their own races but don't count toward Senate control.</p>
+        <p style={item}><b style={{ color: C.text }}>Texas, Ohio, Georgia, Iowa and Kansas Governor:</b> each state's Senate county map, centered on governor polling. They're on the board as their own races but don't count toward Senate control.</p>
       </div>
     </>],
     ["Watch the real count", <p key="w" style={sub}>On election night, official results files from each state arrive every minute or two. The needle compares each county's count with its expected result and carries the difference into the counties still counting. Expected turnout is scaled for a midterm, and if one state's feed goes down, only that state pauses.</p>],
