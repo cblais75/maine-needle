@@ -42,6 +42,10 @@ const RACES = [
   { id: "mn_sen", state: "MN", office: US_SENATE, kind: "two", names: { dem: /flanagan/i, rep: /tafoya/i } },
 ];
 
+// Is this contest one of the races we track in that state? (Georgia's link discovery, Update 62, uses
+// it to download only the contests we need.)
+export const tracksOffice = (state, office) => RACES.some((R) => R.state === state && R.office.test(String(office ?? "")));
+
 // Summary rows some files list as if they were candidates.
 const NOT_A_CANDIDATE = /^(total|totals|total votes( cast)?|ballots cast|registered voters|times (cast|blank voted|over voted)|over ?votes|under ?votes|blank( votes)?|)$/i;
 

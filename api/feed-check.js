@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, error: `host not allowed: ${url.hostname}` });
   const t0 = Date.now();
   try {
-    const { rows, files } = await fetchRows(String(q.url), state);
+    const { rows, files, picked, notPosted } = await fetchRows(String(q.url), state);
     const t1 = Date.now();
     const options = q.office ? { office: new RegExp(esc(String(q.office)), "i"),
       names: { ...(q.dem ? { dem: new RegExp(esc(String(q.dem)), "i") } : {}), ...(q.rep ? { rep: new RegExp(esc(String(q.rep)), "i") } : {}) } } : {};
@@ -32,6 +32,7 @@ export default async function handler(req, res) {
     const tot = (k) => got.reduce((s, c) => s + (race.counties[c][k] || 0), 0);
     res.status(200).json({
       ok: !!race && got.length === COUNTIES[state].length,
+      ...(picked ? { election: picked } : {}), ...(notPosted ? { notPosted } : {}),
       files, seconds: (Date.now() - t0) / 1000,
       rows: rows.length, countiesMatched: `${got.length} of ${COUNTIES[state].length}`,
       totals: race ? { dem: tot("dem"), rep: tot("rep") } : null,

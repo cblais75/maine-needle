@@ -14,6 +14,7 @@
 //   - Kansas's unofficial-results web page (county breakdowns in the map's hover boxes)
 //   - Minnesota's headerless ';' media files with numeric county codes
 //   - Texas's Civix results API (county data wrapped as base64 JSON in an "upload" field)
+//   - Georgia's Enhanced Voting app (one contest's county breakdown per file)
 // aggregate.mjs then keeps only the U.S. Senate race and maps counties to the needle's names.
 import * as XLSX from "xlsx";
 import { unzipSync, strFromU8 } from "fflate";
@@ -250,6 +251,25 @@ function rowsFromTexas(obj) {
   }
   return rows;
 }
+// Georgia's results app (results.sos.ga.gov, built by Enhanced Voting), Update 62. One contest's county
+// breakdown, the same JSON the app itself loads:
+//   .../results/public/api/elections/Georgia/<electionId>/data/ballot-item/<ballotItemId>
+//   -> { ballotItemWithBreakdown: { name: [{ text: "US Senate" }], breakdownResults: [
+//        { locality: { name: [{ text: "Appling County" }] }, precinctReportingStatus: { reportingUnits, totalUnits },
+//          ballotOptions: [{ name: [{ text: "Jon Ossoff (Dem)" }], party: { abbreviation: "Dem" }, voteCount }] } ] } }
+const evText = (v) => (Array.isArray(v) ? (v.find((t) => t.languageId === "en") || v[0] || {}).text : v);
+const isEnhancedVoting = (obj) => !!(obj && obj.ballotItemWithBreakdown && Array.isArray(obj.ballotItemWithBreakdown.breakdownResults));
+function rowsFromEnhancedVoting(obj) {
+  const item = obj.ballotItemWithBreakdown, office = evText(item.name), rows = [];
+  for (const b of item.breakdownResults) {
+    const st = b.precinctReportingStatus || {};
+    const pr = Number(st.reportingUnits), pt = Number(st.totalUnits);
+    for (const o of b.ballotOptions || [])
+      rows.push({ county: evText(b.locality?.name), office, party: o.party?.abbreviation ?? evText(o.party?.name), candidate: evText(o.name), votes: o.voteCount,
+        pr: Number.isFinite(pr) ? pr : undefined, pt: Number.isFinite(pt) ? pt : undefined });
+  }
+  return rows;
+}
 function rowsFromJSON(obj) {
   const rows = [];
   const walk = (node, ctx) => {
@@ -320,6 +340,7 @@ export function readFeed(input, state, name = "") {
     try { obj = JSON.parse(strFromU8(buf)); } catch { /* not JSON after all: fall through to text */ }
     if (obj) {
       obj = unwrapUpload(obj);
+      if (isEnhancedVoting(obj)) return rowsFromEnhancedVoting(obj);
       return isTexasShape(obj) ? rowsFromTexas(obj) : rowsFromJSON(obj);
     }
   }

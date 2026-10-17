@@ -304,6 +304,89 @@ function runoffCheck() {
 }
 runoffCheck();
 
+// LINK DISCOVERY CHECK (Update 62): IA_RESULTS_URL / GA_RESULTS_URL point at each state's LIST of elections.
+// A fake Iowa and Georgia site (no network) serves lists with decoy primaries, specials and runoffs, including
+// a decoy primary ON Nov 3; the reader must pick the general, read its county results exactly, never download a
+// decoy's files or Georgia's Lieutenant Governor contest, say "not posted yet" when the general isn't listed,
+// and respect the start gate (Georgia 7:00 p.m., Iowa 9:00 p.m. ET: nothing is even downloaded before then).
+async function discoveryCheck() {
+  const fails = [], requested = [];
+  const counts = snapshotCounts(0.8);
+  const ia = night.find((s) => s.state === "IA"), ga = night.find((s) => s.state === "GA");
+  const IA_LIST = "https://electionresults.iowa.gov/IA/elections.json";
+  const GA_LIST = "https://results.sos.ga.gov/results/public/api/jurisdictions/Georgia";
+  const GA_API = "https://results.sos.ga.gov/results/public/api";
+  const iaDecoys = [
+    { EID: "126082", ElectionName: "2026 Primary Election", Date: "6/2/2026 12:00:00 AM" },
+    { EID: "126555", ElectionName: "2026 General Election Recount - HD 5", Date: "11/3/2026 12:00:00 AM" },
+    { EID: "124196", ElectionName: "2025 City-School Election", Date: "11/4/2025 12:00:00 AM" },
+  ];
+  const gaDecoys = [
+    { publicElectionId: "06162026GeneralPrimaryRunoff", electionDate: "2026-06-16", name: [{ languageId: "en", text: "June 16th, 2026 General Primary Runoff" }] },
+    { publicElectionId: "GeneralPrimary51926", electionDate: "2026-05-19", name: [{ languageId: "en", text: "May 19, 2026 - General Primary" }] },
+    { publicElectionId: "11032026GenRunoff", electionDate: "2026-11-03", name: [{ languageId: "en", text: "November 3, 2026 - General Election Runoff" }] },
+  ];
+  const iaGeneral = { EID: "126900", ElectionName: "2026 General Election", Date: "11/3/2026 12:00:00 AM" };
+  const gaGeneral = { publicElectionId: "11032026GeneralElection", electionDate: "2026-11-03", name: [{ languageId: "en", text: "November 3, 2026 - General Election" }] };
+  const T = (text) => [{ languageId: "en", text }];
+  const evItem = (id, office, opts) => ({ ballotItemWithBreakdown: { id, name: T(office), breakdownResults: counts.GA.map((c) => ({
+    locality: { name: T(`${c.county} County`) }, precinctReportingStatus: { reportingUnits: Math.round(10 * c.local), totalUnits: 10 },
+    ballotOptions: opts.map(([cand, party, key]) => ({ name: T(cand), party: { abbreviation: party }, voteCount: c[key] })) })) } });
+  let posted = true;
+  const site = (u) => {
+    if (u === IA_LIST) return JSON.stringify(posted ? [...iaDecoys, iaGeneral] : iaDecoys);
+    if (u === "https://electionresults.iowa.gov/IA/126900/current_ver.txt") return "377001";
+    if (u === "https://electionresults.iowa.gov/IA/126900/377001/reports/detailxml.zip") return asFile(ia, counts.IA);
+    if (u === GA_LIST) return JSON.stringify({ id: "09378a07-e6cf-4f66-be7c-ca4aa534f99a", elections: posted ? [...gaDecoys, gaGeneral] : gaDecoys });
+    if (u === `${GA_API}/elections/Georgia/11032026GeneralElection/data`) return JSON.stringify({ ballotItems: [
+      { id: "sen-1", name: T("US Senate") }, { id: "gov-1", name: T("Governor") }, { id: "ltg-1", name: T("Lieutenant Governor") }, { id: "ss-1", name: T("State Senate - District 7") }] });
+    if (u === `${GA_API}/elections/Georgia/11032026GeneralElection/data/ballot-item/sen-1`) return JSON.stringify(evItem("sen-1", "US Senate", [["Jon Ossoff (Dem)", "Dem", "dem"], ["Mike Collins (Rep)", "Rep", "rep"], ["Chase Oliver (Lib)", "Lib", "oth"]]));
+    if (u === `${GA_API}/elections/Georgia/11032026GeneralElection/data/ballot-item/gov-1`) return JSON.stringify(evItem("gov-1", "Governor", [["Keisha Lance Bottoms (Dem)", "Dem", "gdem"], ["Rick Jackson (Rep)", "Rep", "grep"], ["Some Libertarian (Lib)", "Lib", "goth"]]));
+    return null; // anything else (a decoy's files, Lieutenant Governor) is a 404, and is flagged below
+  };
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u) => { u = String(u); requested.push(u); const body = site(u); return new Response(body, { status: body == null ? 404 : 200 }); };
+  try {
+    const sum = (o, k) => Object.values(o || {}).reduce((t, c) => t + (c[k] || 0), 0);
+    const want = (list, d, r, o) => ({ n: list.length, dem: list.reduce((t, c) => t + c[d], 0), rep: list.reduce((t, c) => t + c[r], 0), oth: o ? list.reduce((t, c) => t + c[o], 0) : 0 });
+    const checkRace = (out, id, w) => {
+      const co = out.races[id]?.counties;
+      if (!co || Object.keys(co).length !== w.n || Math.abs(sum(co, "dem") - w.dem) > w.n || Math.abs(sum(co, "rep") - w.rep) > w.n || sum(co, "oth") !== w.oth)
+        fails.push(`${id}: expected ${w.n} counties / D ${w.dem} R ${w.rep} O ${w.oth}, got ${co ? Object.keys(co).length : 0} / D ${sum(co, "dem")} R ${sum(co, "rep")} O ${sum(co, "oth")}`);
+    };
+    // 1. Through the real endpoint, gate and all: before 7 p.m. nothing is downloaded; 7:01 Georgia only; 9:01 both.
+    const env = { IA_RESULTS_URL: IA_LIST, GA_RESULTS_URL: GA_LIST };
+    const et = (h, m) => Date.UTC(2026, 10, 3, h + 5, m);
+    requested.length = 0;
+    const p659 = await buildPayload({ env, now: et(18, 59) });
+    if (requested.length || Object.keys(p659.races).length) fails.push("a list or file was downloaded before 7 p.m.");
+    const p701 = await buildPayload({ env, now: et(19, 1) });
+    if (requested.some((u) => u.includes("iowa.gov"))) fails.push("Iowa's list was read before 9 p.m.");
+    if (!p701.races.ga_sen || p701.races.ia_sen) fails.push("7:01 p.m.: expected Georgia only");
+    requested.length = 0;
+    const p901 = await buildPayload({ env, now: et(21, 1) });
+    checkRace(p901, "ia_sen", want(counts.IA, "dem", "rep"));
+    checkRace(p901, "ga_sen", want(counts.GA, "dem", "rep", "oth"));
+    checkRace(p901, "ga_gov", want(counts.GA, "gdem", "grep", "goth"));
+    if (p901.diag?.IA?.election?.id !== "126900") fails.push(`Iowa picked election ${p901.diag?.IA?.election?.id}, not the general`);
+    if (p901.diag?.GA?.election?.id !== "11032026GeneralElection") fails.push(`Georgia picked election ${p901.diag?.GA?.election?.id}, not the general`);
+    const bad = requested.filter((u) => site(u) == null);
+    if (bad.length) fails.push(`downloaded files it shouldn't have: ${bad.join(", ")}`);
+    if (!(p901.races.ga_sen?.counties && Object.values(p901.races.ga_sen.counties).every((c) => c.pt === 10))) fails.push("Georgia's precincts-reporting numbers were lost");
+    // 2. Today's situation: the general isn't listed yet (only the decoys are).
+    posted = false; requested.length = 0;
+    const pNot = await buildPayload({ env, now: et(21, 1) });
+    if (Object.keys(pNot.races).length) fails.push("showed results from a decoy election");
+    for (const msg of ["Iowa: Nov 3 general not posted yet", "Georgia: Nov 3 general not posted yet"])
+      if (!(pNot.errors || []).includes(msg)) fails.push(`missing message "${msg}" (got ${JSON.stringify(pNot.errors)})`);
+    if (pNot.source !== "waiting") fails.push(`source should be "waiting" before the general is listed, got "${pNot.source}"`);
+    if (requested.some((u) => !(u === IA_LIST || u === GA_LIST))) fails.push("downloaded a decoy election's files");
+  } finally { globalThis.fetch = realFetch; }
+  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa and Georgia pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs and recounts, even ones dated Nov 3 and listed first); county totals exact; Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; nothing downloaded before 7 p.m. (Georgia) / 9 p.m. (Iowa)");
+  if (fails.length) process.exitCode = 1;
+}
+await discoveryCheck();
+
 if (has("--auto")) {
   const minutes = val("--minutes", 30);
   const stepMs = 20000;

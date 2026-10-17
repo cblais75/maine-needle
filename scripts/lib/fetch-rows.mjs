@@ -14,8 +14,12 @@
 //     needle finishes from our copy. Links are only followed to the same site or .gov/.us.
 //   - Kansas's unofficial-results page (sos.ks.gov/ent/kssos_ent.html). It has no data file;
 //     the page itself carries every county's votes, so it is read directly.
+//   - a state's LIST of elections (Iowa, Georgia; Update 62): the Nov 3, 2026 general is picked from
+//     the list on every refresh and its results read (see discover.mjs). Until it's listed, the state
+//     reports "<State>: Nov 3 general not posted yet" and shows no results.
 // Clarity links may contain {ver}; the current folder number is looked up automatically.
 import { readFeed, isKansasPage } from "./read-feed.mjs";
+import { discover, isElectionList } from "./discover.mjs";
 
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; Needlepoint/1.0; +https://needlepoint.news)" };
 
@@ -89,9 +93,16 @@ async function download(url) {
 }
 
 // Returns { rows, files }: all vote rows from every file this setting points to.
+// With an election list: also { picked } (the election chosen) or { notPosted } (the message to show).
 export async function fetchRows(setting, state) {
-  const urls = String(setting || "").split(/\s+/).filter(Boolean);
-  const rows = [], files = [];
+  const urls = [], rows = [], files = [], out = { rows, files };
+  for (const link of String(setting || "").split(/\s+/).filter(Boolean)) {
+    if (!isElectionList(link)) { urls.push(link); continue; }
+    const d = await discover(link, state, async (u) => (await get(u)).json());
+    if (d.picked) out.picked = d.picked;
+    if (d.notPosted) out.notPosted = d.notPosted;
+    urls.push(...d.urls);
+  }
   for (const raw of urls) {
     const url = await resolveUrl(raw);
     const buf = await download(url);
@@ -114,5 +125,5 @@ export async function fetchRows(setting, state) {
       files.push(url);
     }
   }
-  return { rows, files };
+  return out;
 }

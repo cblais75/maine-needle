@@ -23,14 +23,14 @@ if (!COUNTIES[state] || (!opt("--url") && !opt("--file"))) {
   process.exit(1);
 }
 const t0 = Date.now();
-let rows, where, size = 0, files = [];
+let rows, where, size = 0, files = [], picked = null, notPosted = null;
 try {
   if (opt("--file")) {
     const buf = new Uint8Array(fs.readFileSync(opt("--file"))); size = buf.length; where = opt("--file");
     rows = readFeed(buf, state, where); files = [where];
   } else {
     where = opt("--url");
-    ({ rows, files } = await fetchRows(where, state));
+    ({ rows, files, picked = null, notPosted = null } = await fetchRows(where, state));
   }
 } catch (e) { console.log(`FAIL: could not download or read: ${e.message}`); process.exit(2); }
 const t1 = Date.now();
@@ -49,6 +49,8 @@ const missing = all.filter((c) => !got.includes(c));
 
 console.log(`\n=== ${state} feed check ===`);
 console.log(`file: ${where}`);
+if (picked) console.log(`election picked from the list: ${picked.name} (${picked.date}, ID ${picked.id})`);
+if (notPosted) console.log(notPosted);
 console.log(`files read: ${files.length}${files.length > 1 || !opt("--file") ? "\n  " + files.join("\n  ") : ""}${size ? `\nsize: ${(size / 1e6).toFixed(1)} MB` : ""}\ntime ${((t2 - t0) / 1000).toFixed(1)}s   rows ${rows.length}`);
 console.log(`sample row: ${JSON.stringify(rows.find((r) => r.county || r.town) || rows[0] || null)}`);
 console.log(`race matched: ${race ? "yes" : "NO"}   counties matched: ${got.length} of ${all.length}`);

@@ -17,6 +17,11 @@
 // (403), from Vercel too, so MI_RESULTS_URL can't work there unless the state lifts it.
 // Minnesota: MN_RESULTS_URL = https://electionresultsfiles.sos.mn.gov/20261103/allracesbycounty.txt
 // (the state posts TEST data at that address before election day: set it only on election night).
+// Iowa and Georgia (Update 62): set IA_RESULTS_URL / GA_RESULTS_URL to the state's LIST of elections,
+//   IA_RESULTS_URL = https://electionresults.iowa.gov/IA/elections.json
+//   GA_RESULTS_URL = https://results.sos.ga.gov/results/public/api/jurisdictions/Georgia
+// and the Nov 3, 2026 general is found automatically once the state lists it (scripts/lib/discover.mjs).
+// Until then the state reports "Iowa: Nov 3 general not posted yet" (or Georgia) and shows no results.
 // Clarity sites change their folder number as the night goes on. Put {ver} where that number
 // goes (e.g. https://results.enr.clarityelections.com/IA/123456/{ver}/reports/detailxml.zip)
 // and this looks up the current number from current_ver.txt on every refresh.
@@ -51,9 +56,11 @@ const SOURCES = [
 export { resolveUrl } from "../scripts/lib/fetch-rows.mjs";
 
 async function fetchState(setting, state) {
-  const { rows, files } = await fetchRows(setting, state);
+  const { rows, files, picked, notPosted } = await fetchRows(setting, state);
   const out = aggregate(rows, state);
   out._diag.files = files.length;
+  if (picked) out._diag.election = picked;       // election chosen from a state's list (Update 62)
+  if (notPosted) out._diag.notPosted = notPosted;
   return out;
 }
 
@@ -72,7 +79,7 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
       Object.assign(races, out.races || {});
       if (Object.keys(out.races || {}).length) sources.push(s.state);
       diag[s.state] = out._diag;
-      if (!Object.keys(out.races || {}).length) errors.push(`${s.state}: ${out._diag.files ? "file read, but no votes found for our races" : "no results files posted yet"}`);
+      if (!Object.keys(out.races || {}).length) errors.push(out._diag.notPosted || `${s.state}: ${out._diag.files ? "file read, but no votes found for our races" : "no results files posted yet"}`);
     } catch (e) {
       errors.push(`${s.state}: ${String(e)}`);
     }
@@ -80,7 +87,7 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
   // gateResults again, race by race: a belt-and-braces check that no early state slips through.
   return gateResults({
     updated: new Date(now).toISOString(),
-    source: sources.length ? `live (${sources.join(", ")})` : errors.every((e) => /no results files posted yet/.test(e)) ? "waiting" : "error",
+    source: sources.length ? `live (${sources.join(", ")})` : errors.every((e) => /no results files posted yet|not posted yet/.test(e)) ? "waiting" : "error",
     ...(closed.length ? { note: waitingNote(now, closed) } : {}),
     ...(errors.length ? { errors } : {}),
     diag,
