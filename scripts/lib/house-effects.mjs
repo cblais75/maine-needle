@@ -39,6 +39,7 @@ const SPONSORED = {
   "Public Policy Polling (Lone Star Rising PAC)": "D",
   "GBAO (Hamilton campaign)": "D",
   "Public Policy Polling (Senate Majority PAC)": "D",
+  "Tulchin Research (Kulewicz campaign)": "D",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

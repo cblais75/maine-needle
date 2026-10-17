@@ -23,7 +23,7 @@ import { aggregate } from "./lib/aggregate.mjs";
 import { readFeed } from "./lib/read-feed.mjs";
 import { gateResults } from "./lib/results-gate.mjs";
 import { simulatedPreview } from "./lib/night-preview.mjs";
-import { runoffStatus, otherShare } from "./lib/runoff.mjs";
+import { runoffStatus, otherShare, RUNOFF_RACES } from "./lib/runoff.mjs";
 import { buildPayload } from "../api/results.js";
 
 const ROOT = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "..");
@@ -82,11 +82,11 @@ function snapshotCounts(frac) {
       const turnout = Math.round(c.weight * TURNOUT[s.state] * local);
       const demShare = Math.min(0.97, Math.max(0.03, c.demShare + s.swing));
       const row = { county: c.name, dem: Math.round(turnout * demShare), rep: Math.round(turnout * (1 - demShare)), local };
-      if (s.state === "TX") { // Texas also counts its governor race (Update 49), running a little redder than the Senate race
+      if (["TX", "OH", "GA"].includes(s.state)) { // governor races (TX Update 49; OH, GA Update 61), a little redder than the Senate race
         const gShare = Math.min(0.97, Math.max(0.03, demShare - 0.015));
         row.gdem = Math.round(turnout * gShare); row.grep = Math.round(turnout * (1 - gShare));
       }
-      if (s.state === "GA") row.oth = Math.round(turnout * 0.025); // a Libertarian on Georgia's ballot (runoff rule, Update 57)
+      if (s.state === "GA") { row.oth = Math.round(turnout * 0.025); row.goth = Math.round(turnout * 0.02); } // Libertarians (runoff rule, Updates 57 and 61)
       list.push(row);
     }
     perState[s.state] = list;
@@ -111,7 +111,7 @@ function asFile(s, list) {
     const cty = (f) => list.map((c) => `<County name="${c.county}" votes="${f(c)}" />`).join("");
     const part = list.map((c) => `<County name="${c.county}" precinctsParticipating="20" precinctsReported="${Math.round(20 * c.local)}" />`).join("");
     const ch = (name, party, key) => `<Choice key="1" text="${name}" party="${party}"><VoteType name="Election Day">${cty((c) => Math.round(c[key] * 0.7))}</VoteType><VoteType name="Absentee">${cty((c) => c[key] - Math.round(c[key] * 0.7))}</VoteType></Choice>`;
-    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest><Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
+    return enc(`<?xml version="1.0"?><ElectionResult><Contest key="1" text="United States Senator" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch(s.dem, "DEM", "dem")}${ch(s.rep, "REP", "rep")}${s.state === "GA" ? ch("Chase Oliver", "LIB", "oth") : ""}</Contest>${s.state === "GA" ? `<Contest key="3" text="Governor" voteFor="1"><ParticipatingCounties>${part}</ParticipatingCounties>${ch("Keisha Lance Bottoms", "DEM", "gdem")}${ch("Rick Jackson", "REP", "grep")}${ch("Some Libertarian", "LIB", "goth")}</Contest><Contest key="4" text="Lieutenant Governor"><Choice key="8" text="Burt Jones" party="REP"><VoteType name="Election Day">${cty(() => 7777)}</VoteType></Choice></Contest>` : ""}<Contest key="2" text="State Senator Dist. 3"><Choice key="9" text="X" party="DEM"><VoteType name="Election Day">${cty(() => 9999)}</VoteType></Choice></Contest></ElectionResult>`);
   }
   if (s.state === "MI") { // Michigan Voter Information Center download (Update 60): MVIC GetElectionResultFile, the old
     // CENR_BY_COUNTY layout. A "TOTAL VOTER TURNOUT" line comes before the header; no precincts-reporting column;
@@ -131,13 +131,17 @@ function asFile(s, list) {
   }
   if (s.state === "OH") { // Ohio-style wide workbook: counties down the side, candidates across, merged office title,
     // a Total and a Percentage column per candidate, and the SAME race repeated on a "Master" summary sheet
-    const aoa = [["2026 General Election — Official Canvass"], ["", "U.S. Senator", "", "", "", "State Senator 12"],
-      ["", "Sherrod Brown (D)", "", "Jon Husted (R)", "", "Some One (D)"], ["County", "Total", "Percentage", "Total", "Percentage", "Total"]];
-    for (const c of list) aoa.push([c.county, c.dem, c.dem / (c.dem + c.rep), c.rep, c.rep / (c.dem + c.rep), 4444]);
-    aoa.push(["Total", 1, 1, 1, 1, 1]);
+    // Governor (Update 61): Ohio's contest is "Governor and Lieutenant Governor"; it's on the Master sheet and its own sheet.
+    const aoa = [["2026 General Election — Official Canvass"], ["", "U.S. Senator", "", "", "", "State Senator 12", "Governor and Lieutenant Governor", "", ""],
+      ["", "Sherrod Brown (D)", "", "Jon Husted (R)", "", "Some One (D)", "Amy Acton (D)", "Vivek Ramaswamy (R)", "Donald Kissick (L)"],
+      ["County", "Total", "Percentage", "Total", "Percentage", "Total", "Total", "Total", "Total"]];
+    for (const c of list) aoa.push([c.county, c.dem, c.dem / (c.dem + c.rep), c.rep, c.rep / (c.dem + c.rep), 4444, c.gdem, c.grep, 5]);
+    aoa.push(["Total", 1, 1, 1, 1, 1, 1, 1, 1]);
+    const sen = aoa.map((r) => r.slice(0, 6)), gov = aoa.map((r) => [r[0], ...r.slice(6)]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Master");
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "U.S. Senator");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sen), "U.S. Senator");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(gov), "Governor");
     return new Uint8Array(XLSX.write(wb, { type: "array", bookType: "xlsx" }));
   }
   if (s.state === "TX") { // Texas's new Civix results API (Update 59): .../s3/enr/election/countyInfo/<id> answers
@@ -217,9 +221,9 @@ function writeSnapshot(frac) {
     // check nothing was lost or added on the way through, for every race in the state
     const sum = (a, k) => a.reduce((t, x) => t + (x[k] || 0), 0);
     const list = counts[s.state];
-    const expect = s.state === "TX"
-      ? { tx_sen: list, tx_gov: list.map((c) => ({ dem: c.gdem, rep: c.grep })) }
-      : { [Object.keys(out.races)[0] || s.state]: list };
+    const gov = list.map((c) => ({ dem: c.gdem, rep: c.grep }));
+    const expect = { TX: { tx_sen: list, tx_gov: gov }, OH: { oh_sen: list, oh_gov: gov }, GA: { ga_sen: list, ga_gov: gov } }[s.state]
+      || { [Object.keys(out.races)[0] || s.state]: list };
     for (const [id, want] of Object.entries(expect)) {
       const got = out.races[id] ? Object.values(out.races[id].counties) : [];
       if (want.length && (got.length !== want.length || Math.abs(sum(got, "dem") - sum(want, "dem")) > want.length || Math.abs(sum(got, "rep") - sum(want, "rep")) > want.length))
@@ -232,7 +236,7 @@ function writeSnapshot(frac) {
     test: true, // a marked test: shown even before the results start gate (Update 55)
     races,
   }, null, 2));
-  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas governor race)"));
+  console.log(`wrote snapshot at ${(frac * 100).toFixed(0)}% in (seed ${seed})` + (problems.length ? "\n  PROBLEMS:\n  " + problems.join("\n  ") : "  - all 10 states read correctly (plus the Texas, Ohio and Georgia governor races)"));
 }
 
 // START GATE CHECK (Updates 55-56): fake votes in a state's file must not go live before that
@@ -285,6 +289,9 @@ function runoffCheck() {
   const got = Object.values(out.races.ga_sen.counties).reduce((t, c) => t + (c.oth || 0), 0);
   const want = counts.GA.reduce((t, c) => t + c.oth, 0);
   if (got !== want) fails.push(`Georgia third-party votes: expected ${want}, got ${got}`);
+  const gotG = Object.values((out.races.ga_gov || { counties: {} }).counties).reduce((t, c) => t + (c.oth || 0), 0), wantG = counts.GA.reduce((t, c) => t + c.goth, 0);
+  if (gotG !== wantG) fails.push(`Georgia governor third-party votes: expected ${wantG}, got ${gotG}`);
+  if (!RUNOFF_RACES.ga_gov) fails.push("the runoff rule doesn't cover the Georgia governor race");
   // the 2022 certified count: Warnock 1,946,117, Walker 1,908,442, Oliver 81,365, all counted
   const w = 1946117, k = 1908442, o = 81365;
   const full = { margin: (w - k) / (w + k), se: 0.004, fracIn: 1 };
@@ -292,7 +299,7 @@ function runoffCheck() {
   const clear = { margin: 0.08, se: 0.004, fracIn: 1 }; // leader ~52.6% of all votes
   if (runoffStatus(clear, 0.999, 0.025).status !== "called") fails.push("a clear majority was not called");
   if (runoffStatus({ ...full, fracIn: 0.3, se: 0.07 }, 0.6, 0.02).status === "called") fails.push("called with only 30% in");
-  console.log(fails.length ? "runoff check FAILED:\n  " + fails.join("\n  ") : "runoff check passed: Georgia's Libertarian votes kept; 49.4% leader goes to a Dec. 1 runoff (no call); a clear majority is still called");
+  console.log(fails.length ? "runoff check FAILED:\n  " + fails.join("\n  ") : "runoff check passed: Georgia's Libertarian votes kept (Senate and governor); rule covers both races; 49.4% leader goes to a Dec. 1 runoff (no call); a clear majority is still called");
   if (fails.length) process.exitCode = 1;
 }
 runoffCheck();

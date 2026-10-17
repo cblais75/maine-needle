@@ -15,7 +15,7 @@ const recency = (d) => Math.pow(0.5, ageDays(d) / HALF_LIFE_DAYS);
 
 // Measure leans on the two-candidate races (the three-way governor race is corrected
 // with the same leans but not used to measure them).
-const TWO_WAY = ["senate", "cd1", "cd2", "nc_sen", "oh_sen", "tx_sen", "tx_gov", "ia_sen", "ak_sen", "ga_sen", "ne_sen", "mi_sen", "nh_sen", "ks_sen", "mn_sen"];
+const TWO_WAY = ["senate", "cd1", "cd2", "nc_sen", "oh_sen", "tx_sen", "tx_gov", "ia_sen", "ak_sen", "ga_sen", "ne_sen", "mi_sen", "nh_sen", "ks_sen", "mn_sen", "oh_gov", "ga_gov"];
 const effects = measureHouseEffects(Object.fromEntries(TWO_WAY.map((k) => [k, polls[k] || []])));
 
 function summarize(list) {
@@ -60,6 +60,8 @@ const mi = summarize(polls.mi_sen || []);
 const nh = summarize(polls.nh_sen || []);
 const ks = summarize(polls.ks_sen || []);
 const mn = summarize(polls.mn_sen || []);
+const ohg = summarize(polls.oh_gov || []);
+const gag = summarize(polls.ga_gov || []);
 const current = {
   updated: today.toISOString().slice(0, 10),
   method: { halfLifeDays: HALF_LIFE_DAYS, note: "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower. Each poll is first corrected for its pollster's measured lean (house effect)." },
@@ -98,6 +100,10 @@ const current = {
     note: ks.nPolls === 0 ? "No public Kansas Senate polls yet." : "", polls: ks.polls },
   mn_sen: { margin: mn.margin, nPolls: mn.nPolls, fallback: mn.margin === null,
     note: mn.nPolls === 0 ? "No public Minnesota Senate polls yet." : "", polls: mn.polls },
+  oh_gov: { margin: ohg.margin, nPolls: ohg.nPolls, fallback: ohg.margin === null,
+    note: ohg.nPolls === 0 ? "No public Ohio governor polls yet." : "", polls: ohg.polls },
+  ga_gov: { margin: gag.margin, nPolls: gag.nPolls, fallback: gag.margin === null,
+    note: gag.nPolls === 0 ? "No public Georgia governor polls yet." : "", polls: gag.polls },
 };
 writeFileSync(new URL("../public/current.json", import.meta.url), JSON.stringify(current, null, 2));
 console.log(`Senate: ${current.senate.margin >= 0 ? "Jackson +" : "Collins +"}${Math.abs(current.senate.margin)} from ${current.senate.nPolls} polls`);
@@ -115,3 +121,5 @@ console.log(`MI Senate: ${current.mi_sen.nPolls} polls${current.mi_sen.nPolls ? 
 console.log(`NH Senate: ${current.nh_sen.nPolls} polls${current.nh_sen.nPolls ? " (" + (current.nh_sen.margin>=0?"Pappas +":"Sununu +") + Math.abs(current.nh_sen.margin) + ")" : ""}`);
 console.log(`KS Senate: ${current.ks_sen.nPolls} polls${current.ks_sen.nPolls ? " (" + (current.ks_sen.margin>=0?"Hamilton +":"Marshall +") + Math.abs(current.ks_sen.margin) + ")" : ""}`);
 console.log(`MN Senate: ${current.mn_sen.nPolls} polls${current.mn_sen.nPolls ? " (" + (current.mn_sen.margin>=0?"Flanagan +":"Tafoya +") + Math.abs(current.mn_sen.margin) + ")" : ""}`);
+console.log(`OH Governor: ${current.oh_gov.nPolls} polls${current.oh_gov.nPolls ? " (" + (current.oh_gov.margin>=0?"Acton +":"Ramaswamy +") + Math.abs(current.oh_gov.margin) + ")" : ""}`);
+console.log(`GA Governor: ${current.ga_gov.nPolls} polls${current.ga_gov.nPolls ? " (" + (current.ga_gov.margin>=0?"Bottoms +":"Jackson +") + Math.abs(current.ga_gov.margin) + ")" : ""}`);

@@ -2,7 +2,7 @@
 // Georgia requires MORE than 50% of all votes to win outright; otherwise the top two meet in a runoff
 // (Dec. 1, 2026). The needle projects the two main candidates' share; third-party votes ("oth" in the
 // results) shrink both, so a two-way lead can still fall short of a majority (Warnock had 49.4% in 2022).
-export const RUNOFF_RACES = { ga_sen: { date: "Dec. 1" } };
+export const RUNOFF_RACES = { ga_sen: { date: "Dec. 1" }, ga_gov: { date: "Dec. 1" } };
 
 function ncdf(x) {
   const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);

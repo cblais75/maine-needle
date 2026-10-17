@@ -7,7 +7,9 @@ import { matchCounty } from "./read-feed.mjs";
 // "U.S. Senator 6 Year Term (1) Position", "2026-ge-us-senate.xls" — but NOT "State Senate District 5".
 const US_SENATE = /\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT/i;
 // Governor, but NOT "Lieutenant Governor" / "Lt. Governor" (Texas lists both on the same ballot).
-const GOVERNOR = /^(?!.*\b(lieutenant|lt\.?)[\s-]+gov).*\bgovernor\b/i;
+// Ohio's contest is "Governor and Lieutenant Governor" (a joint ticket), so only titles that START with
+// Lieutenant are excluded (Update 61).
+const GOVERNOR = /^(?!\s*(lieutenant|lt\.?)[\s-])(?=.*\bgovernor\b)/i;
 // Kansas titles its primary contests "United States Senate (R)" / "(D)" on the same results site,
 // so the general-election match skips any Senate title ending in a party letter.
 const US_SENATE_GENERAL = /^(?!.*\((?:D|R|L|DEM|REP|LIB)\)\s*$)(?=.*(?:\bU\.?[\s-]*S\.?[\s-]*SENAT|\bUNITED[\s-]+STATES[\s-]+SENAT))/i;
@@ -21,12 +23,15 @@ const RACES = [
   { id: "cd2", state: "ME", office: /(congress|representative).*(district\s*2|second|\b2\b)/i, kind: "two", names: { dem: /dunlap/i, rep: /lepage/i } },
   { id: "nc_sen", state: "NC", office: US_SENATE, kind: "two", names: { dem: /cooper/i, rep: /whatley/i } },
   { id: "oh_sen", state: "OH", office: US_SENATE, kind: "two", names: { dem: /brown/i, rep: /husted/i } },
+  // Ohio and Georgia governor (Update 61): the same state files, the governor contest instead.
+  { id: "oh_gov", state: "OH", office: GOVERNOR, kind: "two", names: { dem: /acton/i, rep: /ramaswamy/i } },
   { id: "tx_sen", state: "TX", office: US_SENATE, kind: "two", names: { dem: /talarico/i, rep: /paxton/i } },
   // Texas governor (Update 49): same feed as the Senate race, the governor contest instead.
   { id: "tx_gov", state: "TX", office: GOVERNOR, kind: "two", names: { dem: /hinojosa/i, rep: /abbott/i } },
   { id: "ia_sen", state: "IA", office: US_SENATE, kind: "two", names: { dem: /turek/i, rep: /hinson/i } },
   // Georgia: majority required (Dec. 1 runoff otherwise), so third-party votes are kept as "oth" (Update 57).
   { id: "ga_sen", state: "GA", office: US_SENATE, kind: "two", trackOther: true, names: { dem: /ossoff/i, rep: /collins/i } },
+  { id: "ga_gov", state: "GA", office: GOVERNOR, kind: "two", trackOther: true, names: { dem: /bottoms/i, rep: /jackson/i } },
   // Nebraska: names only. Osborn is an independent, and if the Democratic nominee (Burbank) ends
   // up on the ballot her votes must NOT be counted as Osborn's.
   { id: "ne_sen", state: "NE", office: US_SENATE, kind: "two", namesOnly: true, names: { dem: /osborn/i, rep: /ricketts/i } },
