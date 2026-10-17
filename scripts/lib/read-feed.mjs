@@ -13,6 +13,7 @@
 //   - JSON (generic walk; used for vendors like Enhanced Voting)
 //   - Kansas's unofficial-results web page (county breakdowns in the map's hover boxes)
 //   - Minnesota's headerless ';' media files with numeric county codes
+//   - Texas's Civix results API (county data wrapped as base64 JSON in an "upload" field)
 // aggregate.mjs then keeps only the U.S. Senate race and maps counties to the needle's names.
 import * as XLSX from "xlsx";
 import { unzipSync, strFromU8 } from "fflate";
@@ -222,6 +223,14 @@ const JKEYS = {
   pr: /^(precinctsreporting|precinctsreported)$/i,
   pt: /^(totalprecincts|precinctsparticipating|precinctstotal)$/i,
 };
+// Texas's new Civix results system (Update 59), goelect.txelections.civixapps.com: the API answers
+//   .../api-ivis-system/api/s3/enr/election/countyInfo/<electionId>  ->  { "upload": "<base64 JSON>" }
+// and the decoded JSON is the same county-keyed shape as the old County.json below (keyed 1..254
+// instead of FIPS codes). Unwrap it and read it the same way.
+function unwrapUpload(obj) {
+  if (!obj || Array.isArray(obj) || typeof obj.upload !== "string" || Object.keys(obj).length > 2) return obj;
+  try { return JSON.parse(Buffer.from(obj.upload, "base64").toString("utf8")); } catch { return obj; }
+}
 // Texas's results site (results.texas-election.com .../County.json):
 // { "48001": { "N": "ANDERSON", "Summary": { "PRR": 23, "PRP": 23 },
 //              "Races": { "1001": { "ON": "PRESIDENT/...", "C": { "9240": { "N": "...", "P": "REP", "V": 15597 } } } } } }
@@ -236,7 +245,7 @@ function rowsFromTexas(obj) {
     const pr = Number(co.Summary?.PRR), pt = Number(co.Summary?.PRP);
     for (const race of Object.values(co.Races || {}))
       for (const cand of Object.values(race.C || {}))
-        rows.push({ county: co.N, office: race.ON, party: cand.P, candidate: cand.N, votes: cand.V,
+        rows.push({ county: co.N, office: race.ON ?? race.N, party: cand.P, candidate: cand.N, votes: cand.V,
           pr: Number.isFinite(pr) ? pr : undefined, pt: Number.isFinite(pt) ? pt : undefined });
   }
   return rows;
@@ -309,7 +318,10 @@ export function readFeed(input, state, name = "") {
   if (/^[\[{]/.test(head)) {
     let obj = null;
     try { obj = JSON.parse(strFromU8(buf)); } catch { /* not JSON after all: fall through to text */ }
-    if (obj) return isTexasShape(obj) ? rowsFromTexas(obj) : rowsFromJSON(obj);
+    if (obj) {
+      obj = unwrapUpload(obj);
+      return isTexasShape(obj) ? rowsFromTexas(obj) : rowsFromJSON(obj);
+    }
   }
   if (/^<(!doctype|html)/i.test(head)) {
     const html = strFromU8(buf);

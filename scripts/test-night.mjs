@@ -133,18 +133,21 @@ function asFile(s, list) {
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "U.S. Senator");
     return new Uint8Array(XLSX.write(wb, { type: "array", bookType: "xlsx" }));
   }
-  if (s.state === "TX") { // Texas results site County.json: keyed by county code, then race, then candidate
+  if (s.state === "TX") { // Texas's new Civix results API (Update 59): .../s3/enr/election/countyInfo/<id> answers
+    // { "upload": "<base64 JSON>" }; inside, counties keyed 1..254 with races, candidates and precincts reporting.
+    // Lieutenant Governor and a State Senate race are mixed in and must NOT count.
     const obj = {};
     list.forEach((c, i) => {
-      obj[String(48001 + 2 * i)] = { N: c.county.toUpperCase(), TV: 1, C: "#19b90f", Summary: { PRR: Math.round(20 * c.local), PRP: 20 },
-        Races: { 1001: { OID: 1001, ON: "U. S. SENATOR ", T: c.dem + c.rep, C: {
-          9240: { id: 9240, N: "JAMES TALARICO", P: "DEM", V: c.dem }, 9241: { id: 9241, N: "KEN PAXTON", P: "REP", V: c.rep }, 9242: { id: 9242, N: "WRITE-IN", P: "W", V: 3 } } },
-          1002: { OID: 1002, ON: "GOVERNOR", T: c.gdem + c.grep, C: {
-            9250: { id: 9250, N: "GINA HINOJOSA", P: "DEM", V: c.gdem }, 9251: { id: 9251, N: "GREG ABBOTT", P: "REP", V: c.grep }, 9252: { id: 9252, N: "PAT DIXON", P: "LIB", V: 4 } } },
-          1003: { OID: 1003, ON: "LIEUTENANT GOVERNOR", C: { 9260: { id: 9260, N: "SOMEONE", P: "DEM", V: 6666 }, 9261: { id: 9261, N: "DAN PATRICK", P: "REP", V: 7777 } } }, // must NOT count as governor
-          2001: { OID: 2001, ON: "STATE SENATOR, DISTRICT 1", C: { 1: { id: 1, N: "X", P: "DEM", V: 5555 } } } } };
+      obj[String(i + 1)] = { N: c.county.toUpperCase(), TV: 1, C: "#19b90f", Summary: { PRR: Math.round(20 * c.local), PRP: 20 },
+        Races: {
+          43: { OID: 43, N: "U. S. SENATOR ", T: c.dem + c.rep, PR: Math.round(20 * c.local), TP: 20, C: {
+            9240: { id: 9240, N: "JAMES TALARICO", P: "DEM", V: c.dem }, 9241: { id: 9241, N: "KEN PAXTON", P: "REP", V: c.rep }, 9242: { id: 9242, N: "TED BROWN", P: "L", V: 3 } } },
+          9: { OID: 9, N: "GOVERNOR", T: c.gdem + c.grep, C: {
+            9250: { id: 9250, N: "GINA HINOJOSA", P: "DEM", V: c.gdem }, 9251: { id: 9251, N: "GREG ABBOTT (I)", P: "REP", V: c.grep }, 9252: { id: 9252, N: "PAT DIXON", P: "L", V: 4 } } },
+          10: { OID: 10, N: "LIEUTENANT GOVERNOR", C: { 9260: { id: 9260, N: "SOMEONE", P: "DEM", V: 6666 }, 9261: { id: 9261, N: "DAN PATRICK (I)", P: "REP", V: 7777 } } }, // must NOT count as governor
+          201: { OID: 201, N: "STATE SENATOR, DISTRICT 1", C: { 1: { id: 1, N: "X", P: "DEM", V: 5555 } } } } };
     });
-    return enc(JSON.stringify(obj));
+    return enc(JSON.stringify({ upload: Buffer.from(JSON.stringify(obj)).toString("base64") }));
   }
   if (s.state === "NE") { // Nebraska results web service: { d: [ ...one object per county per candidate... ] }
     const d = [];

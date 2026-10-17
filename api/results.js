@@ -9,6 +9,9 @@
 //   IA_RESULTS_URL, GA_RESULTS_URL, NE_RESULTS_URL, MI_RESULTS_URL, NH_RESULTS_URL, KS_RESULTS_URL, MN_RESULTS_URL
 // Kansas: KS_RESULTS_URL = https://sos.ks.gov/ent/kssos_ent.html (the statewide results page;
 // every county's votes are in the page itself, so one download covers all 105 counties).
+// Texas: TX_RESULTS_URL = https://goelect.txelections.civixapps.com/api-ivis-system/api/s3/enr/election/countyInfo/53815
+// (Texas's new Civix results system; 53815 is the 2026 November general election; the Senate and governor
+// races both come from this one file).
 // Minnesota: MN_RESULTS_URL = https://electionresultsfiles.sos.mn.gov/20261103/allracesbycounty.txt
 // (the state posts TEST data at that address before election day: set it only on election night).
 // Clarity sites change their folder number as the night goes on. Put {ver} where that number
