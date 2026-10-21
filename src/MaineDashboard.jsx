@@ -2418,6 +2418,7 @@ function MethodView({ wide }) {
   const steps = [
     ["Start from the polls", <>
       <p style={sub}>Each race begins at its polling average. Every poll is weighted two ways: by how much we trust the pollster (see Pollster ratings) and by how recent it is, with a poll's weight halving every three weeks.</p>
+      <p style={sub}>We remove pollsters found to have fabricated data. In October 2026 we removed every Wedgewood Polls survey after the firm admitted its numbers were fake.</p>
       <p style={sub}>Each poll is also corrected for its pollster's measured lean, or "house effect": how far that pollster's numbers have run from other pollsters in the same races at the same time this year. A pollster with only a poll or two gets a smaller correction, since one poll can differ by luck, and a poll paid for by a campaign, party or PAC starts out assumed to lean 2 points toward its sponsor. This is the approach major polling averages such as Silver Bulletin's use, and it works in both directions. The Pollster ratings page lists every pollster's lean.</p>
     </>],
     ["Adjust for history", <>
@@ -2546,7 +2547,6 @@ const POLLSTER_NOTES = {
   "co/efficient": "R-leaning reputation",
   "Rasmussen Reports": "R-leaning reputation",
   "Abacus Data": "lightly proven",
-  "Wedgewood Polls": "lightly proven",
 };
 const GROUP_STATE = { senate: "ME", governor: "ME", cd1: "ME", cd2: "ME" };
 function buildRatings(current) {

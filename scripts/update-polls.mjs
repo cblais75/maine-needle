@@ -5,11 +5,26 @@
 // effect"); see scripts/lib/house-effects.mjs. The raw published numbers are kept too.
 // Run: node scripts/update-polls.mjs   (or: npm run polls)
 import { readFileSync, writeFileSync } from "node:fs";
-import { measureHouseEffects, adjustPoll, canon } from "./lib/house-effects.mjs";
+import { measureHouseEffects, adjustPoll, canon, isBlocked, BLOCKED_POLLSTERS } from "./lib/house-effects.mjs";
 
 const HALF_LIFE_DAYS = 21;          // a poll's weight halves every 3 weeks
 const today = new Date();
 const polls = JSON.parse(readFileSync(new URL("../data/polls.json", import.meta.url)));
+
+// Blocked pollsters (fabricated data; see BLOCKED_POLLSTERS in scripts/lib/house-effects.mjs) must not appear
+// in ANY poll file. If one does, stop here with an error naming it rather than publish an average built on it.
+{
+  const found = [];
+  for (const [race, list] of Object.entries(polls)) if (Array.isArray(list)) for (const p of list) if (isBlocked(p.pollster)) found.push(`data/polls.json ${race}: ${p.pollster} (${p.date})`);
+  for (const f of ["senate-cards", "governor-cards"]) {
+    const cards = JSON.parse(readFileSync(new URL(`../data/${f}.json`, import.meta.url))).races || [];
+    for (const c of cards) for (const p of c.polls || []) if (isBlocked(p.pollster)) found.push(`data/${f}.json ${c.id}: ${p.pollster} (${p.date})`);
+  }
+  if (found.length) {
+    console.error(`ERROR: blocked pollster found (fabricated data; blocked: ${BLOCKED_POLLSTERS.join(", ")}). Remove these polls:\n  ${found.join("\n  ")}`);
+    process.exit(1);
+  }
+}
 const ageDays = (d) => (today - new Date(d)) / 86400000;
 const recency = (d) => Math.pow(0.5, ageDays(d) / HALF_LIFE_DAYS);
 

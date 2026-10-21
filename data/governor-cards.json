@@ -1197,13 +1197,6 @@
       },
       "polls": [
         {
-          "pollster": "Wedgewood Polls",
-          "date": "2026-10-09",
-          "dem": 55,
-          "rep": 45,
-          "rating": 0.55
-        },
-        {
           "pollster": "YouGov",
           "date": "2026-10-04",
           "dem": 48,
@@ -1549,14 +1542,6 @@
           "note": "Lindstrom 5"
         },
         {
-          "pollster": "Wedgewood Polls",
-          "date": "2026-09-16",
-          "dem": 36,
-          "rep": 53,
-          "rating": 0.55,
-          "note": "Lindstrom 5"
-        },
-        {
           "pollster": "Lake Research Partners (Walz campaign)",
           "date": "2026-09-14",
           "dem": 40,
@@ -1589,13 +1574,16 @@
         "rating": "Likely R",
         "favors": "R"
       },
-      "competitive": false,
+      "competitive": true,
       "sources": [
         "https://en.wikipedia.org/wiki/2026_Nebraska_gubernatorial_election",
         "https://en.wikipedia.org/wiki/2026_United_States_gubernatorial_elections",
         "https://www.cookpolitical.com/ratings/governor-race-ratings",
         "https://centerforpolitics.org/crystalball/2026-governor/",
         "https://www.insideelections.com/ratings/governor"
+      ],
+      "competitiveWhy": [
+        "nonpartisan polls average within 3.9 points"
       ]
     },
     {
@@ -1669,13 +1657,6 @@
           "sponsor": "Democratic Governors Association"
         },
         {
-          "pollster": "Wedgewood Polls",
-          "date": "2026-07-12",
-          "dem": 47,
-          "rep": 50,
-          "rating": 0.55
-        },
-        {
           "pollster": "Grassroots Targeting (Better Nevada PAC/RGA)",
           "date": "2026-07-08",
           "dem": 40,
@@ -1701,7 +1682,7 @@
       "competitive": true,
       "competitiveWhy": [
         "3 of 3 forecasters rate it Toss-up, Tilt or Lean",
-        "nonpartisan polls average within 0.4 points"
+        "nonpartisan polls average within 0.2 points"
       ],
       "sources": [
         "https://en.wikipedia.org/wiki/2026_Nevada_gubernatorial_election",

@@ -805,13 +805,6 @@
       },
       "polls": [
         {
-          "pollster": "Wedgewood Polls",
-          "date": "2026-10-14",
-          "dem": 48,
-          "rep": 52,
-          "rating": 0.55
-        },
-        {
           "pollster": "Data for Progress (Way to Lead PAC)",
           "date": "2026-08-15",
           "dem": 38,

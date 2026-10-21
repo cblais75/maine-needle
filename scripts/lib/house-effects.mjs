@@ -28,6 +28,14 @@ export const POLLSTER_ALIASES = {
 };
 export const canon = (name) => POLLSTER_ALIASES[name] || name;
 
+// Pollsters removed for fabricating data. Their polls must never be used anywhere: npm run polls
+// refuses to run if one appears in data/polls.json or the card files, and the lean math skips them.
+//   Wedgewood Polls: admitted on Oct 20, 2026 that it fabricated its poll data (reported by FiftyPlusOne).
+export const BLOCKED_POLLSTERS = ["Wedgewood Polls"];
+const squash = (s) => String(s ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+// Any spelling: "Wedgewood Polls", "Wedgewood", "WEDGEWOOD POLLS (R)", "Wedge-wood"...
+export const isBlocked = (name) => BLOCKED_POLLSTERS.some((b) => squash(name).includes(squash(b).replace(/polls?$/, "")));
+
 // Polls paid for by a campaign, party or PAC, and which side the sponsor is on.
 // "D" means the side stored in the poll's "dem" field (Osborn in Nebraska).
 const SPONSORED = {
@@ -68,6 +76,7 @@ export function measureHouseEffects(races) {
   const polls = [];
   for (const [race, list] of Object.entries(races)) {
     for (const p of list) {
+      if (isBlocked(p.pollster)) continue; // fabricated data: never a yardstick for anyone else
       const name = canon(p.pollster);
       polls.push({ race, name, sponsor: sponsorOf(p.pollster), t: new Date(p.date).getTime(), m: marginOf(p), rating: p.rating });
     }
