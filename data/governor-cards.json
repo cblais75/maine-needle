@@ -1,6 +1,6 @@
 {
   "_comment": "Governor races with a card instead of a needle (Update 58). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Maine, Texas, Ohio, Georgia, Iowa and Kansas governor have needles and are not listed. Ratings: Cook from its own site (matches Wikipedia); Sabato and Inside Elections via Wikipedia's ratings table. 'competitive' marks the promote-to-needle rule. For Alaska, 'rep' is the leading Republican's first choices. For RI and ID, 'ind' is the major independent.",
-  "asOf": "2026-10-16",
+  "asOf": "2026-10-20",
   "races": [
     {
       "id": "al_gov_card",
@@ -34,6 +34,22 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Cygnal (R)",
+          "date": "2026-10-17",
+          "dem": 40,
+          "rep": 51,
+          "rating": 0.6,
+          "note": "For Alabama Daily News and Gray Media"
+        },
+        {
+          "pollster": "The Alabama Poll",
+          "date": "2026-10-16",
+          "dem": 39,
+          "rep": 51,
+          "rating": 0.5,
+          "note": "New pollster with no track record found; reported by AL.com"
+        },
         {
           "pollster": "RMG Research (R)",
           "date": "2026-09-25",
@@ -104,6 +120,22 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Alaska Survey Research",
+          "date": "2026-10-18",
+          "dem": 50,
+          "rep": 30,
+          "rating": 0.8,
+          "note": "First choices; Bronson 12, Taylor 8. Final round: Kreiss-Tomkins 55, Wilson 45"
+        },
+        {
+          "pollster": "Data for Progress (D)",
+          "date": "2026-10-16",
+          "dem": 46,
+          "rep": 28,
+          "rating": 0.6,
+          "note": "First choices; Bronson 12, Taylor 9. Final round: Kreiss-Tomkins 53, Wilson 47"
+        },
         {
           "pollster": "Alaska Survey Research",
           "date": "2026-10-03",
@@ -365,6 +397,14 @@
       "polls": [
         {
           "pollster": "Hendrix College",
+          "date": "2026-10-13",
+          "dem": 32,
+          "rep": 51,
+          "rating": 0.8,
+          "note": "Sponsored by Talk Business & Politics"
+        },
+        {
+          "pollster": "Hendrix College",
           "date": "2026-08-12",
           "dem": 40,
           "rep": 45,
@@ -614,6 +654,14 @@
           "note": "Sponsored by Nexstar Media"
         },
         {
+          "pollster": "Wesleyan University/YouGov",
+          "date": "2026-10-12",
+          "dem": 57,
+          "rep": 34,
+          "rating": 0.8,
+          "note": "Likely voters"
+        },
+        {
           "pollster": "UNH Survey Center",
           "date": "2026-09-21",
           "dem": 55,
@@ -725,6 +773,14 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Univision/YouGov",
+          "date": "2026-10-15",
+          "dem": 42,
+          "rep": 50,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
         {
           "pollster": "Fabrizio Lee (Donalds campaign)",
           "date": "2026-10-11",
@@ -1121,6 +1177,21 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Suffolk University",
+          "date": "2026-10-18",
+          "dem": 59,
+          "rep": 36,
+          "rating": 0.8
+        },
+        {
+          "pollster": "UMass Amherst/YouGov",
+          "date": "2026-10-12",
+          "dem": 56,
+          "rep": 31,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
         {
           "pollster": "MassINC Polling Group",
           "date": "2026-09-22",
@@ -1624,6 +1695,15 @@
       },
       "polls": [
         {
+          "pollster": "Global Strategy Group (Ford campaign)",
+          "date": "2026-10-13",
+          "dem": 47,
+          "rep": 48,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Ford campaign"
+        },
+        {
           "pollster": "Noble Predictive Insights",
           "date": "2026-09-26",
           "dem": 40,
@@ -1728,6 +1808,13 @@
         }
       },
       "polls": [
+        {
+          "pollster": "National Public Affairs (R)",
+          "date": "2026-10-12",
+          "dem": 38,
+          "rep": 54,
+          "rating": 0.6
+        },
         {
           "pollster": "YouGov",
           "date": "2026-10-05",
@@ -2059,7 +2146,17 @@
           "inside": "2026-10-15"
         }
       },
-      "polls": [],
+      "polls": [
+        {
+          "pollster": "Workbench Strategy (Munson campaign)",
+          "date": "2026-10-13",
+          "dem": 45,
+          "rep": 49,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Munson campaign"
+        }
+      ],
       "consensus": {
         "rating": "Likely R",
         "favors": "R"
@@ -2207,6 +2304,14 @@
         }
       },
       "polls": [
+        {
+          "pollster": "PennLive (Bravo Group)",
+          "date": "2026-10-11",
+          "dem": 58,
+          "rep": 28,
+          "rating": 0.6,
+          "note": "Registered voters"
+        },
         {
           "pollster": "Quinnipiac University",
           "date": "2026-10-05",
@@ -2531,6 +2636,14 @@
       },
       "polls": [
         {
+          "pollster": "Mason-Dixon",
+          "date": "2026-10-14",
+          "dem": 36,
+          "rep": 56,
+          "rating": 0.8,
+          "note": "For South Dakota News Watch and the University of South Dakota's Chiesman Center"
+        },
+        {
           "pollster": "Concord Public Opinion Partners (D)",
           "date": "2026-10-08",
           "dem": 38,
@@ -2589,6 +2702,14 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Spry Strategies (R)",
+          "date": "2026-10-15",
+          "dem": 32,
+          "rep": 44,
+          "rating": 0.6,
+          "ind": 12
+        },
         {
           "pollster": "TargetSmart (Progress Fund)",
           "date": "2026-09-12",

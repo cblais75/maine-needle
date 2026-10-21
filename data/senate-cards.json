@@ -1,6 +1,6 @@
 {
   "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54, South Carolina in Update 64). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
-  "asOf": "2026-10-16",
+  "asOf": "2026-10-20",
   "notUp": {
     "D": 32,
     "I": 2,
@@ -35,12 +35,20 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "The Alabama Poll",
+          "date": "2026-10-16",
+          "dem": 35,
+          "rep": 56,
+          "rating": 0.5,
+          "note": "New pollster with no track record found; reported by AL.com"
+        },
         {
           "pollster": "RMG Research (R)",
           "date": "2026-09-25",
@@ -101,7 +109,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -205,7 +213,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -249,7 +257,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -298,12 +306,20 @@
         "sabato": "Safe R",
         "inside": "Likely R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Univision/YouGov",
+          "date": "2026-10-15",
+          "dem": 42,
+          "rep": 51,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
         {
           "pollster": "MDW Communications (D)",
           "date": "2026-10-10",
@@ -443,7 +459,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -547,7 +563,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -606,7 +622,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -661,7 +677,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -734,12 +750,27 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Suffolk University",
+          "date": "2026-10-18",
+          "dem": 60,
+          "rep": 32,
+          "rating": 0.8
+        },
+        {
+          "pollster": "UMass Amherst/YouGov",
+          "date": "2026-10-12",
+          "dem": 56,
+          "rep": 29,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
         {
           "pollster": "MassINC Polling Group",
           "date": "2026-09-22",
@@ -794,11 +825,11 @@
       ],
       "note": "",
       "ratings": {
-        "cook": "Solid R",
+        "cook": "Likely R",
         "sabato": "Likely R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -825,7 +856,7 @@
         }
       ],
       "consensus": {
-        "rating": "Safe R",
+        "rating": "Likely R",
         "favors": "R"
       },
       "sources": [
@@ -872,7 +903,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1062,7 +1093,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1106,7 +1137,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1190,7 +1221,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1244,7 +1275,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1293,7 +1324,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1353,12 +1384,21 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "Public Opinion Strategies (Rounds campaign)",
+          "date": "2026-10-16",
+          "dem": 37,
+          "rep": 54,
+          "rating": 0.5,
+          "sponsored": "R",
+          "sponsor": "Rounds campaign"
+        },
         {
           "pollster": "Concord Public Opinion Partners (D)",
           "date": "2026-10-08",
@@ -1449,7 +1489,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1502,7 +1542,7 @@
         "sabato": "Safe D",
         "inside": "Solid D",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1551,7 +1591,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
@@ -1596,7 +1636,7 @@
         "sabato": "Safe R",
         "inside": "Solid R",
         "asOf": {
-          "cook": "2026-10-06",
+          "cook": "2026-10-20",
           "sabato": "2026-10-14",
           "inside": "2026-10-15"
         }
