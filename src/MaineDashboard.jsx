@@ -898,7 +898,7 @@ export default function MaineDashboard() {
   const anyPaused = night && races.some((r) => isPaused(r, night));
   const pausedNow = anyPaused ? pausedNames(races, night) : "";
   const pausedVerb = pausedNow.includes(" and ") ? "are" : "is";
-  const NAV_ITEMS = [["dashboard", "Races"], ["control", "Senate control"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"]];
+  const NAV_ITEMS = [["dashboard", "Races"], ["control", "Senate control"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["vote", "Vote"]];
   const go = (k) => { setNavOpen(false); setMoreOpen(false); setView(k); setSel(null); };
   const today = new Date();
   const edition = anyLive || night ? "Election night edition" : "Forecast edition";
@@ -964,7 +964,7 @@ export default function MaineDashboard() {
       {d.map((x, i) => <path key={i} d={x} />)}
     </svg>
   );
-  const moreKeys = ["polls", "ratings", "method", "wire"];
+  const moreKeys = ["polls", "ratings", "method", "vote", "wire"];
   const tabs = [
     ["dashboard", "Races", ["M4 18a8 8 0 0 1 16 0", "M12 18l4-6"]],
     ["control", "Senate", ["M3 20h18", "M5 20V10l7-5 7 5v10", "M9 20v-6h6v6"]],
@@ -986,7 +986,7 @@ export default function MaineDashboard() {
   const moreItem = (on) => ({ display: "block", width: "100%", textAlign: "left", minHeight: 44, padding: "10px 14px", fontSize: 16, cursor: "pointer", border: "none", borderBottom: `1px solid ${C.line}`, background: on ? C.panel2 : "transparent", color: C.text, fontWeight: on ? 700 : 500 });
   const moreSheet = moreOpen && (
     <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(61px + env(safe-area-inset-bottom))", zIndex: 49, maxHeight: "70vh", overflowY: "auto", background: C.panel, borderTop: `1px solid ${C.text}`, boxShadow: "0 -8px 24px rgba(27,26,23,0.14)" }}>
-      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["wire", "Live wire"]].map(([k, label]) => (
+      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["vote", "Vote"], ["wire", "Live wire"]].map(([k, label]) => (
         <button key={k} onClick={() => go(k)} style={moreItem(view === k)}>{label}</button>
       ))}
       <div style={{ padding: "12px 14px 6px", fontFamily: serif, fontSize: 18, fontWeight: 600 }}>States</div>
@@ -1022,6 +1022,7 @@ export default function MaineDashboard() {
             {view === "briefing" && <BriefingView posts={briefing} wide={wide} />}
             {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} wide={wide} />}
             {view === "method" && <MethodView wide={wide} />}
+            {view === "vote" && <VoteView wide={wide} />}
 
             {!night && (view === "dashboard" || view === "wire" || view === "control" || (STATES.some((s) => s.code === view) && view !== "AK")) && (
               <>
@@ -2412,6 +2413,49 @@ function RatingsView({ current, loaded, wide }) {
 }
 
 // ── HOW IT WORKS ────────────────────────────────────────────────────────────
+// ── VOTE ────────────────────────────────────────────────────────────────────
+// Plain links only (no embeds). Each was checked to load on Oct 20, 2026. vote.gov answers automated
+// checks with a security challenge, so it was not machine-checked; it is the federal government's own address.
+const VOTE_LINKS = [
+  { label: "Check your registration", url: "https://www.vote.org/am-i-registered-to-vote/", source: "Vote.org",
+    desc: "Confirm you're registered at your current address. It takes about 30 seconds." },
+  { label: "Register to vote", url: "https://www.vote.org/register-to-vote/", source: "Vote.org",
+    desc: "Register online in a couple of minutes. Some states let you register and vote the same day.",
+    extra: { label: "Deadlines and same-day registration by state", url: "https://www.vote.org/voter-registration-deadlines/" } },
+  { label: "Find your polling place", url: "https://www.vote.org/polling-place-locator/", source: "Vote.org",
+    desc: "Look up where you vote on Election Day." },
+  { label: "See what's on your ballot", url: "https://www.vote.org/ballot-information/", source: "Vote.org",
+    desc: "Preview the candidates and measures on your local ballot." },
+  { label: "Absentee and early voting rules for your state", url: "https://www.vote.org/absentee-voting-rules/", source: "Vote.org",
+    desc: "Who can vote by mail, how to request a ballot, and when it's due.",
+    extra: { label: "Early voting dates by state", url: "https://www.vote.org/early-voting-calendar/" } },
+  { label: "Official election info for every state", url: "https://vote.gov/", source: "vote.gov",
+    desc: "The U.S. government's guide, with links to each state's election office." },
+];
+function VoteView({ wide }) {
+  const ext = { target: "_blank", rel: "noopener noreferrer" };
+  return (
+    <div>
+      <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
+        <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Make your plan to vote</h1>
+        <p style={{ ...deckStyle(wide), maxWidth: 760 }}>Everything you need to vote on Nov. 3, from nonpartisan and official sources.</p>
+      </section>
+      <ul style={{ listStyle: "none", margin: 0, padding: 0, maxWidth: 760 }}>
+        {VOTE_LINKS.map((l) => (
+          <li key={l.url} style={{ display: "flex", flexDirection: "column", gap: 4, padding: "18px 0", borderBottom: `1px solid ${C.line}` }}>
+            <a href={l.url} {...ext} style={{ fontFamily: serif, fontSize: wide ? 22 : 19, fontWeight: 600, lineHeight: 1.3, color: C.text, textDecorationThickness: 1, textUnderlineOffset: 3 }}>
+              {l.label} <span style={{ fontFamily: "inherit", fontSize: wide ? 16 : 14, fontWeight: 400, color: C.muted }}>({l.source}) ↗</span>
+            </a>
+            <span style={{ fontSize: 15, lineHeight: 1.5, color: C.body }}>{l.desc}</span>
+            {l.extra && <a href={l.extra.url} {...ext} style={{ fontSize: 14, fontWeight: 600, color: C.text, minHeight: 24 }}>{l.extra.label} ↗</a>}
+          </li>
+        ))}
+      </ul>
+      <p style={{ margin: "18px 0 0", fontSize: 13, color: C.muted }}>Needlepoint isn't affiliated with Vote.org or vote.gov.</p>
+    </div>
+  );
+}
+
 function MethodView({ wide }) {
   const sub = { fontFamily: serif, fontSize: wide ? 18 : 17, lineHeight: 1.6, color: C.body, margin: 0 };
   const item = { fontSize: 15, lineHeight: 1.55, color: C.body, margin: 0 };
