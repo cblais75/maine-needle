@@ -2591,6 +2591,11 @@ const POLLSTER_NOTES = {
   "co/efficient": "R-leaning reputation",
   "Rasmussen Reports": "R-leaning reputation",
   "Abacus Data": "lightly proven",
+  "The Alabama Poll": "limited methodology disclosure; large miss in the May 2026 runoff",
+  "Zenith Research": "no public track record found",
+  "Zenith Research (Bengs campaign)": "no public track record found",
+  "Opinion Diagnostics (Common Cause NC)": "no public track record before 2026",
+  "Opinion Diagnostics (Block campaign)": "no public track record before 2026",
 };
 const GROUP_STATE = { senate: "ME", governor: "ME", cd1: "ME", cd2: "ME" };
 function buildRatings(current) {

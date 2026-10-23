@@ -46,7 +46,7 @@
           "date": "2026-10-16",
           "dem": 35,
           "rep": 56,
-          "rating": 0.5,
+          "rating": 0.4,
           "note": "New pollster with no track record found; reported by AL.com"
         },
         {
@@ -1412,7 +1412,7 @@
           "date": "2026-09-27",
           "dem": 38,
           "rep": 44,
-          "rating": 0.5,
+          "rating": 0.4,
           "sponsored": "I",
           "sponsor": "Bengs campaign"
         },

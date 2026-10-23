@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21",
+  "updated": "2026-10-23",
   "method": {
     "halfLifeDays": 21,
     "note": "Weight = pollster quality rating × recency (halves every 3 weeks). Partisan firms are rated lower. Each poll is first corrected for its pollster's measured lean (house effect)."
@@ -914,13 +914,13 @@
       {
         "pollster": "Opinion Diagnostics (Common Cause NC)",
         "date": "2026-09-20",
-        "rating": 0.55,
+        "rating": 0.5,
         "dem": 51,
         "rep": 41,
         "ind": null,
         "house": 0.4,
         "adjMargin": 9.6,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",

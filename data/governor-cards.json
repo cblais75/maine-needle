@@ -47,7 +47,7 @@
           "date": "2026-10-16",
           "dem": 39,
           "rep": 51,
-          "rating": 0.5,
+          "rating": 0.4,
           "note": "New pollster with no track record found; reported by AL.com"
         },
         {
@@ -1124,7 +1124,7 @@
           "date": "2026-08-03",
           "dem": 58,
           "rep": 31,
-          "rating": 0.6,
+          "rating": 0.4,
           "note": "Sponsored by Blended Public Affairs and Perry Jacobson"
         }
       ],
