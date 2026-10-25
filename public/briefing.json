@@ -204,5 +204,35 @@
         "label": "Subscribe to Food & Politics"
       }
     ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "A Fake Pollster Fooled the New York Times",
+    "body": "A pollster called Wedgewood Polls has admitted that most of its polls this cycle were fabricated. Over roughly five months it released somewhere between 15 and 20 polls, and they made it into the averages of some of the biggest names in the business: the New York Times had 15 of them, Decision Desk HQ had 17, and Needlepoint had 16. It came apart after researchers at FiftyPlusOne dug into the raw data behind one recent Wedgewood poll, found inconsistencies, and contacted the pollster. Wedgewood then posted on social media that the whole thing was a \"social experiment.\"\n\nThe stated goal was to show how easily a made-up polling shop could earn credibility and get cited by major outlets. That point is valid, but the stunt was dangerous, and it isn't the first of its kind. In August, Median Strategies was revealed as a similar experiment run by a 21-year-old who fabricated polls in Wisconsin, Nevada, and California.\n\nFake polls do real damage. Mallory McMorrow says a Wedgewood poll hurt her Michigan Senate campaign by drying up donations and fueling calls for her to drop out, though that is hard to fully verify since other polls also showed her slipping. Back in 2017, an obscure shop called Delphi Analytica released a poll showing Kid Rock ahead of Debbie Stabenow, and her \"stock\" on the prediction market PredictIt fell from 78 cents to 63 cents. A 2023 lab study also found that people shown polls favoring one candidate voted for that candidate more often, even when they were told the polls were biased. Polling can directly distort public perception.\n\nSo how do we fix it? First, weighting. On Needlepoint, every pollster gets a weight based on its track record, and Wedgewood sat in the lowest \"iron\" tier, well below \"diamond\" pollsters like NYT/Siena and Marist. When I removed all 16 Wedgewood polls, not a single race leader changed, and most averages moved by a point or less. Putting new shops on probation makes a model much harder to fool. Second, reward credibility: pollsters that publish their methods, disclose their funding and staff, and build a track record over several cycles should count for more. Third, spot checks: aggregators with the resources should regularly review raw data, the way FiftyPlusOne did here.\n\nI have removed every Wedgewood poll from Needlepoint, put Wedgewood and Median Strategies on a permanent ban list, and audited the rest of the site's lowest-rated pollsters.",
+    "links": [
+      {
+        "url": "https://foodandpolitics.substack.com/p/a-fake-pollster-fooled-the-new-york",
+        "label": "Read the full piece on Food & Politics"
+      },
+      {
+        "url": "https://foodandpolitics.substack.com",
+        "label": "Subscribe to Food & Politics"
+      }
+    ]
+  },
+  {
+    "date": "2026-10-25",
+    "title": "Vivek Ramaswamy's Campaign Controversy",
+    "body": "A warning that this piece contains mentions of sexual violence.\n\nOut in Ohio, Vivek Ramaswamy's Republican bid for governor has stirred up a great deal of controversy over the course of this election cycle. Ramaswamy, a former biotech executive and 2024 presidential hopeful, is facing Democrat Amy Acton, the former head of the Ohio Department of Health, to replace term-limited Republican Governor Mike DeWine.\n\nRamaswamy founded Roivant Sciences in 2014, built a fortune that Forbes estimated at $2.3 billion as of September, and ran for president in 2024 before dropping out after a fourth-place finish in Iowa and endorsing Trump. He is running as a close Trump ally, endorsed by DeWine, on phasing out the state income tax over 10 years, resetting property taxes to pre-pandemic levels, expanding natural gas production, and welcoming data centers that generate their own power. Acton is a physician from Youngstown who led Ohio's COVID-19 response in 2020. She is more of a moderate Democrat: she opposes transgender athletes playing in girls' and women's sports and supports Issue 3, which would add Ohio's voter ID requirement to the state constitution. Her campaign has focused on tax cuts for working families, medical debt forgiveness, an \"Ohio Rx\" platform to lower prescription drug prices, and making data centers pay their full energy costs. She is pro-choice and pro-union.\n\nThe controversy centers on an ad released October 19 that featured Acton's estranged mother, Donna Arthur, calling Acton a liar and declaring her support for Ramaswamy. Acton responded by describing a childhood of abuse and neglect, including being raped by her stepfather. He was charged with raping her in 1978, when she was 12, but the case never went to trial because he and Acton's mother left town. Acton was removed from her mother's custody and has not spoken to her since. Her mother has claimed Acton lied about the abuse, and she stayed married to the stepfather until his death in 2004.\n\nThe ad sparked widespread criticism. Governor DeWine, who still endorses Ramaswamy, said \"It's wrong to run this ad\" and urged the campaign to take it down. Senator Jon Husted said he \"would not have run that ad,\" a member of DeWine's cabinet and Nikki Haley also criticized it, and Ramaswamy's GOP primary challenger, Casey Putsch, said he would vote for Acton because of it. On the national level, JD Vance told Republicans to \"stop whining,\" and Trump called the ad \"hitting pay dirt\" and urged Ramaswamy to \"leave it up.\"\n\nThe ad came at a time when Ramaswamy's poll numbers were already slipping. Since late September, Acton has led nearly every high-quality poll, by margins of 2 to 9 points. With Sherrod Brown also leading Jon Husted in the Senate race, a state that had gained status as \"solid red\" is once again up for grabs in two consequential elections. Early voting is running well ahead of 2022, with almost 1 million ballots already cast. In the first week, Democrats made up 41% of early voters to Republicans' 28%, compared to 36% Republican and 26% Democratic at the same point in 2024. Turnout share is not vote share, and Republicans have historically voted in larger shares on Election Day itself.\n\nOn Needlepoint, Acton currently holds a 56% to 44% chance of victory, and Brown holds a 53% to 47% edge over Husted.",
+    "links": [
+      {
+        "url": "https://foodandpolitics.substack.com/p/vivek-ramaswamys-campaign-controversy",
+        "label": "Read the full piece on Food & Politics"
+      },
+      {
+        "url": "https://foodandpolitics.substack.com",
+        "label": "Subscribe to Food & Politics"
+      }
+    ]
   }
 ]
