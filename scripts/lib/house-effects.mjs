@@ -50,6 +50,9 @@ const SPONSORED = {
   "Public Policy Polling (Senate Majority PAC)": "D",
   "Tulchin Research (Kulewicz campaign)": "D",
   "Global Strategy Group (Holscher campaign)": "D",
+  "Impact Research (Osborn campaign)": "D",
+  "Impact Research (Fresh Start SC)": "D",
+  "Harper Polling (Carolina Journal)": "R",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

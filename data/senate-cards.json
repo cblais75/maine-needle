@@ -1,6 +1,6 @@
 {
   "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54, South Carolina in Update 64). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
-  "asOf": "2026-10-20",
+  "asOf": "2026-10-25",
   "notUp": {
     "D": 32,
     "I": 2,
@@ -41,6 +41,14 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Cygnal (R)",
+          "date": "2026-10-17",
+          "dem": 35,
+          "rep": 50,
+          "rating": 0.6,
+          "note": "For Alabama Daily News and Gray Media"
+        },
         {
           "pollster": "The Alabama Poll",
           "date": "2026-10-16",
@@ -312,6 +320,20 @@
         }
       },
       "polls": [
+        {
+          "pollster": "co/efficient",
+          "date": "2026-10-20",
+          "dem": 40,
+          "rep": 48,
+          "rating": 0.55
+        },
+        {
+          "pollster": "University of North Florida",
+          "date": "2026-10-19",
+          "dem": 45,
+          "rep": 49,
+          "rating": 0.8
+        },
         {
           "pollster": "Univision/YouGov",
           "date": "2026-10-15",
@@ -836,6 +858,14 @@
       },
       "polls": [
         {
+          "pollster": "Change Research (D)",
+          "date": "2026-10-22",
+          "dem": 40,
+          "rep": 43,
+          "rating": 0.6,
+          "ind": 6
+        },
+        {
           "pollster": "Data for Progress (Way to Lead PAC)",
           "date": "2026-08-15",
           "dem": 38,
@@ -909,6 +939,14 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-10-18",
+          "dem": 21,
+          "rep": 44,
+          "rating": 0.6,
+          "ind": 28
+        },
         {
           "pollster": "Peak Insights (Alme campaign)",
           "date": "2026-10-12",
@@ -1391,6 +1429,20 @@
       },
       "polls": [
         {
+          "pollster": "Emerson College",
+          "date": "2026-10-20",
+          "dem": 42,
+          "rep": 50,
+          "rating": 0.85
+        },
+        {
+          "pollster": "Quantus Insights",
+          "date": "2026-10-19",
+          "dem": 37,
+          "rep": 59,
+          "rating": 0.6
+        },
+        {
           "pollster": "Public Opinion Strategies (Rounds campaign)",
           "date": "2026-10-16",
           "dem": 37,
@@ -1398,6 +1450,14 @@
           "rating": 0.5,
           "sponsored": "R",
           "sponsor": "Rounds campaign"
+        },
+        {
+          "pollster": "Mason-Dixon",
+          "date": "2026-10-14",
+          "dem": 37,
+          "rep": 56,
+          "rating": 0.8,
+          "note": "For South Dakota News Watch and the University of South Dakota; registered voters"
         },
         {
           "pollster": "Concord Public Opinion Partners (D)",

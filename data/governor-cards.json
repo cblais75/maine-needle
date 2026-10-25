@@ -1,6 +1,6 @@
 {
   "_comment": "Governor races with a card instead of a needle (Update 58). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Maine, Texas, Ohio, Georgia, Iowa and Kansas governor have needles and are not listed. Ratings: Cook from its own site (matches Wikipedia); Sabato and Inside Elections via Wikipedia's ratings table. 'competitive' marks the promote-to-needle rule. For Alaska, 'rep' is the leading Republican's first choices. For RI and ID, 'ind' is the major independent.",
-  "asOf": "2026-10-20",
+  "asOf": "2026-10-25",
   "races": [
     {
       "id": "al_gov_card",
@@ -236,6 +236,13 @@
       },
       "polls": [
         {
+          "pollster": "GrayHouse (R)",
+          "date": "2026-10-20",
+          "dem": 51,
+          "rep": 45,
+          "rating": 0.6
+        },
+        {
           "pollster": "GrayHouse (Norton campaign)",
           "date": "2026-10-08",
           "dem": 50,
@@ -457,6 +464,28 @@
         }
       },
       "polls": [
+        {
+          "pollster": "McLaughlin & Associates (R)",
+          "date": "2026-10-20",
+          "dem": 55,
+          "rep": 39,
+          "rating": 0.6,
+          "note": "For the California Post"
+        },
+        {
+          "pollster": "Emerson College",
+          "date": "2026-10-19",
+          "dem": 60,
+          "rep": 33,
+          "rating": 0.85
+        },
+        {
+          "pollster": "UC Berkeley Citrin Center/TrueDot/Politico",
+          "date": "2026-10-14",
+          "dem": 55,
+          "rep": 35,
+          "rating": 0.8
+        },
         {
           "pollster": "Manhattan Institute (R)",
           "date": "2026-10-01",
@@ -773,6 +802,20 @@
         }
       },
       "polls": [
+        {
+          "pollster": "co/efficient",
+          "date": "2026-10-20",
+          "dem": 40,
+          "rep": 49,
+          "rating": 0.55
+        },
+        {
+          "pollster": "University of North Florida",
+          "date": "2026-10-19",
+          "dem": 47,
+          "rep": 49,
+          "rating": 0.8
+        },
         {
           "pollster": "Univision/YouGov",
           "date": "2026-10-15",
@@ -1268,6 +1311,14 @@
       },
       "polls": [
         {
+          "pollster": "Marist Poll",
+          "date": "2026-10-18",
+          "dem": 51,
+          "rep": 45,
+          "rating": 0.9,
+          "note": "Likely voters"
+        },
+        {
           "pollster": "YouGov",
           "date": "2026-10-04",
           "dem": 48,
@@ -1582,6 +1633,22 @@
       },
       "polls": [
         {
+          "pollster": "National Public Affairs (R)",
+          "date": "2026-10-18",
+          "dem": 41,
+          "rep": 47,
+          "rating": 0.6
+        },
+        {
+          "pollster": "Global Strategy Group (Walz campaign)",
+          "date": "2026-10-18",
+          "dem": 39,
+          "rep": 40,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "Walz campaign"
+        },
+        {
           "pollster": "Public Policy Polling (D)",
           "date": "2026-10-14",
           "dem": 43,
@@ -1809,6 +1876,13 @@
       },
       "polls": [
         {
+          "pollster": "Saint Anselm College",
+          "date": "2026-10-20",
+          "dem": 42,
+          "rep": 50,
+          "rating": 0.8
+        },
+        {
           "pollster": "National Public Affairs (R)",
           "date": "2026-10-12",
           "dem": 38,
@@ -1982,6 +2056,13 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Quinnipiac University",
+          "date": "2026-10-19",
+          "dem": 55,
+          "rep": 41,
+          "rating": 0.8
+        },
         {
           "pollster": "Pollfinity Research",
           "date": "2026-10-12",
@@ -2305,6 +2386,14 @@
       },
       "polls": [
         {
+          "pollster": "Franklin & Marshall College",
+          "date": "2026-10-18",
+          "dem": 52,
+          "rep": 30,
+          "rating": 0.8,
+          "note": "Registered voters"
+        },
+        {
           "pollster": "PennLive (Bravo Group)",
           "date": "2026-10-11",
           "dem": 58,
@@ -2564,6 +2653,20 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Trafalgar Group",
+          "date": "2026-10-18",
+          "dem": 37,
+          "rep": 53,
+          "rating": 0.6
+        },
+        {
+          "pollster": "National Public Affairs (R)",
+          "date": "2026-10-16",
+          "dem": 41,
+          "rep": 51,
+          "rating": 0.6
+        },
         {
           "pollster": "Resonance Media",
           "date": "2026-10-03",

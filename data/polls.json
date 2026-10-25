@@ -140,6 +140,20 @@
       "date": "2026-10-14",
       "dem": 49,
       "rep": 47
+    },
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-10-23",
+      "dem": 47,
+      "rep": 47
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-10-20",
+      "dem": 49,
+      "rep": 49
     }
   ],
   "governor": [
@@ -214,6 +228,14 @@
       "dem": 49,
       "rep": 38,
       "ind": 8
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-10-20",
+      "dem": 49,
+      "rep": 39,
+      "ind": 9
     }
   ],
   "cd1": [
@@ -451,6 +473,13 @@
       "date": "2026-10-08",
       "dem": 52,
       "rep": 39
+    },
+    {
+      "pollster": "Harper Polling (Carolina Journal)",
+      "rating": 0.5,
+      "date": "2026-10-20",
+      "dem": 49,
+      "rep": 39
     }
   ],
   "oh_sen": [
@@ -614,6 +643,27 @@
       "date": "2026-10-14",
       "dem": 47,
       "rep": 49
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-10-22",
+      "dem": 47,
+      "rep": 44
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-10-19",
+      "dem": 52,
+      "rep": 47
+    },
+    {
+      "pollster": "Cook Political Report (GS Strategy/New River)",
+      "rating": 0.8,
+      "date": "2026-10-13",
+      "dem": 49,
+      "rep": 43
     }
   ],
   "tx_sen": [
@@ -854,6 +904,41 @@
       "date": "2026-10-14",
       "dem": 48,
       "rep": 46
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-10-21",
+      "dem": 45,
+      "rep": 45
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-10-19",
+      "dem": 49,
+      "rep": 49
+    },
+    {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-10-19",
+      "dem": 49,
+      "rep": 48
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-10-18",
+      "dem": 51,
+      "rep": 47
+    },
+    {
+      "pollster": "Cook Political Report (GS Strategy/New River)",
+      "rating": 0.8,
+      "date": "2026-10-13",
+      "dem": 49,
+      "rep": 44
     }
   ],
   "tx_gov": [
@@ -1150,6 +1235,34 @@
       "date": "2026-10-14",
       "dem": 46,
       "rep": 49
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-10-19",
+      "dem": 47,
+      "rep": 52
+    },
+    {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-10-19",
+      "dem": 45,
+      "rep": 49
+    },
+    {
+      "pollster": "Texas Public Opinion Research",
+      "rating": 0.5,
+      "date": "2026-10-18",
+      "dem": 48,
+      "rep": 51
+    },
+    {
+      "pollster": "Cook Political Report (GS Strategy/New River)",
+      "rating": 0.8,
+      "date": "2026-10-13",
+      "dem": 46,
+      "rep": 48
     }
   ],
   "ia_sen": [
@@ -1327,6 +1440,20 @@
       "date": "2026-10-12",
       "dem": 44,
       "rep": 47
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-10-22",
+      "dem": 45,
+      "rep": 47
+    },
+    {
+      "pollster": "Cook Political Report (GS Strategy/New River)",
+      "rating": 0.8,
+      "date": "2026-10-13",
+      "dem": 46,
+      "rep": 44
     }
   ],
   "ak_sen": [
@@ -1520,6 +1647,13 @@
       "date": "2026-10-17",
       "dem": 52,
       "rep": 45
+    },
+    {
+      "pollster": "University of Georgia",
+      "rating": 0.8,
+      "date": "2026-10-15",
+      "dem": 48,
+      "rep": 40
     }
   ],
   "ne_sen": [
@@ -1555,6 +1689,27 @@
       "pollster": "National Public Affairs (R)",
       "rating": 0.6,
       "date": "2026-10-05",
+      "dem": 43,
+      "rep": 46
+    },
+    {
+      "pollster": "GBAO (Working Class Majority PAC)",
+      "rating": 0.5,
+      "date": "2026-10-22",
+      "dem": 46,
+      "rep": 45
+    },
+    {
+      "pollster": "Impact Research (Osborn campaign)",
+      "rating": 0.5,
+      "date": "2026-10-20",
+      "dem": 47,
+      "rep": 49
+    },
+    {
+      "pollster": "National Public Affairs (R)",
+      "rating": 0.6,
+      "date": "2026-10-18",
       "dem": 43,
       "rep": 46
     }
@@ -1769,6 +1924,20 @@
       "date": "2026-10-08",
       "dem": 44,
       "rep": 46
+    },
+    {
+      "pollster": "InsiderAdvantage",
+      "rating": 0.6,
+      "date": "2026-10-22",
+      "dem": 47,
+      "rep": 46
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-10-18",
+      "dem": 50,
+      "rep": 48
     }
   ],
   "nh_sen": [
@@ -1861,6 +2030,13 @@
       "rating": 0.8,
       "date": "2026-10-05",
       "dem": 51,
+      "rep": 43
+    },
+    {
+      "pollster": "Saint Anselm College",
+      "rating": 0.8,
+      "date": "2026-10-20",
+      "dem": 50,
       "rep": 43
     }
   ],
@@ -2041,6 +2217,13 @@
       "date": "2026-10-15",
       "dem": 48,
       "rep": 45
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-10-21",
+      "dem": 48,
+      "rep": 45
     }
   ],
   "oh_gov": [
@@ -2155,6 +2338,20 @@
       "date": "2026-10-18",
       "dem": 51,
       "rep": 43
+    },
+    {
+      "pollster": "Fox News (Beacon/Shaw)",
+      "rating": 0.9,
+      "date": "2026-10-19",
+      "dem": 50,
+      "rep": 48
+    },
+    {
+      "pollster": "Cook Political Report (GS Strategy/New River)",
+      "rating": 0.8,
+      "date": "2026-10-13",
+      "dem": 49,
+      "rep": 44
     }
   ],
   "ga_gov": [
@@ -2383,6 +2580,13 @@
       "date": "2026-10-12",
       "dem": 50,
       "rep": 45
+    },
+    {
+      "pollster": "Cook Political Report (GS Strategy/New River)",
+      "rating": 0.8,
+      "date": "2026-10-13",
+      "dem": 54,
+      "rep": 43
     }
   ],
   "ks_gov": [
@@ -2427,6 +2631,13 @@
       "date": "2026-08-16",
       "dem": 47,
       "rep": 46
+    },
+    {
+      "pollster": "Global Strategy Group (Holscher campaign)",
+      "rating": 0.5,
+      "date": "2026-10-21",
+      "dem": 47,
+      "rep": 47
     }
   ],
   "sc_sen": [
@@ -2478,6 +2689,13 @@
       "date": "2026-10-18",
       "dem": 46,
       "rep": 49
+    },
+    {
+      "pollster": "Impact Research (Fresh Start SC)",
+      "rating": 0.5,
+      "date": "2026-10-21",
+      "dem": 45,
+      "rep": 44
     }
   ]
 }
