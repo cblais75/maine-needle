@@ -100,7 +100,7 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
 }
 
 export default async function handler(req, res) {
-  res.setHeader("Cache-Control", "s-maxage=90, stale-while-revalidate=240");
+  res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=120");
 
   const testUrl = process.env.TEST_RESULTS_URL;
   if (testUrl) {

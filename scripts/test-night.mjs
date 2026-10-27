@@ -25,6 +25,7 @@ import { gateResults } from "./lib/results-gate.mjs";
 import { simulatedPreview } from "./lib/night-preview.mjs";
 import { runoffStatus, otherShare, RUNOFF_RACES } from "./lib/runoff.mjs";
 import { buildPayload } from "../api/results.js";
+import { GA_BACKUP_ID } from "./lib/discover.mjs";
 
 const ROOT = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "public", "results.json");
@@ -34,7 +35,7 @@ const has = (f) => args.includes(f);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? Number(args[i + 1]) : d; };
 
 if (has("--reset")) {
-  fs.writeFileSync(OUT, JSON.stringify({ updated: null, source: "simulation", races: {} }, null, 2));
+  fs.writeFileSync(OUT, '{ "updated": null, "source": "simulation", "races": {} }\n'); // the committed one-line form, so git shows no change
   console.log("reset -> dormant simulation file");
   process.exit(0);
 }
@@ -363,16 +364,24 @@ async function discoveryCheck() {
     return null;
   };
   let posted = true;
+  // Georgia backup (Oct 27): what Georgia's own data says about the known Nov 3 ID when it's missing from the list
+  // (null = that ID isn't there at all).
+  const GA_GOOD = { date: "2026-11-03", name: "November 3, 2026 - General & Special Elections" };
+  let gaBackup = GA_GOOD;
+  const gaIds = () => ["11032026GeneralElection", ...(gaBackup ? [GA_BACKUP_ID] : [])];
   const site = (u) => {
     const scv = scSite(u); if (scv != null) return scv;
     if (u === IA_LIST) return JSON.stringify(posted ? [...iaDecoys, iaGeneral] : iaDecoys);
     if (u === "https://electionresults.iowa.gov/IA/126900/current_ver.txt") return "377001";
     if (u === "https://electionresults.iowa.gov/IA/126900/377001/reports/detailxml.zip") return asFile(ia, counts.IA);
     if (u === GA_LIST) return JSON.stringify({ id: "09378a07-e6cf-4f66-be7c-ca4aa534f99a", elections: posted ? [...gaDecoys, gaGeneral] : gaDecoys });
-    if (u === `${GA_API}/elections/Georgia/11032026GeneralElection/data`) return JSON.stringify({ ballotItems: [
-      { id: "sen-1", name: T("US Senate") }, { id: "gov-1", name: T("Governor") }, { id: "ltg-1", name: T("Lieutenant Governor") }, { id: "ss-1", name: T("State Senate - District 7") }] });
-    if (u === `${GA_API}/elections/Georgia/11032026GeneralElection/data/ballot-item/sen-1`) return JSON.stringify(evItem("sen-1", "US Senate", [["Jon Ossoff (Dem)", "Dem", "dem"], ["Mike Collins (Rep)", "Rep", "rep"], ["Chase Oliver (Lib)", "Lib", "oth"]]));
-    if (u === `${GA_API}/elections/Georgia/11032026GeneralElection/data/ballot-item/gov-1`) return JSON.stringify(evItem("gov-1", "Governor", [["Keisha Lance Bottoms (Dem)", "Dem", "gdem"], ["Rick Jackson (Rep)", "Rep", "grep"], ["Some Libertarian (Lib)", "Lib", "goth"]]));
+    for (const id of gaIds()) {
+      const e = id === GA_BACKUP_ID ? gaBackup : { date: "2026-11-03", name: "November 3, 2026 - General Election" };
+      if (u === `${GA_API}/elections/Georgia/${id}/data`) return JSON.stringify({ election: { electionDate: e.date, name: T(e.name), isPrimary: !!e.isPrimary }, ballotItems: [
+        { id: "sen-1", name: T("US Senate") }, { id: "gov-1", name: T("Governor") }, { id: "ltg-1", name: T("Lieutenant Governor") }, { id: "ss-1", name: T("State Senate - District 7") }] });
+      if (u === `${GA_API}/elections/Georgia/${id}/data/ballot-item/sen-1`) return JSON.stringify(evItem("sen-1", "US Senate", [["Jon Ossoff (Dem)", "Dem", "dem"], ["Mike Collins (Rep)", "Rep", "rep"], ["Chase Oliver (Lib)", "Lib", "oth"]]));
+      if (u === `${GA_API}/elections/Georgia/${id}/data/ballot-item/gov-1`) return JSON.stringify(evItem("gov-1", "Governor", [["Keisha Lance Bottoms (Dem)", "Dem", "gdem"], ["Rick Jackson (Rep)", "Rep", "grep"], ["Some Libertarian (Lib)", "Lib", "goth"]]));
+    }
     return null; // anything else (a decoy's files, Lieutenant Governor) is a 404, and is flagged below
   };
   const realFetch = globalThis.fetch;
@@ -404,20 +413,36 @@ async function discoveryCheck() {
     if (p901.diag?.SC?.election?.id !== "128000") fails.push(`South Carolina picked election ${p901.diag?.SC?.election?.id}, not the general`);
     if (p901.diag?.IA?.election?.id !== "126900") fails.push(`Iowa picked election ${p901.diag?.IA?.election?.id}, not the general`);
     if (p901.diag?.GA?.election?.id !== "11032026GeneralElection") fails.push(`Georgia picked election ${p901.diag?.GA?.election?.id}, not the general`);
+    if (requested.some((u) => u.includes(GA_BACKUP_ID))) fails.push("Georgia tried its backup ID although the list has the general");
     const bad = requested.filter((u) => site(u) == null);
     if (bad.length) fails.push(`downloaded files it shouldn't have: ${bad.join(", ")}`);
     if (!(p901.races.ga_sen?.counties && Object.values(p901.races.ga_sen.counties).every((c) => c.pt === 10))) fails.push("Georgia's precincts-reporting numbers were lost");
     // 2. Today's situation: the general isn't listed yet (only the decoys are).
-    posted = false; requested.length = 0;
+    posted = false; gaBackup = null; requested.length = 0;
     const pNot = await buildPayload({ env, now: et(21, 1) });
     if (Object.keys(pNot.races).length) fails.push("showed results from a decoy election");
     for (const msg of ["Iowa: Nov 3 general not posted yet", "Georgia: Nov 3 general not posted yet", "South Carolina: Nov 3 general not posted yet"])
       if (!(pNot.errors || []).includes(msg)) fails.push(`missing message "${msg}" (got ${JSON.stringify(pNot.errors)})`);
     if (pNot.source !== "waiting") fails.push(`source should be "waiting" before the general is listed, got "${pNot.source}"`);
     // (South Carolina may read the settings files of the elections it considers, but never a results file)
-    if (requested.some((u) => /detailxml|\/data(\/|$)/.test(u))) fails.push("downloaded a decoy election's files");
+    // (Georgia may check its backup ID's own data for the date, but nothing else)
+    if (requested.some((u) => /detailxml|\/data(\/|$)/.test(u) && u !== `${GA_API}/elections/Georgia/${GA_BACKUP_ID}/data`)) fails.push("downloaded a decoy election's files");
+    // 3. Georgia backup: the general dropped off the list, but Georgia's data for the known ID confirms Nov 3, 2026.
+    gaBackup = GA_GOOD;
+    const pBk = await buildPayload({ env: { GA_RESULTS_URL: GA_LIST }, now: et(21, 1) });
+    if (pBk.diag?.GA?.election?.id !== GA_BACKUP_ID) fails.push(`Georgia backup not used (picked ${pBk.diag?.GA?.election?.id})`);
+    checkRace(pBk, "ga_sen", want(counts.GA, "dem", "rep", "oth"));
+    checkRace(pBk, "ga_gov", want(counts.GA, "gdem", "grep", "goth"));
+    // ...but never when that ID's own data says it's another date, a runoff, a recount or a primary.
+    for (const bad of [{ date: "2026-12-01", name: "December 1, 2026 - General Election Runoff" }, { date: "2026-11-03", name: "November 3, 2026 - General Election Runoff" },
+      { date: "2026-11-03", name: "November 3, 2026 - Recount" }, { date: "2026-11-03", name: "November 3, 2026 - General & Special Elections", isPrimary: true }]) {
+      gaBackup = bad; requested.length = 0;
+      const p = await buildPayload({ env: { GA_RESULTS_URL: GA_LIST }, now: et(21, 1) });
+      if (Object.keys(p.races).length || !(p.errors || []).includes("Georgia: Nov 3 general not posted yet") || requested.some((u) => /ballot-item/.test(u)))
+        fails.push(`Georgia backup used for "${bad.name}" (${bad.date}${bad.isPrimary ? ", primary" : ""})`);
+    }
   } finally { globalThis.fetch = realFetch; }
-  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa, Georgia and South Carolina pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs, recounts and SC's Aug special primary and runoff, even ones dated Nov 3 and listed first; SC's mislabeled 'general' with the wrong date is rejected by its settings file); county totals exact (Iowa Senate and governor, Georgia Senate and governor, South Carolina Senate); Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; nothing downloaded before 7 p.m. (Georgia, South Carolina) / 9 p.m. (Iowa)");
+  console.log(fails.length ? "discovery check FAILED:\n  " + fails.join("\n  ") : "discovery check passed: Iowa, Georgia and South Carolina pick the Nov 3 general from their election lists (skipping decoy primaries, runoffs, recounts and SC's Aug special primary and runoff, even ones dated Nov 3 and listed first; SC's mislabeled 'general' with the wrong date is rejected by its settings file); county totals exact (Iowa Senate and governor, Georgia Senate and governor, South Carolina Senate); Lieutenant Governor never downloaded; \"not posted yet\" until the general is listed; Georgia's backup ID is used only when the list lacks the general and its own data confirms Nov 3, 2026 (never a runoff, recount or primary), and the list wins when it has the general; nothing downloaded before 7 p.m. (Georgia, South Carolina) / 9 p.m. (Iowa)");
   if (fails.length) process.exitCode = 1;
 }
 await discoveryCheck();

@@ -797,9 +797,11 @@ export default function MaineDashboard() {
       resultsRef.current = res; setResults(res); setRaces((prev) => applyAllLive(prev, res));
     };
     const load = () =>
-      fetch(`/api/results?t=${Date.now()}`)
+      // Plain address (no changing ?t=) so the CDN can serve one cached copy to every reader;
+      // no-store so the browser itself never reuses an old copy.
+      fetch("/api/results", { cache: "no-store" })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
-        .catch(() => fetch(`/results.json?t=${Date.now()}`).then((r) => r.json()))
+        .catch(() => fetch("/results.json", { cache: "no-store" }).then((r) => r.json()))
         .then(apply)
         .catch(() => { if (preview) apply(null); }); // the preview still simulates if no file loads
     load();

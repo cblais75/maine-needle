@@ -101,6 +101,20 @@ export function listFromEV(json) {
   return (json?.elections || []).map((e) => ({ id: String(e.publicElectionId ?? ""), name: String(text(e.name)), date: isoDate(e.electionDate) })).filter((e) => e.id);
 }
 
+// Georgia backup (Oct 27): Georgia listed the Nov 3 general as "11032026GeneralAndSpecialElection", then dropped it
+// from the list again. When the list has no Nov 3 general, that known ID is tried directly, and used only if
+// Georgia's own data for it says it's the Nov 3, 2026 election and not a primary, runoff or recount.
+// A Nov 3 general on the list (under any ID) always wins.
+export const GA_BACKUP_ID = "11032026GeneralAndSpecialElection";
+async function gaBackup(api, jur, getJson) {
+  let data;
+  try { data = await getJson(`${api}/elections/${jur}/${GA_BACKUP_ID}/data`); } catch { return {}; } // missing or empty
+  const e = data?.election || {};
+  const name = String((Array.isArray(e.name) ? (e.name.find((t) => t.languageId === "en") || e.name[0] || {}).text : e.name) ?? "");
+  if (isoDate(e.electionDate) !== GENERAL_DATE || e.isPrimary === true || NOT_GENERAL.test(name)) return {};
+  return { picked: { id: GA_BACKUP_ID, name, date: GENERAL_DATE, backup: true }, data };
+}
+
 // link: the setting; getJson(url) downloads and parses JSON, getText(url) downloads text. Returns
 //   { urls: [result files to read], picked: { id, name, date } }  or  { urls: [], notPosted: "Iowa: Nov 3 general not posted yet" }
 export async function discover(link, state, getJson, getText = async () => "") {
@@ -124,10 +138,11 @@ export async function discover(link, state, getJson, getText = async () => "") {
   const jur = (u.pathname.match(GA_API) || u.pathname.match(GA_PAGE))[1];
   const api = `${u.origin}/results/public/api`;
   const list = await getJson(`${api}/jurisdictions/${jur}`);
-  const picked = pickElection(listFromEV(list), override && decodeURIComponent(override));
+  let picked = pickElection(listFromEV(list), override && decodeURIComponent(override)), data = null;
+  if (!picked && !override && /^georgia$/i.test(jur)) ({ picked = null, data = null } = await gaBackup(api, jur, getJson));
   if (!picked) return notPosted;
   const eid = encodeURIComponent(picked.id);
-  const data = await getJson(`${api}/elections/${jur}/${eid}/data`);
+  data = data || await getJson(`${api}/elections/${jur}/${eid}/data`);
   const items = (data?.ballotItems || []).filter((b) => tracksOffice(state, (Array.isArray(b.name) ? (b.name.find((t) => t.languageId === "en") || b.name[0] || {}).text : b.name)));
   if (items.length) return { urls: items.map((b) => `${api}/elections/${jur}/${eid}/data/ballot-item/${encodeURIComponent(b.id)}`), picked };
   // Fallback: the election's "Total Votes" Excel report (the file we tested on 2022 and 2024).
