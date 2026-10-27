@@ -14,7 +14,7 @@ import mnBaseline from "../data/mn-baseline.json";
 import scBaseline from "../data/sc-baseline.json";
 import senateCards from "../data/senate-cards.json";
 import governorCards from "../data/governor-cards.json";
-import { gateResults } from "../scripts/lib/results-gate.mjs";
+import { gateResults, stateOpen } from "../scripts/lib/results-gate.mjs";
 import { simulatedPreview } from "../scripts/lib/night-preview.mjs";
 import { RUNOFF_RACES, otherShare, runoffStatus } from "../scripts/lib/runoff.mjs";
 
@@ -1535,10 +1535,14 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
 // (00:00 UTC Nov. 4, after daylight saving ends). Add ?night to the address to preview it any time.
 const ELECTION_NIGHT_START = Date.UTC(2026, 10, 4, 0, 0);
 // Paused on election night: no official results our site can read that night. ME and NH don't publish them;
-// MI's results site blocks automated downloads (Update 61). A paused race still goes live on its own if real
-// results arrive (isPaused checks liveOn), e.g. if MI_RESULTS_URL is ever set and works.
-const PAUSE_STATES = ["ME", "NH", "MI"];
-// "Maine, New Hampshire and Michigan" (only the states actually paused right now).
+// MI's results site blocks automated downloads (Update 61); OH's election-night file is in a format our reader
+// can't read yet (a safety net, Oct 27). A paused race still goes live on its own if real results arrive
+// (isPaused checks liveOn), e.g. if MI_RESULTS_URL or OH_RESULTS_URL is ever set and works.
+const PAUSE_STATES = ["ME", "NH", "MI", "OH"];
+// States that pause only from their own poll close (results-gate.mjs: Ohio 7:30 p.m. ET), not from the 7 p.m. start
+// of election night. The ?night preview shows them paused right away, like the others.
+const PAUSE_AT_STATE_CLOSE = ["OH"];
+// "Maine, New Hampshire, Michigan and Ohio" (only the states actually paused right now).
 const joinNames = (a) => (a.length <= 1 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]);
 const pausedNames = (races, night) => joinNames(PAUSE_STATES.filter((st) => races.some((r) => r.state === st && isPaused(r, night))).map((st) => (STATES.find((x) => x.code === st) || {}).label || st));
 const AP_URL = "https://apnews.com/projects/elections-2026/";
@@ -1550,10 +1554,12 @@ function nightStarted() {
   return nightPreview() || Date.now() >= ELECTION_NIGHT_START;
 }
 // ?night preview (Update 56): scripts/lib/night-preview.mjs simulates practice returns for states not yet closed.
-const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn);
+const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn
+  && (!PAUSE_AT_STATE_CLOSE.includes(r.state) || nightPreview() || stateOpen(r.state, Date.now())));
 const PAUSE_TEXT = {
   ME: "Maine doesn't publish results on election night. Towns report to the press and the AP, and the state posts official town-by-town results only after they're certified, usually a few weeks later. If a ranked-choice count is needed, first-choice results come about a week after the election. This needle will finish on its own when those files are posted.",
   MI: "Michigan's official results site doesn't allow automated downloads, so this needle waits for the official count. Follow the AP's live count in the meantime.",
+  OH: "Ohio's election-night results file isn't one our site can read yet, so this needle waits for the official count. Follow the AP's live count in the meantime.",
   NH: "New Hampshire doesn't publish results on election night. Its towns report to the press and the AP overnight, and the state posts official town results a few days later. This needle will finish on its own when those files are posted.",
 };
 function PauseNote({ state, compact }) {
@@ -2529,7 +2535,7 @@ function MethodView({ wide }) {
       </div>
       <aside style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}` }}>
-          {note("Maine, New Hampshire and Michigan", "Maine and New Hampshire don't publish results on election night, and Michigan's official results site doesn't allow automated downloads. These needles pause and show their forecast, then finish on their own when official results we can read are posted; in the meantime each paused race links to the AP's live count.")}
+          {note("Maine, New Hampshire, Michigan and Ohio", "Maine and New Hampshire don't publish results on election night, Michigan's official results site doesn't allow automated downloads, and Ohio's election-night results file isn't one our site can read yet. These needles pause and show their forecast, then finish on their own when official results we can read are posted; in the meantime each paused race links to the AP's live count.")}
         </div>
         {note("Every other Senate seat and governor's race", "The Senate races without a needle get a card instead. A card shows the candidates, the ratings from Cook, Sabato's Crystal Ball and Inside Elections, and the public polls, but no needle and no live count; it counts toward Senate control by the forecasters' rating. A card gets a full needle if at least two of those forecasters rate it Toss-up or Lean, or nonpartisan polls show it within about 5 points. Governor races without a needle get the same cards and the same promotion rule; a card that meets it is tagged Competitive. Governor cards don't affect the Senate count.")}
         {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so its needle is a polling forecast that doesn't move on election night.")}
