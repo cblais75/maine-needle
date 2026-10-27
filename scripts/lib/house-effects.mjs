@@ -53,6 +53,8 @@ const SPONSORED = {
   "Impact Research (Osborn campaign)": "D",
   "Impact Research (Fresh Start SC)": "D",
   "Harper Polling (Carolina Journal)": "R",
+  "RedBox Research (A Fight Worth Having)": "D",
+  "Targoz Market Research (SC Policy Council)": "R",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

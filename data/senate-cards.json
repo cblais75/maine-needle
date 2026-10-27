@@ -1,6 +1,6 @@
 {
   "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54, South Carolina in Update 64). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
-  "asOf": "2026-10-25",
+  "asOf": "2026-10-27",
   "notUp": {
     "D": 32,
     "I": 2,
@@ -320,6 +320,15 @@
         }
       },
       "polls": [
+        {
+          "pollster": "RedBox Research (A Fight Worth Having)",
+          "date": "2026-10-23",
+          "dem": 43,
+          "rep": 50,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "A Fight Worth Having, a Democratic super PAC"
+        },
         {
           "pollster": "co/efficient",
           "date": "2026-10-20",

@@ -1,6 +1,6 @@
 {
   "_comment": "Governor races with a card instead of a needle (Update 58). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Maine, Texas, Ohio, Georgia, Iowa and Kansas governor have needles and are not listed. Ratings: Cook from its own site (matches Wikipedia); Sabato and Inside Elections via Wikipedia's ratings table. 'competitive' marks the promote-to-needle rule. For Alaska, 'rep' is the leading Republican's first choices. For RI and ID, 'ind' is the major independent.",
-  "asOf": "2026-10-25",
+  "asOf": "2026-10-27",
   "races": [
     {
       "id": "al_gov_card",
@@ -803,6 +803,15 @@
       },
       "polls": [
         {
+          "pollster": "RedBox Research (A Fight Worth Having)",
+          "date": "2026-10-23",
+          "dem": 44,
+          "rep": 49,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "A Fight Worth Having, a Democratic super PAC"
+        },
+        {
           "pollster": "co/efficient",
           "date": "2026-10-20",
           "dem": 40,
@@ -1311,6 +1320,13 @@
       },
       "polls": [
         {
+          "pollster": "Michigan State University/YouGov",
+          "date": "2026-10-19",
+          "dem": 52,
+          "rep": 40,
+          "rating": 0.8
+        },
+        {
           "pollster": "Marist Poll",
           "date": "2026-10-18",
           "dem": 51,
@@ -1633,6 +1649,14 @@
       },
       "polls": [
         {
+          "pollster": "Concord Public Opinion Partners (D)",
+          "date": "2026-10-18",
+          "dem": 43,
+          "rep": 40,
+          "rating": 0.6,
+          "note": "Commissioned by Education Reform Now Advocacy"
+        },
+        {
           "pollster": "National Public Affairs (R)",
           "date": "2026-10-18",
           "dem": 41,
@@ -1761,6 +1785,15 @@
         }
       },
       "polls": [
+        {
+          "pollster": "RedBox Research (A Fight Worth Having)",
+          "date": "2026-10-23",
+          "dem": 46,
+          "rep": 43,
+          "rating": 0.5,
+          "sponsored": "D",
+          "sponsor": "A Fight Worth Having, a Democratic super PAC"
+        },
         {
           "pollster": "Global Strategy Group (Ford campaign)",
           "date": "2026-10-13",
@@ -2653,6 +2686,15 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Targoz Market Research (SC Policy Council)",
+          "date": "2026-10-25",
+          "dem": 41,
+          "rep": 51,
+          "rating": 0.6,
+          "sponsored": "R",
+          "sponsor": "South Carolina Policy Council, a conservative think tank"
+        },
         {
           "pollster": "Trafalgar Group",
           "date": "2026-10-18",

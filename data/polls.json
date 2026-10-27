@@ -154,6 +154,13 @@
       "date": "2026-10-20",
       "dem": 49,
       "rep": 49
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-10-25",
+      "dem": 49,
+      "rep": 47
     }
   ],
   "governor": [
@@ -236,6 +243,14 @@
       "dem": 49,
       "rep": 39,
       "ind": 9
+    },
+    {
+      "pollster": "Marist Poll",
+      "rating": 0.9,
+      "date": "2026-10-25",
+      "dem": 44,
+      "rep": 44,
+      "ind": 6
     }
   ],
   "cd1": [
@@ -480,6 +495,13 @@
       "date": "2026-10-20",
       "dem": 49,
       "rep": 39
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-10-25",
+      "dem": 51,
+      "rep": 43
     }
   ],
   "oh_sen": [
@@ -664,6 +686,20 @@
       "date": "2026-10-13",
       "dem": 49,
       "rep": 43
+    },
+    {
+      "pollster": "RedBox Research (A Fight Worth Having)",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 47,
+      "rep": 44
+    },
+    {
+      "pollster": "Verasight/VoteHub",
+      "rating": 0.5,
+      "date": "2026-10-20",
+      "dem": 48,
+      "rep": 44
     }
   ],
   "tx_sen": [
@@ -939,6 +975,20 @@
       "date": "2026-10-13",
       "dem": 49,
       "rep": 44
+    },
+    {
+      "pollster": "Univision/YouGov",
+      "rating": 0.8,
+      "date": "2026-10-21",
+      "dem": 50,
+      "rep": 45
+    },
+    {
+      "pollster": "Verasight/VoteHub",
+      "rating": 0.5,
+      "date": "2026-10-20",
+      "dem": 48,
+      "rep": 45
     }
   ],
   "tx_gov": [
@@ -1261,6 +1311,20 @@
       "pollster": "Cook Political Report (GS Strategy/New River)",
       "rating": 0.8,
       "date": "2026-10-13",
+      "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "Univision/YouGov",
+      "rating": 0.8,
+      "date": "2026-10-21",
+      "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "Verasight/VoteHub",
+      "rating": 0.5,
+      "date": "2026-10-20",
       "dem": 46,
       "rep": 48
     }
@@ -1712,6 +1776,13 @@
       "date": "2026-10-18",
       "dem": 43,
       "rep": 46
+    },
+    {
+      "pollster": "Concord Public Opinion Partners (D)",
+      "rating": 0.6,
+      "date": "2026-10-18",
+      "dem": 48,
+      "rep": 41
     }
   ],
   "mi_sen": [
@@ -1938,6 +2009,27 @@
       "date": "2026-10-18",
       "dem": 50,
       "rep": 48
+    },
+    {
+      "pollster": "RedBox Research (A Fight Worth Having)",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 49,
+      "rep": 44
+    },
+    {
+      "pollster": "Glengariff (Detroit News/WDIV)",
+      "rating": 0.8,
+      "date": "2026-10-22",
+      "dem": 51,
+      "rep": 45
+    },
+    {
+      "pollster": "Michigan State University/YouGov",
+      "rating": 0.8,
+      "date": "2026-10-19",
+      "dem": 48,
+      "rep": 46
     }
   ],
   "nh_sen": [
@@ -2038,6 +2130,13 @@
       "date": "2026-10-20",
       "dem": 50,
       "rep": 43
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 50,
+      "rep": 44
     }
   ],
   "ks_sen": [
@@ -2117,6 +2216,13 @@
       "date": "2026-10-14",
       "dem": 47,
       "rep": 48
+    },
+    {
+      "pollster": "RedBox Research (A Fight Worth Having)",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 45,
+      "rep": 46
     }
   ],
   "mn_sen": [
@@ -2352,6 +2458,20 @@
       "date": "2026-10-13",
       "dem": 49,
       "rep": 44
+    },
+    {
+      "pollster": "RedBox Research (A Fight Worth Having)",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 48,
+      "rep": 44
+    },
+    {
+      "pollster": "Verasight/VoteHub",
+      "rating": 0.5,
+      "date": "2026-10-20",
+      "dem": 46,
+      "rep": 45
     }
   ],
   "ga_gov": [
@@ -2696,6 +2816,13 @@
       "date": "2026-10-21",
       "dem": 45,
       "rep": 44
+    },
+    {
+      "pollster": "Targoz Market Research (SC Policy Council)",
+      "rating": 0.6,
+      "date": "2026-10-25",
+      "dem": 46,
+      "rep": 47
     }
   ]
 }
