@@ -1,6 +1,6 @@
 {
   "_comment": "Governor races with a card instead of a needle (Update 58). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Maine, Texas, Ohio, Georgia, Iowa and Kansas governor have needles and are not listed. Ratings: Cook from its own site (matches Wikipedia); Sabato and Inside Elections via Wikipedia's ratings table. 'competitive' marks the promote-to-needle rule. For Alaska, 'rep' is the leading Republican's first choices. For RI and ID, 'ind' is the major independent.",
-  "asOf": "2026-10-27",
+  "asOf": "2026-10-28",
   "races": [
     {
       "id": "al_gov_card",
@@ -803,6 +803,13 @@
       },
       "polls": [
         {
+          "pollster": "NYT/Siena",
+          "date": "2026-10-26",
+          "dem": 44,
+          "rep": 48,
+          "rating": 0.95
+        },
+        {
           "pollster": "RedBox Research (A Fight Worth Having)",
           "date": "2026-10-23",
           "dem": 44,
@@ -1538,6 +1545,13 @@
         }
       },
       "polls": [
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-10-26",
+          "dem": 56,
+          "rep": 38,
+          "rating": 0.95
+        },
         {
           "pollster": "SurveyUSA",
           "date": "2026-10-12",
@@ -2686,6 +2700,13 @@
         }
       },
       "polls": [
+        {
+          "pollster": "NYT/Siena",
+          "date": "2026-10-26",
+          "dem": 44,
+          "rep": 51,
+          "rating": 0.95
+        },
         {
           "pollster": "Targoz Market Research (SC Policy Council)",
           "date": "2026-10-25",
