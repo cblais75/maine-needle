@@ -51,12 +51,12 @@
       "sponsor": null
     },
     "InsiderAdvantage": {
-      "lean": -0.6,
+      "lean": -0.7,
       "polls": 24,
       "sponsor": null
     },
     "co/efficient": {
-      "lean": -3.4,
+      "lean": -3.3,
       "polls": 16,
       "sponsor": null
     },
@@ -181,12 +181,12 @@
       "sponsor": null
     },
     "Cook Political Report (GS Strategy/New River)": {
-      "lean": 1.5,
+      "lean": 1.6,
       "polls": 6,
       "sponsor": null
     },
     "RedBox Research (A Fight Worth Having)": {
-      "lean": 1,
+      "lean": 1.1,
       "polls": 4,
       "sponsor": "D"
     },
@@ -196,7 +196,7 @@
       "sponsor": null
     },
     "Texas Public Opinion Research": {
-      "lean": 0.9,
+      "lean": 0.8,
       "polls": 10,
       "sponsor": "D"
     },
@@ -211,7 +211,7 @@
       "sponsor": null
     },
     "Texas Pulse (Texas A&M/ReconMR)": {
-      "lean": 0.7,
+      "lean": 0.6,
       "polls": 3,
       "sponsor": null
     },
@@ -246,7 +246,7 @@
       "sponsor": "R"
     },
     "Stratus Intelligence (R)": {
-      "lean": -2.1,
+      "lean": -2.2,
       "polls": 2,
       "sponsor": "R"
     },
@@ -316,12 +316,12 @@
       "sponsor": "D"
     },
     "University of Georgia": {
-      "lean": -0.2,
+      "lean": -0.3,
       "polls": 2,
       "sponsor": null
     },
     "GBAO (Working Class Majority PAC)": {
-      "lean": 1.5,
+      "lean": 1.6,
       "polls": 2,
       "sponsor": "D"
     },
@@ -346,7 +346,7 @@
       "sponsor": null
     },
     "MSU/IPPSR": {
-      "lean": 0.9,
+      "lean": 0.8,
       "polls": 1,
       "sponsor": null
     },
@@ -495,7 +495,7 @@
         "ind": null,
         "house": 1.5,
         "adjMargin": 2.5,
-        "weightPct": 11
+        "weightPct": 10
       },
       {
         "pollster": "Marist Poll",
@@ -522,13 +522,13 @@
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 51,
         "rep": 44,
         "ind": null,
         "house": 0.3,
         "adjMargin": 6.7,
-        "weightPct": 5
+        "weightPct": 8
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -548,8 +548,8 @@
         "dem": 49,
         "rep": 47,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 2.6,
+        "house": -0.7,
+        "adjMargin": 2.7,
         "weightPct": 5
       },
       {
@@ -625,8 +625,8 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 1.4,
+        "house": -3.3,
+        "adjMargin": 1.3,
         "weightPct": 3
       },
       {
@@ -647,8 +647,8 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 0.6,
+        "house": -0.7,
+        "adjMargin": 0.7,
         "weightPct": 2
       },
       {
@@ -779,18 +779,18 @@
         "ind": 6,
         "house": 2.2,
         "adjMargin": -2.2,
-        "weightPct": 19
+        "weightPct": 18
       },
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 51,
         "rep": 38,
         "ind": 7,
         "house": 0.3,
         "adjMargin": 12.7,
-        "weightPct": 10
+        "weightPct": 14
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -801,7 +801,7 @@
         "ind": 9,
         "house": 0.5,
         "adjMargin": 9.5,
-        "weightPct": 16
+        "weightPct": 15
       },
       {
         "pollster": "Suffolk University",
@@ -812,7 +812,7 @@
         "ind": 8,
         "house": 1,
         "adjMargin": 10,
-        "weightPct": 11
+        "weightPct": 10
       },
       {
         "pollster": "Washington Post/Schar School",
@@ -823,7 +823,7 @@
         "ind": 11,
         "house": 0.6,
         "adjMargin": 12.4,
-        "weightPct": 10
+        "weightPct": 9
       },
       {
         "pollster": "Marist Poll",
@@ -834,7 +834,7 @@
         "ind": 6,
         "house": 2.2,
         "adjMargin": 9.8,
-        "weightPct": 10
+        "weightPct": 9
       },
       {
         "pollster": "co/efficient",
@@ -843,8 +843,8 @@
         "dem": 47,
         "rep": 38,
         "ind": 6,
-        "house": -3.4,
-        "adjMargin": 12.4,
+        "house": -3.3,
+        "adjMargin": 12.3,
         "weightPct": 5
       },
       {
@@ -856,7 +856,7 @@
         "ind": 8,
         "house": -0.2,
         "adjMargin": 13.2,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "AARP (Fabrizio/Impact)",
@@ -878,7 +878,7 @@
         "ind": 5,
         "house": -0.5,
         "adjMargin": 8.5,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "UNH Survey Center",
@@ -1142,8 +1142,8 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 5.6,
+        "house": -0.7,
+        "adjMargin": 5.7,
         "weightPct": 3
       },
       {
@@ -1348,20 +1348,20 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": 1,
-        "adjMargin": 2,
+        "house": 1.1,
+        "adjMargin": 1.9,
         "weightPct": 5
       },
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 47,
         "rep": 47,
         "ind": null,
         "house": 0.3,
         "adjMargin": -0.3,
-        "weightPct": 5
+        "weightPct": 7
       },
       {
         "pollster": "InsiderAdvantage",
@@ -1370,8 +1370,8 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 3.6,
+        "house": -0.7,
+        "adjMargin": 3.7,
         "weightPct": 6
       },
       {
@@ -1383,7 +1383,7 @@
         "ind": null,
         "house": 0.1,
         "adjMargin": 3.9,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Fox News (Beacon/Shaw)",
@@ -1425,8 +1425,8 @@
         "dem": 49,
         "rep": 43,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": 4.5,
+        "house": 1.6,
+        "adjMargin": 4.4,
         "weightPct": 6
       },
       {
@@ -1447,8 +1447,8 @@
         "dem": 45,
         "rep": 46,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 2.4,
+        "house": -3.3,
+        "adjMargin": 2.3,
         "weightPct": 3
       },
       {
@@ -1502,8 +1502,8 @@
         "dem": 44,
         "rep": 43,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 1.6,
+        "house": -0.7,
+        "adjMargin": 1.7,
         "weightPct": 3
       },
       {
@@ -1579,8 +1579,8 @@
         "dem": 47,
         "rep": 42,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 5.6,
+        "house": -0.7,
+        "adjMargin": 5.7,
         "weightPct": 1
       },
       {
@@ -1763,8 +1763,8 @@
         "dem": 51,
         "rep": 47,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 3.1,
+        "house": 0.8,
+        "adjMargin": 3.2,
         "weightPct": 3
       },
       {
@@ -1785,8 +1785,8 @@
         "dem": 48,
         "rep": 49,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -0.4,
+        "house": -0.7,
+        "adjMargin": -0.3,
         "weightPct": 3
       },
       {
@@ -1807,8 +1807,8 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": 3.5,
+        "house": 1.6,
+        "adjMargin": 3.4,
         "weightPct": 4
       },
       {
@@ -1961,8 +1961,8 @@
         "dem": 48,
         "rep": 48,
         "ind": null,
-        "house": -2.1,
-        "adjMargin": 2.1,
+        "house": -2.2,
+        "adjMargin": 2.2,
         "weightPct": 2
       },
       {
@@ -1972,8 +1972,8 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 4.1,
+        "house": 0.8,
+        "adjMargin": 4.2,
         "weightPct": 1
       },
       {
@@ -2104,8 +2104,8 @@
         "dem": 47,
         "rep": 43,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": 3.3,
+        "house": 0.6,
+        "adjMargin": 3.4,
         "weightPct": 0
       },
       {
@@ -2115,8 +2115,8 @@
         "dem": 45,
         "rep": 40,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 4.1,
+        "house": 0.8,
+        "adjMargin": 4.2,
         "weightPct": 0
       },
       {
@@ -2148,8 +2148,8 @@
         "dem": 47,
         "rep": 44,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 2.1,
+        "house": 0.8,
+        "adjMargin": 2.2,
         "weightPct": 0
       }
     ]
@@ -2244,8 +2244,8 @@
         "dem": 48,
         "rep": 51,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": -3.9,
+        "house": 0.8,
+        "adjMargin": -3.8,
         "weightPct": 3
       },
       {
@@ -2277,8 +2277,8 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": -3.5,
+        "house": 1.6,
+        "adjMargin": -3.6,
         "weightPct": 4
       },
       {
@@ -2398,8 +2398,8 @@
         "dem": 45,
         "rep": 50,
         "ind": null,
-        "house": -2.1,
-        "adjMargin": -2.9,
+        "house": -2.2,
+        "adjMargin": -2.8,
         "weightPct": 2
       },
       {
@@ -2409,8 +2409,8 @@
         "dem": 46,
         "rep": 50,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": -4.9,
+        "house": 0.8,
+        "adjMargin": -4.8,
         "weightPct": 1
       },
       {
@@ -2519,8 +2519,8 @@
         "dem": 42,
         "rep": 49,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": -7.9,
+        "house": 0.8,
+        "adjMargin": -7.8,
         "weightPct": 0
       },
       {
@@ -2585,8 +2585,8 @@
         "dem": 45,
         "rep": 46,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": -1.7,
+        "house": 0.6,
+        "adjMargin": -1.6,
         "weightPct": 0
       },
       {
@@ -2607,8 +2607,8 @@
         "dem": 42,
         "rep": 45,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": -3.9,
+        "house": 0.8,
+        "adjMargin": -3.8,
         "weightPct": 0
       },
       {
@@ -2651,8 +2651,8 @@
         "dem": 43,
         "rep": 49,
         "ind": null,
-        "house": 0.7,
-        "adjMargin": -6.7,
+        "house": 0.6,
+        "adjMargin": -6.6,
         "weightPct": 0
       },
       {
@@ -2673,8 +2673,8 @@
         "dem": 41,
         "rep": 46,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": -5.9,
+        "house": 0.8,
+        "adjMargin": -5.8,
         "weightPct": 0
       },
       {
@@ -2717,8 +2717,8 @@
         "dem": 43,
         "rep": 48,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": -5.9,
+        "house": 0.8,
+        "adjMargin": -5.8,
         "weightPct": 0
       }
     ]
@@ -2736,20 +2736,20 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 1.4,
+        "house": -3.3,
+        "adjMargin": 1.3,
         "weightPct": 7
       },
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 45,
         "rep": 43,
         "ind": null,
         "house": 0.3,
         "adjMargin": 1.7,
-        "weightPct": 5
+        "weightPct": 8
       },
       {
         "pollster": "InsiderAdvantage",
@@ -2758,8 +2758,8 @@
         "dem": 45,
         "rep": 47,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -1.4,
+        "house": -0.7,
+        "adjMargin": -1.3,
         "weightPct": 6
       },
       {
@@ -2769,8 +2769,8 @@
         "dem": 45,
         "rep": 48,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 0.4,
+        "house": -3.3,
+        "adjMargin": 0.3,
         "weightPct": 5
       },
       {
@@ -2791,8 +2791,8 @@
         "dem": 46,
         "rep": 44,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": 0.5,
+        "house": 1.6,
+        "adjMargin": 0.4,
         "weightPct": 6
       },
       {
@@ -2859,7 +2859,7 @@
         "ind": null,
         "house": 1,
         "adjMargin": 3,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "Rasmussen Reports",
@@ -2870,7 +2870,7 @@
         "ind": null,
         "house": -0.5,
         "adjMargin": 4.5,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Emerson College",
@@ -2923,8 +2923,8 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 1.6,
+        "house": -0.7,
+        "adjMargin": 1.7,
         "weightPct": 2
       },
       {
@@ -2956,8 +2956,8 @@
         "dem": 42,
         "rep": 46,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": -0.6,
+        "house": -3.3,
+        "adjMargin": -0.7,
         "weightPct": 2
       },
       {
@@ -3085,8 +3085,8 @@
         "dem": 48,
         "rep": 43,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 5.6,
+        "house": -0.7,
+        "adjMargin": 5.7,
         "weightPct": 10
       },
       {
@@ -3140,8 +3140,8 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 1.4,
+        "house": -3.3,
+        "adjMargin": 1.3,
         "weightPct": 4
       },
       {
@@ -3235,7 +3235,7 @@
     ]
   },
   "ga_sen": {
-    "margin": 9,
+    "margin": 10,
     "nPolls": 13,
     "fallback": false,
     "note": "",
@@ -3243,13 +3243,13 @@
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 55,
         "rep": 40,
         "ind": null,
         "house": 0.3,
         "adjMargin": 14.7,
-        "weightPct": 15
+        "weightPct": 21
       },
       {
         "pollster": "Quantus Insights",
@@ -3260,7 +3260,7 @@
         "ind": null,
         "house": -1.8,
         "adjMargin": 8.8,
-        "weightPct": 15
+        "weightPct": 14
       },
       {
         "pollster": "University of Georgia",
@@ -3269,9 +3269,9 @@
         "dem": 48,
         "rep": 40,
         "ind": null,
-        "house": -0.2,
-        "adjMargin": 8.2,
-        "weightPct": 19
+        "house": -0.3,
+        "adjMargin": 8.3,
+        "weightPct": 17
       },
       {
         "pollster": "Trafalgar Group",
@@ -3282,7 +3282,7 @@
         "ind": null,
         "house": -1.1,
         "adjMargin": 9.1,
-        "weightPct": 12
+        "weightPct": 11
       },
       {
         "pollster": "InsiderAdvantage",
@@ -3291,9 +3291,9 @@
         "dem": 50,
         "rep": 42,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 8.6,
-        "weightPct": 7
+        "house": -0.7,
+        "adjMargin": 8.7,
+        "weightPct": 6
       },
       {
         "pollster": "Big Data Poll",
@@ -3304,7 +3304,7 @@
         "ind": null,
         "house": 0.2,
         "adjMargin": 10.8,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "YouGov",
@@ -3315,7 +3315,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": 7.1,
-        "weightPct": 8
+        "weightPct": 7
       },
       {
         "pollster": "Quantus Insights",
@@ -3348,7 +3348,7 @@
         "ind": null,
         "house": -1.1,
         "adjMargin": 7.7,
-        "weightPct": 5
+        "weightPct": 4
       },
       {
         "pollster": "InsiderAdvantage",
@@ -3357,8 +3357,8 @@
         "dem": 50,
         "rep": 43,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 7.6,
+        "house": -0.7,
+        "adjMargin": 7.7,
         "weightPct": 2
       },
       {
@@ -3394,13 +3394,13 @@
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 46,
         "rep": 47,
         "ind": null,
         "house": 0.3,
         "adjMargin": -1.3,
-        "weightPct": 14
+        "weightPct": 19
       },
       {
         "pollster": "GBAO (Working Class Majority PAC)",
@@ -3409,9 +3409,9 @@
         "dem": 46,
         "rep": 45,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": -0.5,
-        "weightPct": 13
+        "house": 1.6,
+        "adjMargin": -0.6,
+        "weightPct": 12
       },
       {
         "pollster": "Impact Research (Osborn campaign)",
@@ -3433,7 +3433,7 @@
         "ind": null,
         "house": -2.4,
         "adjMargin": -0.6,
-        "weightPct": 14
+        "weightPct": 13
       },
       {
         "pollster": "Concord Public Opinion Partners (D)",
@@ -3444,7 +3444,7 @@
         "ind": null,
         "house": 3.4,
         "adjMargin": 3.6,
-        "weightPct": 14
+        "weightPct": 13
       },
       {
         "pollster": "National Public Affairs (R)",
@@ -3455,7 +3455,7 @@
         "ind": null,
         "house": -2.4,
         "adjMargin": -0.6,
-        "weightPct": 9
+        "weightPct": 8
       },
       {
         "pollster": "co/efficient",
@@ -3464,8 +3464,8 @@
         "dem": 40,
         "rep": 45,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": -1.6,
+        "house": -3.3,
+        "adjMargin": -1.7,
         "weightPct": 7
       },
       {
@@ -3477,7 +3477,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": 0.1,
-        "weightPct": 8
+        "weightPct": 7
       },
       {
         "pollster": "SurveyUSA",
@@ -3488,7 +3488,7 @@
         "ind": null,
         "house": 0.5,
         "adjMargin": 3.5,
-        "weightPct": 6
+        "weightPct": 5
       },
       {
         "pollster": "GBAO (Working Class Majority PAC)",
@@ -3497,8 +3497,8 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": -0.5,
+        "house": 1.6,
+        "adjMargin": -0.6,
         "weightPct": 3
       }
     ]
@@ -3538,8 +3538,8 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": 1,
-        "adjMargin": 4,
+        "house": 1.1,
+        "adjMargin": 3.9,
         "weightPct": 4
       },
       {
@@ -3549,8 +3549,8 @@
         "dem": 47,
         "rep": 46,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 1.6,
+        "house": -0.7,
+        "adjMargin": 1.7,
         "weightPct": 5
       },
       {
@@ -3604,8 +3604,8 @@
         "dem": 48,
         "rep": 46,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 2.6,
+        "house": -0.7,
+        "adjMargin": 2.7,
         "weightPct": 3
       },
       {
@@ -3725,8 +3725,8 @@
         "dem": 45,
         "rep": 45,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 3.4,
+        "house": -3.3,
+        "adjMargin": 3.3,
         "weightPct": 2
       },
       {
@@ -3791,8 +3791,8 @@
         "dem": 47,
         "rep": 45,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 2.6,
+        "house": -0.7,
+        "adjMargin": 2.7,
         "weightPct": 2
       },
       {
@@ -3868,8 +3868,8 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "house": 0.9,
-        "adjMargin": 4.1,
+        "house": 0.8,
+        "adjMargin": 4.2,
         "weightPct": 1
       },
       {
@@ -3919,7 +3919,7 @@
     ]
   },
   "nh_sen": {
-    "margin": 6,
+    "margin": 7,
     "nPolls": 15,
     "fallback": false,
     "note": "",
@@ -4019,8 +4019,8 @@
         "dem": 48,
         "rep": 40,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 8.6,
+        "house": -0.7,
+        "adjMargin": 8.7,
         "weightPct": 5
       },
       {
@@ -4030,8 +4030,8 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 3.4,
+        "house": -3.3,
+        "adjMargin": 3.3,
         "weightPct": 4
       },
       {
@@ -4115,8 +4115,8 @@
         "dem": 45,
         "rep": 46,
         "ind": null,
-        "house": 1,
-        "adjMargin": -2,
+        "house": 1.1,
+        "adjMargin": -2.1,
         "weightPct": 11
       },
       {
@@ -4126,8 +4126,8 @@
         "dem": 47,
         "rep": 48,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -0.4,
+        "house": -0.7,
+        "adjMargin": -0.3,
         "weightPct": 10
       },
       {
@@ -4137,8 +4137,8 @@
         "dem": 48,
         "rep": 47,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 1.6,
+        "house": -0.7,
+        "adjMargin": 1.7,
         "weightPct": 9
       },
       {
@@ -4214,8 +4214,8 @@
         "dem": 44,
         "rep": 49,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": -1.6,
+        "house": -3.3,
+        "adjMargin": -1.7,
         "weightPct": 3
       },
       {
@@ -4365,8 +4365,8 @@
         "dem": 46,
         "rep": 45,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 1.6,
+        "house": -0.7,
+        "adjMargin": 1.7,
         "weightPct": 5
       },
       {
@@ -4376,8 +4376,8 @@
         "dem": 43,
         "rep": 42,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 4.4,
+        "house": -3.3,
+        "adjMargin": 4.3,
         "weightPct": 3
       },
       {
@@ -4527,8 +4527,8 @@
         "dem": 45,
         "rep": 46,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -0.4,
+        "house": -0.7,
+        "adjMargin": -0.3,
         "weightPct": 5
       },
       {
@@ -4560,8 +4560,8 @@
         "dem": 43,
         "rep": 45,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -1.4,
+        "house": -0.7,
+        "adjMargin": -1.3,
         "weightPct": 3
       },
       {
@@ -4601,20 +4601,20 @@
         "dem": 48,
         "rep": 44,
         "ind": null,
-        "house": 1,
-        "adjMargin": 3,
+        "house": 1.1,
+        "adjMargin": 2.9,
         "weightPct": 6
       },
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 45,
         "rep": 47,
         "ind": null,
         "house": 0.3,
         "adjMargin": -2.3,
-        "weightPct": 6
+        "weightPct": 9
       },
       {
         "pollster": "Verasight/VoteHub",
@@ -4647,7 +4647,7 @@
         "ind": null,
         "house": 2.2,
         "adjMargin": 5.8,
-        "weightPct": 10
+        "weightPct": 9
       },
       {
         "pollster": "Cook Political Report (GS Strategy/New River)",
@@ -4656,8 +4656,8 @@
         "dem": 49,
         "rep": 44,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": 3.5,
+        "house": 1.6,
+        "adjMargin": 3.4,
         "weightPct": 7
       },
       {
@@ -4678,8 +4678,8 @@
         "dem": 43,
         "rep": 45,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 1.4,
+        "house": -3.3,
+        "adjMargin": 1.3,
         "weightPct": 4
       },
       {
@@ -4842,18 +4842,18 @@
         "ind": null,
         "house": 1.9,
         "adjMargin": 1.1,
-        "weightPct": 18
+        "weightPct": 17
       },
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 49,
         "rep": 48,
         "ind": null,
         "house": 0.3,
         "adjMargin": 0.7,
-        "weightPct": 13
+        "weightPct": 19
       },
       {
         "pollster": "Quantus Insights",
@@ -4864,7 +4864,7 @@
         "ind": null,
         "house": -1.8,
         "adjMargin": 0.8,
-        "weightPct": 13
+        "weightPct": 12
       },
       {
         "pollster": "University of Georgia",
@@ -4873,9 +4873,9 @@
         "dem": 45,
         "rep": 46,
         "ind": null,
-        "house": -0.2,
-        "adjMargin": -0.8,
-        "weightPct": 16
+        "house": -0.3,
+        "adjMargin": -0.7,
+        "weightPct": 15
       },
       {
         "pollster": "InsiderAdvantage",
@@ -4884,9 +4884,9 @@
         "dem": 47,
         "rep": 49,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -1.4,
-        "weightPct": 12
+        "house": -0.7,
+        "adjMargin": -1.3,
+        "weightPct": 11
       },
       {
         "pollster": "Big Data Poll",
@@ -4906,8 +4906,8 @@
         "dem": 46,
         "rep": 48,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": -1.4,
+        "house": -0.7,
+        "adjMargin": -1.3,
         "weightPct": 6
       },
       {
@@ -4919,7 +4919,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": -3.9,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "Rasmussen Reports",
@@ -4930,7 +4930,7 @@
         "ind": null,
         "house": -0.5,
         "adjMargin": -2.5,
-        "weightPct": 4
+        "weightPct": 3
       },
       {
         "pollster": "InsiderAdvantage",
@@ -4939,8 +4939,8 @@
         "dem": 46,
         "rep": 46,
         "ind": null,
-        "house": -0.6,
-        "adjMargin": 0.6,
+        "house": -0.7,
+        "adjMargin": 0.7,
         "weightPct": 2
       },
       {
@@ -5013,20 +5013,20 @@
         "dem": 50,
         "rep": 45,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 8.4,
+        "house": -3.3,
+        "adjMargin": 8.3,
         "weightPct": 9
       },
       {
         "pollster": "Echelon Insights",
         "date": "2026-10-23",
-        "rating": 0.5,
+        "rating": 0.75,
         "dem": 50,
         "rep": 46,
         "ind": null,
         "house": 0.3,
         "adjMargin": 3.7,
-        "weightPct": 7
+        "weightPct": 10
       },
       {
         "pollster": "co/efficient",
@@ -5035,9 +5035,9 @@
         "dem": 49,
         "rep": 45,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 7.4,
-        "weightPct": 7
+        "house": -3.3,
+        "adjMargin": 7.3,
+        "weightPct": 6
       },
       {
         "pollster": "Cook Political Report (GS Strategy/New River)",
@@ -5046,8 +5046,8 @@
         "dem": 54,
         "rep": 43,
         "ind": null,
-        "house": 1.5,
-        "adjMargin": 9.5,
+        "house": 1.6,
+        "adjMargin": 9.4,
         "weightPct": 8
       },
       {
@@ -5059,7 +5059,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": 5.1,
-        "weightPct": 8
+        "weightPct": 7
       },
       {
         "pollster": "National Public Affairs (R)",
@@ -5092,7 +5092,7 @@
         "ind": null,
         "house": -1.8,
         "adjMargin": 5.8,
-        "weightPct": 7
+        "weightPct": 6
       },
       {
         "pollster": "CNN/SSRS",
@@ -5156,8 +5156,8 @@
         "dem": 46,
         "rep": 42,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": 7.4,
+        "house": -3.3,
+        "adjMargin": 7.3,
         "weightPct": 2
       },
       {
@@ -5180,7 +5180,7 @@
         "ind": null,
         "house": 0.9,
         "adjMargin": 9.1,
-        "weightPct": 3
+        "weightPct": 2
       },
       {
         "pollster": "Emerson College",
@@ -5329,8 +5329,8 @@
         "dem": 43,
         "rep": 51,
         "ind": null,
-        "house": -3.4,
-        "adjMargin": -4.6,
+        "house": -3.3,
+        "adjMargin": -4.7,
         "weightPct": 5
       },
       {
