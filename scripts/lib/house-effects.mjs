@@ -55,6 +55,7 @@ const SPONSORED = {
   "Harper Polling (Carolina Journal)": "R",
   "RedBox Research (A Fight Worth Having)": "D",
   "Targoz Market Research (SC Policy Council)": "R",
+  "Victory Insights (Tafoya campaign)": "R",
   "Carolina Journal/Civitas (R)": "R",
   "Torchlight Strategies (Common Sense for America PAC)": "R",
 };

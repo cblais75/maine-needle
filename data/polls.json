@@ -161,6 +161,20 @@
       "date": "2026-10-25",
       "dem": 49,
       "rep": 47
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-10-26",
+      "dem": 49,
+      "rep": 45
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 51,
+      "rep": 44
     }
   ],
   "governor": [
@@ -251,6 +265,14 @@
       "dem": 44,
       "rep": 44,
       "ind": 6
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 51,
+      "rep": 38,
+      "ind": 7
     }
   ],
   "cd1": [
@@ -502,6 +524,13 @@
       "date": "2026-10-25",
       "dem": 51,
       "rep": 43
+    },
+    {
+      "pollster": "High Point University Poll",
+      "rating": 0.8,
+      "date": "2026-10-20",
+      "dem": 54,
+      "rep": 40
     }
   ],
   "oh_sen": [
@@ -700,6 +729,20 @@
       "date": "2026-10-20",
       "dem": 48,
       "rep": 44
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-10-26",
+      "dem": 47,
+      "rep": 44
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 47,
+      "rep": 47
     }
   ],
   "tx_sen": [
@@ -989,6 +1032,27 @@
       "date": "2026-10-20",
       "dem": 48,
       "rep": 45
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-10-27",
+      "dem": 49,
+      "rep": 43
+    },
+    {
+      "pollster": "254 Labs (D)",
+      "rating": 0.5,
+      "date": "2026-10-26",
+      "dem": 51,
+      "rep": 43
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-10-25",
+      "dem": 49,
+      "rep": 47
     }
   ],
   "tx_gov": [
@@ -1327,6 +1391,27 @@
       "date": "2026-10-20",
       "dem": 46,
       "rep": 48
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-10-27",
+      "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "254 Labs (D)",
+      "rating": 0.5,
+      "date": "2026-10-26",
+      "dem": 49,
+      "rep": 46
+    },
+    {
+      "pollster": "Texas Southern University",
+      "rating": 0.75,
+      "date": "2026-10-25",
+      "dem": 47,
+      "rep": 50
     }
   ],
   "ia_sen": [
@@ -1518,6 +1603,20 @@
       "date": "2026-10-13",
       "dem": 46,
       "rep": 44
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-10-28",
+      "dem": 46,
+      "rep": 48
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 45,
+      "rep": 43
     }
   ],
   "ak_sen": [
@@ -1718,6 +1817,13 @@
       "date": "2026-10-15",
       "dem": 48,
       "rep": 40
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 55,
+      "rep": 40
     }
   ],
   "ne_sen": [
@@ -1783,6 +1889,13 @@
       "date": "2026-10-18",
       "dem": 48,
       "rep": 41
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 46,
+      "rep": 47
     }
   ],
   "mi_sen": [
@@ -2030,6 +2143,20 @@
       "date": "2026-10-19",
       "dem": 48,
       "rep": 46
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-10-27",
+      "dem": 49,
+      "rep": 42
+    },
+    {
+      "pollster": "Mitchell Research & Communications",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 51,
+      "rep": 44
     }
   ],
   "nh_sen": [
@@ -2223,6 +2350,13 @@
       "date": "2026-10-23",
       "dem": 45,
       "rep": 46
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-10-26",
+      "dem": 49,
+      "rep": 45
     }
   ],
   "mn_sen": [
@@ -2337,6 +2471,13 @@
       "date": "2026-10-26",
       "dem": 54,
       "rep": 40
+    },
+    {
+      "pollster": "Victory Insights (Tafoya campaign)",
+      "rating": 0.5,
+      "date": "2026-10-22",
+      "dem": 48,
+      "rep": 44
     }
   ],
   "oh_gov": [
@@ -2479,6 +2620,20 @@
       "date": "2026-10-20",
       "dem": 46,
       "rep": 45
+    },
+    {
+      "pollster": "Suffolk University",
+      "rating": 0.8,
+      "date": "2026-10-26",
+      "dem": 48,
+      "rep": 44
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 45,
+      "rep": 47
     }
   ],
   "ga_gov": [
@@ -2572,6 +2727,20 @@
       "date": "2026-10-15",
       "dem": 45,
       "rep": 46
+    },
+    {
+      "pollster": "State Navigate",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 50,
+      "rep": 47
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 49,
+      "rep": 48
     }
   ],
   "ia_gov": [
@@ -2714,6 +2883,20 @@
       "date": "2026-10-13",
       "dem": 54,
       "rep": 43
+    },
+    {
+      "pollster": "co/efficient",
+      "rating": 0.55,
+      "date": "2026-10-28",
+      "dem": 50,
+      "rep": 45
+    },
+    {
+      "pollster": "Echelon Insights",
+      "rating": 0.5,
+      "date": "2026-10-23",
+      "dem": 50,
+      "rep": 46
     }
   ],
   "ks_gov": [
@@ -2765,6 +2948,13 @@
       "date": "2026-10-21",
       "dem": 47,
       "rep": 47
+    },
+    {
+      "pollster": "CNN/SSRS",
+      "rating": 0.9,
+      "date": "2026-10-26",
+      "dem": 45,
+      "rep": 50
     }
   ],
   "sc_sen": [
@@ -2837,6 +3027,20 @@
       "date": "2026-10-26",
       "dem": 48,
       "rep": 48
+    },
+    {
+      "pollster": "The Citadel",
+      "rating": 0.5,
+      "date": "2026-10-25",
+      "dem": 39,
+      "rep": 43
+    },
+    {
+      "pollster": "East Carolina University",
+      "rating": 0.8,
+      "date": "2026-10-24",
+      "dem": 47,
+      "rep": 51
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "_comment": "Senate races with a card instead of a needle (Update 53; Minnesota moved to a full needle in Update 54, South Carolina in Update 64). Card polls are kept here, NOT in data/polls.json, and are not used in the house-effect (lean) math. Ratings: Cook from its own site; Sabato and Inside Elections via Wikipedia's ratings table (their sites block automated access). For ID and SD the main challenger is an independent, stored in the 'dem' column. For MT and MS, 'ind' is the independent (Bodnar, Pinkins).",
-  "asOf": "2026-10-28",
+  "asOf": "2026-10-29",
   "notUp": {
     "D": 32,
     "I": 2,
@@ -311,15 +311,23 @@
       "note": "Special election for the last two years of Marco Rubio's term (he resigned to become Secretary of State).",
       "ratings": {
         "cook": "Solid R",
-        "sabato": "Safe R",
+        "sabato": "Likely R",
         "inside": "Likely R",
         "asOf": {
           "cook": "2026-10-20",
-          "sabato": "2026-10-14",
+          "sabato": "2026-10-27",
           "inside": "2026-10-15"
         }
       },
       "polls": [
+        {
+          "pollster": "St. Pete Polls",
+          "date": "2026-10-27",
+          "dem": 45,
+          "rep": 49,
+          "rating": 0.6,
+          "note": "For Florida Politics"
+        },
         {
           "pollster": "NYT/Siena",
           "date": "2026-10-26",
@@ -335,6 +343,14 @@
           "rating": 0.5,
           "sponsored": "D",
           "sponsor": "A Fight Worth Having, a Democratic super PAC"
+        },
+        {
+          "pollster": "Echelon Insights",
+          "date": "2026-10-23",
+          "dem": 43,
+          "rep": 51,
+          "rating": 0.5,
+          "note": "Conducted for NetChoice, a tech industry group"
         },
         {
           "pollster": "co/efficient",
@@ -450,7 +466,7 @@
         }
       ],
       "consensus": {
-        "rating": "Safe R",
+        "rating": "Likely R",
         "favors": "R"
       },
       "sources": [
@@ -713,11 +729,11 @@
       "ratings": {
         "cook": "Solid R",
         "sabato": "Safe R",
-        "inside": "Solid R",
+        "inside": "Likely R",
         "asOf": {
           "cook": "2026-10-20",
           "sabato": "2026-10-14",
-          "inside": "2026-10-15"
+          "inside": "2026-10-29"
         }
       },
       "polls": [
@@ -865,11 +881,11 @@
       "ratings": {
         "cook": "Likely R",
         "sabato": "Likely R",
-        "inside": "Solid R",
+        "inside": "Likely R",
         "asOf": {
           "cook": "2026-10-20",
           "sabato": "2026-10-14",
-          "inside": "2026-10-15"
+          "inside": "2026-10-29"
         }
       },
       "polls": [
@@ -955,6 +971,15 @@
         }
       },
       "polls": [
+        {
+          "pollster": "Concord Public Opinion Partners (D)",
+          "date": "2026-10-23",
+          "dem": 10,
+          "rep": 38,
+          "rating": 0.6,
+          "ind": 39,
+          "note": "Commissioned by Education Reform Now Advocacy"
+        },
         {
           "pollster": "Quantus Insights",
           "date": "2026-10-18",
