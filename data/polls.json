@@ -2268,6 +2268,13 @@
   ],
   "ks_sen": [
     {
+      "pollster": "Washington Post/Schar School",
+      "rating": 0.9,
+      "date": "2026-10-26",
+      "dem": 52,
+      "rep": 43
+    },
+    {
       "pollster": "InsiderAdvantage",
       "rating": 0.6,
       "date": "2026-10-10",
@@ -2900,6 +2907,13 @@
     }
   ],
   "ks_gov": [
+    {
+      "pollster": "Washington Post/Schar School",
+      "rating": 0.9,
+      "date": "2026-10-26",
+      "dem": 51,
+      "rep": 45
+    },
     {
       "pollster": "YouGov",
       "rating": 0.8,
