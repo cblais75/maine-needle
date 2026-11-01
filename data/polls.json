@@ -2225,6 +2225,13 @@
   ],
   "nh_sen": [
     {
+      "pollster": "UMass Lowell/YouGov",
+      "rating": 0.8,
+      "date": "2026-10-19",
+      "dem": 48,
+      "rep": 41
+    },
+    {
       "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-03-23",
