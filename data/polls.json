@@ -2,6 +2,13 @@
   "_comment": "feed",
   "senate": [
     {
+      "pollster": "Data for Progress (D)",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 50,
+      "rep": 45
+    },
+    {
       "pollster": "UNH Survey Center",
       "rating": 0.8,
       "date": "2026-07-20",
@@ -178,6 +185,14 @@
     }
   ],
   "governor": [
+    {
+      "pollster": "Data for Progress (D)",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 49,
+      "rep": 37,
+      "ind": 7
+    },
     {
       "pollster": "NYT/PPH/Siena",
       "rating": 0.95,
@@ -747,6 +762,20 @@
   ],
   "tx_sen": [
     {
+      "pollster": "Data for Progress (D)",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 49,
+      "rep": 45
+    },
+    {
+      "pollster": "Quantus Insights",
+      "rating": 0.6,
+      "date": "2026-10-28",
+      "dem": 48,
+      "rep": 49
+    },
+    {
       "pollster": "Texas Public Opinion Research",
       "rating": 0.5,
       "date": "2026-05-28",
@@ -1056,6 +1085,13 @@
     }
   ],
   "tx_gov": [
+    {
+      "pollster": "Data for Progress (D)",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 47,
+      "rep": 48
+    },
     {
       "pollster": "UT/Texas Politics Project",
       "rating": 0.85,
@@ -1623,6 +1659,13 @@
     {
       "pollster": "Alaska Survey Research",
       "rating": 0.8,
+      "date": "2026-10-29",
+      "dem": 48,
+      "rep": 46
+    },
+    {
+      "pollster": "Alaska Survey Research",
+      "rating": 0.8,
       "date": "2026-04-19",
       "dem": 49,
       "rep": 43
@@ -1828,6 +1871,13 @@
   ],
   "ne_sen": [
     {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-10-29",
+      "dem": 43,
+      "rep": 49
+    },
+    {
       "pollster": "GBAO (Working Class Majority PAC)",
       "rating": 0.5,
       "date": "2026-09-08",
@@ -1899,6 +1949,20 @@
     }
   ],
   "mi_sen": [
+    {
+      "pollster": "Data for Progress (D)",
+      "rating": 0.6,
+      "date": "2026-10-27",
+      "dem": 50,
+      "rep": 46
+    },
+    {
+      "pollster": "Rasmussen Reports",
+      "rating": 0.5,
+      "date": "2026-10-29",
+      "dem": 49,
+      "rep": 44
+    },
     {
       "pollster": "EPIC-MRA",
       "rating": 0.8,
@@ -2268,6 +2332,13 @@
   ],
   "ks_sen": [
     {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-10-28",
+      "dem": 50,
+      "rep": 47
+    },
+    {
       "pollster": "Washington Post/Schar School",
       "rating": 0.9,
       "date": "2026-10-26",
@@ -2367,6 +2438,13 @@
     }
   ],
   "mn_sen": [
+    {
+      "pollster": "SurveyUSA",
+      "rating": 0.8,
+      "date": "2026-10-28",
+      "dem": 48,
+      "rep": 41
+    },
     {
       "pollster": "Morning Consult",
       "rating": 0.8,
@@ -2908,6 +2986,13 @@
   ],
   "ks_gov": [
     {
+      "pollster": "Emerson College",
+      "rating": 0.85,
+      "date": "2026-10-28",
+      "dem": 48,
+      "rep": 53
+    },
+    {
       "pollster": "Washington Post/Schar School",
       "rating": 0.9,
       "date": "2026-10-26",
@@ -2972,6 +3057,13 @@
     }
   ],
   "sc_sen": [
+    {
+      "pollster": "Patinkin Research Strategies (D)",
+      "rating": 0.5,
+      "date": "2026-10-29",
+      "dem": 48,
+      "rep": 43
+    },
     {
       "pollster": "Rasmussen Reports",
       "rating": 0.5,
