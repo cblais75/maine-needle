@@ -2,6 +2,13 @@
   "_comment": "feed",
   "senate": [
     {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 51,
+      "rep": 45
+    },
+    {
       "pollster": "Data for Progress (D)",
       "rating": 0.6,
       "date": "2026-10-27",
@@ -185,6 +192,14 @@
     }
   ],
   "governor": [
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 49,
+      "rep": 37,
+      "ind": 8
+    },
     {
       "pollster": "Data for Progress (D)",
       "rating": 0.6,
@@ -550,6 +565,13 @@
   ],
   "oh_sen": [
     {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 49,
+      "rep": 44
+    },
+    {
       "pollster": "On Message Inc. (R)",
       "rating": 0.5,
       "date": "2026-03-08",
@@ -761,6 +783,27 @@
     }
   ],
   "tx_sen": [
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-11-01",
+      "dem": 48,
+      "rep": 48
+    },
+    {
+      "pollster": "AtlasIntel",
+      "rating": 0.75,
+      "date": "2026-11-01",
+      "dem": 51,
+      "rep": 45
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 50,
+      "rep": 43
+    },
     {
       "pollster": "Data for Progress (D)",
       "rating": 0.6,
@@ -1085,6 +1128,13 @@
     }
   ],
   "tx_gov": [
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 48,
+      "rep": 47
+    },
     {
       "pollster": "Data for Progress (D)",
       "rating": 0.6,
@@ -1452,6 +1502,13 @@
   ],
   "ia_sen": [
     {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 48,
+      "rep": 47
+    },
+    {
       "pollster": "Public Policy Polling (D)",
       "rating": 0.55,
       "date": "2026-06-04",
@@ -1656,6 +1713,13 @@
     }
   ],
   "ak_sen": [
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 48,
+      "rep": 46
+    },
     {
       "pollster": "Alaska Survey Research",
       "rating": 0.8,
@@ -1949,6 +2013,20 @@
     }
   ],
   "mi_sen": [
+    {
+      "pollster": "Trafalgar Group",
+      "rating": 0.6,
+      "date": "2026-11-01",
+      "dem": 47,
+      "rep": 46
+    },
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 53,
+      "rep": 42
+    },
     {
       "pollster": "Data for Progress (D)",
       "rating": 0.6,
@@ -2339,6 +2417,13 @@
   ],
   "ks_sen": [
     {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 49,
+      "rep": 44
+    },
+    {
       "pollster": "Emerson College",
       "rating": 0.85,
       "date": "2026-10-28",
@@ -2573,6 +2658,13 @@
     }
   ],
   "oh_gov": [
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 49,
+      "rep": 43
+    },
     {
       "pollster": "BGSU/YouGov",
       "rating": 0.8,
@@ -2837,6 +2929,13 @@
   ],
   "ia_gov": [
     {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 51,
+      "rep": 43
+    },
+    {
       "pollster": "YouGov",
       "rating": 0.8,
       "date": "2026-10-12",
@@ -2992,6 +3091,13 @@
     }
   ],
   "ks_gov": [
+    {
+      "pollster": "NYT/Siena",
+      "rating": 0.95,
+      "date": "2026-11-01",
+      "dem": 48,
+      "rep": 47
+    },
     {
       "pollster": "Emerson College",
       "rating": 0.85,
