@@ -2303,6 +2303,13 @@
   ],
   "nh_sen": [
     {
+      "pollster": "UNH Survey Center",
+      "rating": 0.8,
+      "date": "2026-10-31",
+      "dem": 54,
+      "rep": 42
+    },
+    {
       "pollster": "UMass Lowell/YouGov",
       "rating": 0.8,
       "date": "2026-10-19",

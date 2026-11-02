@@ -2039,6 +2039,13 @@
       },
       "polls": [
         {
+          "pollster": "UNH Survey Center",
+          "date": "2026-10-31",
+          "dem": 48,
+          "rep": 48,
+          "rating": 0.8
+        },
+        {
           "pollster": "UMass Lowell/YouGov",
           "date": "2026-10-19",
           "dem": 42,
