@@ -42,8 +42,11 @@ export const isElectionList = (link) => { try { const u = new URL(link); return 
 // SC page links: <a href="https://www.enr-scvotes.org/SC/126294/">Statewide Primaries</a> (labels may sit in nested tags).
 export function scLinks(html) {
   const out = [], seen = new Set(), re = /<a\b[^>]*href\s*=\s*["']([^"']*enr-scvotes\.org\/SC\/(\d+)[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  // Election Day fix: some of SC's links are wrapped in Outlook "safelinks" (…safelinks.protection.outlook.com/?url=<encoded>),
+  // which hide the enr-scvotes address. Unwrap them first so those links are found too.
+  const page = String(html).replace(/https?:\/\/[^"'\s]*safelinks\.protection\.outlook\.com\/?\?url=([^&"'\s]+)[^"'\s]*/gi, (w, u) => { try { return decodeURIComponent(u); } catch { return w; } });
   let m;
-  while ((m = re.exec(String(html)))) {
+  while ((m = re.exec(page))) {
     if (seen.has(m[2])) continue; seen.add(m[2]);
     out.push({ id: m[2], name: m[3].replace(/<[^>]+>/g, " ").replace(/&#8211;|&ndash;/g, "–").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim() });
   }
@@ -51,6 +54,9 @@ export function scLinks(html) {
 }
 const SC_ROOT = "https://www.enr-scvotes.org/SC";
 const SC_NOT_GENERAL = /primar|runoff|recount|municipal|city|school|preference|special/i;
+// Election Day fix: a statewide general can be titled "General and Special Elections" (Georgia's is). "Special" only
+// rules a link out when it isn't also called a general election.
+const scNotGeneral = (name) => /primar|runoff|recount|municipal|city|school|preference/i.test(name) || (SC_NOT_GENERAL.test(name) && !/general/i.test(name));
 // Pick SC's Nov 3, 2026 statewide general: links labeled as a general election (never a primary, runoff,
 // recount or special), newest first, each confirmed by the date in its own settings file. If no label fits
 // (SC hasn't labeled it yet), the three newest links are checked by their settings files instead.
@@ -65,11 +71,11 @@ async function discoverSC(html, override, getJson, getText) {
     const l = links.find((x) => x.id === override);
     return l ? { id: l.id, name: l.name, date: (await settings(l.id)).date } : null;
   }
-  const labeled = links.filter((l) => /general/i.test(l.name) && !SC_NOT_GENERAL.test(l.name));
+  const labeled = links.filter((l) => /general/i.test(l.name) && !scNotGeneral(l.name));
   const pool = (labeled.length ? labeled : links).slice(0, 3);
   for (const l of pool) {
     let s; try { s = await settings(l.id); } catch { continue; }
-    if (s.date === GENERAL_DATE && !SC_NOT_GENERAL.test(s.name) && (labeled.length || /general/i.test(s.name))) return { id: l.id, name: l.name || s.name, date: s.date };
+    if (s.date === GENERAL_DATE && !scNotGeneral(s.name) && (labeled.length || /general/i.test(s.name))) return { id: l.id, name: l.name || s.name, date: s.date };
   }
   return null;
 }
