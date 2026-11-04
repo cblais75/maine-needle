@@ -549,7 +549,18 @@ function compute(units) {
 // How much of the counted areas' swing to carry into the uncounted ones: little at first, more as votes come in.
 const SWING_TRUST_K = 0.05;
 const swingTrust = (f) => (f > 0 ? f / (f + SWING_TRUST_K) : 0);
+// Editor's calls (Nov 3 night): races Needlepoint has called by hand. Value is the winning side ("left" or "right").
+const EDITOR_CALLS = { ga_gov: "right", sc_sen: "right" };
+// compute() plus any editor's call: a called race's needle is pinned to the winner.
+function computeRace(race) {
+  const m = compute(race.units);
+  const side = EDITOR_CALLS[race.id];
+  if (!side) return m;
+  return { ...m, winRight: side === "right" ? 0.995 : 0.005 };
+}
 function rateOf(race, m) {
+  const called = EDITOR_CALLS[race.id];
+  if (called) { const w = race[called]; return { pct: 99, leader: w, text: `Called ${w.short}` }; }
   const p = m.margin >= 0 ? m.winRight : 1 - m.winRight;
   const leader = m.margin >= 0 ? race.right : race.left;
   const pct = Math.round(p * 100);
@@ -838,7 +849,7 @@ export default function MaineDashboard() {
     const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     for (const r of races) {
       if (r.type === "rcv" || r.type === "tbd" || r.type === "three" || !r.right || !r.left || !r.units || !r.units.length) continue;
-      const m = compute(r.units); const rt = rateOf(r, m);
+      const m = computeRace(r); const rt = rateOf(r, m);
       const cur = { pct: rt.pct, tag: rt.runoff ? "Runoff" : rt.text.split(" ")[0], leader: rt.leader.short, color: rt.leader.color, frac: m.fracIn };
       snap[r.id] = cur;
       const prev = wirePrev.current ? wirePrev.current[r.id] : null;
@@ -1111,7 +1122,7 @@ export default function MaineDashboard() {
 }
 
 function TiltBar({ race }) {
-  const m = compute(race.units);
+  const m = computeRace(race);
   const rt = rateOf(race, m);
   const x = (1 - clamp(m.winRight, 0.02, 0.98)) * 100; // Democrat side drawn on the left
   return (
@@ -1193,7 +1204,7 @@ function NeedleGrid({ races, onPick }) {
       return { fav: lead.short, pct, tag, color: lead.color, frac: m.fracIn };
     }
     if (!r.left || !r.right || !r.units || !r.units.length) return { fav: r.title, pct: null, tag: r.system || "", color: C.muted, sub: r.sub };
-    const m = compute(r.units); const rt = rateOf(r, m);
+    const m = computeRace(r); const rt = rateOf(r, m);
     const tag = rt.text.split(" ")[0];
     return { fav: rt.leader.short, pct: rt.pct, tag, color: rt.leader.color, frac: m.fracIn };
   };
@@ -1618,9 +1629,9 @@ function readRace(r) {
     return { kind: "three", fav: lead.short, favColor: lead.color, pct, tag: t === "Toss-up" ? "Toss-up" : `${t} ${lead.short}`, frac: m.fracIn, parts };
   }
   if (!r.left || !r.right || !r.units || !r.units.length) return { kind: "none", fav: r.title, favColor: C.muted, pct: null, tag: r.system || "", frac: 0 };
-  const m = compute(r.units); const rt = rateOf(r, m);
+  const m = computeRace(r); const rt = rateOf(r, m);
   return { kind: "two", fav: rt.leader.short, favColor: rt.leader.color, pct: rt.pct, tag: rt.text, runoff: !!rt.runoff, frac: m.fracIn, pRight: m.winRight, m,
-    marginTxt: `${(m.margin >= 0 ? r.right : r.left).short} +${Math.abs(m.margin * 100).toFixed(1)}`, favSide: m.margin >= 0 ? "right" : "left" };
+    marginTxt: `${(m.margin >= 0 ? r.right : r.left).short} +${Math.abs(m.margin * 100).toFixed(1)}`, favSide: EDITOR_CALLS[r.id] || (m.margin >= 0 ? "right" : "left") };
 }
 function swingCaption(r, m) {
   if (m.fracIn === 0) return "No votes counted yet. The needle sits at its starting point, built from polling and each county's usual lean.";
