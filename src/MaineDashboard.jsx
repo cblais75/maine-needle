@@ -476,7 +476,7 @@ function compute3(units) {
   const totalW = units.reduce((s, u) => s + u.weight, 0);
   const repW = units.reduce((s, u) => s + u.weight * u.reported, 0);
   const fracIn = totalW ? repW / totalW : 0;
-  const swing = (fk, pk) => repW > 0 ? swingTrust(fracIn) * units.reduce((s, u) => s + u.weight * u.reported * (u[fk] - u[pk]), 0) / repW : 0;
+  const swing = (fk, pk) => repW > 0 ? swingTrust(trustFrac(units, totalW, fracIn)) * units.reduce((s, u) => s + u.weight * u.reported * (u[fk] - u[pk]), 0) / repW : 0;
   const sP = swing("fP", "pP"), sC = swing("fC", "pC"), sB = swing("fB", "pB");
   const projOne = (fk, pk, sw) => units.reduce((s, u) => s + u.weight * (u.reported >= 0.92 ? u[fk] : clamp(u[pk] + sw, 0.01, 0.98)), 0) / totalW;
   let P = projOne("fP", "pP", sP), C = projOne("fC", "pC", sC), B = projOne("fB", "pB", sB);
@@ -535,7 +535,7 @@ function compute(units) {
   if (repW > 0) rawSwing = units.reduce((s, u) => s + u.weight * u.reported * (u.finalShare - u.prior), 0) / repW;
   // Election night fix (Nov 3): early returns are often early/mail votes that lean one way, so the swing they
   // show is only trusted in proportion to how much of the vote is in (about 40% at 10% in, 77% at half in).
-  const swing = rawSwing * swingTrust(fracIn);
+  const swing = rawSwing * swingTrust(trustFrac(units, totalW, fracIn));
   const proj = units.reduce((s, u) => {
     const known = u.reported >= 0.92;
     return s + u.weight * (known ? u.finalShare : clamp(u.prior + swing, 0.02, 0.98));
@@ -582,15 +582,26 @@ function rateOf(race, m) {
 const MIDTERM_TURNOUT = { ME: 0.83, NC: 0.68, OH: 0.78, TX: 0.75, IA: 0.81, GA: 0.77, NE: 0.76, MI: 0.8, NH: 0.77, KS: 0.8, MN: 0.82, SC: 0.69 };
 function reportedFrac(counted, u, c, state) {
   const byVotes = clamp(counted / (u.weight * (MIDTERM_TURNOUT[state] || 0.8)), 0, 1);
-  if (c && c.pt > 0 && Number.isFinite(c.pr)) return Math.min(byVotes, clamp(c.pr / c.pt, 0, 1));
+  // Election night fix (Nov 3): states like Georgia post early votes before marking any precinct as reported,
+  // so "precincts reporting" said 0% while a fifth of the vote was in. Count by votes instead, but until the
+  // precincts report, a county can't be treated as finished (the cap stays below the 0.92 "known" line).
+  if (c && c.pt > 0 && Number.isFinite(c.pr)) return Math.min(byVotes, 0.85 + 0.15 * clamp(c.pr / c.pt, 0, 1));
   return byVotes;
+}
+// Share of a county's precincts reporting, when the feed says (undefined otherwise).
+const precFrac = (c) => (c && c.pt > 0 && Number.isFinite(c.pr) ? clamp(c.pr / c.pt, 0, 1) : undefined);
+// How far to trust the counted areas' swing: by precincts reporting where the feed gives them (early votes
+// posted before any precinct reports lean one way and aren't a fair sample), otherwise by the share counted.
+function trustFrac(units, totalW, fracIn) {
+  if (!units.some((u) => u.precRep !== undefined)) return fracIn;
+  return totalW ? units.reduce((s, u) => s + u.weight * Math.min(u.reported || 0, u.precRep ?? (u.reported || 0)), 0) / totalW : 0;
 }
 function liveTwoWay(units, counties, state) {
   return units.map((u) => {
     const c = counties[u.name];
     const counted = c ? (c.dem || 0) + (c.rep || 0) : 0;
     if (counted <= 0) return { ...u, reported: 0, vDem: 0, vRep: 0, vOth: 0 };
-    return { ...u, reported: reportedFrac(counted, u, c, state), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0, vOth: c.oth || 0 };
+    return { ...u, reported: reportedFrac(counted, u, c, state), precRep: precFrac(c), finalShare: c.dem / counted, vDem: c.dem || 0, vRep: c.rep || 0, vOth: c.oth || 0 };
   });
 }
 // Sum raw votes across a race's units for the live scoreboard.
@@ -606,7 +617,7 @@ function liveThree(units, counties, state) {
     const c = counties[u.name];
     const counted = c ? (c.dem || 0) + (c.rep || 0) + (c.ind || 0) : 0;
     if (counted <= 0) return { ...u, reported: 0, fP: u.pP, fC: u.pC, fB: u.pB };
-    return { ...u, reported: reportedFrac(counted, u, c, state), fP: c.dem / counted, fC: c.rep / counted, fB: (c.ind || 0) / counted };
+    return { ...u, reported: reportedFrac(counted, u, c, state), precRep: precFrac(c), fP: c.dem / counted, fC: c.rep / counted, fB: (c.ind || 0) / counted };
   });
 }
 function applyLive(race, rdata) {
