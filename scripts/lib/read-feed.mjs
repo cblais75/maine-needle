@@ -319,7 +319,12 @@ function rowsFromKansasPage(html) {
 
 // ---------- entry point ----------
 export function readFeed(input, state, name = "") {
-  const buf = input instanceof Uint8Array ? input : new Uint8Array(input);
+  let buf = input instanceof Uint8Array ? input : new Uint8Array(input);
+  // Election night (Nov 3): Nebraska's media CSV is UTF-16 text (every other byte is 0). Convert it to UTF-8.
+  if (buf.length > 3 && ((buf[0] === 0xff && buf[1] === 0xfe) || (buf[0] !== 0 && buf[1] === 0 && buf[2] !== 0 && buf[3] === 0)))
+    buf = new TextEncoder().encode(new TextDecoder("utf-16le").decode(buf).replace(/^\uFEFF/, ""));
+  else if (buf.length > 3 && ((buf[0] === 0xfe && buf[1] === 0xff) || (buf[0] === 0 && buf[1] !== 0 && buf[2] === 0 && buf[3] !== 0)))
+    buf = new TextEncoder().encode(new TextDecoder("utf-16be").decode(buf).replace(/^\uFEFF/, ""));
   const head = strFromU8(buf.subarray(0, 400)).replace(/^﻿/, "").trimStart();
   // ZIP container (xlsx is also a zip; let SheetJS take those)
   if (buf[0] === 0x50 && buf[1] === 0x4b) {

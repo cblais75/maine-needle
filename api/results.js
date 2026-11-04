@@ -70,6 +70,7 @@ async function fetchState(setting, state) {
 
 // The results payload for a given moment. now / fetchStateFn are injectable so
 // scripts/test-night.mjs can prove the start gate works without touching any state site.
+const NE_CSV = "https://electionresults.nebraska.gov/resultsCSV.aspx?text=All&type=SW&map=CTY";
 const LAST_GOOD = {}; // per state: { out, at } — last refresh that had results (kept in the warm server)
 export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
   const configured = SOURCES.filter((s) => env[s.env]);
@@ -81,7 +82,10 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
   const memo = env === process.env && fetchStateFn === fetchState; // only the live site remembers last good results (not tests)
   await Promise.all(active.map(async (s) => {
     try {
-      let out = await fetchStateFn(env[s.env], s.state);
+      // Election night (Nov 3): Nebraska's map service stayed empty for the general, so read the state's
+      // county-level media CSV instead (live site only; tests keep their own settings).
+      const setting = memo && s.state === "NE" ? NE_CSV : env[s.env];
+      let out = await fetchStateFn(setting, s.state);
       // Election night: some state sites answer only some requests. If a refresh comes back empty after the
       // state had results, keep showing its last good results (up to 15 minutes old) instead of dropping it.
       const has = Object.keys(out.races || {}).length > 0;
