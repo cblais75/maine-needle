@@ -549,8 +549,13 @@ function compute(units) {
 // How much of the counted areas' swing to carry into the uncounted ones: little at first, more as votes come in.
 const SWING_TRUST_K = 0.05;
 const swingTrust = (f) => (f > 0 ? f / (f + SWING_TRUST_K) : 0);
-// Editor's calls (Nov 3 night): races Needlepoint has called by hand. Value is the winning side ("left" or "right").
-const EDITOR_CALLS = { ga_gov: "right", sc_sen: "right" };
+// Editor's calls (Nov 3 night): races Needlepoint has called by hand. Value is the winning side ("left" or "right"),
+// or the winning candidate's key for the three-way Maine governor race. A called race is never paused.
+const EDITOR_CALLS = {
+  ga_sen: "right", ga_gov: "right", sc_sen: "right", nc_sen: "right", nh_sen: "right", mn_sen: "right",
+  mi_sen: "right", tx_sen: "right", tx_gov: "right", oh_sen: "right", oh_gov: "right", ks_sen: "right",
+  ia_sen: "right", ia_gov: "right", sen: "right", cd1: "right", ne_sen: "left", gov: "P",
+};
 // compute() plus any editor's call: a called race's needle is pinned to the winner.
 function computeRace(race) {
   const m = compute(race.units);
@@ -1043,7 +1048,7 @@ export default function MaineDashboard() {
                 <h1 style={{ margin: "0 0 14px", fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>{STATES.find((s) => s.code === view).label}</h1>
                 <SectionHead title={races.filter((r) => r.state === view).length > 1 ? "Races on the ballot" : "The race"} size={22} />
                 <RaceTable races={races.filter((r) => r.state === view)} onPick={setSel} wide={wide} night={night} />
-                {night && PAUSE_STATES.includes(view) && <div style={{ marginTop: 18 }}><PauseNote state={view} /></div>}
+                {night && races.some((r) => r.state === view && isPaused(r, night)) && <div style={{ marginTop: 18 }}><PauseNote state={view} /></div>}
               </div>
             )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} wide={wide} />}
@@ -1584,7 +1589,7 @@ function nightStarted() {
   return nightPreview() || Date.now() >= ELECTION_NIGHT_START;
 }
 // ?night preview (Update 56): scripts/lib/night-preview.mjs simulates practice returns for states not yet closed.
-const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn
+const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) && !r.liveOn && !EDITOR_CALLS[r.id]
   && (!PAUSE_AT_STATE_CLOSE.includes(r.state) || nightPreview() || stateOpen(r.state, Date.now())));
 const PAUSE_TEXT = {
   ME: "Maine doesn't publish results on election night. Towns report to the press and the AP, and the state posts official town-by-town results only after they're certified, usually a few weeks later. If a ranked-choice count is needed, first-choice results come about a week after the election. This needle will finish on its own when those files are posted.",
@@ -1626,6 +1631,8 @@ function readRace(r) {
     const lead = [...parts].sort((a, b) => b.win - a.win)[0];
     const pct = Math.round(lead.win * 100);
     const t = pct >= 90 ? "Likely" : pct >= 60 ? "Leans" : "Toss-up";
+    const won = parts.find((c) => c.key === EDITOR_CALLS[r.id]);
+    if (won) return { kind: "three", fav: won.short, favColor: won.color, pct: 99, tag: `Called ${won.short}`, frac: m.fracIn, parts };
     return { kind: "three", fav: lead.short, favColor: lead.color, pct, tag: t === "Toss-up" ? "Toss-up" : `${t} ${lead.short}`, frac: m.fracIn, parts };
   }
   if (!r.left || !r.right || !r.units || !r.units.length) return { kind: "none", fav: r.title, favColor: C.muted, pct: null, tag: r.system || "", frac: 0 };
@@ -1634,6 +1641,7 @@ function readRace(r) {
     marginTxt: `${(m.margin >= 0 ? r.right : r.left).short} +${Math.abs(m.margin * 100).toFixed(1)}`, favSide: EDITOR_CALLS[r.id] || (m.margin >= 0 ? "right" : "left") };
 }
 function swingCaption(r, m) {
+  if (EDITOR_CALLS[r.id] && m.fracIn === 0) return `Needlepoint has called this race for ${r[EDITOR_CALLS[r.id]].short}. The county map shows our pre-election forecast until official results are posted.`;
   if (m.fracIn === 0) return "No votes counted yet. The needle sits at its starting point, built from polling and each county's usual lean.";
   const s = (m.rawSwing ?? m.swing) * 100;
   if (Math.abs(s) < 0.6) return "Counted areas are tracking close to their expected results, so the projection is holding steady.";
@@ -1722,7 +1730,7 @@ function controlTally(races) {
       side = right ? (c.indRight ? "I" : "D") : "R";
       const cand = right ? r.right : r.left;
       name = `${cand.short} (${right ? (c.indRight ? "I" : "D") : "R"})`;
-      pct = d.pct; called = d.tag.startsWith("Called") && d.frac > 0;
+      pct = d.pct; called = d.tag.startsWith("Called") && (d.frac > 0 || !!EDITOR_CALLS[r.id]);
     }
     if (side === "D") dL++; else if (side === "R") rL++; else iL++;
     if (called) { if (side === "D") dC++; else if (side === "R") rC++; else iC++; }
@@ -2153,7 +2161,9 @@ function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
             {side(R, 100 - leftPct, t.dem, "flex-start")}{side(L, leftPct, t.rep, "flex-end")}
           </div>
           <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>
-            Chance of winning · <b style={{ color: C.text }}>{d.tag}</b> · Projected {d.marginTxt} · {Math.round(d.frac * 100)}% of expected vote in
+            {d.tag.startsWith("Called") && d.frac === 0
+              ? <>Needlepoint call · <b style={{ color: C.text }}>{d.tag}</b> · official results to follow</>
+              : <>Chance of winning · <b style={{ color: C.text }}>{d.tag}</b> · Projected {d.marginTxt} · {Math.round(d.frac * 100)}% of expected vote in</>}
           </div>
         </div>
       </section>
