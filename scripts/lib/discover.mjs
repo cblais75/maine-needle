@@ -80,6 +80,15 @@ async function discoverSC(html, override, getJson, getText) {
   return null;
 }
 
+export const SC_BACKUP_ID = "127300";
+async function scBackup(getJson, getText) {
+  const ver = String(await getText(`${SC_ROOT}/${SC_BACKUP_ID}/current_ver.txt`)).trim();
+  const d = (await getJson(`${SC_ROOT}/${SC_BACKUP_ID}/${ver}/json/en/electionsettings.json`))?.settings?.electiondetails || {};
+  const name = String(d.internalname || "");
+  if (isoDate(d.electiondate) !== GENERAL_DATE || scNotGeneral(name)) return null;
+  return { id: SC_BACKUP_ID, name: name || "2026 Statewide General Election", date: GENERAL_DATE, backup: true };
+}
+
 // "6/2/2026 12:00:00 AM" -> "2026-06-02"; "2026-06-16" stays.
 export function isoDate(s) {
   const t = String(s ?? "").trim();
@@ -136,7 +145,12 @@ export async function discover(link, state, getJson, getText = async () => "") {
     return { urls: [`${root}${picked.id}/{ver}/reports/detailxml.zip`], picked };
   }
   if (isSCPage(u)) {
-    const picked = await discoverSC(await getText(base), override && decodeURIComponent(override), getJson, getText);
+    let picked = await discoverSC(await getText(base), override && decodeURIComponent(override), getJson, getText);
+    // Election night (Nov 3): SC put the general's link only in its HOMEPAGE banner ("Election Night Reporting",
+    // https://www.enr-scvotes.org/SC/127300/), not on the results page. Look there too, then try that ID directly.
+    // Each is still confirmed by the election's own settings file (date 2026-11-03, a general).
+    if (!picked && !override) { try { picked = await discoverSC(await getText(`${u.origin}/`), null, getJson, getText); } catch { /* homepage unreachable */ } }
+    if (!picked && !override) { try { picked = await scBackup(getJson, getText); } catch { /* not posted */ } }
     if (!picked) return notPosted;
     return { urls: [`${SC_ROOT}/${picked.id}/{ver}/reports/detailxml.zip`], picked };
   }
