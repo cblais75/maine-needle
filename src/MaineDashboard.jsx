@@ -476,7 +476,7 @@ function compute3(units) {
   const totalW = units.reduce((s, u) => s + u.weight, 0);
   const repW = units.reduce((s, u) => s + u.weight * u.reported, 0);
   const fracIn = totalW ? repW / totalW : 0;
-  const swing = (fk, pk) => repW > 0 ? swingTrust(trustFrac(units, totalW, fracIn)) * units.reduce((s, u) => s + u.weight * u.reported * (u[fk] - u[pk]), 0) / repW : 0;
+  const swing = (fk, pk) => repW > 0 ? swingTrust(fracIn) * units.reduce((s, u) => s + u.weight * u.reported * (u[fk] - u[pk]), 0) / repW : 0;
   const sP = swing("fP", "pP"), sC = swing("fC", "pC"), sB = swing("fB", "pB");
   const projOne = (fk, pk, sw) => units.reduce((s, u) => s + u.weight * (u.reported >= 0.92 ? u[fk] : clamp(u[pk] + sw, 0.01, 0.98)), 0) / totalW;
   let P = projOne("fP", "pP", sP), C = projOne("fC", "pC", sC), B = projOne("fB", "pB", sB);
@@ -535,7 +535,7 @@ function compute(units) {
   if (repW > 0) rawSwing = units.reduce((s, u) => s + u.weight * u.reported * (u.finalShare - u.prior), 0) / repW;
   // Election night fix (Nov 3): early returns are often early/mail votes that lean one way, so the swing they
   // show is only trusted in proportion to how much of the vote is in (about 40% at 10% in, 77% at half in).
-  const swing = rawSwing * swingTrust(trustFrac(units, totalW, fracIn));
+  const swing = rawSwing * swingTrust(fracIn);
   const proj = units.reduce((s, u) => {
     const known = u.reported >= 0.92;
     return s + u.weight * (known ? u.finalShare : clamp(u.prior + swing, 0.02, 0.98));
@@ -547,7 +547,7 @@ function compute(units) {
   return { fracIn, swing, rawSwing, margin, se, winRight: ncdf(margin / se) };
 }
 // How much of the counted areas' swing to carry into the uncounted ones: little at first, more as votes come in.
-const SWING_TRUST_K = 0.15;
+const SWING_TRUST_K = 0.05;
 const swingTrust = (f) => (f > 0 ? f / (f + SWING_TRUST_K) : 0);
 function rateOf(race, m) {
   const p = m.margin >= 0 ? m.winRight : 1 - m.winRight;
