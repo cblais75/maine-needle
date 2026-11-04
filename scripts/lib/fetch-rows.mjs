@@ -24,13 +24,26 @@ import { discover, isElectionList } from "./discover.mjs";
 const UA = { "User-Agent": "Mozilla/5.0 (compatible; Needlepoint/1.0; +https://needlepoint.news)" };
 
 export async function get(url, ms = 20000) {
-  const ctl = new AbortController();
-  const t = setTimeout(() => ctl.abort(), ms);
-  try {
-    const resp = await fetch(url, { signal: ctl.signal, headers: UA });
-    if (!resp.ok) throw new Error(`source ${resp.status}`);
-    return resp;
-  } finally { clearTimeout(t); }
+  // Election night (Nov 3): state results servers answer "502/503/504" in bursts under heavy traffic.
+  // Retry those (and dropped connections) a few times with short pauses before giving up.
+  const waits = [400, 900, 1600];
+  for (let attempt = 0; ; attempt++) {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), ms);
+    try {
+      const resp = await fetch(url, { signal: ctl.signal, headers: UA });
+      if (!resp.ok) {
+        const err = new Error(`source ${resp.status}`);
+        if (resp.status >= 500 && attempt < waits.length) { await new Promise((r) => setTimeout(r, waits[attempt])); continue; }
+        throw err;
+      }
+      return resp;
+    } catch (e) {
+      const retryable = !/^Error: source 4/.test(String(e)) && !/source [0-4]\d\d/.test(String(e)) && e?.name !== "AbortError";
+      if (retryable && attempt < waits.length && !/source/.test(String(e))) { await new Promise((r) => setTimeout(r, waits[attempt])); continue; }
+      throw e;
+    } finally { clearTimeout(t); }
+  }
 }
 const LAST_VER = {};
 export async function resolveUrl(url) {
