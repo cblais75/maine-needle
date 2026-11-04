@@ -1557,7 +1557,7 @@ const ELECTION_NIGHT_START = Date.UTC(2026, 10, 4, 0, 0);
 // MI's results site blocks automated downloads (Update 61); OH's election-night file is in a format our reader
 // can't read yet (a safety net, Oct 27). A paused race still goes live on its own if real results arrive
 // (isPaused checks liveOn), e.g. if MI_RESULTS_URL or OH_RESULTS_URL is ever set and works.
-const PAUSE_STATES = ["ME", "NH", "MI", "OH"];
+const PAUSE_STATES = ["ME", "NH", "MI", "OH", "NE"];
 // States that pause only from their own poll close (results-gate.mjs: Ohio 7:30 p.m. ET), not from the 7 p.m. start
 // of election night. The ?night preview shows them paused right away, like the others.
 const PAUSE_AT_STATE_CLOSE = ["OH"];
@@ -1578,6 +1578,7 @@ const isPaused = (r, night) => !!(night && r && PAUSE_STATES.includes(r.state) &
 const PAUSE_TEXT = {
   ME: "Maine doesn't publish results on election night. Towns report to the press and the AP, and the state posts official town-by-town results only after they're certified, usually a few weeks later. If a ranked-choice count is needed, first-choice results come about a week after the election. This needle will finish on its own when those files are posted.",
   MI: "Michigan's official results site doesn't allow automated downloads, so this needle waits for the official count. Follow the AP's live count in the meantime.",
+  NE: "Nebraska's results service isn't publishing county results tonight, so this needle waits for the official count. Follow the AP's live count in the meantime.",
   OH: "Ohio's election-night results file isn't one our site can read yet, so this needle waits for the official count. Follow the AP's live count in the meantime.",
   NH: "New Hampshire doesn't publish results on election night. Its towns report to the press and the AP overnight, and the state posts official town results a few days later. This needle will finish on its own when those files are posted.",
 };
