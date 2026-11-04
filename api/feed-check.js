@@ -21,6 +21,17 @@ export default async function handler(req, res) {
   if (!(ALLOWED.some((re) => re.test(url.hostname)) || s3ok(url)))
     return res.status(400).json({ ok: false, error: `host not allowed: ${url.hostname}` });
   const t0 = Date.now();
+  // ?peek=1: show the first bytes of the file itself (as hex and as text) so a new format can be read on the night.
+  if (q.peek) {
+    try {
+      const r = await fetch(String(q.url), { headers: { "user-agent": "Mozilla/5.0 (Needlepoint results check)" } });
+      const b = new Uint8Array(await r.arrayBuffer());
+      const hex = Array.from(b.slice(0, 48)).map((x) => x.toString(16).padStart(2, "0")).join(" ");
+      const u16 = b.length > 3 && ((b[0] === 0xff && b[1] === 0xfe) || (b[1] === 0 && b[3] === 0));
+      const text = new TextDecoder(u16 ? "utf-16le" : "utf-8").decode(b.slice(0, 2400));
+      return res.status(200).json({ ok: r.ok, status: r.status, type: r.headers.get("content-type"), bytes: b.length, hex, text });
+    } catch (e) { return res.status(200).json({ ok: false, error: String(e) }); }
+  }
   try {
     const { rows, files, picked, notPosted } = await fetchRows(String(q.url), state);
     const t1 = Date.now();
