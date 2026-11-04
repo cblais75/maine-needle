@@ -70,6 +70,7 @@ async function fetchState(setting, state) {
 
 // The results payload for a given moment. now / fetchStateFn are injectable so
 // scripts/test-night.mjs can prove the start gate works without touching any state site.
+const LAST_GOOD = {}; // per state: { out, at } — last refresh that had results (kept in the warm server)
 export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
   const configured = SOURCES.filter((s) => env[s.env]);
   if (!configured.length) return { updated: null, source: "simulation", races: {} };
@@ -77,14 +78,23 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
   const closed = configured.filter((s) => !stateOpen(s.state, now)).map((s) => s.state);
   if (!active.length) return waitingPayload(now, closed);
   const races = {}, sources = [], errors = [], diag = {};
+  const memo = env === process.env && fetchStateFn === fetchState; // only the live site remembers last good results (not tests)
   await Promise.all(active.map(async (s) => {
     try {
-      const out = await fetchStateFn(env[s.env], s.state);
+      let out = await fetchStateFn(env[s.env], s.state);
+      // Election night: some state sites answer only some requests. If a refresh comes back empty after the
+      // state had results, keep showing its last good results (up to 15 minutes old) instead of dropping it.
+      const has = Object.keys(out.races || {}).length > 0;
+      const last = memo ? LAST_GOOD[s.state] : null;
+      if (has && memo) LAST_GOOD[s.state] = { out, at: now };
+      else if (last && now - last.at < 15 * 60 * 1000) out = last.out;
       Object.assign(races, out.races || {});
       if (Object.keys(out.races || {}).length) sources.push(s.state);
       diag[s.state] = out._diag;
       if (!Object.keys(out.races || {}).length) errors.push(out._diag.notPosted || `${s.state}: ${out._diag.files ? "file read, but no votes found for our races" : "no results files posted yet"}`);
     } catch (e) {
+      const last = memo ? LAST_GOOD[s.state] : null;
+      if (last && now - last.at < 15 * 60 * 1000) { Object.assign(races, last.out.races || {}); sources.push(s.state); diag[s.state] = { ...last.out._diag, stale: true }; }
       errors.push(`${s.state}: ${String(e)}`);
     }
   }));

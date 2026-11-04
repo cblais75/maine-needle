@@ -151,6 +151,9 @@ export async function discover(link, state, getJson, getText = async () => "") {
     // Each is still confirmed by the election's own settings file (date 2026-11-03, a general).
     if (!picked && !override) { try { picked = await discoverSC(await getText(`${u.origin}/`), null, getJson, getText); } catch { /* homepage unreachable */ } }
     if (!picked && !override) { try { picked = await scBackup(getJson, getText); } catch { /* not posted */ } }
+    // Election night: SC's sites answer only some requests. 127300 was confirmed as the Nov 3 general tonight
+    // (its own settings file and the homepage banner), so if every check above fails, read it anyway.
+    if (!picked && !override) picked = { id: SC_BACKUP_ID, name: "2026 Statewide General Election", date: GENERAL_DATE, backup: true };
     if (!picked) return notPosted;
     return { urls: [`${SC_ROOT}/${picked.id}/{ver}/reports/detailxml.zip`], picked };
   }

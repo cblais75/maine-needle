@@ -32,10 +32,15 @@ export async function get(url, ms = 20000) {
     return resp;
   } finally { clearTimeout(t); }
 }
+const LAST_VER = {};
 export async function resolveUrl(url) {
   if (!url.includes("{ver}")) return url;
   const base = url.split("{ver}")[0];
-  const ver = (await (await get(base + "current_ver.txt", 5000)).text()).trim();
+  // Election night: if the version lookup fails this time, reuse the last folder number that worked.
+  let ver = "";
+  try { ver = (await (await get(base + "current_ver.txt", 5000)).text()).trim(); } catch (e) { if (!LAST_VER[base]) throw e; }
+  if (!/^\d+$/.test(ver)) { if (!LAST_VER[base]) throw new Error(`no version number at ${base}current_ver.txt`); ver = LAST_VER[base]; }
+  LAST_VER[base] = ver;
   return url.replace("{ver}", ver);
 }
 
