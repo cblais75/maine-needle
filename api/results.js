@@ -84,7 +84,7 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
     try {
       // Election night (Nov 3): Nebraska's map service stayed empty for the general, so read the state's
       // county-level media CSV instead (live site only; tests keep their own settings).
-      const setting = memo && s.state === "NE" ? NE_CSV : env[s.env];
+      const setting = env[s.env]; // NE_CSV (statewide totals only) can't drive the county needle; map feed kept
       let out = await fetchStateFn(setting, s.state);
       // Election night: some state sites answer only some requests. If a refresh comes back empty after the
       // state had results, keep showing its last good results (up to 15 minutes old) instead of dropping it.
