@@ -476,7 +476,7 @@ function compute3(units) {
   const totalW = units.reduce((s, u) => s + u.weight, 0);
   const repW = units.reduce((s, u) => s + u.weight * u.reported, 0);
   const fracIn = totalW ? repW / totalW : 0;
-  const swing = (fk, pk) => repW > 0 ? units.reduce((s, u) => s + u.weight * u.reported * (u[fk] - u[pk]), 0) / repW : 0;
+  const swing = (fk, pk) => repW > 0 ? swingTrust(fracIn) * units.reduce((s, u) => s + u.weight * u.reported * (u[fk] - u[pk]), 0) / repW : 0;
   const sP = swing("fP", "pP"), sC = swing("fC", "pC"), sB = swing("fB", "pB");
   const projOne = (fk, pk, sw) => units.reduce((s, u) => s + u.weight * (u.reported >= 0.92 ? u[fk] : clamp(u[pk] + sw, 0.01, 0.98)), 0) / totalW;
   let P = projOne("fP", "pP", sP), C = projOne("fC", "pC", sC), B = projOne("fB", "pB", sB);
@@ -531,8 +531,11 @@ function compute(units) {
   const totalW = units.reduce((s, u) => s + u.weight, 0);
   const repW = units.reduce((s, u) => s + u.weight * u.reported, 0);
   const fracIn = totalW ? repW / totalW : 0;
-  let swing = 0;
-  if (repW > 0) swing = units.reduce((s, u) => s + u.weight * u.reported * (u.finalShare - u.prior), 0) / repW;
+  let rawSwing = 0;
+  if (repW > 0) rawSwing = units.reduce((s, u) => s + u.weight * u.reported * (u.finalShare - u.prior), 0) / repW;
+  // Election night fix (Nov 3): early returns are often early/mail votes that lean one way, so the swing they
+  // show is only trusted in proportion to how much of the vote is in (about 40% at 10% in, 77% at half in).
+  const swing = rawSwing * swingTrust(fracIn);
   const proj = units.reduce((s, u) => {
     const known = u.reported >= 0.92;
     return s + u.weight * (known ? u.finalShare : clamp(u.prior + swing, 0.02, 0.98));
@@ -541,8 +544,11 @@ function compute(units) {
   // Confidence band: wide when little is in (so a sliver can't "call" a race),
   // tightening as real vote accumulates. Floor keeps very-early calls impossible.
   const se = 0.095 * Math.sqrt(1 - fracIn) + 0.03 * (1 - fracIn) + 0.004;
-  return { fracIn, swing, margin, se, winRight: ncdf(margin / se) };
+  return { fracIn, swing, rawSwing, margin, se, winRight: ncdf(margin / se) };
 }
+// How much of the counted areas' swing to carry into the uncounted ones: little at first, more as votes come in.
+const SWING_TRUST_K = 0.15;
+const swingTrust = (f) => (f > 0 ? f / (f + SWING_TRUST_K) : 0);
 function rateOf(race, m) {
   const p = m.margin >= 0 ? m.winRight : 1 - m.winRight;
   const leader = m.margin >= 0 ? race.right : race.left;
@@ -1606,9 +1612,9 @@ function readRace(r) {
 }
 function swingCaption(r, m) {
   if (m.fracIn === 0) return "No votes counted yet. The needle sits at its starting point, built from polling and each county's usual lean.";
-  const s = m.swing * 100;
+  const s = (m.rawSwing ?? m.swing) * 100;
   if (Math.abs(s) < 0.6) return "Counted areas are tracking close to their expected results, so the projection is holding steady.";
-  return `Counted areas are running about ${Math.abs(s).toFixed(1)} points toward ${s > 0 ? r.right.short : r.left.short} compared with their expected results. The needle carries that swing into the areas still counting.`;
+  return `Counted areas are running about ${Math.abs(s).toFixed(1)} points toward ${s > 0 ? r.right.short : r.left.short} compared with their expected results. The needle carries that swing into the areas still counting, more fully as more of the vote comes in.`;
 }
 function headlineFor(r, d) {
   if (d.kind !== "two" && d.kind !== "three") return raceName(r);
