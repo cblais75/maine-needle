@@ -404,7 +404,7 @@ const makeMississippiSenate = (pollMargin = MS_PRIOR) => ({
   id: "ms_sen", state: "MS", title: "U.S. Senate",
   sub: "Colom (D) vs Hyde-Smith (R)",
   system: "Plurality", real: true,
-  note: `Added after election night. Sen. Cindy Hyde-Smith (R) faces Democrat Scott Colom, with independent Ty Pinkins also on the ballot. Forecasters rated it Likely Republican; the only public polls, all Democratic-sponsored, had Hyde-Smith up 3 to 6. Mississippi posts no live results feed, so this needle updates from county tables as provisional and late mail ballots are counted (certification Nov. 13). County map built from 2024 results.`,
+  note: `Added after election night. Sen. Cindy Hyde-Smith (R) faces Democrat Scott Colom, with independent Ty Pinkins also on the ballot. Forecasters rated it Likely Republican; the only public polls, all Democratic-sponsored, had Hyde-Smith up 3 to 6. Mississippi posts no live results feed, so this needle runs on the AP's county-by-county count and is updated by hand as provisional and late mail ballots are counted (certification Nov. 13). Independent Ty Pinkins (about 2%) is left out of the county counts. County map built from 2024 results.`,
   left: { full: "Hyde-Smith", short: "Hyde-Smith", color: RED },
   right: { full: "Colom", short: "Colom", color: BLUE },
   units: Object.keys(MS_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - MS_HOUSE) / 200 + MS_LEAN[n], 0.02, 0.98), MS_W[n])),
@@ -613,7 +613,7 @@ function rateOf(race, m) {
 // ever be called. Expected 2026 vote = weight x the state's midterm turnout ratio: the higher of
 // 2018 and 2022 turnout relative to 2024, plus a small cushion so the needle leans cautious.
 // When a feed states precincts reporting outright, the reported fraction is the lower reading.
-const MIDTERM_TURNOUT = { ME: 0.83, NC: 0.68, OH: 0.78, TX: 0.75, IA: 0.81, GA: 0.77, NE: 0.76, MI: 0.8, NH: 0.77, KS: 0.8, MN: 0.82, SC: 0.69, MS: 0.8 };
+const MIDTERM_TURNOUT = { ME: 0.83, NC: 0.68, OH: 0.78, TX: 0.75, IA: 0.81, GA: 0.77, NE: 0.76, MI: 0.8, NH: 0.77, KS: 0.8, MN: 0.82, SC: 0.69, MS: 1 }; // MS: county weights are already the AP's expected 2026 vote (data/ms-baseline.json)
 function reportedFrac(counted, u, c, state) {
   const byVotes = clamp(counted / (u.weight * (MIDTERM_TURNOUT[state] || 0.8)), 0, 1);
   // Election night fix (Nov 3): states like Georgia post early votes before marking any precinct as reported,

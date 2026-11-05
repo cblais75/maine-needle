@@ -79,6 +79,7 @@ const OFFICIAL = {
   MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-general.txt",
   OH_RESULTS_URL: "https://needlepoint.news/official/oh-2026-general.xml", // NIST 1500-100 XML, Nov 6
   NE_RESULTS_URL: "https://needlepoint.news/official/ne-2026-general.xlsx",
+  MS_RESULTS_URL: "https://needlepoint.news/official/ms-2026-us-senate.csv", // from AP county table (via NYT), Nov 6
 };
 const LAST_GOOD = {}; // per state: { out, at } — last refresh that had results (kept in the warm server)
 export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
