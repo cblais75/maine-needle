@@ -72,14 +72,16 @@ async function fetchState(setting, state) {
 // scripts/test-night.mjs can prove the start gate works without touching any state site.
 const NE_CSV = "https://electionresults.nebraska.gov/resultsCSV.aspx?text=All&type=SW&map=CTY";
 // Post-election (Nov 6): official files Colin downloaded in a browser (the state sites block our servers),
-// saved in public/official/. Used on the live site when the state has no Vercel setting.
+// saved in public/official/. On the live site these take the place of the state's own Vercel setting
+// (Nebraska's election-night map feed never carried county results).
 const OFFICIAL = {
   MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-general.txt",
   OH_RESULTS_URL: "https://needlepoint.news/official/oh-2026-general.xml", // NIST 1500-100 XML, Nov 6
+  NE_RESULTS_URL: "https://needlepoint.news/official/ne-2026-general.xlsx",
 };
 const LAST_GOOD = {}; // per state: { out, at } — last refresh that had results (kept in the warm server)
 export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
-  const settingOf = (s) => env[s.env] || (env === process.env ? OFFICIAL[s.env] : undefined);
+  const settingOf = (s) => (env === process.env && OFFICIAL[s.env]) || env[s.env];
   const configured = SOURCES.filter((s) => settingOf(s));
   if (!configured.length) return { updated: null, source: "simulation", races: {} };
   const active = configured.filter((s) => stateOpen(s.state, now)); // don't even download test files early
