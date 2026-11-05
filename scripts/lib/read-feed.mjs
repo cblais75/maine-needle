@@ -318,6 +318,37 @@ function rowsFromKansasPage(html) {
 }
 
 // ---------- entry point ----------
+// ---------- NIST 1500-100 / IEEE 1622 election results XML (Ohio's "Ohio Decides" download), Nov 6 ----------
+// <GpUnit ObjectId Name Type="County" SubUnitsReported TotalSubUnits>, <Party ObjectId Abbreviation>,
+// <Candidate ObjectId><BallotName>..</BallotName><PartyId>..</PartyId>, and per contest
+// <BallotSelection><VoteCounts Type="Total" Count><GpUnitId>..</GpUnitId></VoteCounts>...<CandidateId>..</CandidateId>.
+const isNist = (xml) => /<ElectionReport\b/.test(xml.slice(0, 2000)) && /1622/.test(xml.slice(0, 2000));
+function rowsFromNIST(xml) {
+  const counties = {}, parties = {}, cands = {};
+  for (const t of xml.match(/<GpUnit\b[^>]*>/g) || [])
+    if (attr(t, "Type") === "County") counties[attr(t, "ObjectId")] = { name: attr(t, "Name"), pr: Number(attr(t, "SubUnitsReported")), pt: Number(attr(t, "TotalSubUnits")) };
+  for (const t of xml.match(/<Party\b[^>]*>/g) || []) parties[attr(t, "ObjectId")] = attr(t, "Abbreviation") || "";
+  for (const m of xml.matchAll(/<Candidate\b([^>]*)>([\s\S]*?)<\/Candidate>/g)) {
+    const nm = (m[2].match(/<LanguageString[^>]*>([^<]*)</) || [])[1] || "";
+    const pid = (m[2].match(/<PartyId>([^<]*)</) || [])[1];
+    cands[attr(m[1], "ObjectId")] = { name: nm.trim(), party: parties[pid] || "" };
+  }
+  const rows = [];
+  for (const cm of xml.matchAll(/<Contest\b([^>]*)>([\s\S]*?)<\/Contest>/g)) {
+    const office = attr(cm[1], "Name") || "";
+    for (const bm of cm[2].matchAll(/<BallotSelection\b[^>]*>([\s\S]*?)<\/BallotSelection>/g)) {
+      const cid = (bm[1].match(/<CandidateId>([^<]*)</) || [])[1];
+      const c = cands[cid] || { name: "", party: "" };
+      for (const v of bm[1].matchAll(/<VoteCounts\b([^>]*)>\s*<GpUnitId>([^<]*)<\/GpUnitId>/g)) {
+        const cty = counties[v[2]];
+        if (!cty || (attr(v[1], "Type") || "Total") !== "Total") continue;
+        rows.push({ county: cty.name, office, party: c.party, candidate: c.name, votes: Number(attr(v[1], "Count") || 0), pr: cty.pr, pt: cty.pt });
+      }
+    }
+  }
+  return rows;
+}
+
 export function readFeed(input, state, name = "") {
   let buf = input instanceof Uint8Array ? input : new Uint8Array(input);
   // Election night (Nov 3): Nebraska's media CSV is UTF-16 text (every other byte is 0). Convert it to UTF-8.
@@ -335,9 +366,10 @@ export function readFeed(input, state, name = "") {
   }
   // legacy .xls (OLE2)
   if (buf[0] === 0xd0 && buf[1] === 0xcf) return rowsFromWorkbook(buf, state);
-  if (/^<\?xml|^<ElectionResult/i.test(head)) {
+  if (/^<\?xml|^<ElectionResult|^<ElectionReport/i.test(head)) {
     const xml = strFromU8(buf);
     if (/<ElectionResult/i.test(xml)) return rowsFromClarityXML(xml);
+    if (isNist(xml)) return rowsFromNIST(xml);
     return rowsFromWorkbook(buf, state); // Excel 2003 XML spreadsheets (Clarity "detail.xls")
   }
   if (/^[\[{]/.test(head)) {

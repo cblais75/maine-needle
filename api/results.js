@@ -73,7 +73,10 @@ async function fetchState(setting, state) {
 const NE_CSV = "https://electionresults.nebraska.gov/resultsCSV.aspx?text=All&type=SW&map=CTY";
 // Post-election (Nov 6): official files Colin downloaded in a browser (the state sites block our servers),
 // saved in public/official/. Used on the live site when the state has no Vercel setting.
-const OFFICIAL = { MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-general.txt" };
+const OFFICIAL = {
+  MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-general.txt",
+  OH_RESULTS_URL: "https://needlepoint.news/official/oh-2026-general.xml", // NIST 1500-100 XML, Nov 6
+};
 const LAST_GOOD = {}; // per state: { out, at } — last refresh that had results (kept in the warm server)
 export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
   const settingOf = (s) => env[s.env] || (env === process.env ? OFFICIAL[s.env] : undefined);
