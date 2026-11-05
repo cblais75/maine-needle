@@ -12,7 +12,7 @@ const s3ok = (u) => u.hostname === "s3.amazonaws.com" && u.pathname.startsWith("
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export default async function handler(req, res) {
-  res.setHeader("Cache-Control", "s-maxage=60");
+  res.setHeader("Cache-Control", "s-maxage=3600");
   const q = req.query || {};
   const state = String(q.state || "").toUpperCase();
   let url;

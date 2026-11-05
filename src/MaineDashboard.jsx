@@ -838,7 +838,7 @@ export default function MaineDashboard() {
         .then(apply)
         .catch(() => { if (preview) apply(null); }); // the preview still simulates if no file loads
     load();
-    const id = setInterval(load, 20000);
+    const id = setInterval(load, 300000); // every 5 minutes (post-election)
     return () => clearInterval(id);
   }, []);
 
