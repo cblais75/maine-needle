@@ -71,9 +71,13 @@ async function fetchState(setting, state) {
 // The results payload for a given moment. now / fetchStateFn are injectable so
 // scripts/test-night.mjs can prove the start gate works without touching any state site.
 const NE_CSV = "https://electionresults.nebraska.gov/resultsCSV.aspx?text=All&type=SW&map=CTY";
+// Post-election (Nov 6): official files Colin downloaded in a browser (the state sites block our servers),
+// saved in public/official/. Used on the live site when the state has no Vercel setting.
+const OFFICIAL = { MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-general.txt" };
 const LAST_GOOD = {}; // per state: { out, at } — last refresh that had results (kept in the warm server)
 export async function buildPayload({ env = process.env, now = Date.now(), fetchStateFn = fetchState } = {}) {
-  const configured = SOURCES.filter((s) => env[s.env]);
+  const settingOf = (s) => env[s.env] || (env === process.env ? OFFICIAL[s.env] : undefined);
+  const configured = SOURCES.filter((s) => settingOf(s));
   if (!configured.length) return { updated: null, source: "simulation", races: {} };
   const active = configured.filter((s) => stateOpen(s.state, now)); // don't even download test files early
   const closed = configured.filter((s) => !stateOpen(s.state, now)).map((s) => s.state);
@@ -84,7 +88,7 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
     try {
       // Election night (Nov 3): Nebraska's map service stayed empty for the general, so read the state's
       // county-level media CSV instead (live site only; tests keep their own settings).
-      const setting = env[s.env]; // NE_CSV (statewide totals only) can't drive the county needle; map feed kept
+      const setting = settingOf(s); // NE_CSV (statewide totals only) can't drive the county needle; map feed kept
       let out = await fetchStateFn(setting, s.state);
       // Election night: some state sites answer only some requests. If a refresh comes back empty after the
       // state had results, keep showing its last good results (up to 15 minutes old) instead of dropping it.
