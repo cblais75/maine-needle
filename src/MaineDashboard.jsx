@@ -1042,6 +1042,7 @@ export default function MaineDashboard() {
             {view === "dashboard" && (
               <FrontPage races={races} current={current} briefing={briefing} wide={wide} onPick={setSel} go={go} night={night} />
             )}
+            {view === "dashboard" && <SignupBand wide={wide} />}
             {STATES.some((s) => s.code === view) && (
               <div>
                 <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>November 2026</div>
@@ -1696,6 +1697,20 @@ function ThreeStrip({ parts, height = 10 }) {
     <div style={{ display: "flex", height, width: "100%" }}>
       {parts.map((p) => <div key={p.key} style={{ width: `${p.sh * 100}%`, background: p.color, transition: "width .6s ease-out" }} />)}
     </div>
+  );
+}
+// Newsletter signup (added Nov 6): Substack's own embedded form, so emails go straight to Food & Politics.
+function SignupBand({ wide }) {
+  return (
+    <section style={{ marginTop: 34, borderTop: `3px solid ${C.text}`, paddingTop: 20, display: "grid", gridTemplateColumns: wide ? "1fr 440px" : "1fr", gap: wide ? 36 : 16, alignItems: "center" }}>
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#B3261E" }}>Stay with Needlepoint</div>
+        <h2 style={{ margin: "6px 0 10px", fontFamily: serif, fontWeight: 600, fontSize: wide ? 34 : 27, lineHeight: 1.1 }}>The needles return for 2027 and 2028</h2>
+        <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>Thanks for watching election night with us. Sign up to hear when new needles go live, starting with next year's governor races, plus analysis from Colin Blais on Food &amp; Politics.</p>
+      </div>
+      <iframe title="Sign up for Needlepoint updates" src="https://foodandpolitics.substack.com/embed" loading="lazy"
+        style={{ width: "100%", height: 320, border: `1px solid ${C.line}`, background: "#FFFFFF" }} frameBorder="0" scrolling="no" />
+    </section>
   );
 }
 function SectionHead({ title, note, size = 26 }) {
