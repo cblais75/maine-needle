@@ -56,6 +56,7 @@ const SOURCES = [
   { state: "KS", env: "KS_RESULTS_URL" },
   { state: "MN", env: "MN_RESULTS_URL" },
   { state: "SC", env: "SC_RESULTS_URL" },
+  { state: "MS", env: "MS_RESULTS_URL" }, // Nov 6: no state feed; filled from public/official/ (see OFFICIAL)
 ];
 export { resolveUrl } from "../scripts/lib/fetch-rows.mjs";
 

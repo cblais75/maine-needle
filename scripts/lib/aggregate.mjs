@@ -48,6 +48,8 @@ const RACES = [
   { id: "mn_sen", state: "MN", office: US_SENATE, kind: "two", names: { dem: /flanagan/i, rep: /tafoya/i } },
   // South Carolina (Update 64): Clarity, like Iowa. November's contest is "U.S. Senate"; never a "- REP" primary or a State Senate race.
   { id: "sc_sen", state: "SC", office: US_SENATE_GENERAL, kind: "two", names: { dem: /andrews/i, rep: /graham/i } },
+  // Mississippi (added Nov 6, after election night): results come from county tables Colin sends (no state feed).
+  { id: "ms_sen", state: "MS", office: US_SENATE_GENERAL, kind: "two", names: { dem: /colom/i, rep: /hyde/i } },
 ];
 
 // Is this contest one of the races we track in that state? (Georgia's link discovery, Update 62, uses

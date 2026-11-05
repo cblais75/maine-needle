@@ -15,7 +15,7 @@
 //   TX 9:00 (El Paso/Hudspeth, Mountain), KS 9:00 (western Mountain-time counties), NE, MN, IA 9:00.
 const ET = (h, m = 0) => Date.UTC(2026, 10, 3, h + 5, m); // Nov 3 local Eastern -> UTC
 export const STATE_START = {
-  GA: ET(19), SC: ET(19), NC: ET(19, 30), OH: ET(19, 30), ME: ET(20), NH: ET(20),
+  GA: ET(19), SC: ET(19), MS: ET(20), NC: ET(19, 30), OH: ET(19, 30), ME: ET(20), NH: ET(20),
   MI: ET(21), TX: ET(21), KS: ET(21), NE: ET(21), MN: ET(21), IA: ET(21),
 };
 const LATEST = ET(25); // any state not listed: 1 a.m. ET Nov 4, after every poll in the country closes

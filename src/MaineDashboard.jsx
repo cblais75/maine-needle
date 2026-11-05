@@ -12,6 +12,7 @@ import nhBaseline from "../data/nh-baseline.json";
 import ksBaseline from "../data/ks-baseline.json";
 import mnBaseline from "../data/mn-baseline.json";
 import scBaseline from "../data/sc-baseline.json";
+import msBaseline from "../data/ms-baseline.json";
 import senateCards from "../data/senate-cards.json";
 import governorCards from "../data/governor-cards.json";
 import { gateResults, stateOpen } from "../scripts/lib/results-gate.mjs";
@@ -393,6 +394,22 @@ const makeSouthCarolinaSenate = (pollMargin) => ({
   units: scUnits(pollMargin),
 });
 
+// ---- MISSISSIPPI ---- (added Nov 6, after election night, when the race stayed too close to call)
+// Mississippi has no live results feed (each county posts a PDF), so this needle is filled from county
+// tables Colin sends, saved in public/official/. The prior is centered on the three public polls
+// (Hyde-Smith +3, +6, +3: all Democratic-sponsored), with no Republican shift.
+const MS_PRIOR = -4, MS_HOUSE = 0;
+const MS_LEAN = msBaseline.lean || {}, MS_W = msBaseline.weight || {};
+const makeMississippiSenate = (pollMargin = MS_PRIOR) => ({
+  id: "ms_sen", state: "MS", title: "U.S. Senate",
+  sub: "Colom (D) vs Hyde-Smith (R)",
+  system: "Plurality", real: true,
+  note: `Added after election night. Sen. Cindy Hyde-Smith (R) faces Democrat Scott Colom, with independent Ty Pinkins also on the ballot. Forecasters rated it Likely Republican; the only public polls, all Democratic-sponsored, had Hyde-Smith up 3 to 6. Mississippi posts no live results feed, so this needle updates from county tables as provisional and late mail ballots are counted (certification Nov. 13). County map built from 2024 results.`,
+  left: { full: "Hyde-Smith", short: "Hyde-Smith", color: RED },
+  right: { full: "Colom", short: "Colom", color: BLUE },
+  units: Object.keys(MS_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - MS_HOUSE) / 200 + MS_LEAN[n], 0.02, 0.98), MS_W[n])),
+});
+
 // REAL DATA: county partisan geography (blended 2020+2016 presidential), mean-zero lean.
 const GOV_LEAN = { Cumberland: +0.145, York: +0.005, Penobscot: -0.088, Kennebec: -0.040, Androscoggin: -0.054, Aroostook: -0.105, Hancock: +0.008, Oxford: -0.095, Somerset: -0.158, Knox: +0.053, Sagadahoc: +0.021, Waldo: -0.024, Lincoln: -0.004, Washington: -0.137, Franklin: -0.062, Piscataquis: -0.172 };
 
@@ -596,7 +613,7 @@ function rateOf(race, m) {
 // ever be called. Expected 2026 vote = weight x the state's midterm turnout ratio: the higher of
 // 2018 and 2022 turnout relative to 2024, plus a small cushion so the needle leans cautious.
 // When a feed states precincts reporting outright, the reported fraction is the lower reading.
-const MIDTERM_TURNOUT = { ME: 0.83, NC: 0.68, OH: 0.78, TX: 0.75, IA: 0.81, GA: 0.77, NE: 0.76, MI: 0.8, NH: 0.77, KS: 0.8, MN: 0.82, SC: 0.69 };
+const MIDTERM_TURNOUT = { ME: 0.83, NC: 0.68, OH: 0.78, TX: 0.75, IA: 0.81, GA: 0.77, NE: 0.76, MI: 0.8, NH: 0.77, KS: 0.8, MN: 0.82, SC: 0.69, MS: 0.8 };
 function reportedFrac(counted, u, c, state) {
   const byVotes = clamp(counted / (u.weight * (MIDTERM_TURNOUT[state] || 0.8)), 0, 1);
   // Election night fix (Nov 3): states like Georgia post early votes before marking any precinct as reported,
@@ -657,7 +674,7 @@ const serif = "'Newsreader', Georgia, 'Times New Roman', serif";
 const COFFEE_URL = "https://buymeacoffee.com/colinblais";
 const GLOBAL_CSS = `html,body{margin:0;background:${"#F4EFE4"}}body{font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}button,input{font-family:inherit}a{color:inherit}::selection{background:#E6D9B8}::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:#CFC7B6;border-radius:9px}::-webkit-scrollbar-track{background:transparent}`;
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: C.muted, border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
-const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "NE", label: "Nebraska" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }, { code: "NH", label: "New Hampshire" }, { code: "KS", label: "Kansas" }, { code: "MN", label: "Minnesota" }, { code: "SC", label: "South Carolina" }];
+const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "NE", label: "Nebraska" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }, { code: "NH", label: "New Hampshire" }, { code: "KS", label: "Kansas" }, { code: "MN", label: "Minnesota" }, { code: "SC", label: "South Carolina" }, { code: "MS", label: "Mississippi" }];
 
 // Width-based layout switch: >=1000px gets the desktop three-zone layout, anything
 // narrower keeps the exact mobile column. Width (not device sniffing) so a resized
@@ -737,6 +754,7 @@ export default function MaineDashboard() {
     rollRace(makeKansasGov(ksgm)),
     rollRace(makeMinnesotaSenate(mnm)),
     rollRace(makeSouthCarolinaSenate(scm)),
+    rollRace(makeMississippiSenate()),
     ...OTHER_RACES.map((r) => rollRace(r)),
   ];
   const racesRef = useRef([]);
@@ -1357,10 +1375,11 @@ const CONTROL_SET = [
   { id: "ks_sen", label: "Kansas",          holder: "R" },
   { id: "mn_sen", label: "Minnesota",       holder: "D" },
   { id: "sc_sen", label: "South Carolina",  holder: "R" },
+  { id: "ms_sen", label: "Mississippi",     holder: "R" }, // needle added Nov 6 (its card is dropped below)
 ];
 // Card races: every other 2026 Senate race, shown with forecaster ratings and polls but no needle.
 // A Toss-up card (no consensus favorite) counts for the party that holds the seat now.
-const CARD_RACES = (senateCards.races || []).slice().sort((a, b) => a.stateName.localeCompare(b.stateName));
+const CARD_RACES = (senateCards.races || []).filter((c) => c.state !== "MS").slice().sort((a, b) => a.stateName.localeCompare(b.stateName));
 const cardSide = (c) => c.consensus.favors || c.incumbent.party;
 const NOT_UP_D = senateCards.notUp.D + senateCards.notUp.I, NOT_UP_R = senateCards.notUp.R;
 const D_SAFE_SEATS = NOT_UP_D + CARD_RACES.filter((c) => cardSide(c) === "D").length;
@@ -1612,7 +1631,7 @@ function PauseNote({ state, compact }) {
 
 const POLL_KEY = { sen: "senate", gov: "governor" };
 const pollKey = (id) => POLL_KEY[id] || id;
-const HOUSE_BY_RACE = { ak_sen: AK_HOUSE, sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, tx_gov: TX_HOUSE, oh_gov: OH_HOUSE, ga_gov: GA_HOUSE, ia_gov: IA_HOUSE, ks_gov: KS_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE, ks_sen: KS_HOUSE, mn_sen: MN_HOUSE, sc_sen: SC_HOUSE };
+const HOUSE_BY_RACE = { ms_sen: MS_HOUSE, ak_sen: AK_HOUSE, sen: SEN_HOUSE, nc_sen: NC_HOUSE, oh_sen: OH_HOUSE, tx_sen: TX_HOUSE, tx_gov: TX_HOUSE, oh_gov: OH_HOUSE, ga_gov: GA_HOUSE, ia_gov: IA_HOUSE, ks_gov: KS_HOUSE, ia_sen: IA_HOUSE, ga_sen: GA_HOUSE, ne_sen: NE_HOUSE, mi_sen: MI_HOUSE, nh_sen: NH_HOUSE, ks_sen: KS_HOUSE, mn_sen: MN_HOUSE, sc_sen: SC_HOUSE };
 const stateLabel = (code) => (STATES.find((s) => s.code === code) || {}).label || code;
 const raceName = (r) => String(r.title || "").replace("U.S. House · District", "House District").replace("U.S. ", "");
 const PAPER = "#F4EFE4";
