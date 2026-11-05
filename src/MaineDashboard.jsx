@@ -555,6 +555,7 @@ const EDITOR_CALLS = {
   ga_sen: "right", ga_gov: "right", sc_sen: "right", nc_sen: "right", nh_sen: "right", mn_sen: "right",
   mi_sen: "right", tx_sen: "right", tx_gov: "right", oh_sen: "right", oh_gov: "right", ks_sen: "right",
   ia_sen: "right", ia_gov: "right", sen: "right", cd1: "right", ne_sen: "left", gov: "P",
+  ks_gov: "right", // Holscher (Nov 6)
 };
 // compute() plus any editor's call: a called race's needle is pinned to the winner.
 function computeRace(race) {
