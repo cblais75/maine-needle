@@ -2670,6 +2670,25 @@ function ScorecardView({ wide }) {
   );
 }
 
+// Contact form (Nov 6): Colin's Tally form, embedded so his email address never appears on the site.
+const TALLY_FORM = "BEKbjK";
+function ContactForm() {
+  useEffect(() => {
+    const load = () => window.Tally && window.Tally.loadEmbeds();
+    if (window.Tally) { load(); return; }
+    const sc = document.createElement("script");
+    sc.src = "https://tally.so/widgets/embed.js"; sc.async = true; sc.onload = load;
+    document.body.appendChild(sc);
+  }, []);
+  const src = `https://tally.so/embed/${TALLY_FORM}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
+  return (
+    <div style={{ maxWidth: 640 }}>
+      <iframe data-tally-src={src} src={src} loading="lazy" width="100%" height="520" frameBorder="0" title="Contact Needlepoint" style={{ border: "none", display: "block" }} />
+      <p style={{ margin: "6px 0 0", fontSize: 13, color: C.muted }}>Form not loading? <a href={`https://tally.so/r/${TALLY_FORM}`} target="_blank" rel="noopener noreferrer" style={{ color: BLUE }}>Open it in a new tab</a>.</p>
+    </div>
+  );
+}
+
 // ---- Custom dashboards / portfolio (added Nov 6) ----
 function WorkView({ wide, go }) {
   const p = { margin: 0, fontFamily: serif, fontSize: wide ? 18 : 17, lineHeight: 1.6, color: C.body };
@@ -2702,7 +2721,11 @@ function WorkView({ wide, go }) {
         <SectionHead title="What I can build for you" size={wide ? 28 : 22} />
         <p style={p}>A private or public dashboard for a single race or a whole slate: precinct and county results on election night, your own polling and turnout targets, early-vote tracking, and a clean page to share with staff, donors or readers.</p>
         <p style={p}>See how it held up on the night in the <button onClick={() => go("scorecard")} style={{ background: "none", border: "none", padding: 0, font: "inherit", color: BLUE, textDecoration: "underline", cursor: "pointer" }}>2026 scorecard</button>.</p>
-        <a href="https://foodandpolitics.substack.com" target="_blank" rel="noopener noreferrer" style={{ alignSelf: "flex-start", padding: "12px 18px", background: C.text, color: C.ink, fontWeight: 700, textDecoration: "none" }}>Get in touch through Food & Politics</a>
+      </section>
+      <section style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <SectionHead title="Get in touch" size={wide ? 28 : 22} />
+        <p style={p}>Questions, corrections, or interested in a dashboard of your own? Send a note and I'll get back to you.</p>
+        <ContactForm />
       </section>
     </div>
   );
