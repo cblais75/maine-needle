@@ -13,6 +13,7 @@ import ksBaseline from "../data/ks-baseline.json";
 import mnBaseline from "../data/mn-baseline.json";
 import scBaseline from "../data/sc-baseline.json";
 import msBaseline from "../data/ms-baseline.json";
+import akCount from "../data/ak-count.json";
 import senateCards from "../data/senate-cards.json";
 import governorCards from "../data/governor-cards.json";
 import { gateResults, stateOpen } from "../scripts/lib/results-gate.mjs";
@@ -268,10 +269,35 @@ const makeNebraskaSenate = (pollMargin) => ({
 // (Sullivan won by about 13 in 2020 after polling far closer; Peltola lost her 2024 House race
 // by about 2 after polling close).
 const AK_HOUSE = 2; // halved from 4 in Update 47, like the other state shifts
+// Nov 6: Alaska goes live from the AP's first-choice count by house district (data/ak-count.json, pasted by Colin).
+// 1) Each district's uncounted vote (from the AP's "% counted") is assumed to split like its counted vote.
+// 2) Ranked-choice rounds: Heikes (R) and the minor candidates are eliminated. Their ballots move the way the
+//    last comparable Alaska elimination did (2022 House: Begich's Republican voters went 50% Palin, 29% Peltola,
+//    21% no further choice); minor-candidate ballots split evenly with 40% exhausting.
+// 3) Uncertainty: the uncounted share (district errors) plus how Heikes voters really rank (plus or minus 15 pts).
+const AK_TRANSFER = { h: { s: 0.5, p: 0.29 }, o: { s: 0.3, p: 0.3 } };
+function akProjection(count) {
+  const rows = (count && count.rows) || [];
+  if (!rows.length) return null;
+  let P = 0, S = 0, H = 0, O = 0, T = 0, E = 0, fP = 0, fS = 0, fH = 0, fO = 0;
+  for (const r of rows) {
+    const k = r.pct > 0 ? 100 / r.pct : 1;
+    P += r.p; S += r.s; H += r.h; O += r.o; T += r.t; E += r.t * k;
+    fP += r.p * k; fS += r.s * k; fH += r.h * k; fO += r.o * k;
+  }
+  const finP = fP + AK_TRANSFER.h.p * fH + AK_TRANSFER.o.p * fO;
+  const finS = fS + AK_TRANSFER.h.s * fH + AK_TRANSFER.o.s * fO;
+  const margin = (finP - finS) / (finP + finS);
+  const fracIn = T / E;
+  const se = Math.sqrt((0.035 * (1 - fracIn)) ** 2 + (0.15 * fH / E) ** 2 + 0.002 ** 2);
+  return { P, S, H, O, T, E, fracIn, finP, finS, margin, se, winP: ncdf(margin / se) };
+}
+let AK_PROJ_CACHE; // computed on first use (ncdf is defined further down)
+const akProj = () => (AK_PROJ_CACHE ??= akProjection(akCount));
 const makeAlaskaSenate = (pollMargin = 3) => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
   sub: "Peltola (D) vs Sullivan (R)",
-  system: "Ranked-Choice Voting", real: true, noNight: true,
+  system: "Ranked-Choice Voting", real: true, noNight: !((akCount.rows || []).length),
   note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans; the shift was halved in October, since past misses don't reliably repeat. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
   left: { full: "Sullivan", short: "Sullivan", color: RED },
   right: { full: "Peltola", short: "Peltola", color: BLUE },
@@ -576,6 +602,7 @@ const EDITOR_CALLS = {
 };
 // compute() plus any editor's call: a called race's needle is pinned to the winner.
 function computeRace(race) {
+  if (race.id === "ak_sen" && akProj()) { const a = akProj(); return { fracIn: a.fracIn, swing: 0, rawSwing: 0, margin: a.margin, se: a.se, winRight: a.winP }; }
   const m = compute(race.units);
   const side = EDITOR_CALLS[race.id];
   if (!side) return m;
@@ -1547,6 +1574,8 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
   );
   const hasNeedle = d.kind === "two";
   const leftPct = hasNeedle ? (d.favSide === "left" ? d.pct : 100 - d.pct) : null;
+  const a = akProj(); // live count (Nov 6) or null
+  const pc = (v, t) => `${(v / t * 100).toFixed(1)}%`;
   return (
     <div>
       <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", color: C.muted, fontSize: 14, cursor: "pointer", padding: 0, marginBottom: 14 }}>
@@ -1554,10 +1583,12 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
       </button>
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 26, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={kicker(hasNeedle ? d.favColor : RED)}>Alaska · {race.title} · Ranked-choice voting · Forecast only</div>
+          <div style={kicker(hasNeedle ? d.favColor : RED)}>Alaska · {race.title} · Ranked-choice voting · {a ? "Count + projection" : "Forecast only"}</div>
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>Peltola vs. Sullivan</h1>
           <p style={deckStyle(wide)}>{hasNeedle ? dekFor(race, d, current) : "Rated Lean Republican."}</p>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>This needle is a polling forecast. It won't move on election night, because Alaska's ranked-choice rounds are counted about two weeks later.</p>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{a
+            ? `This needle now runs on the AP's first-choice count (${Math.round(a.fracIn * 100)}% of the expected vote, as of ${akCount.asOf === "2026-11-05" ? "Nov. 5" : akCount.asOf}) plus a projection of the ranked-choice rounds, which Alaska tabulates Nov. 18. Not called.`
+            : "This needle is a polling forecast. It won't move on election night, because Alaska's ranked-choice rounds are counted about two weeks later."}</p>
         </div>
         {hasNeedle && (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
@@ -1566,16 +1597,28 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
               <span style={{ display: "flex", flexDirection: "column" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.right.color }}>{100 - leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Peltola (D)</span></span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.left.color }}>{leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Sullivan (R)</span></span>
             </div>
-            <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>Chance of winning, from the polling average · <b style={{ color: C.text }}>{d.tag}</b></div>
+            <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>Chance of winning, {a ? "from the count and a ranked-choice projection" : "from the polling average"} · <b style={{ color: C.text }}>{d.tag}</b></div>
           </div>
         )}
       </section>
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 26, paddingTop: 22 }}>
         <div>
-          {sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
+          {a && (
+            <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}`, display: "flex", flexDirection: "column", gap: 10 }}>
+              <h2 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>The first-choice count</h2>
+              {[["Peltola (D)", a.P, race.right.color], ["Sullivan (R)", a.S, race.left.color], ["Heikes (R)", a.H, C.muted], ["Other candidates", a.O, C.muted]].map(([n, v, col]) => (
+                <div key={n} style={{ display: "flex", justifyContent: "space-between", fontSize: 17, borderBottom: `1px solid ${C.line}`, paddingBottom: 6 }}>
+                  <span style={{ fontWeight: 600, color: col }}>{n}</span><span>{fmtVotes(v)} · {pc(v, a.T)}</span>
+                </div>
+              ))}
+              <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>{`Peltola leads by ${fmtVotes(a.P - a.S)} first-choice votes with about ${fmtVotes(Math.round((a.E - a.T) / 1000) * 1000)} still to count. No one is near 50%, so ranked-choice rounds decide it. If Heikes voters rank like Begich's Republican voters did in 2022 (half to the Republican, about three in ten to Peltola, the rest stopping), Peltola finishes ahead by about ${(a.margin * 100).toFixed(1)} points. Sullivan needs Heikes voters to break much harder for him than that.`}</p>
+              <p style={{ margin: 0, fontSize: 13, color: C.muted }}>Source: the AP's count by state house district (via the New York Times), as of {akCount.asOf === "2026-11-05" ? "Nov. 5" : akCount.asOf}.</p>
+            </div>
+          )}
+          {!a && sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
           {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
           {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
-          {sec("How this needle is built", `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
+          {sec("How this needle is built", a ? "Since Nov. 6 it runs on the count. Each house district's uncounted ballots are assumed to split like its counted ones. Then the ranked-choice rounds are simulated: Heikes and the minor candidates are eliminated, and their ballots move the way the last comparable Alaska elimination did (2022 House race: Begich's Republican voters went 50% to Palin, 29% to Peltola, 21% to no one), with minor-candidate ballots split evenly. The chance of winning allows for errors in both the uncounted vote and how Heikes voters actually rank." : `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
         </div>
         {hasNeedle && onNav && <RacePolls r={race} current={current} onNav={onNav} />}
       </section>
