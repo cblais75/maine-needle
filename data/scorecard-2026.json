@@ -1,0 +1,281 @@
+{
+ "asOf": "Nov. 6, 2026",
+ "note": "Results are unofficial counts as of Nov. 5\u20136 and may shift slightly with certification.",
+ "senate": [
+  {
+   "race": "Georgia",
+   "dem": "Ossoff",
+   "odds": 76,
+   "winner": "Ossoff",
+   "forecast": 9.0,
+   "result": 18.0
+  },
+  {
+   "race": "North Carolina",
+   "dem": "Cooper",
+   "odds": 75,
+   "winner": "Cooper",
+   "forecast": 8.5,
+   "result": 19.6
+  },
+  {
+   "race": "New Hampshire",
+   "dem": "Pappas",
+   "odds": 72,
+   "winner": "Pappas",
+   "forecast": 7.5,
+   "result": 14.3
+  },
+  {
+   "race": "Minnesota",
+   "dem": "Flanagan",
+   "odds": 68,
+   "winner": "Flanagan",
+   "forecast": 6.0,
+   "result": 10.2
+  },
+  {
+   "race": "Michigan",
+   "dem": "El-Sayed",
+   "odds": 59,
+   "winner": "El-Sayed",
+   "forecast": 3.0,
+   "result": 6.7
+  },
+  {
+   "race": "Texas",
+   "dem": "Talarico",
+   "odds": 55,
+   "winner": "Talarico",
+   "forecast": 1.5,
+   "result": 11.7
+  },
+  {
+   "race": "Ohio (special)",
+   "dem": "Brown",
+   "odds": 53,
+   "winner": "Brown",
+   "forecast": 1.0,
+   "result": 4.9
+  },
+  {
+   "race": "Kansas",
+   "dem": "Hamilton",
+   "odds": 52,
+   "winner": "Hamilton",
+   "forecast": 0.5,
+   "result": 4.9
+  },
+  {
+   "race": "Maine",
+   "dem": "Jackson",
+   "odds": 44,
+   "winner": "Jackson",
+   "forecast": -2.0,
+   "result": 7.7
+  },
+  {
+   "race": "Iowa",
+   "dem": "Turek",
+   "odds": 42,
+   "winner": "Turek",
+   "forecast": -2.5,
+   "result": 4.1
+  },
+  {
+   "race": "South Carolina",
+   "dem": "Andrews",
+   "odds": 39,
+   "winner": "Andrews",
+   "forecast": -3.5,
+   "result": 4.5
+  },
+  {
+   "race": "Nebraska",
+   "dem": "Osborn (I)",
+   "odds": 38,
+   "winner": "Ricketts",
+   "forecast": -4.0,
+   "result": -7.2
+  }
+ ],
+ "governor": [
+  {
+   "race": "Maine (3-way)",
+   "dem": "Pingree",
+   "odds": 73,
+   "winner": "Pingree"
+  },
+  {
+   "race": "Iowa",
+   "dem": "Sand",
+   "odds": 64,
+   "winner": "Sand"
+  },
+  {
+   "race": "Ohio",
+   "dem": "Acton",
+   "odds": 53,
+   "winner": "Acton"
+  },
+  {
+   "race": "Georgia",
+   "dem": "Bottoms",
+   "odds": 47,
+   "winner": "Bottoms"
+  },
+  {
+   "race": "Texas",
+   "dem": "Hinojosa",
+   "odds": 39,
+   "winner": "Hinojosa"
+  },
+  {
+   "race": "Kansas",
+   "dem": "Holscher",
+   "odds": 36,
+   "winner": "Holscher"
+  }
+ ],
+ "pollsters": [
+  {
+   "name": "Cook Political Report (GS Strategy/New River)",
+   "n": 5,
+   "miss": 2.2,
+   "lean": -1.7,
+   "rating": 0.8
+  },
+  {
+   "name": "RedBox Research (A Fight Worth Having)",
+   "n": 4,
+   "miss": 2.8,
+   "lean": -2.8,
+   "rating": 0.5
+  },
+  {
+   "name": "NYT/Siena",
+   "n": 12,
+   "miss": 2.8,
+   "lean": -1.2,
+   "rating": 0.95
+  },
+  {
+   "name": "CNN/SSRS",
+   "n": 8,
+   "miss": 2.8,
+   "lean": -1.9,
+   "rating": 0.9
+  },
+  {
+   "name": "Suffolk University",
+   "n": 6,
+   "miss": 2.8,
+   "lean": -2.7,
+   "rating": 0.8
+  },
+  {
+   "name": "Washington Post/Schar School",
+   "n": 3,
+   "miss": 4.4,
+   "lean": -1.7,
+   "rating": 0.9
+  },
+  {
+   "name": "Echelon Insights",
+   "n": 8,
+   "miss": 4.6,
+   "lean": -3.2,
+   "rating": 0.75
+  },
+  {
+   "name": "Verasight/VoteHub",
+   "n": 3,
+   "miss": 4.7,
+   "lean": -4.7,
+   "rating": 0.5
+  },
+  {
+   "name": "YouGov",
+   "n": 6,
+   "miss": 4.7,
+   "lean": -4.7,
+   "rating": 0.8
+  },
+  {
+   "name": "Data for Progress (D)",
+   "n": 4,
+   "miss": 4.9,
+   "lean": -4.9,
+   "rating": 0.6
+  },
+  {
+   "name": "National Public Affairs (R)",
+   "n": 3,
+   "miss": 5.7,
+   "lean": -3.4,
+   "rating": 0.6
+  },
+  {
+   "name": "Marist Poll",
+   "n": 8,
+   "miss": 5.9,
+   "lean": -5.3,
+   "rating": 0.9
+  },
+  {
+   "name": "Fox News (Beacon/Shaw)",
+   "n": 5,
+   "miss": 6.3,
+   "lean": -6.2,
+   "rating": 0.9
+  },
+  {
+   "name": "InsiderAdvantage",
+   "n": 6,
+   "miss": 6.3,
+   "lean": -6.3,
+   "rating": 0.6
+  },
+  {
+   "name": "co/efficient",
+   "n": 4,
+   "miss": 6.5,
+   "lean": -6.5,
+   "rating": 0.55
+  },
+  {
+   "name": "Emerson College",
+   "n": 4,
+   "miss": 6.5,
+   "lean": -6.5,
+   "rating": 0.85
+  },
+  {
+   "name": "Rasmussen Reports",
+   "n": 7,
+   "miss": 7.1,
+   "lean": -7.1,
+   "rating": 0.5
+  },
+  {
+   "name": "Trafalgar Group",
+   "n": 8,
+   "miss": 8.4,
+   "lean": -8.4,
+   "rating": 0.6
+  },
+  {
+   "name": "Quantus Insights",
+   "n": 4,
+   "miss": 10.2,
+   "lean": -10.2,
+   "rating": 0.6
+  }
+ ],
+ "pollsSummary": {
+  "polls": 146,
+  "races": 15,
+  "avgMiss": 5.3,
+  "avgLeanR": 4.5
+ }
+}
