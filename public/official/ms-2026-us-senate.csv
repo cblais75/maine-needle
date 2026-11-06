@@ -7,8 +7,8 @@ Amite,United States Senate,Scott Colom,DEM,2053,933,1000
 Amite,United States Senate,Cindy Hyde-Smith,REP,2978,933,1000
 Attala,United States Senate,Scott Colom,DEM,2829,933,1000
 Attala,United States Senate,Cindy Hyde-Smith,REP,2983,933,1000
-Benton,United States Senate,Scott Colom,DEM,1246,933,1000
-Benton,United States Senate,Cindy Hyde-Smith,REP,1479,933,1000
+Benton,United States Senate,Scott Colom,DEM,1263,933,1000
+Benton,United States Senate,Cindy Hyde-Smith,REP,1491,933,1000
 Bolivar,United States Senate,Scott Colom,DEM,7117,933,1000
 Bolivar,United States Senate,Cindy Hyde-Smith,REP,2916,933,1000
 Calhoun,United States Senate,Scott Colom,DEM,1631,933,1000
@@ -17,8 +17,8 @@ Carroll,United States Senate,Scott Colom,DEM,1500,667,1000
 Carroll,United States Senate,Cindy Hyde-Smith,REP,2511,667,1000
 Chickasaw,United States Senate,Scott Colom,DEM,3381,800,1000
 Chickasaw,United States Senate,Cindy Hyde-Smith,REP,2871,800,1000
-Choctaw,United States Senate,Scott Colom,DEM,1012,467,1000
-Choctaw,United States Senate,Cindy Hyde-Smith,REP,1941,467,1000
+Choctaw,United States Senate,Scott Colom,DEM,1032,933,1000
+Choctaw,United States Senate,Cindy Hyde-Smith,REP,1962,933,1000
 Claiborne,United States Senate,Scott Colom,DEM,2908,933,1000
 Claiborne,United States Senate,Cindy Hyde-Smith,REP,385,933,1000
 Clarke,United States Senate,Scott Colom,DEM,2384,933,1000
@@ -39,16 +39,16 @@ Franklin,United States Senate,Scott Colom,DEM,1249,933,1000
 Franklin,United States Senate,Cindy Hyde-Smith,REP,2018,933,1000
 George,United States Senate,Scott Colom,DEM,1107,933,1000
 George,United States Senate,Cindy Hyde-Smith,REP,5406,933,1000
-Greene,United States Senate,Scott Colom,DEM,775,933,1000
-Greene,United States Senate,Cindy Hyde-Smith,REP,2575,933,1000
+Greene,United States Senate,Scott Colom,DEM,806,933,1000
+Greene,United States Senate,Cindy Hyde-Smith,REP,2606,933,1000
 Grenada,United States Senate,Scott Colom,DEM,3841,933,1000
 Grenada,United States Senate,Cindy Hyde-Smith,REP,3605,933,1000
 Hancock,United States Senate,Scott Colom,DEM,4538,933,1000
 Hancock,United States Senate,Cindy Hyde-Smith,REP,11441,933,1000
-Harrison,United States Senate,Scott Colom,DEM,27470,533,1000
-Harrison,United States Senate,Cindy Hyde-Smith,REP,29638,533,1000
-Hinds,United States Senate,Scott Colom,DEM,61793,333,1000
-Hinds,United States Senate,Cindy Hyde-Smith,REP,14702,333,1000
+Harrison,United States Senate,Scott Colom,DEM,27470,800,1000
+Harrison,United States Senate,Cindy Hyde-Smith,REP,29638,800,1000
+Hinds,United States Senate,Scott Colom,DEM,61793,533,1000
+Hinds,United States Senate,Cindy Hyde-Smith,REP,14702,533,1000
 Holmes,United States Senate,Scott Colom,DEM,5458,333,1000
 Holmes,United States Senate,Cindy Hyde-Smith,REP,833,333,1000
 Humphreys,United States Senate,Scott Colom,DEM,2640,333,1000
@@ -89,8 +89,8 @@ Lowndes,United States Senate,Scott Colom,DEM,12211,800,1000
 Lowndes,United States Senate,Cindy Hyde-Smith,REP,8834,800,1000
 Madison,United States Senate,Scott Colom,DEM,22712,733,1000
 Madison,United States Senate,Cindy Hyde-Smith,REP,22364,733,1000
-Marion,United States Senate,Scott Colom,DEM,3191,800,1000
-Marion,United States Senate,Cindy Hyde-Smith,REP,4998,800,1000
+Marion,United States Senate,Scott Colom,DEM,3258,933,1000
+Marion,United States Senate,Cindy Hyde-Smith,REP,5045,933,1000
 Marshall,United States Senate,Scott Colom,DEM,6577,933,1000
 Marshall,United States Senate,Cindy Hyde-Smith,REP,4738,933,1000
 Monroe,United States Senate,Scott Colom,DEM,5441,933,1000
@@ -103,16 +103,16 @@ Newton,United States Senate,Scott Colom,DEM,2526,933,1000
 Newton,United States Senate,Cindy Hyde-Smith,REP,4203,933,1000
 Noxubee,United States Senate,Scott Colom,DEM,3473,867,1000
 Noxubee,United States Senate,Cindy Hyde-Smith,REP,787,867,1000
-Oktibbeha,United States Senate,Scott Colom,DEM,9123,600,1000
-Oktibbeha,United States Senate,Cindy Hyde-Smith,REP,5907,600,1000
+Oktibbeha,United States Senate,Scott Colom,DEM,9524,800,1000
+Oktibbeha,United States Senate,Cindy Hyde-Smith,REP,6003,800,1000
 Panola,United States Senate,Scott Colom,DEM,6267,800,1000
 Panola,United States Senate,Cindy Hyde-Smith,REP,4865,800,1000
 Pearl River,United States Senate,Scott Colom,DEM,4008,933,1000
 Pearl River,United States Senate,Cindy Hyde-Smith,REP,11850,933,1000
 Perry,United States Senate,Scott Colom,DEM,1112,933,1000
 Perry,United States Senate,Cindy Hyde-Smith,REP,2551,933,1000
-Pike,United States Senate,Scott Colom,DEM,7333,933,1000
-Pike,United States Senate,Cindy Hyde-Smith,REP,5150,933,1000
+Pike,United States Senate,Scott Colom,DEM,7492,933,1000
+Pike,United States Senate,Cindy Hyde-Smith,REP,5209,933,1000
 Pontotoc,United States Senate,Scott Colom,DEM,2574,733,1000
 Pontotoc,United States Senate,Cindy Hyde-Smith,REP,7391,733,1000
 Prentiss,United States Senate,Scott Colom,DEM,1815,933,1000
@@ -121,8 +121,8 @@ Quitman,United States Senate,Scott Colom,DEM,1654,933,1000
 Quitman,United States Senate,Cindy Hyde-Smith,REP,523,933,1000
 Rankin,United States Senate,Scott Colom,DEM,18513,733,1000
 Rankin,United States Senate,Cindy Hyde-Smith,REP,31654,733,1000
-Scott,United States Senate,Scott Colom,DEM,3745,333,1000
-Scott,United States Senate,Cindy Hyde-Smith,REP,3917,333,1000
+Scott,United States Senate,Scott Colom,DEM,3830,933,1000
+Scott,United States Senate,Cindy Hyde-Smith,REP,3943,933,1000
 Sharkey,United States Senate,Scott Colom,DEM,1004,933,1000
 Sharkey,United States Senate,Cindy Hyde-Smith,REP,416,933,1000
 Simpson,United States Senate,Scott Colom,DEM,3307,933,1000
