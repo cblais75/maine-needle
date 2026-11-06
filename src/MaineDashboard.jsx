@@ -614,7 +614,10 @@ const CalledNote = () => (
 );
 function computeRace(race) {
   if (race.id === "ak_sen" && akProj()) { const a = akProj(); return { fracIn: a.fracIn, swing: 0, rawSwing: 0, margin: a.margin, se: a.se, winRight: a.winP }; }
-  const m = compute(race.units);
+  let m = compute(race.units);
+  // Mississippi (Nov 6): a hand-fed late count. The election-night uncertainty stays wide even at 97% in,
+  // so here it scales with the share still out: the uncounted vote's margin is uncertain by about 12 points.
+  if (race.id === "ms_sen") { const se = Math.hypot(0.12 * (1 - m.fracIn), 0.002); m = { ...m, se, winRight: ncdf(m.margin / se) }; }
   const side = EDITOR_CALLS[race.id];
   if (!side) return m;
   return { ...m, winRight: side === "right" ? 0.995 : 0.005 };
