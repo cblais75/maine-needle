@@ -271,11 +271,13 @@ const makeNebraskaSenate = (pollMargin) => ({
 const AK_HOUSE = 2; // halved from 4 in Update 47, like the other state shifts
 // Nov 6: Alaska goes live from the AP's first-choice count by house district (data/ak-count.json, pasted by Colin).
 // 1) Each district's uncounted vote (from the AP's "% counted") is assumed to split like its counted vote.
-// 2) Ranked-choice rounds: Heikes (R) and the minor candidates are eliminated. Their ballots move the way the
-//    last comparable Alaska elimination did (2022 House: Begich's Republican voters went 50% Palin, 29% Peltola,
-//    21% no further choice); minor-candidate ballots split evenly with 40% exhausting.
-// 3) Uncertainty: the uncounted share (district errors) plus how Heikes voters really rank (plus or minus 15 pts).
-const AK_TRANSFER = { h: { s: 0.5, p: 0.29 }, o: { s: 0.3, p: 0.3 } };
+// 2) Ranked-choice rounds: Heikes (R) and the minor candidates (mostly Daniel J. Sullivan Jr.) are eliminated.
+//    Transfers come from the NYT's analysis of Alaska's cast vote records (Nov 5, 200,000+ ballots):
+//    Heikes voters' second choices 36% Sen. Sullivan, 12% Peltola, 14% Sullivan Jr., 37% blank; Sullivan Jr.
+//    voters' 29% Peltola, 18% Heikes, 16% Sen. Sullivan, 36% blank. Following ballots through both
+//    eliminations gives the shares below, a net gain for Sen. Sullivan of about 0.4 pts (the NYT's own figure).
+// 3) Uncertainty: the uncounted share (district errors) plus a small error on the transfers.
+const AK_TRANSFER = { h: { s: 0.38, p: 0.15 }, o: { s: 0.23, p: 0.33 } };
 function akProjection(count) {
   const rows = (count && count.rows) || [];
   if (!rows.length) return null;
@@ -289,8 +291,9 @@ function akProjection(count) {
   const finS = fS + AK_TRANSFER.h.s * fH + AK_TRANSFER.o.s * fO;
   const margin = (finP - finS) / (finP + finS);
   const fracIn = T / E;
-  const se = Math.sqrt((0.035 * (1 - fracIn)) ** 2 + (0.15 * fH / E) ** 2 + 0.002 ** 2);
-  return { P, S, H, O, T, E, fracIn, finP, finS, margin, se, winP: ncdf(margin / se) };
+  const se = Math.sqrt((0.035 * (1 - fracIn)) ** 2 + (0.05 * (fH + fO) / E) ** 2 + 0.002 ** 2);
+  const rcvGain = (fP - fS) / (fP + fS) - margin; // how much the rounds narrow Peltola's lead
+  return { P, S, H, O, T, E, fracIn, finP, finS, margin, rcvGain, se, winP: ncdf(margin / se) };
 }
 let AK_PROJ_CACHE; // computed on first use (ncdf is defined further down)
 const akProj = () => (AK_PROJ_CACHE ??= akProjection(akCount));
@@ -1620,14 +1623,14 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
                   <span style={{ fontWeight: 600, color: col }}>{n}</span><span>{fmtVotes(v)} · {pc(v, a.T)}</span>
                 </div>
               ))}
-              <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>{`Peltola leads by ${fmtVotes(a.P - a.S)} first-choice votes with about ${fmtVotes(Math.round((a.E - a.T) / 1000) * 1000)} still to count. No one is near 50%, so ranked-choice rounds decide it. If Heikes voters rank like Begich's Republican voters did in 2022 (half to the Republican, about three in ten to Peltola, the rest stopping), Peltola finishes ahead by about ${(a.margin * 100).toFixed(1)} points. Sullivan needs Heikes voters to break much harder for him than that.`}</p>
+              <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>{`Peltola leads by ${fmtVotes(a.P - a.S)} first-choice votes with about ${fmtVotes(Math.round((a.E - a.T) / 1000) * 1000)} still to count. No one is near 50%, so ranked-choice rounds decide it. The ballots already scanned show how voters ranked: Heikes voters lean to Sen. Sullivan, but many rank no one else, and Daniel J. Sullivan Jr.'s voters lean to Peltola. The rounds gain Sen. Sullivan only about ${(a.rcvGain * 100).toFixed(1)} points, and Peltola finishes ahead by about ${(a.margin * 100).toFixed(1)}.`}</p>
               <p style={{ margin: 0, fontSize: 13, color: C.muted }}>Source: the AP's count by state house district (via the New York Times), as of {akCount.asOf === "2026-11-05" ? "Nov. 5" : akCount.asOf}.</p>
             </div>
           )}
           {!a && sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
           {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
           {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
-          {sec("How this needle is built", a ? "Since Nov. 6 it runs on the count. Each house district's uncounted ballots are assumed to split like its counted ones. Then the ranked-choice rounds are simulated: Heikes and the minor candidates are eliminated, and their ballots move the way the last comparable Alaska elimination did (2022 House race: Begich's Republican voters went 50% to Palin, 29% to Peltola, 21% to no one), with minor-candidate ballots split evenly. The chance of winning allows for errors in both the uncounted vote and how Heikes voters actually rank." : `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
+          {sec("How this needle is built", a ? "Since Nov. 6 it runs on the count. Each house district's uncounted ballots are assumed to split like its counted ones. Then the ranked-choice rounds are simulated: Heikes and the minor candidates are eliminated, and their ballots move the way the New York Times found voters actually ranked in Alaska's released ballot records (Heikes voters: 36% second choice Sen. Sullivan, 12% Peltola, 37% no one; Daniel J. Sullivan Jr. voters: 29% Peltola, 16% Sen. Sullivan, 36% no one). That nets Sen. Sullivan about 0.4 points. The chance of winning allows for errors in the uncounted vote and in the transfers." : `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
         </div>
         {hasNeedle && onNav && <RacePolls r={race} current={current} onNav={onNav} />}
       </section>
