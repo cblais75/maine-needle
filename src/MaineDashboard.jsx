@@ -2683,7 +2683,7 @@ function ContactForm() {
   const src = `https://tally.so/embed/${TALLY_FORM}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
   return (
     <div style={{ maxWidth: 640 }}>
-      <iframe data-tally-src={src} src={src} loading="lazy" width="100%" height="520" frameBorder="0" title="Contact Needlepoint" style={{ border: "none", display: "block" }} />
+      <iframe data-tally-src={src} src={src} loading="lazy" width="100%" height="800" frameBorder="0" title="Contact Needlepoint" style={{ border: "none", display: "block" }} />
       <p style={{ margin: "6px 0 0", fontSize: 13, color: C.muted }}>Form not loading? <a href={`https://tally.so/r/${TALLY_FORM}`} target="_blank" rel="noopener noreferrer" style={{ color: BLUE }}>Open it in a new tab</a>.</p>
     </div>
   );
@@ -2724,7 +2724,6 @@ function WorkView({ wide, go }) {
       </section>
       <section style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         <SectionHead title="Get in touch" size={wide ? 28 : 22} />
-        <p style={p}>Questions, corrections, or interested in a dashboard of your own? Send a note and I'll get back to you.</p>
         <ContactForm />
       </section>
     </div>
