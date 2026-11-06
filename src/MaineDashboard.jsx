@@ -297,7 +297,7 @@ const akProj = () => (AK_PROJ_CACHE ??= akProjection(akCount));
 const makeAlaskaSenate = (pollMargin = 3) => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
   sub: "Peltola (D) vs Sullivan (R)",
-  system: "Ranked-Choice Voting", real: true, noNight: !((akCount.rows || []).length),
+  system: "Ranked-Choice Voting", real: true, noNight: !((akCount.rows || []).length), liveOn: (akCount.rows || []).length > 0,
   note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans; the shift was halved in October, since past misses don't reliably repeat. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
   left: { full: "Sullivan", short: "Sullivan", color: RED },
   right: { full: "Peltola", short: "Peltola", color: BLUE },
@@ -599,8 +599,16 @@ const EDITOR_CALLS = {
   mi_sen: "right", tx_sen: "right", tx_gov: "right", oh_sen: "right", oh_gov: "right", ks_sen: "right",
   ia_sen: "right", ia_gov: "right", sen: "right", cd1: "right", ne_sen: "left", gov: "P",
   ks_gov: "right", // Holscher (Nov 6)
+  cd2: "left", // LePage (Nov 6: Dunlap conceded; AP had not called it)
 };
 // compute() plus any editor's call: a called race's needle is pinned to the winner.
+// A called race: its needle stops updating (Nov 6). Final certified numbers get loaded by hand later.
+const isCalled = (r) => !!(r && EDITOR_CALLS[r.id]);
+const CalledNote = () => (
+  <p style={{ margin: 0, padding: "10px 12px", fontSize: 14, lineHeight: 1.55, color: C.body, background: C.panel2, border: `1px solid ${C.line}` }}>
+    <b style={{ color: C.text }}>This race has been called, so updating is finished.</b> The numbers shown are the last count we loaded. They may differ slightly from the final certified results, which we'll add once states certify.
+  </p>
+);
 function computeRace(race) {
   if (race.id === "ak_sen" && akProj()) { const a = akProj(); return { fracIn: a.fracIn, swing: 0, rawSwing: 0, margin: a.margin, se: a.se, winRight: a.winP }; }
   const m = compute(race.units);
@@ -994,7 +1002,7 @@ export default function MaineDashboard() {
   ) : null;
   const statusLine = (<>{simBanner}
     <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
-      {results && results.simulated ? "Simulated · These needles are running on practice numbers, not real votes." : anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
+      {results && results.simulated ? "Simulated · These needles are running on practice numbers, not real votes." : anyLive && races.some((r) => isCalled(r)) ? `Live · Still counting: ${races.filter((r) => r.liveOn && !isCalled(r)).map((r) => stateLabel(r.state)).join(" and ") || "none"}. Every other race has been called.` : anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
       {anyPaused ? ` ${pausedNow} ${pausedVerb} paused until official results are posted.` : ""}
     </p></>
   );
@@ -1337,12 +1345,13 @@ function GovDetail({ race, onBack, govB, govMargin, current, night }) {
       </button>
       <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", columnGap: 40, rowGap: 22, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={kicker(d.favColor)}>Maine · Governor · Plurality, three-way{race.liveOn ? " · Live" : ""}</div>
+          <div style={kicker(d.favColor)}>Maine · Governor · Plurality, three-way{isCalled(race) ? " · Called" : race.liveOn ? " · Live" : ""}</div>
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: 44, lineHeight: 1.05, letterSpacing: -0.8 }}>{race.cands.map((c) => c.short).join(" vs. ")}</h1>
           <p style={deckStyle(true)}>{d.frac > 0
             ? `${d.fav} leads with ${(parts.find((p) => p.short === d.fav).sh * 100).toFixed(1)}% projected. In a three-way race the winner needs only the most votes, so the gap between the top two matters more than the 50% line.`
             : `Polling has Bennett at ${govB}% and ${govMargin >= 0 ? "Pingree" : "Charles"} ahead by ${Math.abs(govMargin)} between the two major-party candidates. The winner needs only the most votes, not a majority.`}</p>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>Bennett (I) has no past election to map, so this race leans on polling for its starting point.</p>
+          {isCalled(race) && <CalledNote />}
           {paused && <PauseNote state="ME" />}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center", opacity: paused ? 0.45 : 1 }}>
@@ -1847,7 +1856,7 @@ function RaceTable({ races, onPick, wide, night, grouped = false }) {
                 <>
                   <span style={{ fontSize: 16, fontWeight: 600 }}>{stateLabel(r.state)}</span>
                   <span style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
-                    <span style={{ fontFamily: serif, fontSize: 18 }}>{raceName(r)}{r.liveOn && <span style={{ marginLeft: 8, fontFamily: sans, fontSize: 11, fontWeight: 700, color: "#fff", background: RED, padding: "1px 6px", verticalAlign: 3 }}>LIVE</span>}</span>
+                    <span style={{ fontFamily: serif, fontSize: 18 }}>{raceName(r)}{r.liveOn && !isCalled(r) && <span style={{ marginLeft: 8, fontFamily: sans, fontSize: 11, fontWeight: 700, color: "#fff", background: RED, padding: "1px 6px", verticalAlign: 3 }}>LIVE</span>}</span>
                     <span style={{ fontSize: 13, color: C.muted }}>{r.sub}</span>
                   </span>
                   <span style={{ fontSize: 17, fontWeight: 600, color: favCol }}>{fav}</span>
@@ -1859,7 +1868,7 @@ function RaceTable({ races, onPick, wide, night, grouped = false }) {
                 <>
                   <span style={{ opacity: d.paused ? 0.35 : 1 }}>{gauge}</span>
                   <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-                    <span style={{ fontSize: 15, fontWeight: 600 }}>{stateLabel(r.state)} <span style={{ fontWeight: 400, color: C.muted }}>{raceName(r)}</span>{r.liveOn && <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 700, color: "#fff", background: RED, padding: "1px 5px" }}>LIVE</span>}</span>
+                    <span style={{ fontSize: 15, fontWeight: 600 }}>{stateLabel(r.state)} <span style={{ fontWeight: 400, color: C.muted }}>{raceName(r)}</span>{r.liveOn && !isCalled(r) && <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 700, color: "#fff", background: RED, padding: "1px 5px" }}>LIVE</span>}</span>
                     <span style={{ fontSize: 13, color: C.muted }}>{ratingTxt}{d.frac > 0 ? ` · ${Math.round(d.frac * 100)}% in` : ""}</span>
                   </span>
                   <span style={{ fontSize: 15, fontWeight: 600, color: favCol, textAlign: "right" }}>{fav}</span>
@@ -2071,8 +2080,9 @@ function PausedList({ races, onPick, wide }) {
 
 function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
   const leadRace = pickLead(races, night);
-  const counting = races.filter((r) => !isPaused(r, night));
-  const paused = races.filter((r) => isPaused(r, night));
+  const counting = races.filter((r) => !isPaused(r, night) && !isCalled(r));
+  const called = races.filter((r) => isCalled(r));
+  const paused = races.filter((r) => isPaused(r, night) && !isCalled(r));
   const tally = controlTally(races);
   const latest = (briefing || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
   const firstPara = latest ? String(latest.body || "").split(/\n\s*\n/)[0] : "";
@@ -2114,10 +2124,17 @@ function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
         {sidebar}
       </section>
       <section style={{ paddingTop: 28 }}>
-        <SectionHead title={night ? "Counting now" : "Every race we're tracking"} note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
-        <RaceTable races={counting} onPick={onPick} wide={wide} night={night} grouped />
-        <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Alaska's needle is a polling forecast only. Its ranked-choice rounds are counted about two weeks after election night, so it doesn't move on election night.</p>
+        <SectionHead title={called.length ? "Still counting" : night ? "Counting now" : "Every race we're tracking"} note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
+        <RaceTable races={counting} onPick={onPick} wide={wide} night={night} grouped={!called.length} />
+        {called.length > 0 && <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>These races haven't been called. Mississippi and Alaska are updated by hand from the AP's count as late ballots come in.</p>}
       </section>
+      {called.length > 0 && (
+        <section style={{ paddingTop: 34 }}>
+          <SectionHead title="Called races" note={wide ? "Updating finished · tap a race for its page" : null} size={wide ? 28 : 22} />
+          <RaceTable races={called} onPick={onPick} wide={wide} night={night} grouped />
+          <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Each of these races has been called, so its needle has stopped updating. Final certified numbers will be added once states certify.</p>
+        </section>
+      )}
       {night && <PausedList races={paused} onPick={onPick} wide={wide} />}
       <ErrorBoundary mini label="Senate seat cards unavailable"><SeatCards wide={wide} night={night} /></ErrorBoundary>
       <ErrorBoundary mini label="Governor cards unavailable"><SeatCards wide={wide} night={night} cards={GOV_CARD_RACES} title="Every other governor's race"
@@ -2226,10 +2243,11 @@ function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
       </button>
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={kicker(paused ? C.muted : d.favColor)}>{stateLabel(race.state)} · {race.title} · {race.system}{race.liveOn ? " · Live" : paused ? " · Paused" : ""}</div>
+          <div style={kicker(paused ? C.muted : d.favColor)}>{stateLabel(race.state)} · {race.title} · {race.system}{isCalled(race) ? " · Called" : race.liveOn ? " · Live" : paused ? " · Paused" : ""}</div>
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>{R.short} vs. {L.short}</h1>
           <p style={deckStyle(wide)}>{dekFor(race, d, current)}</p>
           {race.note && <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{race.note}</p>}
+          {isCalled(race) && <CalledNote />}
           {paused && <PauseNote state={race.state} />}
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: paused ? 0.45 : 1 }}>
