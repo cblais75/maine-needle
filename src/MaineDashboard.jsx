@@ -1613,7 +1613,7 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>Peltola vs. Sullivan</h1>
           <p style={deckStyle(wide)}>{hasNeedle ? dekFor(race, d, current) : "Rated Lean Republican."}</p>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{a
-            ? `This needle now runs on the AP's first-choice count (${Math.round(a.fracIn * 100)}% of the expected vote, as of ${akCount.asOf === "2026-11-05" ? "Nov. 5" : akCount.asOf}) plus a projection of the ranked-choice rounds, which Alaska tabulates Nov. 18. Not called.`
+            ? `This needle now runs on the AP's first-choice count (${Math.round(a.fracIn * 100)}% of the expected vote, as of ${`Nov. ${Number(String(akCount.asOf).slice(8, 10))}`}) plus a projection of the ranked-choice rounds, which Alaska tabulates Nov. 18. Not called.`
             : "This needle is a polling forecast. It won't move on election night, because Alaska's ranked-choice rounds are counted about two weeks later."}</p>
         </div>
         {hasNeedle && (
@@ -1638,7 +1638,7 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
                 </div>
               ))}
               <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>{`Peltola leads by ${fmtVotes(a.P - a.S)} first-choice votes with about ${fmtVotes(Math.round((a.E - a.T) / 1000) * 1000)} still to count. No one is near 50%, so ranked-choice rounds decide it. The ballots already scanned show how voters ranked: Heikes voters lean to Sen. Sullivan, but many rank no one else, and Daniel J. Sullivan Jr.'s voters lean to Peltola. The rounds gain Sen. Sullivan only about ${(a.rcvGain * 100).toFixed(1)} points, and Peltola finishes ahead by about ${(a.margin * 100).toFixed(1)}.`}</p>
-              <p style={{ margin: 0, fontSize: 13, color: C.muted }}>Source: the AP's count by state house district (via the New York Times), as of {akCount.asOf === "2026-11-05" ? "Nov. 5" : akCount.asOf}.</p>
+              <p style={{ margin: 0, fontSize: 13, color: C.muted }}>Source: the AP's count by state house district (via the New York Times), as of {`Nov. ${Number(String(akCount.asOf).slice(8, 10))}`}.</p>
             </div>
           )}
           {!a && sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
