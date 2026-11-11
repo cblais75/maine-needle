@@ -294,7 +294,10 @@ function akProjection(count) {
   const fracIn = T / E;
   const se = Math.sqrt((0.035 * (1 - fracIn)) ** 2 + (0.05 * (fH + fO) / E) ** 2 + 0.002 ** 2);
   const rcvGain = (fP - fS) / (fP + fS) - margin; // how much the rounds narrow Peltola's lead
-  return { P, S, H, O, T, E, fracIn, finP, finS, margin, rcvGain, se, winP: ncdf(margin / se) };
+  // Editorial hold (Colin, Nov 11): no call until Alaska's official ranked-choice count on Nov. 18, so cap at 96%.
+  const AK_HOLD = 0.96;
+  const w = ncdf(margin / se);
+  return { P, S, H, O, T, E, fracIn, finP, finS, margin, rcvGain, se, winP: Math.min(Math.max(w, 1 - AK_HOLD), AK_HOLD) };
 }
 let AK_PROJ_CACHE; // computed on first use (ncdf is defined further down)
 const akProj = () => (AK_PROJ_CACHE ??= akProjection(akCount));
