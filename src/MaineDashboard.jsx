@@ -15,6 +15,7 @@ import scBaseline from "../data/sc-baseline.json";
 import msBaseline from "../data/ms-baseline.json";
 import akCount from "../data/ak-count.json";
 import scorecard from "../data/scorecard-2026.json";
+import specials from "../data/specials.json";
 import senateCards from "../data/senate-cards.json";
 import governorCards from "../data/governor-cards.json";
 import { gateResults, stateOpen } from "../scripts/lib/results-gate.mjs";
@@ -728,7 +729,7 @@ const slugify = (x) => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "-").repla
 const stateSlug = (code) => slugify((STATES.find((x) => x.code === code) || { label: code }).label);
 const raceSlug = (r) => (r.title.startsWith("U.S. Senate") ? "senate" : r.title === "Governor" ? "governor"
   : r.title.startsWith("U.S. House") ? `house-district-${(r.title.match(/\d+/) || ["1"])[0]}` : slugify(r.title));
-const VIEW_PATHS = { control: "senate-control", briefing: "briefing", polls: "polls", ratings: "pollster-ratings", method: "how-it-works", scorecard: "2026-scorecard", work: "custom-dashboards", vote: "vote", wire: "live-wire" };
+const VIEW_PATHS = { control: "senate-control", briefing: "briefing", polls: "polls", ratings: "pollster-ratings", method: "how-it-works", scorecard: "2026-scorecard", specials: "special-elections", work: "custom-dashboards", vote: "vote", wire: "live-wire" };
 const racePath = (r) => `/${stateSlug(r.state)}/${raceSlug(r)}`;
 function pathFor(view, sel, races) {
   const r = sel && races.find((x) => x.id === sel);
@@ -1049,13 +1050,13 @@ export default function MaineDashboard() {
   const anyPaused = night && races.some((r) => isPaused(r, night));
   const pausedNow = anyPaused ? pausedNames(races, night) : "";
   const pausedVerb = pausedNow.includes(" and ") ? "are" : "is";
-  const NAV_ITEMS = [["dashboard", "Races"], ["control", "Senate control"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["scorecard", "2026 scorecard"], ["vote", "Vote"], ["work", "Custom dashboards"]];
+  const NAV_ITEMS = [["dashboard", "Races"], ["control", "Senate control"], ["briefing", "Briefing"], ["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["scorecard", "2026 scorecard"], ["specials", "Special elections"], ["vote", "Vote"], ["work", "Custom dashboards"]];
   const go = (k) => { setNavOpen(false); setMoreOpen(false); setView(k); setSel(null); };
   // Search tune-up (Nov 6): a descriptive browser/tab title for each view and race.
   useEffect(() => {
     const r = sel && races.find((x) => x.id === sel);
     const st = STATES.find((x) => x.code === view);
-    const names = { control: "Senate control", briefing: "Briefing", polls: "Polling averages", ratings: "Pollster ratings", method: "How the needles work", scorecard: "2026 forecast & pollster scorecard", work: "Custom race dashboards", vote: "How to vote", wire: "Live wire" };
+    const names = { control: "Senate control", briefing: "Briefing", polls: "Polling averages", ratings: "Pollster ratings", method: "How the needles work", scorecard: "2026 forecast & pollster scorecard", specials: "Special elections tracker", work: "Custom race dashboards", vote: "How to vote", wire: "Live wire" };
     const t = r ? `${stateLabel(r.state)} ${r.title}: ${r.sub || ""} ${isCalled(r) ? "2026 results" : "live needle"}` : st ? `${st.label} 2026 election needles` : names[view];
     document.title = t ? `${t} | Needlepoint` : "Needlepoint | Live 2026 Election Needles, Results & Pollster Ratings";
     const url = `https://needlepoint.news${pathFor(view, sel, races)}`;
@@ -1126,7 +1127,7 @@ export default function MaineDashboard() {
       {d.map((x, i) => <path key={i} d={x} />)}
     </svg>
   );
-  const moreKeys = ["polls", "ratings", "method", "scorecard", "work", "vote", "wire"];
+  const moreKeys = ["polls", "ratings", "method", "scorecard", "specials", "work", "vote", "wire"];
   const tabs = [
     ["dashboard", "Races", ["M4 18a8 8 0 0 1 16 0", "M12 18l4-6"]],
     ["control", "Senate", ["M3 20h18", "M5 20V10l7-5 7 5v10", "M9 20v-6h6v6"]],
@@ -1148,7 +1149,7 @@ export default function MaineDashboard() {
   const moreItem = (on) => ({ display: "block", width: "100%", textAlign: "left", minHeight: 44, padding: "10px 14px", fontSize: 16, cursor: "pointer", border: "none", borderBottom: `1px solid ${C.line}`, background: on ? C.panel2 : "transparent", color: C.text, fontWeight: on ? 700 : 500 });
   const moreSheet = moreOpen && (
     <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(61px + env(safe-area-inset-bottom))", zIndex: 49, maxHeight: "70vh", overflowY: "auto", background: C.panel, borderTop: `1px solid ${C.text}`, boxShadow: "0 -8px 24px rgba(27,26,23,0.14)" }}>
-      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["scorecard", "2026 scorecard"], ["work", "Custom dashboards"], ["vote", "Vote"], ["wire", "Live wire"]].map(([k, label]) => (
+      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["scorecard", "2026 scorecard"], ["specials", "Special elections"], ["work", "Custom dashboards"], ["vote", "Vote"], ["wire", "Live wire"]].map(([k, label]) => (
         <button key={k} onClick={() => go(k)} style={moreItem(view === k)}>{label}</button>
       ))}
       <div style={{ padding: "12px 14px 6px", fontFamily: serif, fontSize: 18, fontWeight: 600 }}>States</div>
@@ -1186,6 +1187,7 @@ export default function MaineDashboard() {
             {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} wide={wide} />}
             {view === "method" && <MethodView wide={wide} />}
             {view === "scorecard" && <ScorecardView wide={wide} />}
+            {view === "specials" && <SpecialsView wide={wide} />}
             {view === "work" && <WorkView wide={wide} go={go} />}
             {view === "vote" && <VoteView wide={wide} />}
 
@@ -2697,7 +2699,7 @@ function ScorecardView({ wide }) {
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>2026 scorecard</h1>
         <p style={{ ...deckStyle(wide), maxWidth: 900 }}>{`How Needlepoint's final forecast and the pollsters did against the results. We picked ${senHits} of ${sc.senate.length} decided Senate races and ${govHits} of ${sc.governor.length} governor races, but every miss went the same way: Democrats beat our forecast in ${beat} of ${sc.senate.length} Senate races, by ${avgMiss.toFixed(1)} points on average.`}</p>
-        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}. Mississippi and Alaska are still counting.</p>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}.</p>
       </section>
       <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <SectionHead title="Senate: our forecast vs. the result" size={wide ? 28 : 22} />
@@ -2729,6 +2731,96 @@ function ScorecardView({ wide }) {
         </>)}
         <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{`Green: better than the average poll (${sc.pollsSummary.avgMiss} points off). The one exception to the Republican lean was Nebraska, where every poll overstated Osborn.`}</p>
       </section>
+    </div>
+  );
+}
+
+// ---- Special elections tracker (Nov 14) ----
+// Each special election next to how the same district voted for president in 2024. Data: data/specials.json,
+// updated by hand as results come in ("results" holds the 2027-28 cycle; "house" the 2025-26 House specials).
+function SpecialsView({ wide }) {
+  const sp = specials;
+  const STATE_NAMES = { MS: "Mississippi", LA: "Louisiana", AR: "Arkansas", FL: "Florida", VA: "Virginia", AZ: "Arizona", TN: "Tennessee", GA: "Georgia", NJ: "New Jersey", CA: "California", TX: "Texas" };
+  const fmtDate = (d) => new Date(`${d}T12:00:00`).toLocaleDateString("en-US", wide ? { month: "short", day: "numeric", year: "numeric" } : { month: "numeric", day: "numeric", year: "2-digit" });
+  const whole = (v) => (v === 0 ? "Even" : v > 0 ? `D +${v}` : `R +${-v}`);
+  const mg = (v) => (Math.abs(v) < 0.05 ? "Even" : v > 0 ? `D +${v.toFixed(Math.abs(v) >= 10 ? 0 : 1)}` : `R +${(-v).toFixed(Math.abs(v) >= 10 ? 0 : 1)}`);
+  const rows = (list) => list.map((x) => ({ ...x, margin: x.d - x.r, swing: x.d - x.r - x.pres }));
+  const house = rows(sp.house), cycle = rows(sp.results || []);
+  const avg = (l) => l.reduce((a, x) => a + x.swing, 0) / l.length;
+  const houseAvg = avg(house);
+  const pad = wide ? "9px 10px" : "8px 5px";
+  const th = { textAlign: "left", fontSize: wide ? 12 : 10.5, fontWeight: 700, letterSpacing: wide ? 1 : 0.4, textTransform: "uppercase", color: C.muted, padding: pad, borderBottom: `1px solid ${C.text}` };
+  const td = { fontSize: wide ? 15 : 13.5, padding: pad, borderBottom: `1px solid ${C.line}`, verticalAlign: "middle" };
+  const wrap = (children) => <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse" }}>{children}</table></div>;
+  // Swing bar: Democratic gains grow to the left in blue, Republican gains to the right in red (the same sides as the needles).
+  const MAX = 30;
+  const bar = (v) => {
+    const w = Math.min(Math.abs(v), MAX) / MAX * 50;
+    return (
+      <div style={{ position: "relative", height: 16, minWidth: wide ? 160 : 90 }}>
+        <div style={{ position: "absolute", left: "50%", top: -3, bottom: -3, borderLeft: `1px solid ${C.text}` }} />
+        <div style={{ position: "absolute", top: 2, height: 12, background: v >= 0 ? BLUE : RED, opacity: 0.85, ...(v >= 0 ? { right: "50%", width: `${w}%` } : { left: "50%", width: `${w}%` }) }} />
+      </div>
+    );
+  };
+  const swingCell = (v) => <span style={{ fontWeight: 700, color: v >= 0 ? BLUE : RED, whiteSpace: "nowrap" }}>{mg(v)}</span>;
+  const table = (list) => wrap(<>
+    <thead><tr><th style={th}>Date</th><th style={th}>Seat</th>{wide && <th style={th}>Winner</th>}<th style={th}>Result</th><th style={th}>2024 president</th><th style={th}>Swing</th>{wide && <th style={{ ...th, textAlign: "center" }}>Toward D · Toward R</th>}</tr></thead>
+    <tbody>{list.map((x) => (
+      <tr key={x.seat + x.date}>
+        <td style={{ ...td, whiteSpace: "nowrap", color: C.muted }}>{fmtDate(x.date)}</td>
+        <td style={{ ...td, fontWeight: 600, whiteSpace: "nowrap" }}>{x.seat}{x.why && wide && <div style={{ fontSize: 12.5, fontWeight: 400, color: C.muted }}>{x.why}</div>}</td>
+        {wide && <td style={td}>{x.winner} ({x.party})</td>}
+        <td style={td}>{mg(x.margin)}</td>
+        <td style={{ ...td, color: C.muted }}>{whole(x.pres)}</td>
+        <td style={td}>{swingCell(x.swing)}</td>
+        {wide && <td style={td}>{bar(x.swing)}</td>}
+      </tr>
+    ))}</tbody>
+  </>);
+  const tile = (big, label, color = C.text) => (
+    <div style={{ flex: "1 1 200px", background: C.panel, border: `1px solid ${C.line}`, padding: "14px 16px" }}>
+      <div style={{ fontFamily: serif, fontWeight: 700, fontSize: wide ? 38 : 30, lineHeight: 1.05, color }}>{big}</div>
+      <div style={{ marginTop: 6, fontSize: 14, lineHeight: 1.45, color: C.body }}>{label}</div>
+    </div>
+  );
+  const fl = sp.flips2026;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+      <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
+        <div style={kicker(C.brass)}>Special elections tracker</div>
+        <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>The races between the big ones</h1>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Special elections fill seats that open up between regular elections. Each one is compared with how the same district voted for president in 2024. The gap, or swing, is one of the best early signs of the national mood. Through 2025 and 2026 it pointed toward Democrats, and the midterms followed.</p>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>Updated {sp.asOf}. {sp.note}</p>
+      </section>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        {tile(mg(houseAvg), `Average swing in the ${house.length} House special elections of 2025 and 2026 with a Democrat facing a Republican.`, BLUE)}
+        {tile(`${fl.toD} of ${fl.count}`, `State legislative seats that changed parties in 2026 special elections went from Republican to Democratic.`, BLUE)}
+        {tile(mg(sp.legisMedian), "Median swing in 2026 state legislative specials, as measured by MultiState.", BLUE)}
+      </div>
+      <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <SectionHead title="Coming up" note="The 2027–28 cycle starts here" size={wide ? 28 : 22} />
+        {wrap(<>
+          <thead><tr><th style={th}>Date</th><th style={th}>State</th><th style={th}>Seat</th><th style={th}>Type</th>{wide && <th style={th}>Last held by</th>}</tr></thead>
+          <tbody>{sp.upcoming.map((x) => (
+            <tr key={x.state + x.seat}><td style={{ ...td, whiteSpace: "nowrap", color: C.muted }}>{fmtDate(x.date)}</td><td style={td}>{wide ? (STATE_NAMES[x.state] || x.state) : x.state}</td><td style={{ ...td, fontWeight: 600 }}>{x.seat}</td><td style={td}>{x.kind}</td>{wide && <td style={td}>{x.was}</td>}</tr>
+          ))}</tbody>
+        </>)}
+        {cycle.length ? <>
+          <h3 style={{ margin: "12px 0 0", fontFamily: serif, fontSize: 21, fontWeight: 600 }}>Results so far this cycle · average {mg(avg(cycle))}</h3>
+          {table(cycle)}
+        </> : <p style={{ margin: 0, fontSize: 14, color: C.muted }}>No results yet this cycle. Each race gets added here, with its swing, once it is decided.</p>}
+      </section>
+      <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <SectionHead title="The 2025–26 House special elections" note={`Average swing ${mg(houseAvg)}`} size={wide ? 28 : 22} />
+        {table(house)}
+        <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, color: C.muted }}>{`Democrats ran ahead of Harris in ${house.filter((x) => x.swing > 0).length} of these ${house.length} races. The exception was California's 1st District, decided in an all-party primary; there we compare all the Democratic candidates' votes with all the Republicans'. ${sp.sameParty.map((x) => x.seat).join(", ")} also held special elections, but each ended with two Democrats in the final round, so they don't measure swing.`}</p>
+      </section>
+      <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <SectionHead title="State legislative seats that flipped in 2026" size={wide ? 24 : 20} />
+        <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body }}>{`All ${fl.count} went from Republican to Democratic: ${fl.list.join(", ")}.`}</p>
+      </section>
+      <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: C.muted }}>Sources: {sp.sources.map((x, i) => <span key={x.url}>{i ? " · " : ""}<a href={x.url} target="_blank" rel="noopener">{x.name}</a></span>)}. Results come from Ballotpedia and news reports of each race. 2024 presidential margins are rounded to the nearest point.</p>
     </div>
   );
 }

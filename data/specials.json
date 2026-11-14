@@ -1,0 +1,34 @@
+{
+  "asOf": "Nov. 14, 2026",
+  "note": "Margins are the Democrat minus the Republican, in points. Swing is how much better (or worse) the Democrat did than Kamala Harris did in the same district in 2024.",
+  "upcoming": [
+    { "date": "2026-12-01", "state": "MS", "seat": "State House District 70", "kind": "Runoff", "was": "William Brown" },
+    { "date": "2026-12-01", "state": "MS", "seat": "State House District 77", "kind": "Runoff", "was": "Price Wallace" },
+    { "date": "2026-12-12", "state": "LA", "seat": "State House District 92", "kind": "Special", "was": "Joe Stagni" },
+    { "date": "2026-12-15", "state": "AR", "seat": "State Senate District 18", "kind": "Special", "was": "Jonathan Dismang" },
+    { "date": "2026-12-22", "state": "MS", "seat": "State Senate District 34", "kind": "Special (runoff Jan. 19 if needed)", "was": "Juan Barnett" }
+  ],
+  "results": [],
+  "house": [
+    { "date": "2025-04-01", "state": "FL", "seat": "FL-1", "winner": "Jimmy Patronis", "party": "R", "d": 42.26, "r": 56.86, "pres": -37, "why": "Matt Gaetz resigned" },
+    { "date": "2025-04-01", "state": "FL", "seat": "FL-6", "winner": "Randy Fine", "party": "R", "d": 42.69, "r": 56.68, "pres": -30, "why": "Mike Waltz became national security adviser" },
+    { "date": "2025-09-09", "state": "VA", "seat": "VA-11", "winner": "James Walkinshaw", "party": "D", "d": 75.14, "r": 24.67, "pres": 34, "why": "Gerry Connolly died" },
+    { "date": "2025-09-23", "state": "AZ", "seat": "AZ-7", "winner": "Adelita Grijalva", "party": "D", "d": 68.92, "r": 29.42, "pres": 22, "why": "Raúl Grijalva died" },
+    { "date": "2025-12-02", "state": "TN", "seat": "TN-7", "winner": "Matt Van Epps", "party": "R", "d": 45.06, "r": 53.90, "pres": -22, "why": "Mark Green resigned" },
+    { "date": "2026-04-07", "state": "GA", "seat": "GA-14", "winner": "Clay Fuller", "party": "R", "d": 44.1, "r": 55.9, "pres": -37, "why": "Marjorie Taylor Greene resigned", "note": "Runoff" },
+    { "date": "2026-04-16", "state": "NJ", "seat": "NJ-11", "winner": "Analilia Mejia", "party": "D", "d": 60, "r": 39, "pres": 9, "why": "Mikie Sherrill became governor" },
+    { "date": "2026-06-02", "state": "CA", "seat": "CA-1", "winner": "James Gallagher", "party": "R", "d": 35.8, "r": 63.3, "pres": -25, "why": "Doug LaMalfa died", "note": "All-party primary; all Democrats vs. all Republicans" }
+  ],
+  "sameParty": [
+    { "date": "2026-01-31", "seat": "TX-18", "winner": "Christian Menefee" },
+    { "date": "2026-08-18", "seat": "CA-14", "winner": "Aisha Wahab" },
+    { "date": "2026-08-25", "seat": "GA-13", "winner": "Everton Blair Jr." }
+  ],
+  "flips2026": { "count": 8, "toD": 8, "toR": 0, "list": ["Arkansas House 70", "New Hampshire House Carroll 7", "Florida Senate 14", "Florida House 87", "Pennsylvania House 12", "North Dakota House 42", "Texas House 93", "West Virginia Senate 17"] },
+  "legisMedian": 10.4,
+  "sources": [
+    { "name": "Ballotpedia: special elections to the 119th Congress", "url": "https://ballotpedia.org/Special_elections_to_the_119th_United_States_Congress_(2025-2026)" },
+    { "name": "Ballotpedia: state legislative special elections, 2026", "url": "https://ballotpedia.org/State_legislative_special_elections,_2026" },
+    { "name": "MultiState: 2026 special elections swing analysis", "url": "https://www.multistate.us/elections/special-elections-2026.html" }
+  ]
+}

@@ -67,6 +67,7 @@ const VIEWS = [
   ["/how-it-works", "How the needles work", "How Needlepoint's election-night needles turn county results into a chance of winning."],
   ["/2026-scorecard", "2026 forecast and pollster scorecard", "How Needlepoint's forecast did in 2026, and which pollsters came closest to the results."],
   ["/custom-dashboards", "Custom race dashboards", "Custom election-night dashboards like Needlepoint's, built for campaigns and organizations."],
+  ["/special-elections", "Special elections tracker", "Every special election compared with the 2024 presidential vote in the same district, from 2025 through the 2027–28 cycle."],
   ["/vote", "How to vote", "Where to find official voting information for the states Needlepoint covers."],
   ["/live-wire", "Live wire", "Running updates from election night 2026."],
 ];
