@@ -1047,7 +1047,7 @@ export default function MaineDashboard() {
     const r = sel && races.find((x) => x.id === sel);
     const st = STATES.find((x) => x.code === view);
     const names = { control: "Senate control", briefing: "Briefing", polls: "Polling averages", ratings: "Pollster ratings", method: "How the needles work", scorecard: "2026 forecast & pollster scorecard", work: "Custom race dashboards", vote: "How to vote", wire: "Live wire" };
-    const t = r ? `${stateLabel(r.state)} ${r.title}: ${r.sub || ""} live needle` : st ? `${st.label} 2026 election needles` : names[view];
+    const t = r ? `${stateLabel(r.state)} ${r.title}: ${r.sub || ""} ${isCalled(r) ? "2026 results" : "live needle"}` : st ? `${st.label} 2026 election needles` : names[view];
     document.title = t ? `${t} | Needlepoint` : "Needlepoint | Live 2026 Election Needles, Results & Pollster Ratings";
     const url = `https://needlepoint.news${pathFor(view, sel, races)}`;
     const can = document.querySelector('link[rel="canonical"]'); if (can) can.setAttribute("href", url);
