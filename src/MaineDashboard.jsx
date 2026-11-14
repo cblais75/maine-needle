@@ -721,6 +721,35 @@ const GLOBAL_CSS = `html,body{margin:0;background:${"#F4EFE4"}}body{font-variant
 const RBTN = { marginTop: 8, width: "100%", background: "transparent", color: C.muted, border: `1px solid ${C.line}`, borderRadius: 8, padding: "7px 0", fontSize: 11.5, fontFamily: mono, cursor: "pointer" };
 const STATES = [{ code: "ME", label: "Maine" }, { code: "NC", label: "North Carolina" }, { code: "OH", label: "Ohio" }, { code: "TX", label: "Texas" }, { code: "IA", label: "Iowa" }, { code: "GA", label: "Georgia" }, { code: "NE", label: "Nebraska" }, { code: "AK", label: "Alaska" }, { code: "MI", label: "Michigan" }, { code: "NH", label: "New Hampshire" }, { code: "KS", label: "Kansas" }, { code: "MN", label: "Minnesota" }, { code: "SC", label: "South Carolina" }, { code: "MS", label: "Mississippi" }];
 
+// ---- Per-race web addresses (Nov 14) ----
+// needlepoint.news/<state>/<race> (e.g. /mississippi/senate, /maine/house-district-2), /<state> for a state page,
+// and a short name for each other page. Vercel serves index.html for these paths (vercel.json "rewrites").
+const slugify = (x) => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+const stateSlug = (code) => slugify((STATES.find((x) => x.code === code) || { label: code }).label);
+const raceSlug = (r) => (r.title.startsWith("U.S. Senate") ? "senate" : r.title === "Governor" ? "governor"
+  : r.title.startsWith("U.S. House") ? `house-district-${(r.title.match(/\d+/) || ["1"])[0]}` : slugify(r.title));
+const VIEW_PATHS = { control: "senate-control", briefing: "briefing", polls: "polls", ratings: "pollster-ratings", method: "how-it-works", scorecard: "2026-scorecard", work: "custom-dashboards", vote: "vote", wire: "live-wire" };
+const racePath = (r) => `/${stateSlug(r.state)}/${raceSlug(r)}`;
+function pathFor(view, sel, races) {
+  const r = sel && races.find((x) => x.id === sel);
+  if (r) return racePath(r);
+  if (STATES.some((x) => x.code === view)) return `/${stateSlug(view)}`;
+  return VIEW_PATHS[view] ? `/${VIEW_PATHS[view]}` : "/";
+}
+function routeFromPath(path, races) {
+  const parts = String(path || "/").toLowerCase().split("/").filter(Boolean);
+  if (!parts.length) return { view: "dashboard", sel: null };
+  const st = STATES.find((x) => stateSlug(x.code) === parts[0]);
+  if (st) {
+    const inState = races.filter((r) => r.state === st.code);
+    const r = parts[1] ? inState.find((x) => raceSlug(x) === parts[1]) : (st.code !== "ME" && inState.length === 1 ? inState[0] : null);
+    if (parts[1] && !r) return null;
+    return { view: st.code, sel: r ? r.id : null };
+  }
+  const v = Object.keys(VIEW_PATHS).find((k) => VIEW_PATHS[k] === parts[0]);
+  return v && parts.length === 1 ? { view: v, sel: null } : null;
+}
+
 // Width-based layout switch: >=1000px gets the desktop three-zone layout, anything
 // narrower keeps the exact mobile column. Width (not device sniffing) so a resized
 // window or a landscape tablet just works.
@@ -805,7 +834,9 @@ export default function MaineDashboard() {
   const racesRef = useRef([]);
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY, DEFAULT_CD1_MARGIN, DEFAULT_CD2_MARGIN));
   racesRef.current = races; // the ?night preview simulates from the current needles' county units
-  const [sel, setSel] = useState(null);
+  const startRoute = useRef(null);
+  if (startRoute.current === null) startRoute.current = (typeof window !== "undefined" && routeFromPath(window.location.pathname, races)) || { view: "dashboard", sel: null };
+  const [sel, setSel] = useState(startRoute.current.sel);
   const wide = useWide(1000);
   const [navOpen, setNavOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -817,7 +848,19 @@ export default function MaineDashboard() {
   const wireSeen = useRef({});
   const [speed, setSpeed] = useState(1);
   const [current, setCurrent] = useState(null);   // current polling outlook from public/current.json
-  const [view, setView] = useState("dashboard");   // dashboard | <state code> | polls | method
+  const [view, setView] = useState(startRoute.current.view);   // dashboard | <state code> | polls | method
+  // Keep the address bar in step with the page (Nov 14), and let the back button work.
+  const firstPath = useRef(true);
+  useEffect(() => {
+    const p = pathFor(view, sel, racesRef.current);
+    if (p !== window.location.pathname) window.history[firstPath.current ? "replaceState" : "pushState"](null, "", p + window.location.search);
+    firstPath.current = false;
+  }, [view, sel]);
+  useEffect(() => {
+    const onPop = () => { const r = routeFromPath(window.location.pathname, racesRef.current) || { view: "dashboard", sel: null }; setView(r.view); setSel(r.sel); };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
   useEffect(() => { window.scrollTo(0, 0); }, [view, sel]);
   const [currentLoaded, setCurrentLoaded] = useState(false);
   const [results, setResults] = useState(null);   // live returns from public/results.json
@@ -1006,6 +1049,9 @@ export default function MaineDashboard() {
     const names = { control: "Senate control", briefing: "Briefing", polls: "Polling averages", ratings: "Pollster ratings", method: "How the needles work", scorecard: "2026 forecast & pollster scorecard", work: "Custom race dashboards", vote: "How to vote", wire: "Live wire" };
     const t = r ? `${stateLabel(r.state)} ${r.title}: ${r.sub || ""} live needle` : st ? `${st.label} 2026 election needles` : names[view];
     document.title = t ? `${t} | Needlepoint` : "Needlepoint | Live 2026 Election Needles, Results & Pollster Ratings";
+    const url = `https://needlepoint.news${pathFor(view, sel, races)}`;
+    const can = document.querySelector('link[rel="canonical"]'); if (can) can.setAttribute("href", url);
+    const og = document.querySelector('meta[property="og:url"]'); if (og) og.setAttribute("content", url);
   }, [view, sel, races]);
   const today = new Date();
   const edition = anyLive || night ? "Election night edition" : "Forecast edition";
