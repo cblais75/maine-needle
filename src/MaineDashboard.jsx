@@ -77,7 +77,7 @@ const makeSenate = (pollMargin) => ({
   id: "sen", state: "ME", title: "U.S. Senate",
   sub: "Jackson (D) vs Collins (R)",
   system: "Ranked-Choice Voting", real: true,
-  note: `Troy Jackson (D) won the July 25 Democratic convention to replace Graham Platner and faces Susan Collins. Centered on polls, then shifted ${SEN_HOUSE} pts toward Collins, who has consistently outrun her polling (she trailed in nearly every 2020 survey and won by about 9). The county map blends the 2020 Collins-Gideon Senate results with recent presidential results.`,
+  note: `Troy Jackson (D) won the July 25 Democratic convention to replace Graham Platner and faced Susan Collins. The forecast was centered on polls, then shifted ${SEN_HOUSE} pts toward Collins, who had consistently outrun her polling (she trailed in nearly every 2020 survey and won by about 9). The county map blended the 2020 Collins-Gideon Senate results with recent presidential results.`,
   left: { full: "Collins", short: "Collins", color: RED },
   right: { full: "Jackson", short: "Jackson", color: BLUE },
   units: senateUnits(pollMargin),
@@ -101,7 +101,7 @@ const makeNCSenate = (pollMargin) => ({
   id: "nc_sen", state: "NC", title: "U.S. Senate",
   sub: "Cooper (D) vs Whatley (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Tillis retired). Centered on polls, then shifted ${NC_HOUSE} pts toward Whatley because North Carolina polls have tended to underestimate Republicans; the shift is about half of how far North Carolina polls have typically missed in recent elections, since past misses don't reliably repeat. County map built from 2024 results.`,
+  note: `Open seat (Tillis retired). The forecast was centered on polls, then shifted ${NC_HOUSE} pts toward Whatley because North Carolina polls have tended to underestimate Republicans; the shift was about half of how far North Carolina polls have typically missed in recent elections, since past misses don't reliably repeat. County map built from 2024 results.`,
   left: { full: "Whatley", short: "Whatley", color: RED },
   right: { full: "Cooper", short: "Cooper", color: BLUE },
   units: ncUnits(pollMargin),
@@ -123,7 +123,7 @@ const makeOhioSenate = (pollMargin) => ({
   id: "oh_sen", state: "OH", title: "U.S. Senate (special)",
   sub: "Brown (D) vs Husted (R)",
   system: "Plurality", real: true,
-  note: `Special election for JD Vance's old seat. Centered on polls, then shifted ${OH_HOUSE} pts toward Husted because Ohio polls have tended to underestimate Republicans; the shift was halved in October, since past misses don't reliably repeat.${OH_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Special election for JD Vance's old seat. The forecast was centered on polls, then shifted ${OH_HOUSE} pts toward Husted because Ohio polls have tended to underestimate Republicans; the shift was halved in October, since past misses don't reliably repeat.${OH_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Husted", short: "Husted", color: RED },
   right: { full: "Brown", short: "Brown", color: BLUE },
   units: ohUnits(pollMargin),
@@ -135,7 +135,7 @@ const makeOhioGov = (pollMargin) => ({
   id: "oh_gov", state: "OH", title: "Governor",
   sub: "Acton (D) vs Ramaswamy (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Mike DeWine is term-limited). Ohio polls have underestimated Republicans in recent federal races, so the poll center is shifted ${OH_HOUSE} pts toward Ramaswamy, the same shift as the Ohio Senate race.${OH_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
+  note: `Open seat (Mike DeWine was term-limited). Ohio polls have underestimated Republicans in recent federal races, so the forecast's poll center was shifted ${OH_HOUSE} pts toward Ramaswamy, the same shift as the Ohio Senate race.${OH_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Ramaswamy", short: "Ramaswamy", color: RED },
   right: { full: "Acton", short: "Acton", color: BLUE },
   units: ohUnits(pollMargin),
@@ -156,7 +156,7 @@ const makeTexasSenate = (pollMargin) => ({
   id: "tx_sen", state: "TX", title: "U.S. Senate",
   sub: "Talarico (D) vs Paxton (R)",
   system: "Plurality", real: true,
-  note: `Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Paxton (about half of how far Texas polls have typically missed in recent elections, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the forecast's poll center was shifted ${TX_HOUSE} pts toward Paxton (about half of how far Texas polls have typically missed in recent elections, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Paxton", short: "Paxton", color: RED },
   right: { full: "Talarico", short: "Talarico", color: BLUE },
   units: txUnits(pollMargin),
@@ -169,7 +169,7 @@ const makeTexasGov = (pollMargin) => ({
   id: "tx_gov", state: "TX", title: "Governor",
   sub: "Hinojosa (D) vs Abbott (R)",
   system: "Plurality", real: true,
-  note: `Greg Abbott is seeking a fourth term. Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${TX_HOUSE} pts toward Abbott, the same shift as the Texas Senate race (about half of how far Texas polls have typically missed in recent elections, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Greg Abbott sought a fourth term. Texas leans strongly Republican and its polls have tended to underestimate Republicans, so the forecast's poll center was shifted ${TX_HOUSE} pts toward Abbott, the same shift as the Texas Senate race (about half of how far Texas polls have typically missed in recent elections, since past misses don't reliably repeat).${TX_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Abbott", short: "Abbott", color: RED },
   right: { full: "Hinojosa", short: "Hinojosa", color: BLUE },
   units: txUnits(pollMargin),
@@ -190,7 +190,7 @@ const makeIowaSenate = (pollMargin) => ({
   id: "ia_sen", state: "IA", title: "U.S. Senate",
   sub: "Turek (D) vs Hinson (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Ernst is retiring). Iowa leans strongly Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${IA_HOUSE} pts toward Hinson (halved in October, since past misses don't reliably repeat).${IA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Open seat (Ernst retired). Iowa leans strongly Republican and its polls have tended to underestimate Republicans, so the forecast's poll center was shifted ${IA_HOUSE} pts toward Hinson (halved in October, since past misses don't reliably repeat).${IA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Hinson", short: "Hinson", color: RED },
   right: { full: "Turek", short: "Turek", color: BLUE },
   units: iaUnits(pollMargin),
@@ -202,7 +202,7 @@ const makeIowaGov = (pollMargin) => ({
   id: "ia_gov", state: "IA", title: "Governor",
   sub: "Sand (D) vs Lahn (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Kim Reynolds isn't running). Iowa leans Republican and its polls have tended to underestimate Republicans, so the poll center is shifted ${IA_HOUSE} pts toward Lahn, the same shift as the Iowa Senate race.${IA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
+  note: `Open seat (Kim Reynolds didn't run). Iowa leans Republican and its polls have tended to underestimate Republicans, so the forecast's poll center was shifted ${IA_HOUSE} pts toward Lahn, the same shift as the Iowa Senate race.${IA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Lahn", short: "Lahn", color: RED },
   right: { full: "Sand", short: "Sand", color: BLUE },
   units: iaUnits(pollMargin),
@@ -222,8 +222,8 @@ const gaUnits = (pollMargin) =>
 const makeGeorgiaSenate = (pollMargin) => ({
   id: "ga_sen", state: "GA", title: "U.S. Senate",
   sub: "Ossoff (D) vs Collins (R)",
-  system: "Majority (runoff Dec 1 if no one tops 50%)", real: true,
-  note: `Ossoff is the incumbent; Collins won the Republican runoff. The poll center is shifted ${GA_HOUSE} pt toward Collins for Georgia's slight Republican lean. If no candidate wins a majority in November, the race goes to a December 1 runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  system: "Majority required", real: true,
+  note: `Ossoff was the incumbent; Collins won the Republican runoff. The forecast's poll center was shifted ${GA_HOUSE} pt toward Collins for Georgia's slight Republican lean. Georgia requires a majority to win, or the race goes to a December runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Collins", short: "Collins", color: RED },
   right: { full: "Ossoff", short: "Ossoff", color: BLUE },
   units: gaUnits(pollMargin),
@@ -234,8 +234,8 @@ const makeGeorgiaSenate = (pollMargin) => ({
 const makeGeorgiaGov = (pollMargin) => ({
   id: "ga_gov", state: "GA", title: "Governor",
   sub: "Bottoms (D) vs Jackson (R)",
-  system: "Majority (runoff Dec 1 if no one tops 50%)", real: true,
-  note: `Open seat (Brian Kemp is term-limited). The poll center is shifted ${GA_HOUSE} pt toward Jackson for Georgia's narrow Republican lean, the same as the Senate race. Georgia requires a majority: if no one tops 50%, the race goes to a December 1 runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
+  system: "Majority required", real: true,
+  note: `Open seat (Brian Kemp was term-limited). The forecast's poll center was shifted ${GA_HOUSE} pt toward Jackson for Georgia's narrow Republican lean, the same as the Senate race. Georgia requires a majority to win, or the race goes to a December runoff.${GA_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Jackson", short: "Jackson", color: RED },
   right: { full: "Bottoms", short: "Bottoms", color: BLUE },
   units: gaUnits(pollMargin),
@@ -256,7 +256,7 @@ const makeNebraskaSenate = (pollMargin) => ({
   id: "ne_sen", state: "NE", title: "U.S. Senate",
   sub: "Osborn (I) vs Ricketts (R)",
   system: "Independent vs Republican", real: true,
-  note: `Dan Osborn runs as an independent against Republican incumbent Pete Ricketts; the Democratic nominee is expected to step aside for him. Public polls show a near-tie, but the center is shifted ${NE_HOUSE} pts toward Ricketts for Nebraska's strong Republican lean (Trump +20 in 2024) and Osborn's 2024 pattern of polling close before losing by about 7. The shift was halved in October, since one race's miss doesn't reliably repeat. Osborn has not said which party he would caucus with.${NE_HAS_COUNTIES ? " County map built from past results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Dan Osborn ran as an independent against Republican incumbent Pete Ricketts, with no Democrat in the race. Public polls showed a near-tie, but the forecast's center was shifted ${NE_HOUSE} pts toward Ricketts for Nebraska's strong Republican lean (Trump +20 in 2024) and Osborn's 2024 pattern of polling close before losing by about 7. The shift was halved in October, since one race's miss doesn't reliably repeat. As it turned out, every Nebraska poll overstated Osborn.${NE_HAS_COUNTIES ? " County map built from past results." : ""}`,
   left: { full: "Ricketts", short: "Ricketts", color: RED },
   right: { full: "Osborn", short: "Osborn", color: TEAL },
   units: neUnits(pollMargin),
@@ -304,7 +304,7 @@ const makeAlaskaSenate = (pollMargin = 3) => ({
   id: "ak_sen", state: "AK", title: "U.S. Senate",
   sub: "Peltola (D) vs Sullivan (R)",
   system: "Ranked-Choice Voting", real: true, noNight: !((akCount.rows || []).length), liveOn: (akCount.rows || []).length > 0,
-  note: `Polling forecast only. Centered on the head-to-head polling average, then shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans; the shift was halved in October, since past misses don't reliably repeat. Alaska's ranked-choice rounds are counted about two weeks after election night, so this needle does not move on election night.`,
+  note: `Before the count, this was a polling forecast: the head-to-head polling average, shifted ${AK_HOUSE} pts toward Sullivan because Alaska polls have underestimated Republicans (halved in October, since past misses don't reliably repeat). From Nov. 6 it ran on the count instead.`,
   left: { full: "Sullivan", short: "Sullivan", color: RED },
   right: { full: "Peltola", short: "Peltola", color: BLUE },
   units: [unit("Alaska", clamp(0.5 + (pollMargin - AK_HOUSE) / 200, 0.02, 0.98), 320000)],
@@ -338,7 +338,7 @@ const makeNHSenate = (pollMargin) => ({
   id: "nh_sen", state: "NH", title: "U.S. Senate",
   sub: "Pappas (D) vs Sununu (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Shaheen retiring). Chris Pappas (D) faces former Senator John E. Sununu (R). Centered on polls, then shifted ${NH_HOUSE} pt toward Sununu, the smallest shift on the board. New Hampshire leans Democratic at the presidential level and has held this seat for Democrats for over a decade, but its polls have underestimated Republicans before and Sununu is a proven statewide crossover candidate. County map built from 2024 results.`,
+  note: `Open seat (Shaheen retired). Chris Pappas (D) faced former Senator John E. Sununu (R). The forecast was centered on polls, then shifted ${NH_HOUSE} pt toward Sununu, the smallest shift on the board: New Hampshire leans Democratic at the presidential level, but its polls have underestimated Republicans before and Sununu was a proven statewide crossover candidate. County map built from 2024 results.`,
   left: { full: "Sununu", short: "Sununu", color: RED },
   right: { full: "Pappas", short: "Pappas", color: BLUE },
   units: nhUnits(pollMargin),
@@ -347,7 +347,7 @@ const makeMichiganSenate = (pollMargin) => ({
   id: "mi_sen", state: "MI", title: "U.S. Senate",
   sub: "El-Sayed (D) vs Rogers (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Peters retiring). Abdul El-Sayed won the August 4 Democratic primary over Haley Stevens in a race decided by roughly a point; Mike Rogers was unopposed on the Republican side. Centered on polls, then shifted ${MI_HOUSE} pt toward Rogers. Michigan polling underestimated Republicans in each of the last three presidential cycles, but misses like that don't reliably repeat in a midterm, and Michigan is the narrowest state on this board at the presidential level. County map built from 2024 results.`,
+  note: `Open seat (Peters retired). Abdul El-Sayed won the August 4 Democratic primary over Haley Stevens in a race decided by roughly a point; Mike Rogers was unopposed on the Republican side. The forecast was centered on polls, then shifted ${MI_HOUSE} pt toward Rogers: Michigan polling underestimated Republicans in each of the last three presidential cycles, but misses like that don't reliably repeat in a midterm. County map built from 2024 results.`,
   left: { full: "Rogers", short: "Rogers", color: RED },
   right: { full: "El-Sayed", short: "El-Sayed", color: BLUE },
   units: miUnits(pollMargin),
@@ -368,7 +368,7 @@ const makeKansasSenate = (pollMargin) => ({
   id: "ks_sen", state: "KS", title: "U.S. Senate",
   sub: "Hamilton (D) vs Marshall (R)",
   system: "Plurality", real: true,
-  note: `Roger Marshall (R) is seeking a second term against Democrat Adam Hamilton. Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races (by about 10 points in the 2014 Senate race and about 7 in 2020), so the poll center is shifted ${KS_HOUSE} pts toward Marshall. Polls missed the other way in Gov. Laura Kelly's races, which is part of why the shift isn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Roger Marshall (R) sought a second term against Democrat Adam Hamilton. Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races (by about 10 points in the 2014 Senate race and about 7 in 2020), so the forecast's poll center was shifted ${KS_HOUSE} pts toward Marshall. Polls missed the other way in Gov. Laura Kelly's races, which is part of why the shift wasn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Marshall", short: "Marshall", color: RED },
   right: { full: "Hamilton", short: "Hamilton", color: BLUE },
   units: ksUnits(pollMargin),
@@ -380,7 +380,7 @@ const makeKansasGov = (pollMargin) => ({
   id: "ks_gov", state: "KS", title: "Governor",
   sub: "Holscher (D) vs Masterson (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Laura Kelly is term-limited). Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races, so the poll center is shifted ${KS_HOUSE} pts toward Masterson, the same shift as the Kansas Senate race. Polls missed the other way in Kelly's own governor races, which is part of why the shift isn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
+  note: `Open seat (Laura Kelly was term-limited). Kansas leans strongly Republican and its polls have underestimated Republicans in recent federal races, so the forecast's poll center was shifted ${KS_HOUSE} pts toward Masterson, the same shift as the Kansas Senate race. Polls missed the other way in Kelly's own governor races, which is part of why the shift wasn't larger.${KS_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Masterson", short: "Masterson", color: RED },
   right: { full: "Holscher", short: "Holscher", color: BLUE },
   units: ksUnits(pollMargin),
@@ -400,7 +400,7 @@ const makeMinnesotaSenate = (pollMargin) => ({
   id: "mn_sen", state: "MN", title: "U.S. Senate",
   sub: "Flanagan (D) vs Tafoya (R)",
   system: "Plurality", real: true,
-  note: `Open seat (Tina Smith is retiring). Minnesota's polls have missed in both directions in recent elections (underrating Democrats in 2018, 2022 and the 2024 Senate race, overrating them slightly in 2020 and the 2024 presidential race), so there's no shift.${MN_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Open seat (Tina Smith retired). Minnesota's polls have missed in both directions in recent elections (underrating Democrats in 2018, 2022 and the 2024 Senate race, overrating them slightly in 2020 and the 2024 presidential race), so the forecast had no shift.${MN_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Tafoya", short: "Tafoya", color: RED },
   right: { full: "Flanagan", short: "Flanagan", color: BLUE },
   units: mnUnits(pollMargin),
@@ -420,7 +420,7 @@ const makeSouthCarolinaSenate = (pollMargin) => ({
   id: "sc_sen", state: "SC", title: "U.S. Senate",
   sub: "Andrews (D) vs D. Graham (R)",
   system: "Plurality", real: true,
-  note: `Sen. Darline Graham (R) was appointed after Lindsey Graham's death in July and won a special Republican runoff to replace him on the ballot. She faces Democrat Annie Andrews. South Carolina leans strongly Republican and its polls have underestimated Republicans in recent races (by about 4 points in the 2020 Senate race and about 5 in the 2022 governor's race), so the poll center is shifted ${SC_HOUSE} pts toward Graham.${SC_HAS_COUNTIES ? " County map built from 2024 results." : " County-level baseline is being added; the needle is currently statewide."}`,
+  note: `Sen. Darline Graham (R) was appointed after Lindsey Graham's death in July and won a special Republican runoff to replace him on the ballot. She faced Democrat Annie Andrews. South Carolina leans strongly Republican and its polls have underestimated Republicans in recent races (by about 4 points in the 2020 Senate race and about 5 in the 2022 governor's race), so the forecast's poll center was shifted ${SC_HOUSE} pts toward Graham.${SC_HAS_COUNTIES ? " County map built from 2024 results." : ""}`,
   left: { full: "Graham", short: "Graham", color: RED },
   right: { full: "Andrews", short: "Andrews", color: BLUE },
   units: scUnits(pollMargin),
@@ -436,7 +436,7 @@ const makeMississippiSenate = (pollMargin = MS_PRIOR) => ({
   id: "ms_sen", state: "MS", title: "U.S. Senate",
   sub: "Colom (D) vs Hyde-Smith (R)",
   system: "Plurality", real: true,
-  note: `Added after election night. Sen. Cindy Hyde-Smith (R) faces Democrat Scott Colom, with independent Ty Pinkins also on the ballot. Forecasters rated it Likely Republican; the only public polls, all Democratic-sponsored, had Hyde-Smith up 3 to 6. Mississippi posts no live results feed, so this needle runs on the AP's county-by-county count and is updated by hand as provisional and late mail ballots are counted (certification Nov. 13). Independent Ty Pinkins (about 2%) is left out of the county counts. County map built from 2024 results.`,
+  note: `Added after election night. Sen. Cindy Hyde-Smith (R) faced Democrat Scott Colom. Forecasters rated it Likely Republican; the only public polls, all Democratic-sponsored, had Hyde-Smith up 3 to 6. Mississippi posts no live results feed, so this needle ran on the AP's county-by-county count, entered by hand as provisional and late mail ballots were counted. Independent Ty Pinkins (about 2%) is left out of the county counts. County map built from 2024 results.`,
   left: { full: "Hyde-Smith", short: "Hyde-Smith", color: RED },
   right: { full: "Colom", short: "Colom", color: BLUE },
   units: Object.keys(MS_LEAN).map((n) => unit(n, clamp(0.5 + (pollMargin - MS_HOUSE) / 200 + MS_LEAN[n], 0.02, 0.98), MS_W[n])),
@@ -1057,14 +1057,15 @@ export default function MaineDashboard() {
     const r = sel && races.find((x) => x.id === sel);
     const st = STATES.find((x) => x.code === view);
     const names = { control: "Senate control", briefing: "Briefing", polls: "Polling averages", ratings: "Pollster ratings", method: "How the needles work", scorecard: "2026 forecast & pollster scorecard", specials: "Special elections tracker", work: "Custom race dashboards", vote: "How to vote", wire: "Live wire" };
-    const t = r ? `${stateLabel(r.state)} ${r.title}: ${r.sub || ""} ${isCalled(r) ? "2026 results" : "live needle"}` : st ? `${st.label} 2026 election needles` : names[view];
-    document.title = t ? `${t} | Needlepoint` : "Needlepoint | Live 2026 Election Needles, Results & Pollster Ratings";
+    const t = r ? `${stateLabel(r.state)} ${r.title}: ${r.sub || ""} ${isCalled(r) ? "2026 results" : "live needle"}` : st ? `${st.label} 2026 election results` : names[view];
+    document.title = t ? `${t} | Needlepoint` : "Needlepoint | 2026 Election Results, Needles & Pollster Ratings";
     const url = `https://needlepoint.news${pathFor(view, sel, races)}`;
     const can = document.querySelector('link[rel="canonical"]'); if (can) can.setAttribute("href", url);
     const og = document.querySelector('meta[property="og:url"]'); if (og) og.setAttribute("content", url);
   }, [view, sel, races]);
   const today = new Date();
-  const edition = anyLive || night ? "Election night edition" : "Forecast edition";
+  const settled = settledAll(races);
+  const edition = settled ? "2026 results" : anyLive || night ? "Election night edition" : "Forecast edition";
   const longDate = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
   const shortDate = today.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   const onState = STATES.some((st) => st.code === view);
@@ -1075,7 +1076,7 @@ export default function MaineDashboard() {
     </div>
   ) : null;
   const statusLine = (<>{simBanner}
-    <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
+    <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: settled ? C.body : anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
       {results && results.simulated ? "Simulated · These needles are running on practice numbers, not real votes." : anyLive && races.some((r) => isCalled(r)) ? (races.some((r) => r.liveOn && !isCalled(r)) ? `Live · Still counting: ${races.filter((r) => r.liveOn && !isCalled(r)).map((r) => stateLabel(r.state)).join(" and ")}. Every other race has been called.` : "Every race has been called. Final certified results will be added as states certify.") : anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
       {anyPaused ? ` ${pausedNow} ${pausedVerb} paused until official results are posted.` : ""}
     </p></>
@@ -1091,7 +1092,7 @@ export default function MaineDashboard() {
     <header style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, paddingBottom: 12, borderBottom: `3px double ${C.text}` }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", fontSize: 13, color: C.muted }}>
         <span>{edition} · {longDate}</span>
-        <span style={{ display: "flex", alignItems: "center", gap: 18 }}><span>{night ? "Results refresh automatically" : "Election night: Tuesday, Nov. 3"}</span><SupportSmall /></span>
+        <span style={{ display: "flex", alignItems: "center", gap: 18 }}><span>{settled ? "Final results, awaiting certification" : night ? "Results refresh automatically" : "Election night: Tuesday, Nov. 3"}</span><SupportSmall /></span>
       </div>
       {titleBtn(64)}
       <nav aria-label="Sections" style={{ position: "relative", display: "flex", alignItems: "center", gap: 26 }}>
@@ -1414,25 +1415,29 @@ function GovDetail({ race, onBack, govB, govMargin, current, night }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={kicker(d.favColor)}>Maine · Governor · Plurality, three-way{isCalled(race) ? " · Called" : race.liveOn ? " · Live" : ""}</div>
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: 44, lineHeight: 1.05, letterSpacing: -0.8 }}>{race.cands.map((c) => c.short).join(" vs. ")}</h1>
-          <p style={deckStyle(true)}>{d.frac > 0
+          <p style={deckStyle(true)}>{isCalled(race) && d.frac > 0
+            ? `${byShare[0].full} won with ${(byShare[0].sh * 100).toFixed(1)}% of the vote, ahead of ${byShare.slice(1).map((p) => `${p.full} (${(p.sh * 100).toFixed(1)}%)`).join(" and ")}.`
+            : d.frac > 0
             ? `${d.fav} leads with ${(parts.find((p) => p.short === d.fav).sh * 100).toFixed(1)}% projected. In a three-way race the winner needs only the most votes, so the gap between the top two matters more than the 50% line.`
             : `Polling has Bennett at ${govB}% and ${govMargin >= 0 ? "Pingree" : "Charles"} ahead by ${Math.abs(govMargin)} between the two major-party candidates. The winner needs only the most votes, not a majority.`}</p>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>Bennett (I) has no past election to map, so this race leans on polling for its starting point.</p>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>Bennett (I) had no past election to map, so the forecast leaned on polling for its starting point.</p>
           {isCalled(race) && <CalledNote />}
           {paused && <PauseNote state="ME" />}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 14, justifyContent: "center", opacity: paused ? 0.45 : 1 }}>
-          <div style={{ fontSize: 14, color: C.muted }}>{paused ? "Pre-election forecast" : "Chance of winning"} · <b style={{ color: C.text }}>{d.tag}</b></div>
+          <div style={{ fontSize: 14, color: C.muted }}>{isCalled(race) && d.frac > 0 ? "Share of the vote" : paused ? "Pre-election forecast" : "Chance of winning"} · <b style={{ color: C.text }}>{isCalled(race) ? `Called for ${d.fav}` : d.tag}</b></div>
           {byShare.map((p) => (
             <div key={p.key} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                 <span style={{ fontSize: 17, fontWeight: 600, color: p.color }}>{p.full}</span>
-                <span style={{ fontSize: 15, color: C.muted }}><b style={{ fontSize: 24, color: p.color }}>{Math.round(p.win * 100)}%</b> to win · {(p.sh * 100).toFixed(1)}% of the vote</span>
+                {isCalled(race) && d.frac > 0
+                  ? <b style={{ fontSize: 24, color: p.color }}>{(p.sh * 100).toFixed(1)}%</b>
+                  : <span style={{ fontSize: 15, color: C.muted }}><b style={{ fontSize: 24, color: p.color }}>{Math.round(p.win * 100)}%</b> to win · {(p.sh * 100).toFixed(1)}% of the vote</span>}
               </div>
               <div style={{ height: 10, background: C.panel2 }}><div style={{ width: `${p.sh * 100}%`, height: "100%", background: p.color, transition: "width .6s ease-out" }} /></div>
             </div>
           ))}
-          <div style={{ fontSize: 13, color: C.muted }}>{Math.round(m.fracIn * 100)}% of expected vote in</div>
+          <div style={{ fontSize: 13, color: C.muted }}>{Math.round(m.fracIn * 100)}% of expected vote counted</div>
         </div>
       </section>
       <section style={{ paddingTop: 26, maxWidth: 820 }}>
@@ -1512,7 +1517,7 @@ function SupportBlock({ compact }) {
     <section style={{ display: "flex", flexDirection: compact ? "column" : "row", alignItems: compact ? "stretch" : "center", justifyContent: "space-between", gap: compact ? 12 : 40, marginTop: 40, paddingTop: 22, borderTop: `3px double ${C.text}` }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 760 }}>
         <span style={{ fontFamily: serif, fontSize: compact ? 22 : 26, fontWeight: 600 }}>Support Needlepoint</span>
-        <span style={{ fontFamily: serif, fontSize: compact ? 16 : 18, lineHeight: 1.5, color: C.body }}>It's free, ad-free and built by one person. If it's useful to you, you can chip in to keep it running through election night.</span>
+        <span style={{ fontFamily: serif, fontSize: compact ? 16 : 18, lineHeight: 1.5, color: C.body }}>It's free, ad-free and built by one person. If it's useful to you, you can chip in to keep it running for the next election.</span>
       </div>
       <a href={COFFEE_URL} target="_blank" rel="noopener noreferrer"
         style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, minHeight: 48, boxSizing: "border-box", padding: "12px 22px", background: C.text, color: C.ink, textDecoration: "none", fontSize: 16, fontWeight: 700, whiteSpace: "nowrap" }}>
@@ -1659,11 +1664,11 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
       </button>
       <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,7fr) minmax(0,5fr)" : "minmax(0,1fr)", columnGap: 40, rowGap: 22, paddingBottom: 26, borderBottom: `1px solid ${C.line}` }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={kicker(hasNeedle ? d.favColor : RED)}>Alaska · {race.title} · Ranked-choice voting · {a ? "Count + projection" : "Forecast only"}</div>
+          <div style={kicker(hasNeedle ? d.favColor : RED)}>Alaska · {race.title} · Ranked-choice voting · {isCalled(race) ? "Called" : a ? "Count + projection" : "Forecast only"}</div>
           <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 48 : 32, lineHeight: 1.05, letterSpacing: -0.8 }}>Peltola vs. Sullivan</h1>
-          <p style={deckStyle(wide)}>{hasNeedle ? dekFor(race, d, current) : "Rated Lean Republican."}</p>
+          <p style={deckStyle(wide)}>{a && isCalled(race) ? `Peltola leads Sullivan by ${fmtVotes(a.P - a.S)} first-choice votes with ${Math.round(a.fracIn * 100)}% of the expected vote counted. After the ranked-choice rounds, Needlepoint projects Peltola ahead by about ${(a.margin * 100).toFixed(1)} points.` : hasNeedle ? dekFor(race, d, current) : "Rated Lean Republican."}</p>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: C.muted }}>{a
-            ? `This needle now runs on the AP's first-choice count (${Math.round(a.fracIn * 100)}% of the expected vote, as of ${`Nov. ${Number(String(akCount.asOf).slice(8, 10))}`}) plus a projection of the ranked-choice rounds, which Alaska tabulates Nov. 18. Not called.`
+            ? `This needle runs on the AP's first-choice count (${Math.round(a.fracIn * 100)}% of the expected vote, as of ${`Nov. ${Number(String(akCount.asOf).slice(8, 10))}`}) plus a projection of the ranked-choice rounds, which Alaska tabulates Nov. 18.${isCalled(race) ? ` Needlepoint called the race for ${race[EDITOR_CALLS[race.id]].short} on Nov. 14.` : " Not called."}`
             : "This needle is a polling forecast. It won't move on election night, because Alaska's ranked-choice rounds are counted about two weeks later."}</p>
         </div>
         {hasNeedle && (
@@ -1673,7 +1678,7 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
               <span style={{ display: "flex", flexDirection: "column" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.right.color }}>{100 - leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Peltola (D)</span></span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}><span style={{ fontSize: wide ? 34 : 28, fontWeight: 600, color: race.left.color }}>{leftPct}%</span><span style={{ fontSize: 15, fontWeight: 600 }}>Sullivan (R)</span></span>
             </div>
-            <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>Chance of winning, {a ? "from the count and a ranked-choice projection" : "from the polling average"} · <b style={{ color: C.text }}>{d.tag}</b></div>
+            <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>Chance of winning, {a ? "from the count and a ranked-choice projection" : "from the polling average"} · <b style={{ color: C.text }}>{isCalled(race) ? `Called for ${race[EDITOR_CALLS[race.id]].short}` : d.tag}</b></div>
           </div>
         )}
       </section>
@@ -1693,8 +1698,8 @@ function AlaskaDetail({ race, onBack, current, wide = true, onNav }) {
           )}
           {!a && sec("Won't be called on election night", "Alaska counts first-choice votes on the night, but if no candidate is above 50% the winner is decided by ranked-choice rounds the state does not tabulate until about two weeks later. So on the night you'll see the first-choice lead, not a final result.", true)}
           {sec("How this race works", "Alaska uses a top-four open primary: the four candidates with the most votes, regardless of party, advance to a ranked-choice general election. To win outright, a candidate needs a majority of first-choice votes. If no one clears 50%, the last-place candidate is eliminated and their ballots move to each voter's next choice. That repeats until someone has a majority.")}
-          {sec("The matchup", "Incumbent Republican Dan Sullivan faces Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024 and Sullivan is the incumbent; Peltola's crossover appeal and the ranked-choice format keep it competitive.")}
-          {sec("How this needle is built", a ? "Since Nov. 6 it runs on the count. Each house district's uncounted ballots are assumed to split like its counted ones. Then the ranked-choice rounds are simulated: Heikes and the minor candidates are eliminated, and their ballots move the way the New York Times found voters actually ranked in Alaska's released ballot records (Heikes voters: 36% second choice Sen. Sullivan, 12% Peltola, 37% no one; Daniel J. Sullivan Jr. voters: 29% Peltola, 16% Sen. Sullivan, 36% no one). That nets Sen. Sullivan about 0.4 points. The chance of winning allows for errors in the uncounted vote and in the transfers." : `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
+          {sec("The matchup", "Incumbent Republican Dan Sullivan faced Democrat Mary Peltola, the only Democrat to win a statewide race in Alaska since 2008. Trump carried Alaska by 13 points in 2024, but Peltola's crossover appeal and the ranked-choice format kept the race competitive.")}
+          {sec("How this needle is built", a ? "Since Nov. 6 it has run on the count. Each house district's uncounted ballots are assumed to split like its counted ones. Then the ranked-choice rounds are simulated: Heikes and the minor candidates are eliminated, and their ballots move the way the New York Times found voters actually ranked in Alaska's released ballot records (Heikes voters: 36% second choice Sen. Sullivan, 12% Peltola, 37% no one; Daniel J. Sullivan Jr. voters: 29% Peltola, 16% Sen. Sullivan, 36% no one). That nets Sen. Sullivan about 0.4 points. The chance of winning allows for errors in the uncounted vote and in the transfers." : `It starts from the head-to-head polling average and shifts ${AK_HOUSE} points toward Sullivan (halved in October, since past misses don't reliably repeat), because Alaska polls have underestimated Republicans: Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close. Alaska reports results by state house district rather than county, so there's no county map, and the needle stays a forecast.`)}
         </div>
         {hasNeedle && onNav && <RacePolls r={race} current={current} onNav={onNav} />}
       </section>
@@ -1761,6 +1766,29 @@ function tintOf(hex, t = 0.68) {
 }
 
 // One plain reading of any race: who is favored, how likely, how much is counted.
+// After a call (Nov 14): the final counted vote of a called two-candidate race, or null when no count was loaded.
+function finalCount(r) {
+  if (!r || !isCalled(r) || r.type === "three" || !r.left || !r.units) return null;
+  if (r.id === "ak_sen") return null; // Alaska's page shows its first-choice count and ranked-choice projection
+  const t = voteTotals(r.units);
+  if (t.total <= 0) return null;
+  const w = r[EDITOR_CALLS[r.id]], l = w === r.right ? r.left : r.right;
+  const wv = w === r.right ? t.dem : t.rep, lv = t.total - wv;
+  return { w, l, wv, lv, wsh: wv / t.total, lsh: lv / t.total, pts: ((wv - lv) / t.total) * 100, votes: wv - lv, dsh: t.dem / t.total, rsh: t.rep / t.total };
+}
+// Margin of a called race for tables: "Won by 4.9" (two-candidate vote; three-way: top two).
+function wonBy(r) {
+  if (r.type === "three") {
+    const m = compute3(r.units);
+    if (!(m.fracIn > 0)) return null;
+    const sh = r.cands.map((c) => m.proj[c.key]).sort((a, b) => b - a);
+    return `Won by ${((sh[0] - sh[1]) * 100).toFixed(1)}`;
+  }
+  if (r.id === "ak_sen" && akProj()) return `Leads by ${(akProj().margin * 100).toFixed(1)} (projected)`;
+  const f = finalCount(r);
+  return f ? `Won by ${f.pts.toFixed(1)}` : null;
+}
+const settledAll = (races) => races.every((r) => isCalled(r));
 function readRace(r) {
   if (!r) return { kind: "none" };
   if (r.type === "tbd") return { kind: "tbd", fav: "To be decided", favColor: C.brass, pct: null, tag: r.tbdChip || "Nominee TBD", frac: 0 };
@@ -1781,6 +1809,13 @@ function readRace(r) {
     marginTxt: `${(m.margin >= 0 ? r.right : r.left).short} +${Math.abs(m.margin * 100).toFixed(1)}`, favSide: EDITOR_CALLS[r.id] || (m.margin >= 0 ? "right" : "left") };
 }
 function swingCaption(r, m) {
+  const f = finalCount(r);
+  if (f && m && m.fracIn > 0) {
+    const s0 = (m.rawSwing ?? m.swing) * 100;
+    return Math.abs(s0) < 0.6
+      ? "The results landed close to our pre-election county forecast."
+      : `Compared with our pre-election county forecast, the counted vote ran about ${Math.abs(s0).toFixed(1)} points toward ${s0 > 0 ? r.right.short : r.left.short}.`;
+  }
   if (EDITOR_CALLS[r.id] && m.fracIn === 0) return `Needlepoint has called this race for ${r[EDITOR_CALLS[r.id]].short}. The county map shows our pre-election forecast until official results are posted.`;
   if (m.fracIn === 0) return "No votes counted yet. The needle sits at its starting point, built from polling and each county's usual lean.";
   const s = (m.rawSwing ?? m.swing) * 100;
@@ -1799,6 +1834,8 @@ function headlineFor(r, d) {
   return `${d.fav} is a clear favorite`;
 }
 function dekFor(r, d, current) {
+  const f = finalCount(r);
+  if (f && d.frac > 0) return `${f.w.short} beat ${f.l.short} by ${f.pts.toFixed(1)} points, ${fmtVotes(f.votes)} votes, with ${Math.round(d.frac * 100)}% of the expected vote counted.`;
   if (d.frac > 0 && d.m) return swingCaption(r, d.m);
   const pc = current && current[pollKey(r.id)];
   if (!pc || pc.margin == null || d.kind !== "two") return r.note || "";
@@ -1902,6 +1939,7 @@ const raceGroup = (r) => (/House/.test(r.title) ? "House" : /Governor/.test(r.ti
 function RaceTable({ races, onPick, wide, night, grouped = false }) {
   const reads = races.map((r) => ({ r, d: isPaused(r, night) ? { ...readRace(r), paused: true, frac: 0 } : readRace(r) }));
   const anyIn = reads.some((x) => x.d.frac > 0);
+  const done = reads.every((x) => isCalled(x.r));
   const cols = wide ? `150px minmax(0,1fr) 190px 150px ${anyIn ? "80px " : ""}72px` : "56px minmax(0,1fr) auto";
   const byName = (a, b) => stateLabel(a.r.state).localeCompare(stateLabel(b.r.state)) || raceName(a.r).localeCompare(raceName(b.r), undefined, { numeric: true });
   const groups = grouped
@@ -1912,9 +1950,9 @@ function RaceTable({ races, onPick, wide, night, grouped = false }) {
           ? <Dial mini pRight={d.pRight} width={wide ? 64 : 52} left={r.left.color} right={r.right.color} />
           : d.kind === "three" ? <div style={{ width: wide ? 64 : 52 }}><ThreeStrip parts={d.parts} height={8} /></div>
           : <span style={{ fontSize: 11, color: C.muted }}>No needle</span>;
-        const fav = d.paused ? "Paused" : d.runoff ? "Runoff" : d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
+        const fav = isCalled(r) ? d.fav : d.paused ? "Paused" : d.runoff ? "Runoff" : d.pct != null ? `${d.fav} ${d.pct}%` : d.kind === "rcv" ? "Lean R" : d.fav;
         const favCol = d.paused ? C.muted : d.runoff ? C.text : d.favColor;
-        const ratingTxt = d.paused ? "Waiting for official results" : d.kind === "rcv" ? "No night-of call" : r.noNight ? `${d.tag} · forecast only` : d.tag;
+        const ratingTxt = isCalled(r) ? (wonBy(r) || "Called") : d.paused ? "Waiting for official results" : d.kind === "rcv" ? "No night-of call" : r.noNight ? `${d.tag} · forecast only` : d.tag;
         return (
           <ErrorBoundary key={r.id} mini label={`${r.title} unavailable`}>
             <button role="listitem" onClick={() => onPick(r.id)}
@@ -1949,7 +1987,7 @@ function RaceTable({ races, onPick, wide, night, grouped = false }) {
     <div role="list">
       {wide && (
         <div style={{ display: "grid", gridTemplateColumns: cols, columnGap: 20, padding: "9px 0", fontSize: 12, fontWeight: 600, color: C.muted, borderBottom: `1px solid ${C.line}` }}>
-          <span>State</span><span>Race</span><span>Favored</span><span>Rating</span>{anyIn && <span>Counted</span>}<span style={{ textAlign: "right" }}>Needle</span>
+          <span>State</span><span>Race</span><span>{done ? "Winner" : "Favored"}</span><span>{done ? "Margin (pts)" : "Rating"}</span>{anyIn && <span>Counted</span>}<span style={{ textAlign: "right" }}>Needle</span>
         </div>
       )}
       {groups.map(([g, list], gi) => g ? (
@@ -1966,9 +2004,11 @@ function LeadStory({ r, current, wide, onPick }) {
   const d = readRace(r);
   if (d.kind !== "two") return null;
   const L = r.left, R = r.right;
-  const leftPct = d.favSide === "left" ? d.pct : 100 - d.pct;
-  const rightPct = 100 - leftPct;
+  const leftPct0 = d.favSide === "left" ? d.pct : 100 - d.pct;
   const t = voteTotals(r.units);
+  const fc = finalCount(r);
+  const leftPct = fc ? (fc.rsh * 100).toFixed(1) : leftPct0;
+  const rightPct = fc ? (fc.dsh * 100).toFixed(1) : 100 - leftPct0;
   const side = (cand, pct, align) => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: align, gap: 2, minWidth: wide ? 140 : 0 }}>
       <span style={{ fontSize: wide ? 40 : 28, fontWeight: 600, color: cand.color, lineHeight: 1 }}>{pct}%</span>
@@ -1996,7 +2036,7 @@ function LeadStory({ r, current, wide, onPick }) {
         </>
       )}
       <p style={{ margin: 0, textAlign: "center", fontSize: 13, color: C.muted }}>
-        Chance of winning, {d.frac > 0 ? "updated from the official count" : "from the polling average"}. {d.tag}.{" "}
+        {fc ? <>Share of the two-candidate vote, {Math.round(d.frac * 100)}% of the expected vote counted. Called for {fc.w.short}.</> : <>Chance of winning, {d.frac > 0 ? "updated from the official count" : "from the polling average"}. {d.tag}.</>}{" "}
         <button onClick={() => onPick(r.id)} style={{ ...linkBtn, fontSize: 13 }}>Open the race page</button>
       </p>
     </div>
@@ -2059,7 +2099,7 @@ function SeatCard({ c, open, onToggle, night, wide }) {
           {cand(left, "flex-start")}<span style={{ fontSize: 12, color: C.muted }}>vs</span>{cand(right, "flex-end")}
         </span>
         <span style={{ fontSize: 12.5, color: C.muted }}>
-          {n ? `${n} poll${n === 1 ? "" : "s"}` : "No public polls"}{night ? " · Forecast only, no live count" : ""}<span style={{ float: "right" }}>{open ? "Close ▴" : "Details ▾"}</span>
+          {n ? `${n} poll${n === 1 ? "" : "s"}` : "No public polls"}{night ? " · Pre-election rating" : ""}<span style={{ float: "right" }}>{open ? "Close ▴" : "Details ▾"}</span>
         </span>
       </button>
       {open && (
@@ -2074,7 +2114,7 @@ function SeatCard({ c, open, onToggle, night, wide }) {
           {c.competitive && c.competitiveWhy && <div style={{ fontSize: 13 }}><b>Competitive:</b> {c.competitiveWhy.join("; ")}.</div>}
           {c.futureNeedle && <div style={{ fontSize: 13, fontWeight: 600 }}>A full needle for this state is planned for future elections.</div>}
           {c.nominees.some((x) => x.minor) && <div style={{ fontSize: 13, color: C.muted }}>Also on the ballot: {c.nominees.filter((x) => x.minor).map((x) => `${x.name} (${x.party})`).join(", ")}</div>}
-          {night && <div style={{ fontSize: 13, fontWeight: 600 }}>Forecast only, no live count.{/_gov_card$/.test(c.id) ? "" : " This seat counts toward Senate control by its forecaster rating."}</div>}
+          {night && <div style={{ fontSize: 13, fontWeight: 600 }}>Needlepoint didn't run a needle for this race.{/_gov_card$/.test(c.id) ? "" : " In Senate control it counts by its pre-election forecaster rating."}</div>}
           <div style={{ fontSize: 13, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>{n ? "Public polls since the primary" : "No public polls since the primary"}</div>
           {c.polls.map((p, i) => (
             <div key={i} style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,1fr) auto" : "minmax(0,1fr)", columnGap: 12, rowGap: 2, padding: "6px 0", borderBottom: `1px solid ${C.line}` }}>
@@ -2102,11 +2142,11 @@ function SeatCards({ wide, night, cards = CARD_RACES, title = "Every other Senat
   const [open, setOpen] = useState(null);
   return (
     <section style={{ paddingTop: 34 }}>
-      <SectionHead title={title} note={wide ? "Forecaster ratings and public polls · no needle" : null} size={wide ? 28 : 22} />
+      <SectionHead title={title} note={wide ? "Pre-election ratings and polls · no needle" : null} size={wide ? 28 : 22} />
       <div style={{ display: "grid", gridTemplateColumns: wide ? "repeat(3, minmax(0,1fr))" : "minmax(0,1fr)", gap: wide ? 12 : 8, paddingTop: 14 }}>
         {cards.map((c) => <SeatCard key={c.id} c={c} night={night} wide={wide} open={open === c.id} onToggle={() => setOpen(open === c.id ? null : c.id)} />)}
       </div>
-      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>{footer || "The rating shown is the one most of Cook, Sabato's Crystal Ball and Inside Elections agree on. These seats count toward Senate control by that rating. Their polls are listed for reference and don't feed any needle."}</p>
+      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>{footer || "The rating shown is the pre-election one most of Cook, Sabato's Crystal Ball and Inside Elections agreed on. In Senate control, these seats count by that rating. Their polls are listed for reference and didn't feed any needle."}</p>
     </section>
   );
 }
@@ -2115,14 +2155,14 @@ function CardSeatBlock() {
   const groups = RATING_ORDER.map((r) => [r, CARD_RACES.filter((c) => c.consensus.rating === r)]).filter(([, l]) => l.length);
   return (
     <section style={{ paddingTop: 26 }}>
-      <SectionHead title={`The other ${CARD_RACES.length} seats on the ballot`} note="Counted by forecaster rating" size={22} />
+      <SectionHead title={`The other ${CARD_RACES.length} seats on the ballot`} note="Counted by pre-election rating" size={22} />
       {groups.map(([r, list]) => (
         <div key={r} style={{ display: "grid", gridTemplateColumns: "100px minmax(0,1fr)", columnGap: 14, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: 15, lineHeight: 1.5 }}>
           <span style={{ fontWeight: 700, color: ratingColor(r) }}>{r} <span style={{ fontWeight: 400, color: C.muted }}>({list.length})</span></span>
           <span>{list.map((c) => c.stateName + (c.seat === "special" ? " (special)" : "")).join(", ")}</span>
         </div>
       ))}
-      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>These races have no needle and no live count on election night. Each counts for the party its forecaster rating favors. Seats not up this year: {NOT_UP_D} Democrats (including two independents who caucus with them) and {NOT_UP_R} Republicans.</p>
+      <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>These races had no needle. Each counts for the party its pre-election forecaster rating favored. Seats not up this year: {NOT_UP_D} Democrats (including two independents who caucus with them) and {NOT_UP_R} Republicans.</p>
     </section>
   );
 }
@@ -2161,7 +2201,7 @@ function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
     <aside style={{ display: "flex", flexDirection: "column", gap: 26 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <h3 style={{ margin: 0, fontFamily: serif, fontSize: 24, fontWeight: 600 }}>Senate control</h3>
-        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: C.body }}>{anyIn ? "If every race goes to its current leader:" : "If every race goes to today's polling leader:"}{paused.length ? " Paused races count by their pre-election forecast." : ""}</p>
+        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: C.body }}>{settledAll(races) ? "The new Senate, with every race called:" : anyIn ? "If every race goes to its current leader:" : "If every race goes to today's polling leader:"}{paused.length ? " Paused races count by their pre-election forecast." : ""}</p>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", fontSize: 30, fontWeight: 600 }}>
           <span style={{ color: BLUE }}>{tally.D} D</span>{tally.I > 0 && <span style={{ color: TEAL, fontSize: 22 }}>{tally.I} I</span>}<span style={{ color: RED }}>{tally.R} R</span>
         </div>
@@ -2227,7 +2267,7 @@ function RacePolls({ r, current, onNav }) {
   const mTxt = (dm, rp) => { const x = Math.round((dm - rp) * 10) / 10; return x === 0 ? ["Tied", C.text] : x > 0 ? [`${dem} +${x}`, r.right.color] : [`${rep} +${-x}`, r.left.color]; };
   return (
     <div>
-      <SectionHead title="Recent polls" note={pc.nPolls ? `${pc.nPolls} in the average` : null} size={22} />
+      <SectionHead title={isCalled(r) ? "Final polls" : "Recent polls"} note={pc.nPolls ? `${pc.nPolls} in the ${isCalled(r) ? "final " : ""}average` : null} size={22} />
       {polls.length === 0 ? <p style={{ fontSize: 14, color: C.muted }}>{pc.note || "No public polls yet."}</p> : polls.map((p, i) => {
         const [t, col] = mTxt(p.dem, p.rep);
         return (
@@ -2275,14 +2315,14 @@ function CountyTable({ race }) {
                 <span style={{ width: `${share * 100}%`, background: tintOf(race.right.color, 0.45) }} />
                 <span style={{ width: `${(1 - share) * 100}%`, background: tintOf(race.left.color, 0.45) }} />
               </span>
-              {anyIn && <span style={{ fontSize: 12, color: C.muted }}>{Math.round(u.reported * 100)}% counted · expected {base >= 0 ? race.right.short : race.left.short} +{Math.abs(base)}</span>}
+              {anyIn && <span style={{ fontSize: 12, color: C.muted }}>{Math.round(u.reported * 100)}% counted · forecast {base >= 0 ? race.right.short : race.left.short} +{Math.abs(base)}</span>}
             </span>
             <span style={{ fontSize: 14, fontWeight: 600, color: col, textAlign: "right" }}>{lean === 0 ? "Even" : `${who} +${Math.abs(lean)}`}</span>
           </div>
         );
       })}
       <p style={{ margin: 0, paddingTop: 10, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>
-        {anyIn ? "Counties show the counted vote once results arrive, and the starting estimate before that." : "Each county starts from its usual lean relative to the state. When votes arrive, the gap between the starting estimate and the real count drives the needle."}
+        {anyIn ? (isCalled(race) ? "Each county's counted vote, next to our pre-election forecast for it." : "Counties show the counted vote once results arrive, and the starting estimate before that.") : "Each county starts from its usual lean relative to the state. When votes arrive, the gap between the starting estimate and the real count drives the needle."}
       </p>
     </div>
   );
@@ -2293,6 +2333,7 @@ function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
   const L = race.left, R = race.right;
   const leftPct = d.favSide === "left" ? d.pct : 100 - d.pct;
   const t = voteTotals(race.units);
+  const fc = finalCount(race);
   const party = (c) => (c.color === RED ? "R" : c.color === TEAL ? "I" : "D");
   const side = (cand, pct, votes, align) => (
     <span style={{ display: "flex", flexDirection: "column", alignItems: align }}>
@@ -2325,10 +2366,12 @@ function RacePage({ race, onBack, current, briefing, wide, onNav, night }) {
           {paused && <div style={{ fontSize: 14, fontWeight: 600, color: C.muted }}>Pre-election forecast</div>}
           <div style={{ width: "100%", maxWidth: 400 }}><Dial pRight={d.pRight} width={400} left={L.color} right={R.color} /></div>
           <div style={{ display: "flex", justifyContent: "space-between", width: "100%", maxWidth: 400 }}>
-            {side(R, 100 - leftPct, t.dem, "flex-start")}{side(L, leftPct, t.rep, "flex-end")}
+            {fc ? <>{side(R, (fc.dsh * 100).toFixed(1), t.dem, "flex-start")}{side(L, (fc.rsh * 100).toFixed(1), t.rep, "flex-end")}</>
+              : <>{side(R, 100 - leftPct, t.dem, "flex-start")}{side(L, leftPct, t.rep, "flex-end")}</>}
           </div>
           <div style={{ fontSize: 14, color: C.muted, textAlign: "center" }}>
-            {d.tag.startsWith("Called") && d.frac === 0
+            {fc ? <>Share of the two-candidate vote · <b style={{ color: C.text }}>Called for {fc.w.short}</b> · {Math.round(d.frac * 100)}% of expected vote counted</>
+            : d.tag.startsWith("Called") && d.frac === 0
               ? <>Needlepoint call · <b style={{ color: C.text }}>{d.tag}</b> · official results to follow</>
               : <>Chance of winning · <b style={{ color: C.text }}>{d.tag}</b> · Projected {d.marginTxt} · {Math.round(d.frac * 100)}% of expected vote in</>}
           </div>
@@ -2363,6 +2406,7 @@ function SenateControlView({ races, wide, onPick, night }) {
   };
   const flips = rows.filter((x) => (x.pick || x.side) !== x.holder);
   const verdict = D >= 51 ? "Democrats would take control" : R >= 50 ? "Republicans would keep control" : "control would come down to Nebraska's Dan Osborn";
+  const final = !scenario && rows.every((x) => x.called);
   const blocks = [];
   for (let i = 0; i < D_SAFE_SEATS; i++) blocks.push(BLUE);
   rows.filter((x) => (x.pick || x.side) === "D").forEach(() => blocks.push(tintOf(BLUE, 0.4)));
@@ -2374,8 +2418,9 @@ function SenateControlView({ races, wide, onPick, night }) {
       <section style={{ display: "flex", flexDirection: "column", gap: 14, paddingBottom: 28, borderBottom: `1px solid ${C.line}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Who controls the Senate?</h1>
         <p style={{ ...deckStyle(wide), maxWidth: 880 }}>
+          {final ? <>With every race called, {D >= 51 ? "Democrats won control" : "Republicans kept control"}, {D} to {R}.{flips.length ? ` Seats that changed hands: ${flips.map((x) => x.label).join(", ")}.` : ""}</> : <>
           {scenario ? "In your scenario, " : "If every race we track goes to today's leader, "}{verdict}, {D} to {R}{I ? `, with Osborn holding ${I}` : ""}.
-          {flips.length ? ` Seats changing hands: ${flips.map((x) => x.label).join(", ")}.` : " No seats would change hands."}
+          {flips.length ? ` Seats changing hands: ${flips.map((x) => x.label).join(", ")}.` : " No seats would change hands."}</>}
         </p>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", fontSize: wide ? 34 : 24, fontWeight: 600 }}>
           <span style={{ color: BLUE }}>{D} Democrats</span>{I > 0 && <span style={{ color: TEAL, fontSize: wide ? 24 : 18 }}>{I} Ind.</span>}<span style={{ color: RED }}>{R} Republicans</span>
@@ -2385,12 +2430,12 @@ function SenateControlView({ races, wide, onPick, night }) {
           <div style={{ position: "absolute", left: "calc(50% - 1px)", top: -8, width: 2, height: wide ? 42 : 36, background: C.text }} />
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 24px", fontSize: 13, color: C.muted }}>
-          <span>Dark: seats not up this year, plus the other {CARD_RACES.length} races by forecaster rating ({D_SAFE_SEATS} D, {R_SAFE_SEATS} R)</span><span>Light: the {CONTROL_SET.length} races we track, by current leader</span><span>Line: 51 for control; the vice president breaks a 50–50 tie</span>
+          <span>Dark: seats not up this year, plus the other {CARD_RACES.length} races by pre-election rating ({D_SAFE_SEATS} D, {R_SAFE_SEATS} R)</span><span>Light: the {CONTROL_SET.length} races we tracked, {final ? "by winner" : "by current leader"}</span><span>Line: 51 for control; the vice president breaks a 50–50 tie</span>
         </div>
-        {scenario && <button onClick={() => setOvr({})} style={{ ...linkBtn, color: RED }}>Clear my scenario and go back to the forecast</button>}
+        {scenario && <button onClick={() => setOvr({})} style={{ ...linkBtn, color: RED }}>Clear my scenario and go back to the results</button>}
       </section>
       <section style={{ paddingTop: 26 }}>
-        <SectionHead title={`The ${CONTROL_SET.length} seats that decide it`} note={wide ? "Tap “Your call” to try a scenario" : null} size={wide ? 28 : 22} />
+        <SectionHead title={`The ${CONTROL_SET.length} seats that ${final ? "decided" : "decide"} it`} note={wide ? "Tap “Your call” to try a what-if" : null} size={wide ? 28 : 22} />
         {rows.map((x) => {
           const s = x.pick || x.side;
           const col = sideColor(s);
@@ -2403,15 +2448,15 @@ function SenateControlView({ races, wide, onPick, night }) {
                   <button onClick={() => x.race && onPick(x.id)} style={{ ...linkBtn, textDecoration: "none", fontSize: 16 }}>{x.label}</button>
                   <span style={{ fontSize: 14, color: C.muted }}>Held by {x.holder === "D" ? "Dem." : "GOP"}</span>
                   <span style={{ fontFamily: serif, fontSize: 18, color: sideColor(x.side) }}>{x.name}{x.runoff ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · headed for a {RUNOFF_RACES[x.id].date} runoff, forecast shown</span> : isPaused(x.race, night) ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · paused, forecast shown</span> : x.race && x.race.noNight ? <span style={{ fontFamily: sans, fontSize: 13, color: C.muted }}> · forecast only</span> : null}</span>
-                  <span style={{ fontSize: 16, fontWeight: 600, color: sideColor(x.side) }}>{x.pct != null ? `${x.pct}%` : "—"}{x.called ? " · Called" : ""}</span>
-                  <span>{flip && <span style={{ fontSize: 12, fontWeight: 700, color: PAPER, background: col, padding: "2px 8px" }}>Would flip</span>}</span>
+                  <span style={{ fontSize: 16, fontWeight: 600, color: sideColor(x.side) }}>{x.called ? `Called · ${wonBy(x.race) || ""}`.replace(/ · $/, "") : x.pct != null ? `${x.pct}%` : "—"}</span>
+                  <span>{flip && <span style={{ fontSize: 12, fontWeight: 700, color: PAPER, background: col, padding: "2px 8px" }}>{x.called && !x.pick ? "Flipped" : "Would flip"}</span>}</span>
                   <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 13, fontWeight: 600, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
                 </>
               ) : (
                 <>
                   <span style={{ display: "flex", flexDirection: "column" }}>
                     <span style={{ fontSize: 16, fontWeight: 600 }}>{x.label} <span style={{ fontWeight: 400, fontSize: 13, color: C.muted }}>held by {x.holder === "D" ? "Dem." : "GOP"}</span></span>
-                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.pct != null ? `${x.pct}%` : ""}{flip ? " · would flip" : ""}{x.runoff ? " · runoff, forecast shown" : isPaused(x.race, night) ? " · paused" : x.race && x.race.noNight ? " · forecast only" : ""}</span>
+                    <span style={{ fontSize: 14, color: sideColor(x.side) }}>{x.name} {x.called ? (wonBy(x.race) || "· Called").replace(/^Won/, "· won") : x.pct != null ? `${x.pct}%` : ""}{flip ? (x.called && !x.pick ? " · flipped" : " · would flip") : ""}{x.runoff ? " · runoff, forecast shown" : isPaused(x.race, night) ? " · paused" : x.race && x.race.noNight ? " · forecast only" : ""}</span>
                   </span>
                   <button onClick={() => cycle(x)} style={{ whiteSpace: "nowrap", fontSize: 12, fontWeight: 600, minHeight: 36, border: `1px solid ${x.pick ? col : C.line}`, background: x.pick ? tintOf(col, 0.8) : "transparent", color: C.text, padding: "5px 8px", cursor: "pointer" }}>Your call: {callTxt}</button>
                 </>
@@ -2587,7 +2632,7 @@ function RatingsView({ current, loaded, wide }) {
     <div>
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Pollster ratings</h1>
-        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Not every poll deserves the same trust. Each pollster gets one rating, used everywhere it polls, and that rating decides how much its numbers pull the average. Each pollster's measured lean is shown too, and corrected for. This list is built from the polls the site is using right now.</p>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>Not every poll deserves the same trust. Each pollster gets one rating, used everywhere it polls, and that rating decides how much its numbers pull the average. Each pollster's measured lean is shown too, and corrected for. This list is built from the polls in Needlepoint's 2026 averages.</p>
       </section>
       {!loaded && <p style={{ fontSize: 14, color: C.muted }}>Loading ratings…</p>}
       {TIERS.map((t, i) => {
@@ -2652,7 +2697,7 @@ function VoteView({ wide }) {
     <div>
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>Make your plan to vote</h1>
-        <p style={{ ...deckStyle(wide), maxWidth: 760 }}>Everything you need to vote on Nov. 3, from nonpartisan and official sources.</p>
+        <p style={{ ...deckStyle(wide), maxWidth: 760 }}>Everything you need to register and vote in your next election, from nonpartisan and official sources.</p>
       </section>
       <ul style={{ listStyle: "none", margin: 0, padding: 0, maxWidth: 760 }}>
         {VOTE_LINKS.map((l) => (
@@ -2687,8 +2732,8 @@ function ScorecardView({ wide }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>2026 scorecard</h1>
-        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>{`How Needlepoint's final forecast and the pollsters did against the results. We picked ${senHits} of ${sc.senate.length} decided Senate races and ${govHits} of ${sc.governor.length} governor races, but every miss went the same way: Democrats beat our forecast in ${beat} of ${sc.senate.length} Senate races, by ${avgMiss.toFixed(1)} points on average.`}</p>
-        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}.</p>
+        <p style={{ ...deckStyle(wide), maxWidth: 900 }}>{`How Needlepoint's final forecast and the pollsters did against the results. We picked ${senHits} of the ${sc.senate.length} Senate races scored here and ${govHits} of ${sc.governor.length} governor races, but every miss went the same way: Democrats beat our forecast in ${beat} of ${sc.senate.length} Senate races, by ${avgMiss.toFixed(1)} points on average.`}</p>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}. Mississippi isn't scored because it had no forecast before election night; Alaska will be added once its ranked-choice count is final on Nov. 18.</p>
       </section>
       <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <SectionHead title="Senate: our forecast vs. the result" size={wide ? 28 : 22} />
@@ -2879,12 +2924,12 @@ function MethodView({ wide }) {
   const item = { fontSize: 15, lineHeight: 1.55, color: C.body, margin: 0 };
   const steps = [
     ["Start from the polls", <>
-      <p style={sub}>Each race begins at its polling average. Every poll is weighted two ways: by how much we trust the pollster (see Pollster ratings) and by how recent it is, with a poll's weight halving every three weeks.</p>
+      <p style={sub}>Each race began at its polling average. Every poll was weighted two ways: by how much we trust the pollster (see Pollster ratings) and by how recent it was, with a poll's weight halving every three weeks.</p>
       <p style={sub}>We remove pollsters found to have fabricated data. In October 2026 we removed every Wedgewood Polls survey after the firm admitted its numbers were fake.</p>
-      <p style={sub}>Each poll is also corrected for its pollster's measured lean, or "house effect": how far that pollster's numbers have run from other pollsters in the same races at the same time this year. A pollster with only a poll or two gets a smaller correction, since one poll can differ by luck, and a poll paid for by a campaign, party or PAC starts out assumed to lean 2 points toward its sponsor. This is the approach major polling averages such as Silver Bulletin's use, and it works in both directions. The Pollster ratings page lists every pollster's lean.</p>
+      <p style={sub}>Each poll was also corrected for its pollster's measured lean, or "house effect": how far that pollster's numbers ran from other pollsters in the same races at the same time. A pollster with only a poll or two got a smaller correction, since one poll can differ by luck, and a poll paid for by a campaign, party or PAC started out assumed to lean 2 points toward its sponsor. This is the approach major polling averages such as Silver Bulletin's use, and it works in both directions. The Pollster ratings page lists every pollster's lean.</p>
     </>],
     ["Adjust for history", <>
-      <p style={sub}>Polls in several of these states underestimated Republicans in recent elections, mostly in presidential years. Misses like that don't reliably repeat (midterm polls have been far closer), so each race's starting point shifts only part of the way toward the Republican. Each shift is about half of how far that state's polls have typically missed in recent elections, since past misses don't reliably repeat. Maine's shift is about Susan Collins herself, whose record of beating her polls is the best documented on the board, so it stays at full size:</p>
+      <p style={sub}>Polls in several of these states underestimated Republicans in recent elections, mostly in presidential years. Misses like that don't reliably repeat (midterm polls have been far closer), so each race's starting point shifted only part of the way toward the Republican. Each shift was about half of how far that state's polls have typically missed in recent elections, since past misses don't reliably repeat. Maine's shift was about Susan Collins herself, whose record of beating her polls was the best documented on the board, so it stayed at full size:</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
         {[["Maine", `${SEN_HOUSE} pts toward Collins`, "Collins has repeatedly outrun her polls (she trailed in nearly every 2020 survey and won by about 9). Kept at full size."],
           ["North Carolina", `${NC_HOUSE} pts toward Whatley`, "NC polls have overstated Democrats in recent cycles, and undecided voters there tend to break Republican."],
@@ -2898,7 +2943,7 @@ function MethodView({ wide }) {
           ["Ohio", `${OH_HOUSE} pts toward Husted`, "Ohio polls have underestimated Republicans in recent federal races."],
           ["Nebraska", `${NE_HOUSE} pts toward Ricketts`, "for the state's Republican lean and Osborn's 2024 pattern of polling close, then losing by about seven."],
           ["Georgia", `${GA_HOUSE} pt toward Collins`, "for Georgia's narrow Republican lean."],
-          ["Michigan", `${MI_HOUSE} pt toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it is the closest state on this board."],
+          ["Michigan", `${MI_HOUSE} pt toward Rogers`, "Michigan polls underestimated Republicans in each of the last three presidential elections, but it was the closest state on the board."],
           ["New Hampshire", `${NH_HOUSE} pt toward Sununu`, "the smallest shift, for NH polls' history and Sununu's crossover appeal."],
           ["Kansas", `${KS_HOUSE} pts toward Marshall`, "Kansas polls underestimated Republicans in the 2014 and 2020 Senate races, though they missed the other way in Laura Kelly's governor races."],
           ["Minnesota", `${MN_HOUSE} pts (no shift)`, "Minnesota's polls have missed in both directions recently: they underrated Democrats in 2018, 2022 and the 2024 Senate race, and overrated them slightly in 2020 and the 2024 presidential race."],
@@ -2906,22 +2951,25 @@ function MethodView({ wide }) {
           ["Alaska", `${AK_HOUSE} pts toward Sullivan`, "Sullivan won by about 13 in 2020 after polling much closer, and Peltola lost her 2024 House race by about 2 after polling close."]].map(([s, a, why]) => (
           <p key={s} style={item}><b style={{ color: C.text }}>{s}:</b> {a}. {why.charAt(0).toUpperCase() + why.slice(1)}</p>
         ))}
-        <p style={item}>Maine's governor and House races get no adjustment. These shifts were halved on Oct. 4, and North Carolina's and Texas's were trimmed again on Oct. 12 after an audit of how far their polls have actually missed. Kansas joined the board on Oct. 12.</p>
+        <p style={item}>Maine's governor and House races got no adjustment. These shifts were halved on Oct. 4, and North Carolina's and Texas's were trimmed again on Oct. 12 after an audit of how far their polls have actually missed. Kansas joined the board on Oct. 12.</p>
+        <p style={item}><b style={{ color: C.text }}>How it turned out:</b> in 2026 the polls missed the other way. Democrats beat our forecast in 11 of the 12 Senate races we scored, so these shifts made the forecast more Republican than the results. The 2026 scorecard has the details.</p>
       </div>
     </>],
     ["Map it county by county", <>
-      <p style={sub}>Every race is built on real past results, county by county. The map sets which counties run bluer or redder than the state; how the state leans overall comes from the polls.</p>
+      <p style={sub}>Every race was built on real past results, county by county. The map set which counties ran bluer or redder than the state; how the state leaned overall came from the polls.</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
         <p style={item}><b style={{ color: C.text }}>Maine Senate:</b> the 2020 Collins–Gideon results (60%) blended with the 2020 and 2016 presidential maps (40%).</p>
-        <p style={item}><b style={{ color: C.text }}>Maine House 1 and 2:</b> the 2020 House results by county. District 2 is an open seat, so only a quarter of Jared Golden's personal-vote pattern is kept.</p>
+        <p style={item}><b style={{ color: C.text }}>Maine House 1 and 2:</b> the 2020 House results by county. District 2 was an open seat, so only a quarter of Jared Golden's personal-vote pattern was kept.</p>
         <p style={item}><b style={{ color: C.text }}>Maine Governor:</b> the blended presidential map for shape, with the three-way split (Pingree, Charles, Bennett) set by polling.</p>
-        <p style={item}><b style={{ color: C.text }}>Alaska:</b> a single statewide forecast from polling. Alaska reports by state house district, not county, and counts its ranked-choice rounds about two weeks after election night, so its needle never goes live; it still counts toward Senate control.</p>
-        <p style={item}><b style={{ color: C.text }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan, New Hampshire, Kansas, Minnesota and South Carolina:</b> 2024 presidential results in every county. Ohio's race is a special election; Georgia goes to a Dec. 1 runoff if no one tops 50%; Nebraska's Dan Osborn is an independent, shown in green.</p>
-        <p style={item}><b style={{ color: C.text }}>Texas, Ohio, Georgia, Iowa and Kansas Governor:</b> each state's Senate county map, centered on governor polling. They're on the board as their own races but don't count toward Senate control.</p>
+        <p style={item}><b style={{ color: C.text }}>Alaska:</b> a single statewide polling forecast until Nov. 6. After that it ran on the AP's first-choice count by state house district (Alaska doesn't report by county), plus a projection of the ranked-choice rounds.</p>
+        <p style={item}><b style={{ color: C.text }}>North Carolina, Ohio, Texas, Iowa, Georgia, Nebraska, Michigan, New Hampshire, Kansas, Minnesota and South Carolina:</b> 2024 presidential results in every county. Ohio's race was a special election; Georgia required a majority to avoid a December runoff; Nebraska's Dan Osborn was an independent, shown in green.</p>
+        <p style={item}><b style={{ color: C.text }}>Mississippi:</b> added after election night, when the race turned close, on 2024 presidential results by county.</p>
+        <p style={item}><b style={{ color: C.text }}>Texas, Ohio, Georgia, Iowa and Kansas Governor:</b> each state's Senate county map, centered on governor polling. They were on the board as their own races but didn't count toward Senate control.</p>
       </div>
     </>],
-    ["Watch the real count", <p key="w" style={sub}>On election night, official results files from each state arrive every minute or two. The needle compares each county's count with its expected result and carries the difference into the counties still counting. Expected turnout is scaled for a midterm, and if one state's feed goes down, only that state pauses.</p>],
-    ["Call it carefully", <p key="c" style={sub}>A race is called only when the leader passes a 97 percent chance and at least half the expected vote is counted. Before that, the strongest label is Likely, however lopsided the early count looks.</p>],
+    ["Watch the real count", <p key="w" style={sub}>On election night, official results files from each state arrived every minute or two. The needle compared each county's count with its expected result and carried the difference into the counties still counting. Expected turnout was scaled for a midterm, and when one state's feed went down, only that state paused.</p>],
+    ["Call it carefully", <><p key="c" style={sub}>A race could be called only once the leader passed a 97 percent chance with at least half the expected vote counted. Before that, the strongest label was Likely, however lopsided the early count looked.</p>
+      <p style={sub}>Most races were called on election night. The last few were called in the days after, once the remaining vote could no longer change the outcome or the trailing candidate conceded: Kansas governor and Maine's 2nd District on Nov. 6, Mississippi on Nov. 11 and Alaska on Nov. 14. All 22 races are now called; the numbers shown are the last counts loaded, and certified totals will be added as states certify.</p></>],
   ];
   const note = (title, text) => (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -2933,7 +2981,7 @@ function MethodView({ wide }) {
     <section style={{ display: "grid", gridTemplateColumns: wide ? "minmax(0,2fr) minmax(0,1fr)" : "minmax(0,1fr)", columnGap: 48, rowGap: 30 }}>
       <div>
         <h1 style={{ margin: "0 0 12px", fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>How the needle works</h1>
-        <p style={{ ...deckStyle(wide), paddingBottom: 18, borderBottom: `2px solid ${C.text}` }}>Before election night, the needle is a polling forecast. Once votes are counted, it runs on the official results each state publishes.</p>
+        <p style={{ ...deckStyle(wide), paddingBottom: 18, borderBottom: `2px solid ${C.text}` }}>In 2026 the needle started as a polling forecast, then switched to the count as each state reported. All 22 races have been called; this page explains how the needles worked.</p>
         {steps.map(([title, content], i) => (
           <div key={title} style={{ display: "grid", gridTemplateColumns: wide ? "70px minmax(0,1fr)" : "44px minmax(0,1fr)", columnGap: wide ? 24 : 14, padding: "20px 0", borderBottom: `1px solid ${C.line}` }}>
             <span style={{ fontFamily: serif, fontSize: wide ? 44 : 32, fontWeight: 600, lineHeight: 1, color: C.muted }}>{i + 1}</span>
@@ -2947,11 +2995,11 @@ function MethodView({ wide }) {
       </div>
       <aside style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div style={{ padding: 18, background: C.panel2, border: `1px solid ${C.line}` }}>
-          {note("Maine, New Hampshire, Michigan and Ohio", "Maine and New Hampshire don't publish results on election night, Michigan's official results site doesn't allow automated downloads, and Ohio's election-night results file isn't one our site can read yet. These needles pause and show their forecast, then finish on their own when official results we can read are posted; in the meantime each paused race links to the AP's live count.")}
+          {note("Paused needles", "Maine and New Hampshire don't publish results on election night, Michigan's official results site blocks automated downloads, and Ohio's and Nebraska's election-night files weren't ones our site could read. Those needles paused on election night and showed their forecast. They finished in the days after, from each state's official files (New Hampshire, Ohio and Nebraska) or the AP's county tables (Maine and Michigan).")}
         </div>
-        {note("Every other Senate seat and governor's race", "The Senate races without a needle get a card instead. A card shows the candidates, the ratings from Cook, Sabato's Crystal Ball and Inside Elections, and the public polls, but no needle and no live count; it counts toward Senate control by the forecasters' rating. A card gets a full needle if at least two of those forecasters rate it Toss-up or Lean, or nonpartisan polls show it within about 5 points. Governor races without a needle get the same cards and the same promotion rule; a card that meets it is tagged Competitive. Governor cards don't affect the Senate count.")}
-        {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race use ranked-choice voting. The needle tracks first choices. Alaska's ranked rounds are counted about two weeks later, so its needle is a polling forecast that doesn't move on election night.")}
-        {note("Where the data comes from", "Polls from public releases, and results from the official files each state's election office publishes. No paid data and no copying from news sites.")}
+        {note("Every other Senate seat and governor's race", "The Senate races without a needle got a card instead. A card shows the candidates, the pre-election ratings from Cook, Sabato's Crystal Ball and Inside Elections, and the public polls, but no needle and no count; it counts toward Senate control by the forecasters' rating. A card would have been promoted to a full needle if at least two of those forecasters rated it Toss-up or Lean, or nonpartisan polls showed it within about 5 points. Governor races without a needle got the same cards and the same rule; a card that met it was tagged Competitive. Governor cards don't affect the Senate count.")}
+        {note("Ranked-choice races", "Maine's Senate and House races and Alaska's Senate race used ranked-choice voting. The needles tracked first choices. In Alaska, where no one reached 50% of first choices, the needle also projected the ranked-choice rounds from how voters ranked candidates in the state's released ballot records. Alaska tabulates those rounds Nov. 18.")}
+        {note("Where the data comes from", "Polls from public releases. Results from the official files each state's election office publishes; for Mississippi, Alaska, Maine and Michigan, where no official county file could be read, the AP's county (or district) counts were entered by hand. No paid data.")}
         {note("About the name", "Needlepoint was called The Needle Project until October 2026. Same site, same needles, shorter name.")}
       </aside>
     </section>
