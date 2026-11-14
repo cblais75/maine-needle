@@ -294,10 +294,8 @@ function akProjection(count) {
   const fracIn = T / E;
   const se = Math.sqrt((0.035 * (1 - fracIn)) ** 2 + (0.05 * (fH + fO) / E) ** 2 + 0.002 ** 2);
   const rcvGain = (fP - fS) / (fP + fS) - margin; // how much the rounds narrow Peltola's lead
-  // Editorial hold (Colin, Nov 11): no call until Alaska's official ranked-choice count on Nov. 18, so cap at 96%.
-  const AK_HOLD = 0.96;
-  const w = ncdf(margin / se);
-  return { P, S, H, O, T, E, fracIn, finP, finS, margin, rcvGain, se, winP: Math.min(Math.max(w, 1 - AK_HOLD), AK_HOLD) };
+  // The Nov 11 editorial hold at 96% was lifted Nov 14, when Colin called the race for Peltola.
+  return { P, S, H, O, T, E, fracIn, finP, finS, margin, rcvGain, se, winP: ncdf(margin / se) };
 }
 let AK_PROJ_CACHE; // computed on first use (ncdf is defined further down)
 const akProj = () => (AK_PROJ_CACHE ??= akProjection(akCount));
@@ -607,6 +605,8 @@ const EDITOR_CALLS = {
   ia_sen: "right", ia_gov: "right", sen: "right", cd1: "right", ne_sen: "left", gov: "P",
   ks_gov: "right", // Holscher (Nov 6)
   cd2: "left", // LePage (Nov 6: Dunlap conceded; AP had not called it)
+  ak_sen: "right", // Peltola (Nov 14: called at 96% counted, lead 10,412; VoteHub had called it)
+  ms_sen: "right", // Colom (Nov 11: AP called it)
 };
 // compute() plus any editor's call: a called race's needle is pinned to the winner.
 // A called race: its needle stops updating (Nov 6). Final certified numbers get loaded by hand later.
@@ -1066,7 +1066,7 @@ export default function MaineDashboard() {
   ) : null;
   const statusLine = (<>{simBanner}
     <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: wide ? 14 : 12.5, lineHeight: 1.45, textAlign: "center", color: anyLive || night ? RED : C.muted, fontWeight: anyLive || night ? 600 : 400 }}>
-      {results && results.simulated ? "Simulated · These needles are running on practice numbers, not real votes." : anyLive && races.some((r) => isCalled(r)) ? `Live · Still counting: ${races.filter((r) => r.liveOn && !isCalled(r)).map((r) => stateLabel(r.state)).join(" and ") || "none"}. Every other race has been called.` : anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
+      {results && results.simulated ? "Simulated · These needles are running on practice numbers, not real votes." : anyLive && races.some((r) => isCalled(r)) ? (races.some((r) => r.liveOn && !isCalled(r)) ? `Live · Still counting: ${races.filter((r) => r.liveOn && !isCalled(r)).map((r) => stateLabel(r.state)).join(" and ")}. Every other race has been called.` : "Every race has been called. Final certified results will be added as states certify.") : anyLive ? "Live · The needles are running on official results as they come in." : night ? "Election night · Each needle goes live as its state posts its first official results." : "Pre-election forecast based on polling averages. The needles start moving on real votes at 7 p.m. ET on Nov. 3."}
       {anyPaused ? ` ${pausedNow} ${pausedVerb} paused until official results are posted.` : ""}
     </p></>
   );
@@ -2010,7 +2010,9 @@ function pickLead(races, night) {
   const byClose = (a, b) => Math.abs(readRace(a).pct - 50) - Math.abs(readRace(b).pct - 50);
   const counting = two.filter((r) => readRace(r).frac > 0);
   const open = counting.filter((r) => !readRace(r).tag.startsWith("Called")).sort(byClose);
-  return open[0] || counting.sort((a, b) => readRace(b).frac - readRace(a).frac)[0] || two.slice().sort(byClose)[0];
+  // Once every race is called (Nov 14), lead with the closest finish.
+  const byMargin = (a, b) => Math.abs(computeRace(a).margin) - Math.abs(computeRace(b).margin);
+  return open[0] || counting.sort(byMargin)[0] || two.slice().sort(byClose)[0];
 }
 // ── SENATE SEAT CARDS (Update 53) ───────────────────────────────────────────
 // Every Senate race without a needle: candidates, forecaster ratings and public polls only.
@@ -2189,11 +2191,13 @@ function FrontPage({ races, current, briefing, wide, onPick, go, night }) {
         </div>
         {sidebar}
       </section>
+      {counting.length > 0 && (
       <section style={{ paddingTop: 28 }}>
         <SectionHead title={called.length ? "Still counting" : night ? "Counting now" : "Every race we're tracking"} note={wide ? "Chance of winning · tap a race for its page" : null} size={wide ? 28 : 22} />
         <RaceTable races={counting} onPick={onPick} wide={wide} night={night} grouped={!called.length} />
         {called.length > 0 && <p style={{ margin: 0, paddingTop: 12, fontSize: 13, color: C.muted, lineHeight: 1.5 }}>These races haven't been called. Mississippi and Alaska are updated by hand from the AP's count as late ballots come in.</p>}
       </section>
+      )}
       {called.length > 0 && (
         <section style={{ paddingTop: 34 }}>
           <SectionHead title="Called races" note={wide ? "Updating finished · tap a race for its page" : null} size={wide ? 28 : 22} />
