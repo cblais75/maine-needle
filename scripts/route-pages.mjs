@@ -69,7 +69,6 @@ const VIEWS = [
   ["/custom-dashboards", "Custom race dashboards", "Custom election-night dashboards like Needlepoint's, built for campaigns and organizations."],
   ["/special-elections", "Special elections tracker", "Every special election compared with the 2024 presidential vote in the same district, from 2025 through the 2027–28 cycle."],
   ["/vote", "How to vote", "Where to find official voting information for the states Needlepoint covers."],
-  ["/live-wire", "Live wire", "Running updates from election night 2026."],
 ];
 for (const [path, name, desc] of VIEWS) pages.push({ path, title: `${name} | Needlepoint`, og: `Needlepoint: ${name}`, desc, image: DEFAULT_IMG, h1: name, body: desc });
 

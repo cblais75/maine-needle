@@ -729,7 +729,7 @@ const slugify = (x) => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "-").repla
 const stateSlug = (code) => slugify((STATES.find((x) => x.code === code) || { label: code }).label);
 const raceSlug = (r) => (r.title.startsWith("U.S. Senate") ? "senate" : r.title === "Governor" ? "governor"
   : r.title.startsWith("U.S. House") ? `house-district-${(r.title.match(/\d+/) || ["1"])[0]}` : slugify(r.title));
-const VIEW_PATHS = { control: "senate-control", briefing: "briefing", polls: "polls", ratings: "pollster-ratings", method: "how-it-works", scorecard: "2026-scorecard", specials: "special-elections", work: "custom-dashboards", vote: "vote", wire: "live-wire" };
+const VIEW_PATHS = { control: "senate-control", briefing: "briefing", polls: "polls", ratings: "pollster-ratings", method: "how-it-works", scorecard: "2026-scorecard", specials: "special-elections", work: "custom-dashboards", vote: "vote" };
 const racePath = (r) => `/${stateSlug(r.state)}/${raceSlug(r)}`;
 function pathFor(view, sel, races) {
   const r = sel && races.find((x) => x.id === sel);
@@ -1127,7 +1127,7 @@ export default function MaineDashboard() {
       {d.map((x, i) => <path key={i} d={x} />)}
     </svg>
   );
-  const moreKeys = ["polls", "ratings", "method", "scorecard", "specials", "work", "vote", "wire"];
+  const moreKeys = ["polls", "ratings", "method", "scorecard", "specials", "work", "vote"];
   const tabs = [
     ["dashboard", "Races", ["M4 18a8 8 0 0 1 16 0", "M12 18l4-6"]],
     ["control", "Senate", ["M3 20h18", "M5 20V10l7-5 7 5v10", "M9 20v-6h6v6"]],
@@ -1149,7 +1149,7 @@ export default function MaineDashboard() {
   const moreItem = (on) => ({ display: "block", width: "100%", textAlign: "left", minHeight: 44, padding: "10px 14px", fontSize: 16, cursor: "pointer", border: "none", borderBottom: `1px solid ${C.line}`, background: on ? C.panel2 : "transparent", color: C.text, fontWeight: on ? 700 : 500 });
   const moreSheet = moreOpen && (
     <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(61px + env(safe-area-inset-bottom))", zIndex: 49, maxHeight: "70vh", overflowY: "auto", background: C.panel, borderTop: `1px solid ${C.text}`, boxShadow: "0 -8px 24px rgba(27,26,23,0.14)" }}>
-      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["scorecard", "2026 scorecard"], ["specials", "Special elections"], ["work", "Custom dashboards"], ["vote", "Vote"], ["wire", "Live wire"]].map(([k, label]) => (
+      {[["polls", "Polls"], ["ratings", "Pollster ratings"], ["method", "How it works"], ["scorecard", "2026 scorecard"], ["specials", "Special elections"], ["work", "Custom dashboards"], ["vote", "Vote"]].map(([k, label]) => (
         <button key={k} onClick={() => go(k)} style={moreItem(view === k)}>{label}</button>
       ))}
       <div style={{ padding: "12px 14px 6px", fontFamily: serif, fontSize: 18, fontWeight: 600 }}>States</div>
@@ -1182,7 +1182,6 @@ export default function MaineDashboard() {
             )}
             {view === "polls" && <PollsView current={current} loaded={currentLoaded} wide={wide} />}
             {view === "control" && <SenateControlView races={races} wide={wide} onPick={setSel} night={night} />}
-            {view === "wire" && <WireFeed events={wire} />}
             {view === "briefing" && <BriefingView posts={briefing} wide={wide} />}
             {view === "ratings" && <RatingsView current={current} loaded={currentLoaded} wide={wide} />}
             {view === "method" && <MethodView wide={wide} />}
@@ -1232,8 +1231,8 @@ export default function MaineDashboard() {
     );
   }
 
-  // ── DESKTOP (>= 1000px): newspaper front page; the Wire rail appears once there is news ──
-  const showRail = anyLive || night || wire.length > 0;
+  // ── DESKTOP (>= 1000px): newspaper front page. The Wire side rail was removed Nov 14 (no use after election night). ──
+  const showRail = false;
   return (
     <div style={{ minHeight: "100vh", background: C.ink, color: C.text, fontFamily: sans }}>
       <style>{GLOBAL_CSS}</style>
@@ -1242,16 +1241,6 @@ export default function MaineDashboard() {
         {statusLine}
         <div style={{ display: "grid", gridTemplateColumns: showRail ? "minmax(0,1fr) 320px" : "minmax(0,1fr)", gap: 40, paddingTop: 28 }}>
           <main style={{ minWidth: 0 }}>{sel !== null ? detailBlock : tabBody}</main>
-          {showRail && (
-            <aside style={{ position: "sticky", top: 20, alignSelf: "start", maxHeight: "calc(100vh - 40px)", overflowY: "auto", paddingLeft: 24, borderLeft: `1px solid ${C.line}` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, paddingBottom: 8, borderBottom: `2px solid ${C.text}` }}>
-                <span style={{ width: 9, height: 9, borderRadius: 5, background: anyLive ? RED : C.muted }} />
-                <span style={{ fontFamily: serif, fontSize: 22, fontWeight: 600 }}>The Wire</span>
-              </div>
-              {anyPaused && <p style={{ margin: 0, padding: "10px 0", borderBottom: `1px solid ${C.line}`, fontSize: 14, lineHeight: 1.45, color: C.body }}>{pausedNow} {pausedVerb} paused until official results are posted. <a href={AP_URL} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 700, color: C.text }}>Live count at AP</a></p>}
-              <ErrorBoundary mini label="Wire unavailable"><WireFeed events={wire} embedded /></ErrorBoundary>
-            </aside>
-          )}
         </div>
         <SupportBlock />
       </div>
