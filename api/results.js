@@ -76,7 +76,7 @@ const NE_CSV = "https://electionresults.nebraska.gov/resultsCSV.aspx?text=All&ty
 // saved in public/official/. On the live site these take the place of the state's own Vercel setting
 // (Nebraska's election-night map feed never carried county results).
 const OFFICIAL = {
-  MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-general.txt",
+  MI_RESULTS_URL: "https://needlepoint.news/official/mi-2026-us-senate.csv",
   OH_RESULTS_URL: "https://needlepoint.news/official/oh-2026-general.xml", // NIST 1500-100 XML, Nov 6
   NE_RESULTS_URL: "https://needlepoint.news/official/ne-2026-general.xlsx",
   MAINE_RESULTS_URL: "https://needlepoint.news/official/me-2026-general.csv", // AP town tables pasted by Colin (Nov 14); overseas ballots have no county and are left out
