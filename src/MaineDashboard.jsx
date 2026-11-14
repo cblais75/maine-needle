@@ -750,6 +750,14 @@ function routeFromPath(path, races) {
   return v && parts.length === 1 ? { view: v, sel: null } : null;
 }
 
+// ---- Embeddable needle (Nov 14) ----
+// needlepoint.news/embed/<state>/<race> shows one race as a small card that other sites can drop in with an
+// <iframe>. Each race page has an "Embed this needle" box with the code to copy.
+const EMBED_PATH = typeof window !== "undefined" && /^\/embed(\/|$)/i.test(window.location.pathname)
+  ? (window.location.pathname.replace(/^\/embed/i, "") || "/") : null;
+const SITE_URL = "https://needlepoint.news";
+const embedCode = (r) => `<iframe src="${SITE_URL}/embed${racePath(r)}" title="${stateLabel(r.state)} ${raceName(r)}: Needlepoint" width="100%" height="420" style="border:0;max-width:460px" loading="lazy"></iframe>`;
+
 // Width-based layout switch: >=1000px gets the desktop three-zone layout, anything
 // narrower keeps the exact mobile column. Width (not device sniffing) so a resized
 // window or a landscape tablet just works.
@@ -835,7 +843,7 @@ export default function MaineDashboard() {
   const [races, setRaces] = useState(() => buildAll(DEFAULT_MARGIN, DEFAULT_B, DEFAULT_GM, DEFAULT_DECAY, DEFAULT_CD1_MARGIN, DEFAULT_CD2_MARGIN));
   racesRef.current = races; // the ?night preview simulates from the current needles' county units
   const startRoute = useRef(null);
-  if (startRoute.current === null) startRoute.current = (typeof window !== "undefined" && routeFromPath(window.location.pathname, races)) || { view: "dashboard", sel: null };
+  if (startRoute.current === null) startRoute.current = (typeof window !== "undefined" && routeFromPath(EMBED_PATH ?? window.location.pathname, races)) || { view: "dashboard", sel: null };
   const [sel, setSel] = useState(startRoute.current.sel);
   const wide = useWide(1000);
   const [navOpen, setNavOpen] = useState(false);
@@ -852,6 +860,7 @@ export default function MaineDashboard() {
   // Keep the address bar in step with the page (Nov 14), and let the back button work.
   const firstPath = useRef(true);
   useEffect(() => {
+    if (EMBED_PATH !== null) return; // an embedded needle keeps its /embed/ address
     const p = pathFor(view, sel, racesRef.current);
     if (p !== window.location.pathname) window.history[firstPath.current ? "replaceState" : "pushState"](null, "", p + window.location.search);
     firstPath.current = false;
@@ -1203,6 +1212,7 @@ export default function MaineDashboard() {
             )}
           </ErrorBoundary>
   );
+  if (EMBED_PATH !== null) return <EmbedCard race={races.find((x) => x.id === sel)} />;
   // ── MOBILE (< 1000px): one column, masthead on top, tab bar at the bottom ──
   if (!wide) {
     return (
@@ -2868,7 +2878,105 @@ function MethodView({ wide }) {
 }
 
 
-function Detail({ race, onBack, govB, govMargin, onGov, current, briefing, wide, onNav, night }) {
+// One race as a small self-contained card, for /embed/<state>/<race>.
+function embedRead(r) {
+  const party = (c) => (c.color === RED ? "R" : c.color === TEAL ? "I" : c.color === IND ? "I" : "D");
+  const called = EDITOR_CALLS[r.id];
+  if (r.type === "three") {
+    const m = compute3(r.units);
+    const win = called ? r.cands.find((c) => c.key === called) : null;
+    const rows = r.cands.map((c) => ({ name: c.short, party: party(c), color: c.color, share: m.proj[c.key], votes: null, won: win === c }))
+      .sort((a, b) => b.share - a.share);
+    const P = r.cands.find((c) => c.color === BLUE), Cn = r.cands.find((c) => c.color === RED);
+    return { rows, fracIn: m.fracIn, pRight: win ? (win === P ? 0.99 : 0.01) : m.win[P.key] / (m.win[P.key] + m.win[Cn.key]), left: Cn, right: P, winner: win, lead: rows[0] };
+  }
+  const d = readRace(r);
+  const winner = called ? r[called] : null;
+  if (r.id === "ak_sen" && akProj()) {
+    const a = akProj();
+    const rows = [{ name: r.right.short, party: "D", color: r.right.color, share: a.P / a.T, votes: a.P, won: winner === r.right },
+      { name: r.left.short, party: "R", color: r.left.color, share: a.S / a.T, votes: a.S, won: winner === r.left }].sort((x, y) => y.share - x.share);
+    return { rows, fracIn: a.fracIn, pRight: d.pRight, left: r.left, right: r.right, winner, lead: rows[0],
+      note: `First-choice votes. After the ranked-choice rounds, Needlepoint projects ${a.margin >= 0 ? r.right.short : r.left.short} +${Math.abs(a.margin * 100).toFixed(1)}.` };
+  }
+  // Shares are of the two candidates' combined vote, the same way the race page counts it.
+  let dem = 0, rep = 0;
+  for (const u of r.units) { dem += u.vDem || 0; rep += u.vRep || 0; }
+  const tot = dem + rep;
+  const rows = [{ name: r.right.short, party: party(r.right), color: r.right.color, share: tot ? dem / tot : null, votes: tot ? dem : null, won: winner === r.right },
+    { name: r.left.short, party: party(r.left), color: r.left.color, share: tot ? rep / tot : null, votes: tot ? rep : null, won: winner === r.left }]
+    .sort((x, y) => (y.votes || 0) - (x.votes || 0));
+  return { rows, fracIn: d.frac, pRight: d.pRight, left: r.left, right: r.right, winner, lead: rows[0], chance: d.pct, fav: d.fav,
+    note: tot ? "Share of the vote for the top two candidates." : null };
+}
+function EmbedCard({ race }) {
+  // Keep search engines on the full race page rather than this small copy.
+  useEffect(() => { const m = document.querySelector('meta[name="robots"]'); if (m) m.setAttribute("content", "noindex, follow"); }, []);
+  const link = race ? `${SITE_URL}${racePath(race)}` : SITE_URL;
+  const shell = (children) => (
+    <div style={{ boxSizing: "border-box", minHeight: "100vh", background: C.panel, color: C.text, fontFamily: sans, boxShadow: `inset 0 0 0 1px ${C.line}`, padding: "14px 16px 12px", display: "flex", flexDirection: "column" }}>
+      <style>{GLOBAL_CSS}</style>
+      {children}
+      <div style={{ marginTop: "auto", paddingTop: 10, borderTop: `1px solid ${C.line}`, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <a href={link} target="_blank" rel="noopener" style={{ fontFamily: serif, fontWeight: 700, fontSize: 19, letterSpacing: -0.4, textDecoration: "none" }}>Needlepoint</a>
+        <a href={link} target="_blank" rel="noopener" style={{ fontSize: 13, fontWeight: 600, color: C.muted }}>Full 2026 results →</a>
+      </div>
+    </div>
+  );
+  if (!race) return shell(<p style={{ margin: "8px 0 16px", fontSize: 15, lineHeight: 1.5 }}>This needle could not be found. See every race on needlepoint.news.</p>);
+  const e = embedRead(race);
+  const pctIn = Math.round((e.fracIn || 0) * 100);
+  const status = e.winner
+    ? `Called for ${e.winner.short}${pctIn > 0 ? ` · ${pctIn}% of vote counted` : ""}`
+    : race.liveOn ? `${e.chance}% chance for ${e.fav} · ${pctIn}% of expected vote counted` : `${e.chance}% chance for ${e.fav} · Pre-election forecast`;
+  const badge = e.winner ? { t: "Called", bg: C.text } : race.liveOn ? { t: "Live", bg: RED } : null;
+  return shell(<>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+      <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1.6, textTransform: "uppercase", color: C.muted }}>{stateLabel(race.state)} · {raceName(race)}</span>
+      {badge && <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase", color: "#fff", background: badge.bg, padding: "3px 7px" }}>{badge.t}</span>}
+    </div>
+    <h1 style={{ margin: "6px 0 2px", fontFamily: serif, fontWeight: 600, fontSize: 26, lineHeight: 1.1, letterSpacing: -0.4 }}>
+      {e.winner ? <><span style={{ color: e.winner.color }}>{e.winner.short}</span> wins</> : `${race.type === "three" ? race.cands.map((c) => c.short).join(" vs. ") : `${race.right.short} vs. ${race.left.short}`}`}
+    </h1>
+    <div style={{ width: "100%", maxWidth: "min(230px, 62vw)", margin: "4px auto 0" }}><Dial pRight={e.pRight} width={230} left={e.left.color} right={e.right.color} /></div>
+    <div style={{ display: "flex", flexDirection: "column", marginTop: 8 }}>
+      {e.rows.map((x) => (
+        <div key={x.name} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", alignItems: "baseline", gap: 12, padding: "5px 0", borderBottom: `1px solid ${C.panel2}` }}>
+          <span style={{ fontSize: 16, fontWeight: x.won ? 700 : 500, color: x.color }}>{x.won ? "✓ " : ""}{x.name} <span style={{ fontSize: 12.5, color: C.muted, fontWeight: 500 }}>({x.party})</span></span>
+          <span style={{ fontSize: 13, color: C.muted }}>{x.votes != null ? fmtVotes(x.votes) : ""}</span>
+          <span style={{ fontSize: 17, fontWeight: 700, color: x.won ? x.color : C.text, minWidth: 52, textAlign: "right" }}>{x.share != null ? `${(x.share * 100).toFixed(1)}%` : ""}</span>
+        </div>
+      ))}
+    </div>
+    {e.note && <p style={{ margin: "8px 0 0", fontSize: 12.5, lineHeight: 1.45, color: C.muted }}>{e.note}</p>}
+    <p style={{ margin: "8px 0 10px", fontSize: 13, lineHeight: 1.45, color: C.body, fontWeight: 600 }}>{status}</p>
+  </>);
+}
+// "Embed this needle": the copy-and-paste code for the race's embed card, shown under each race page.
+function EmbedBox({ race }) {
+  const [copied, setCopied] = useState(false);
+  const code = embedCode(race);
+  const copy = () => {
+    const done = () => { setCopied(true); setTimeout(() => setCopied(false), 2000); };
+    if (navigator.clipboard) navigator.clipboard.writeText(code).then(done, () => {});
+  };
+  return (
+    <details style={{ marginTop: 30, borderTop: `1px solid ${C.line}`, paddingTop: 14 }}>
+      <summary style={{ cursor: "pointer", fontSize: 15, fontWeight: 600, color: C.text }}>Embed this needle on your site</summary>
+      <p style={{ margin: "10px 0 8px", fontSize: 14, lineHeight: 1.55, color: C.body }}>Copy this code and paste it into your page, article or newsletter tool where it accepts HTML. The needle updates on its own and links back here. <a href={`/embed${racePath(race)}`} target="_blank" rel="noopener">See what it looks like</a>.</p>
+      <textarea readOnly value={code} onFocus={(ev) => ev.target.select()} rows={3}
+        style={{ width: "100%", boxSizing: "border-box", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12.5, lineHeight: 1.45, padding: 10, border: `1px solid ${C.line}`, background: C.panel, color: C.text, resize: "none" }} />
+      <button onClick={copy} style={{ marginTop: 8, padding: "8px 14px", fontSize: 14, fontWeight: 600, background: C.text, color: C.ink, border: "none", borderRadius: 4, cursor: "pointer" }}>{copied ? "Copied" : "Copy code"}</button>
+    </details>
+  );
+}
+function Detail(props) {
+  return (<>
+    <DetailInner {...props} />
+    {props.race.type !== "tbd" && <EmbedBox race={props.race} />}
+  </>);
+}
+function DetailInner({ race, onBack, govB, govMargin, onGov, current, briefing, wide, onNav, night }) {
   if (race.type === "three") return <GovDetail race={race} onBack={onBack} govB={govB} govMargin={govMargin} onGov={onGov} current={current} night={night} />;
   if (race.type === "rcv" || race.id === "ak_sen") return <AlaskaDetail race={race} onBack={onBack} current={current} wide={wide} onNav={onNav} />;
   if (race.type === "tbd") return race.id === "sen" ? <MaineSenateTbdDetail race={race} onBack={onBack} /> : <MichiganDetail race={race} onBack={onBack} />;
