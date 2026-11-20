@@ -2675,7 +2675,7 @@ function RatingsView({ current, loaded, wide }) {
                 <div key={p.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "9px 12px", background: C.panel, border: `1px solid ${C.line}` }}>
                   <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                     <span style={{ fontSize: 15, fontWeight: 600 }}>{p.name}</span>
-                    <span style={{ fontSize: 12, color: C.muted }}>{POLLSTER_NOTES[p.name] ? `${POLLSTER_NOTES[p.name]} · ` : ""}{p.n} {p.n === 1 ? "poll" : "polls"} · {[...p.states].sort().join(", ")}</span>
+                    <span style={{ fontSize: 12, color: C.muted }}>{RATING_UPDATES[p.name] ? `${RATING_UPDATES[p.name].note} · ` : POLLSTER_NOTES[p.name] ? `${POLLSTER_NOTES[p.name]} · ` : ""}{p.n} {p.n === 1 ? "poll" : "polls"} · {[...p.states].sort().join(", ")}</span>
                     {leanText(p.lean) && <span style={{ fontSize: 12, fontWeight: 600, color: leanColor(p.lean) }}>Measured lean: {leanText(p.lean)}</span>}
                   </span>
                   <span style={{ fontSize: 15, fontWeight: 700, color: t.color }}>{p.rating.toFixed(2)}</span>
@@ -2757,7 +2757,7 @@ function ScorecardView({ wide }) {
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>2026 scorecard</h1>
         <p style={{ ...deckStyle(wide), maxWidth: 900 }}>{`How Needlepoint's final forecast and the pollsters did against the results. We picked ${senHits} of the ${sc.senate.length} Senate races scored here and ${govHits} of ${sc.governor.length} governor races, but every miss went the same way: Democrats beat our forecast in ${beat} of ${sc.senate.length} Senate races, by ${avgMiss.toFixed(1)} points on average.`}</p>
-        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}. Mississippi isn't scored because it had no forecast before election night. Alaska isn't in the Senate table because its needle switched from the forecast to the count on Nov. 6, but its polls are in the pollster scores below.</p>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}. Mississippi isn't scored because it had no forecast before election night. Alaska isn't in the Senate table because its needle switched from the forecast to the count on Nov. 6, but its polls are in the pollster scores below. Ratings shown are the ones used before the election; Mitchell Research has since been raised from 0.60 to 0.80.</p>
       </section>
       <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <SectionHead title="Senate: our forecast vs. the result" size={wide ? 28 : 22} />
@@ -3171,6 +3171,11 @@ const POLLSTER_ALIASES = {
   "UT Politics Project": "UT/Texas Politics Project",
   "Emerson College/Nexstar": "Emerson College",
 };
+// Ratings revised after the 2026 election (shown on this page and used in future cycles). The 2026 polling
+// averages keep the rating each poll carried at the time, so the record of the 2026 forecast doesn't change.
+const RATING_UPDATES = {
+  "Mitchell Research & Communications": { rating: 0.8, was: 0.6, note: "raised from 0.60 on Nov. 20, 2026: long track record, rated on par with EPIC-MRA by 538, and the closest final poll of 2026 (Michigan Senate)" },
+};
 const POLLSTER_NOTES = {
   "Fox News": "Beacon (D) and Shaw (R) pair",
   "AARP (Fabrizio/Impact)": "Fabrizio (R) and Impact (D) pair",
@@ -3204,6 +3209,7 @@ function buildRatings(current) {
   }
   const he = (current && current.houseEffects) || {};
   for (const v of map.values()) v.lean = he[v.name] ? he[v.name].lean : null;
+  for (const v of map.values()) if (RATING_UPDATES[v.name]) v.rating = RATING_UPDATES[v.name].rating;
   return [...map.values()].sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
 }
 // A pollster's measured lean, in plain words. Positive = more Democratic than other pollsters.
