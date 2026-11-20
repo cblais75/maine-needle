@@ -1,0 +1,46 @@
+# Pulls North Carolina's official precinct results (2024 and 2026) for the counties in one area and saves
+# the federal races to the "nc-district-data" branch. Used Nov 20, 2026 for an NC-10 district deep-dive.
+# Run it by hand from the Actions tab.
+name: NC district data
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download NC State Board of Elections results and keep the federal races
+        run: |
+          mkdir out && cd out
+          for d in 2024_11_05 2026_11_03; do
+            f="results_pct_${d//_/}.zip"
+            curl -sSfL "https://s3.amazonaws.com/dl.ncsbe.gov/ENRS/$d/$f" -o "$f" || { echo "missing $f"; continue; }
+            unzip -o -q "$f" -d "raw_$d"
+            ls -la "raw_$d"
+          done
+          python3 - <<'PY'
+          import csv, glob, io, os
+          counties = {"CATAWBA", "FORSYTH", "IREDELL", "LINCOLN", "YADKIN"}
+          keep = ("US HOUSE", "US SENATE", "US PRESIDENT", "PRESIDENT AND VICE PRESIDENT", "NC GOVERNOR")
+          for d in ("2024_11_05", "2026_11_03"):
+              files = glob.glob(f"raw_{d}/*.txt")
+              if not files: continue
+              out = open(f"nc_{d}.tsv", "w", newline="")
+              w = None; n = 0
+              for f in files:
+                  text = open(f, encoding="utf-8", errors="replace").read()
+                  for row in csv.DictReader(io.StringIO(text), delimiter="\t"):
+                      if row.get("County", "").upper() not in counties: continue
+                      name = row.get("Contest Name", "").upper()
+                      if not any(k in name for k in keep): continue
+                      if w is None:
+                          w = csv.DictWriter(out, fieldnames=list(row.keys()), delimiter="\t"); w.writeheader()
+                      w.writerow(row); n += 1
+              out.close(); print(d, n, "rows")
+          PY
+          rm -rf raw_* *.zip
+          echo '{"git":{"deploymentEnabled":false}}' > vercel.json
+          git init -q -b nc-district-data
+          git -c user.name="data bot" -c user.email="data@users.noreply.github.com" add .
+          git -c user.name="data bot" -c user.email="data@users.noreply.github.com" commit -qm "NC precinct results for NC-10 counties $(date -u +%FT%TZ)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" nc-district-data
