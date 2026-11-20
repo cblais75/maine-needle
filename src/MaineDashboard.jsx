@@ -954,9 +954,20 @@ export default function MaineDashboard() {
         .catch(() => fetch("/results.json", { cache: "no-store" }).then((r) => r.json()))
         .then(apply)
         .catch(() => { if (preview) apply(null); }); // the preview still simulates if no file loads
-    load();
-    const id = setInterval(load, 300000); // every 5 minutes (post-election)
-    return () => clearInterval(id);
+    // FROZEN RESULTS (Nov 20): every race is called, so the site reads a saved copy of the final results
+    // (public/results-final.json, made by the "Snapshot results" GitHub workflow) instead of running the
+    // results function, which was using up Vercel's free CPU allowance. Delete that file to go live again.
+    let id = null;
+    if (!preview) {
+      fetch("/results-final.json", { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((d) => { if (!d || !d.races) throw new Error("no races"); apply(d); })
+        .catch(() => { load(); id = setInterval(load, 300000); });
+    } else {
+      load();
+      id = setInterval(load, 300000); // every 5 minutes (post-election)
+    }
+    return () => { if (id) clearInterval(id); };
   }, []);
 
   useEffect(() => {

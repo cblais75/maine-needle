@@ -127,7 +127,7 @@ export async function buildPayload({ env = process.env, now = Date.now(), fetchS
 
 export default async function handler(req, res) {
   // Post-election (Nov 6): counts move slowly now, so refresh hourly to stay inside Vercel's free CPU allowance.
-  res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=86400");
+  res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=604800"); // Nov 20: results are final; refresh at most daily
 
   const testUrl = process.env.TEST_RESULTS_URL;
   if (testUrl) {
