@@ -1,17 +1,20 @@
-# Saves a copy of the live results (needlepoint.news/api/results) as a downloadable file.
+# Saves a copy of the live results (needlepoint.news/api/results) to the "results-snapshot" branch.
 # Used Nov 20, 2026 to freeze the final 2026 results into public/results-final.json, so the site
 # stops running the results function (Vercel free-tier CPU limit). Run it by hand from the Actions tab.
 name: Snapshot results
 on: workflow_dispatch
+permissions:
+  contents: write
 jobs:
   snapshot:
     runs-on: ubuntu-latest
     steps:
-      - name: Download the live results
+      - name: Download the live results and save them to the results-snapshot branch
         run: |
-          curl -sSf "https://needlepoint.news/api/results" -o results-final.json
-          python3 -c "import json; d=json.load(open('results-final.json')); r=d['races']; print(len(r), 'races'); [print(k, len(v.get('counties', {}))) for k, v in r.items()]"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: results-final
-          path: results-final.json
+          curl -sSf "https://needlepoint.news/api/results" -o /tmp/results-final.json
+          python3 -c "import json; d=json.load(open('/tmp/results-final.json')); print(len(d['races']), 'races')"
+          mkdir snap && cd snap && git init -q -b results-snapshot
+          cp /tmp/results-final.json .
+          git -c user.name="snapshot bot" -c user.email="snapshot@users.noreply.github.com" add results-final.json
+          git -c user.name="snapshot bot" -c user.email="snapshot@users.noreply.github.com" commit -qm "Results snapshot $(date -u +%FT%TZ)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" results-snapshot
