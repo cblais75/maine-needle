@@ -1,0 +1,17 @@
+# Saves a copy of the live results (needlepoint.news/api/results) as a downloadable file.
+# Used Nov 20, 2026 to freeze the final 2026 results into public/results-final.json, so the site
+# stops running the results function (Vercel free-tier CPU limit). Run it by hand from the Actions tab.
+name: Snapshot results
+on: workflow_dispatch
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the live results
+        run: |
+          curl -sSf "https://needlepoint.news/api/results" -o results-final.json
+          python3 -c "import json; d=json.load(open('results-final.json')); r=d['races']; print(len(r), 'races'); [print(k, len(v.get('counties', {}))) for k, v in r.items()]"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-final
+          path: results-final.json
