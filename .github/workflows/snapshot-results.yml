@@ -15,6 +15,8 @@ jobs:
           python3 -c "import json; d=json.load(open('/tmp/results-final.json')); print(len(d['races']), 'races')"
           mkdir snap && cd snap && git init -q -b results-snapshot
           cp /tmp/results-final.json .
-          git -c user.name="snapshot bot" -c user.email="snapshot@users.noreply.github.com" add results-final.json
+          # Tell Vercel not to try to build this branch (it holds only the data file).
+          echo '{"git":{"deploymentEnabled":false}}' > vercel.json
+          git -c user.name="snapshot bot" -c user.email="snapshot@users.noreply.github.com" add results-final.json vercel.json
           git -c user.name="snapshot bot" -c user.email="snapshot@users.noreply.github.com" commit -qm "Results snapshot $(date -u +%FT%TZ)"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" results-snapshot
