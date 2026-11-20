@@ -1,6 +1,6 @@
 {
- "asOf": "Nov. 6, 2026",
- "note": "Results are unofficial counts as of Nov. 5\u20136 and may shift slightly with certification.",
+ "asOf": "Nov. 20, 2026",
+ "note": "Results are final unofficial counts (99% or more counted) and may shift slightly with certification.",
  "senate": [
   {
    "race": "Georgia",
@@ -8,7 +8,7 @@
    "odds": 76,
    "winner": "Ossoff",
    "forecast": 9.0,
-   "result": 18.0
+   "result": 18.1
   },
   {
    "race": "North Carolina",
@@ -64,7 +64,7 @@
    "odds": 52,
    "winner": "Hamilton",
    "forecast": 0.5,
-   "result": 4.9
+   "result": 5.4
   },
   {
    "race": "Maine",
@@ -72,7 +72,7 @@
    "odds": 44,
    "winner": "Jackson",
    "forecast": -2.0,
-   "result": 7.7
+   "result": 6.2
   },
   {
    "race": "Iowa",
@@ -80,7 +80,7 @@
    "odds": 42,
    "winner": "Turek",
    "forecast": -2.5,
-   "result": 4.1
+   "result": 4.2
   },
   {
    "race": "South Carolina",
@@ -96,7 +96,7 @@
    "odds": 38,
    "winner": "Ricketts",
    "forecast": -4.0,
-   "result": -7.2
+   "result": -7.3
   }
  ],
  "governor": [
@@ -139,113 +139,106 @@
  ],
  "pollsters": [
   {
-   "name": "Cook Political Report (GS Strategy/New River)",
-   "n": 5,
-   "miss": 2.2,
-   "lean": -1.7,
-   "rating": 0.8
-  },
-  {
-   "name": "RedBox Research (A Fight Worth Having)",
-   "n": 4,
-   "miss": 2.8,
-   "lean": -2.8,
-   "rating": 0.5
-  },
-  {
    "name": "NYT/Siena",
-   "n": 12,
-   "miss": 2.8,
-   "lean": -1.2,
+   "n": 14,
+   "miss": 2.5,
+   "lean": -1.1,
    "rating": 0.95
   },
   {
+   "name": "Cook Political Report (GS Strategy/New River)",
+   "n": 5,
+   "miss": 2.6,
+   "lean": -2.2,
+   "rating": 0.8
+  },
+  {
    "name": "CNN/SSRS",
-   "n": 8,
+   "n": 9,
    "miss": 2.8,
-   "lean": -1.9,
+   "lean": -2.5,
    "rating": 0.9
   },
   {
    "name": "Suffolk University",
    "n": 6,
-   "miss": 2.8,
-   "lean": -2.7,
+   "miss": 2.9,
+   "lean": -2.6,
    "rating": 0.8
   },
   {
+   "name": "RedBox Research (A Fight Worth Having)",
+   "n": 4,
+   "miss": 3.5,
+   "lean": -3.5,
+   "rating": 0.5
+  },
+  {
+   "name": "Data for Progress (D)",
+   "n": 5,
+   "miss": 3.6,
+   "lean": -3.6,
+   "rating": 0.6
+  },
+  {
    "name": "Washington Post/Schar School",
-   "n": 3,
-   "miss": 4.4,
-   "lean": -1.7,
+   "n": 4,
+   "miss": 3.7,
+   "lean": 0.6,
    "rating": 0.9
+  },
+  {
+   "name": "YouGov",
+   "n": 7,
+   "miss": 4.6,
+   "lean": -4.6,
+   "rating": 0.8
   },
   {
    "name": "Echelon Insights",
    "n": 8,
-   "miss": 4.6,
-   "lean": -3.2,
+   "miss": 4.8,
+   "lean": -3.0,
    "rating": 0.75
-  },
-  {
-   "name": "Verasight/VoteHub",
-   "n": 3,
-   "miss": 4.7,
-   "lean": -4.7,
-   "rating": 0.5
-  },
-  {
-   "name": "YouGov",
-   "n": 6,
-   "miss": 4.7,
-   "lean": -4.7,
-   "rating": 0.8
-  },
-  {
-   "name": "Data for Progress (D)",
-   "n": 4,
-   "miss": 4.9,
-   "lean": -4.9,
-   "rating": 0.6
-  },
-  {
-   "name": "National Public Affairs (R)",
-   "n": 3,
-   "miss": 5.7,
-   "lean": -3.4,
-   "rating": 0.6
   },
   {
    "name": "Marist Poll",
    "n": 8,
-   "miss": 5.9,
-   "lean": -5.3,
-   "rating": 0.9
-  },
-  {
-   "name": "Fox News (Beacon/Shaw)",
-   "n": 5,
-   "miss": 6.3,
-   "lean": -6.2,
+   "miss": 5.2,
+   "lean": -5.2,
    "rating": 0.9
   },
   {
    "name": "InsiderAdvantage",
-   "n": 6,
-   "miss": 6.3,
-   "lean": -6.3,
+   "n": 7,
+   "miss": 5.4,
+   "lean": -5.2,
    "rating": 0.6
   },
   {
-   "name": "co/efficient",
-   "n": 4,
-   "miss": 6.5,
-   "lean": -6.5,
-   "rating": 0.55
+   "name": "Verasight/VoteHub",
+   "n": 3,
+   "miss": 5.5,
+   "lean": -5.5,
+   "rating": 0.5
+  },
+  {
+   "name": "National Public Affairs (R)",
+   "n": 3,
+   "miss": 5.9,
+   "lean": -3.0,
+   "rating": 0.6
+  },
+  {
+   "name": "Fox News (Beacon/Shaw)",
+   "n": 5,
+   "miss": 6.2,
+   "lean": -6.1,
+   "rating": 0.9
   },
   {
    "name": "Emerson College",
-   "n": 4,
+   "n": 5,
    "miss": 6.5,
    "lean": -6.5,
    "rating": 0.85
@@ -253,29 +246,36 @@
   {
    "name": "Rasmussen Reports",
    "n": 7,
-   "miss": 7.1,
-   "lean": -7.1,
+   "miss": 6.9,
+   "lean": -6.9,
    "rating": 0.5
+  },
+  {
+   "name": "co/efficient",
+   "n": 4,
+   "miss": 7.0,
+   "lean": -7.0,
+   "rating": 0.55
   },
   {
    "name": "Trafalgar Group",
    "n": 8,
-   "miss": 8.4,
-   "lean": -8.4,
+   "miss": 8.3,
+   "lean": -8.3,
    "rating": 0.6
   },
   {
    "name": "Quantus Insights",
    "n": 4,
-   "miss": 10.2,
-   "lean": -10.2,
+   "miss": 10.3,
+   "lean": -10.3,
    "rating": 0.6
   }
  ],
  "pollsSummary": {
-  "polls": 146,
-  "races": 15,
-  "avgMiss": 5.3,
-  "avgLeanR": 4.5
+  "polls": 157,
+  "races": 17,
+  "avgMiss": 5.1,
+  "avgLeanR": 4.3
  }
 }

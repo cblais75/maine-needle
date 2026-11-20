@@ -2757,7 +2757,7 @@ function ScorecardView({ wide }) {
       <section style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 20, borderBottom: `2px solid ${C.text}` }}>
         <h1 style={{ margin: 0, fontFamily: serif, fontWeight: 600, fontSize: wide ? 46 : 32, letterSpacing: -0.8 }}>2026 scorecard</h1>
         <p style={{ ...deckStyle(wide), maxWidth: 900 }}>{`How Needlepoint's final forecast and the pollsters did against the results. We picked ${senHits} of the ${sc.senate.length} Senate races scored here and ${govHits} of ${sc.governor.length} governor races, but every miss went the same way: Democrats beat our forecast in ${beat} of ${sc.senate.length} Senate races, by ${avgMiss.toFixed(1)} points on average.`}</p>
-        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}. Mississippi isn't scored because it had no forecast before election night. Alaska isn't scored because its needle switched from the forecast to the count on Nov. 6; Peltola won with 50.1% of first choices.</p>
+        <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{sc.note} As of {sc.asOf}. Mississippi isn't scored because it had no forecast before election night. Alaska isn't in the Senate table because its needle switched from the forecast to the count on Nov. 6, but its polls are in the pollster scores below.</p>
       </section>
       <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <SectionHead title="Senate: our forecast vs. the result" size={wide ? 28 : 22} />
@@ -2780,11 +2780,11 @@ function ScorecardView({ wide }) {
       </section>
       <section style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <SectionHead title="Which pollsters got it right" size={wide ? 28 : 22} />
-        <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body, maxWidth: 900 }}>{`Each pollster's final poll in every race we tracked from Oct. 4 on, ${sc.pollsSummary.polls} polls across ${sc.pollsSummary.races} races, compared with the result. The average poll was ${sc.pollsSummary.avgLeanR} points too Republican, and every pollster below leaned that way. Pollsters with three or more races, best first.`}</p>
+        <p style={{ margin: 0, fontFamily: serif, fontSize: 17, lineHeight: 1.55, color: C.body, maxWidth: 900 }}>{`Each pollster's final poll in every race we tracked from Oct. 4 on, ${sc.pollsSummary.polls} polls across ${sc.pollsSummary.races} races, compared with the result. The average poll was ${sc.pollsSummary.avgLeanR} points too Republican, and ${sc.pollsters.every((p) => p.lean < 0) ? "every pollster below" : `${sc.pollsters.filter((p) => p.lean < 0).length} of the ${sc.pollsters.length} pollsters below`} leaned that way. Pollsters with three or more races, best first.`}</p>
         {wrap(<>
           <thead><tr><th style={th}>#</th><th style={th}>Pollster</th><th style={th}>Our rating</th>{wide && <th style={th}>Races</th>}<th style={th}>Average miss</th>{wide && <th style={th}>Leaned</th>}</tr></thead>
           <tbody>{sc.pollsters.map((p, i) => { const t = tierOf(p.rating); return (
-            <tr key={p.name}><td style={{ ...td, color: C.muted }}>{i + 1}</td><td style={{ ...td, fontWeight: 600 }}>{p.name}</td><td style={{ ...td, color: t.color, fontWeight: 700 }}>{t.name} {p.rating.toFixed(2)}</td>{wide && <td style={td}>{p.n}</td>}<td style={{ ...td, fontWeight: 700, color: p.miss < sc.pollsSummary.avgMiss ? "#0F7A68" : C.text }}>{p.miss.toFixed(1)} pts</td>{wide && <td style={{ ...td, color: RED }}>R +{(-p.lean).toFixed(1)}</td>}</tr>
+            <tr key={p.name}><td style={{ ...td, color: C.muted }}>{i + 1}</td><td style={{ ...td, fontWeight: 600 }}>{p.name}</td><td style={{ ...td, color: t.color, fontWeight: 700 }}>{t.name} {p.rating.toFixed(2)}</td>{wide && <td style={td}>{p.n}</td>}<td style={{ ...td, fontWeight: 700, color: p.miss < sc.pollsSummary.avgMiss ? "#0F7A68" : C.text }}>{p.miss.toFixed(1)} pts</td>{wide && <td style={{ ...td, color: p.lean > 0 ? BLUE : RED }}>{p.lean > 0 ? "D" : "R"} +{Math.abs(p.lean).toFixed(1)}</td>}</tr>
           ); })}</tbody>
         </>)}
         <p style={{ margin: 0, fontSize: 13, color: C.muted }}>{`Green: better than the average poll (${sc.pollsSummary.avgMiss} points off). The one exception to the Republican lean was Nebraska, where every poll overstated Osborn.`}</p>
